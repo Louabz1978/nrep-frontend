@@ -1,5 +1,4 @@
 import { useCallback, useLayoutEffect, useState } from "react";
-import secureLocalStorage from "react-secure-storage";
 
 type Theme = "light" | "dark";
 
@@ -11,9 +10,7 @@ export const useTheme = () => {
 
   useLayoutEffect(() => {
     try {
-      const savedTheme = secureLocalStorage.getItem(
-        "USER_THEME"
-      ) as Theme | null;
+      const savedTheme = localStorage.getItem("USER_THEME") as Theme | null;
       const initialTheme = savedTheme || (systemPrefersDark ? "dark" : "light");
 
       setTheme(initialTheme);
@@ -28,7 +25,7 @@ export const useTheme = () => {
 
   const changeTheme = useCallback((theme: Theme) => {
     setTheme(theme);
-    secureLocalStorage.setItem("USER_THEME", theme);
+    localStorage.setItem("USER_THEME", theme);
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, []);
 
