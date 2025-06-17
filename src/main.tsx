@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider } from "jotai";
 import SonnerToast from "./components/global/toast/SonnerToast";
-import "./i18n";
 import AppInitializer from "./providers/AppInitializer";
 import { RouterProvider } from "react-router-dom";
 import router from "./router";
