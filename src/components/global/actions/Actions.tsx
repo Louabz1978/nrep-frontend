@@ -1,7 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import handleClickOutside from "../../../functions/common/handleClickOutside";
-import { useUserInformationContext } from "../../../contexts/common/UserInformationContextProvider";
+import handleClickOutside from "@/utils/handleClickOutside";
+import { useUser } from "@/stores/useUser";
+import type WEBSITE_PERMISSIONS from "@/data/website/permissions";
+import type ADMIN_PERMISSIONS from "@/data/admin/permissoins";
+
+interface Action {
+  title: string;
+  onClick: () => void;
+  permissions?: (
+    | keyof typeof WEBSITE_PERMISSIONS
+    | keyof typeof ADMIN_PERMISSIONS
+  )[];
+  disabled?: boolean;
+}
+
+interface ActionsProps {
+  actions: Action[];
+  index: number;
+  pageName: string;
+  Icon?: React.ComponentType;
+  className?: string;
+}
 
 function Actions({
   actions,
@@ -9,12 +29,11 @@ function Actions({
   pageName,
   Icon = BsThreeDots,
   className = "",
-}) {
-  // check permissions method
-  const { checkPermissions } = useUserInformationContext();
-
+}: ActionsProps) {
+  const { checkPermissions } = useUser();
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
+
   useEffect(
     () =>
       handleClickOutside(ref, setIsOpen, `close-options-${pageName}-${index}`),
@@ -47,11 +66,11 @@ function Actions({
                   ? ""
                   : "لا تملك صلاحية"
               }
-              className={`p-2 text-fontColor w-full min-w-[150px] bg-thirdColor bg-opacity-50 backdrop-blur-[15px] border-b border-solid border-fontColor border-opacity-10 last:border-b-0 ${
+              className={`p-2 text-primary w-full min-w-[150px] bg-tertiary/50 backdrop-blur-[15px] border-b border-solid border-primary/10 last:border-b-0 ${
                 (!action?.permissions ||
                   checkPermissions(action?.permissions)) &&
                 !action?.disabled
-                  ? "cursor-pointer hover:bg-opacity-80"
+                  ? "cursor-pointer hover:bg-tertiary/80"
                   : "brightness-[0.8] cursor-not-allowed"
               }`}
               onClick={() => {

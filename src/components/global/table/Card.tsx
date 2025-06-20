@@ -37,7 +37,7 @@ function Card({
       >
         {/* count of this card */}
         {withRanking ? (
-          <div className="absolute flex justify-center items-center text-fontColor w-[20px] h-[20px] text-size12 border-2 border-solid border-borderColor bottom-4 left-4 rounded-full">
+          <div className="absolute flex justify-center items-center text-fontColor w-[20px] h-[20px] text- border-2 border-solid border-borderColor bottom-4 left-4 rounded-full">
             {index + 1}
           </div>
         ) : null}
