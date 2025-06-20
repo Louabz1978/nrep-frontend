@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 
 interface InputProps {
-  type: string;
+  type?: string;
   placeholder?: string;
   register: UseFormRegister<any>;
   name: string;
@@ -36,7 +36,7 @@ interface InputProps {
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
 // returns: input component controlled by react hook form
 function Input({
-  type,
+  type = "text",
   placeholder,
   register,
   name,
@@ -65,7 +65,7 @@ function Input({
   function getError(errors: FieldErrors | undefined, name: string): any {
     let res: any = false;
     let currentErrors: any = errors;
-    let names = name?.split(".");
+    const names = name?.split(".");
     names?.map((subName) => {
       res = currentErrors?.[subName];
       currentErrors = currentErrors?.[subName];

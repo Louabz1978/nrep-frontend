@@ -1,6 +1,7 @@
 import paginatedData from "@/data/template/template/dummyData";
 // import axiosClient from "@/libs/axios/axios-client";
 import type { PaginationData } from "@/types/global/pagination";
+import waitSeconds from "@/utils/waitSeconds";
 // import { cleanParams } from "@/utils/filter";
 
 export type Gender = "male" | "female";
@@ -39,9 +40,11 @@ async function getTemplates({ queryKey }: getTemplatesProps): Promise<
   // });
 
   // return res.data.data;
+  console.log("filter is", queryKey?.[1]);
 
-  console.log(queryKey?.[2]);
+  await waitSeconds();
 
+  if (queryKey?.[1]?.search == "one") return paginatedData?.[6];
   return paginatedData?.[queryKey?.[2]];
 }
 

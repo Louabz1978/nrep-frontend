@@ -16,7 +16,7 @@ import {
 
 interface SelectProps {
   placeholder?: string;
-  register: UseFormRegister<any>;
+  register?: UseFormRegister<any>;
   name: string;
   label?: string;
   errors?: FieldErrors;
@@ -223,31 +223,30 @@ function Select({
           }}
         >
           <div className="overflow-auto text-nowrap">
-            {watch(name) &&
-              (!isArray(watch(name)) ||
-              (isArray(watch(name)) && watch(name).length) ? (
-                !multiple ? (
-                  showValue ? (
-                    watch(name)[showValue]
-                  ) : (
-                    watch(name)
-                  )
-                ) : showValue ? (
-                  watch(name).map((ele: any, index: number) => {
-                    return `${ele[showValue]}${
-                      index + 1 == watch(name).length ? "" : " - "
-                    }`;
-                  })
+            {(watch(name) && !isArray(watch(name))) ||
+            (isArray(watch(name)) && watch(name).length) ? (
+              !multiple ? (
+                showValue ? (
+                  watch(name)[showValue]
                 ) : (
-                  watch(name).map((ele: any, index: number) => {
-                    return `${ele}${
-                      index + 1 == watch(name).length ? "" : " - "
-                    }`;
-                  })
+                  watch(name)
                 )
+              ) : showValue ? (
+                watch(name).map((ele: any, index: number) => {
+                  return `${ele[showValue]}${
+                    index + 1 == watch(name).length ? "" : " - "
+                  }`;
+                })
               ) : (
-                <span className="text-placeholder">{placeholder}</span>
-              ))}
+                watch(name).map((ele: any, index: number) => {
+                  return `${ele}${
+                    index + 1 == watch(name).length ? "" : " - "
+                  }`;
+                })
+              )
+            ) : (
+              <span className="text-placeholder">{placeholder}</span>
+            )}
           </div>
 
           {/* delete option */}

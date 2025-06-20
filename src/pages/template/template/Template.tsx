@@ -3,15 +3,13 @@ import Actions from "@/components/global/actions/Actions";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import RefetchLoader from "@/components/global/refetchLoader/RefetchLoader";
 import Table from "@/components/global/table/Table";
-import { useTheme } from "@/hooks/global/useTheme";
 import useTemplatesQuery from "@/hooks/template/template/useTemplatesQuery";
 import { useState } from "react";
+import TemplatesHeader from "./components/TemplatesHeader";
 
 function Template() {
   // templates query methods
   const {
-    filter,
-    setFilter,
     templates,
     page,
     setPage,
@@ -20,9 +18,10 @@ function Template() {
     templateDetails,
     setCurrentTemplate,
     currentTemplate,
+    setFilter,
   } = useTemplatesQuery();
 
-  const { toggleTheme, theme } = useTheme();
+  console.log(templates);
 
   // templates mutation methods
   // const {
@@ -34,15 +33,13 @@ function Template() {
   //   deleteTemplate,
   // } = useTemplatesMutation();
 
-  console.log(templates?.data?.data);
-
-  const [currentLayout, setCurrentLayout] = useState(true);
+  const [currentLayout, setCurrentLayout] = useState<boolean>(true);
 
   type rowType = { row: TemplateType };
 
   const fields = [
     {
-      width: "20%", // Increased from 20%
+      width: "15%", // Increased from 20%
       title: "الاسم",
       showKey: "name",
     },
@@ -52,7 +49,7 @@ function Template() {
       showKey: "phone",
     },
     {
-      width: "10%", // Same as original
+      width: "15%", // Same as original
       title: "البريد الإلكتروني",
       showKey: "email",
     },
@@ -73,7 +70,7 @@ function Template() {
       },
     },
     {
-      width: "15%", // Increased from 10%
+      width: "20%", // Increased from 10%
       title: "العنوان",
       showKey: "address",
     },
@@ -90,7 +87,7 @@ function Template() {
       showKey: "createdAt",
     },
     {
-      width: "10%", // Same as original
+      width: "5%", // Same as original
       title: "الإجراءات",
       component: ({ row }: rowType) => {
         const actions = [
@@ -117,21 +114,13 @@ function Template() {
 
   return (
     <PageContainer permissions={[]}>
-      <div className="flex items-center p-2 gap-3 border-b border-border">
-        <span
-          className="cursor-pointer"
-          onClick={() => setCurrentLayout((prev) => !prev)}
-        >
-          طريقة العرض
-        </span>
+      {/* header */}
+      <TemplatesHeader
+        setFilter={setFilter}
+        setCurrentLayout={setCurrentLayout}
+        currentLayout={currentLayout}
+      />
 
-        <div
-          className="dark:text-red-600 text-blue-600"
-          onClick={() => {
-            toggleTheme();
-          }}
-        >{`toggle ${theme}`}</div>
-      </div>
       {/* table */}
       <Table
         data={templates?.data?.data}

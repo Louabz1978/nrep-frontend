@@ -6,11 +6,12 @@ import getTemplates, {
 import getTemplateDetails from "@/api/template/template/getTemplateDetails";
 import { useState } from "react";
 import { debounce } from "lodash";
+import { TEMPLATES_FILTER_SCHEMA_INITIAL } from "@/data/template/template/templateFilterSchema";
 
-interface templatesFilterType {
-  age?: number;
+export interface TemplatesFilterType {
+  age?: string;
   name?: string;
-  gender?: Gender;
+  gender?: Gender | null;
 }
 
 function useTemplatesQuery() {
@@ -21,7 +22,9 @@ function useTemplatesQuery() {
   const [size, setSize] = useState(10);
 
   // filter of request
-  const [filter, setFilter] = useState<templatesFilterType>({});
+  const [filter, setFilter] = useState<TemplatesFilterType>(
+    TEMPLATES_FILTER_SCHEMA_INITIAL
+  );
 
   // get templates
   const templates = useQuery({
@@ -31,7 +34,7 @@ function useTemplatesQuery() {
     refetchOnWindowFocus: false,
   });
   // debounce fetch templates on change filter values
-  async function fetchTemplatesFilter(filter: templatesFilterType) {
+  async function fetchTemplatesFilter(filter: TemplatesFilterType) {
     setPage(1);
     setFilter(filter);
   }
