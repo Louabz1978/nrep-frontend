@@ -1,5 +1,37 @@
 import { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
+import {
+  type UseFormRegister,
+  type FieldErrors,
+  type UseFormSetValue,
+  type UseFormTrigger,
+  type UseFormWatch,
+} from "react-hook-form";
+
+interface InputProps {
+  type: string;
+  placeholder?: string;
+  register: UseFormRegister<any>;
+  name: string;
+  label?: string;
+  errors?: any;
+  element?: React.ReactNode;
+  disabled?: boolean;
+  addingStyle?: string;
+  addingInputStyle?: string;
+  customInput?: React.ReactNode;
+  step?: number;
+  setValue?: UseFormSetValue<any>;
+  trigger?: UseFormTrigger<any>;
+  watch?: UseFormWatch<any>;
+  numberRegex?: RegExp;
+  onClick?: () => void;
+  onFocus?: () => void;
+  onChange?: (data: { trigger: UseFormTrigger<any> }) => void;
+  onBlur?: () => void;
+  min?: number;
+  max?: number;
+}
 
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
 // returns: input component controlled by react hook form
@@ -17,8 +49,8 @@ function Input({
   customInput,
   step = 1,
   setValue = () => {},
-  trigger = () => {},
-  watch = () => {},
+  trigger,
+  watch,
   numberRegex = /^\d*$/,
   onClick = () => {},
   onFocus = () => {},
@@ -26,13 +58,13 @@ function Input({
   onBlur = () => {},
   min,
   max,
-}) {
+}: InputProps) {
   // to show password
   const [show, setShow] = useState(false);
 
-  function getError(errors, name) {
-    let res = false;
-    let currentErrors = errors;
+  function getError(errors: FieldErrors | undefined, name: string): any {
+    let res: any = false;
+    let currentErrors: any = errors;
     let names = name?.split(".");
     names?.map((subName) => {
       res = currentErrors?.[subName];
@@ -57,18 +89,22 @@ function Input({
               disabled={disabled}
               onChange={(e) => {
                 setValue(name, e?.target?.checked ? 1 : 0);
-                trigger(name);
-                onChange({ trigger });
+                trigger?.(name);
+                onChange({ trigger } as { trigger: UseFormTrigger<any> });
               }}
-              checked={watch(name) ? true : false}
+              checked={watch?.(name) ? true : false}
             />
             {/* checkbox presentation */}
-            <div className="w-[20px] max-w-[20px] min-w-[20px] h-[20px] max-h-[20px] min-h-[20px] bg-secondBackgroundColor rounded-sm right-[2px] peer-checked:bg-secondFontColor transition-all duration-[0.1s]"></div>
+            <div className="w-[20px] max-w-[20px] min-w-[20px] h-[20px] max-h-[20px] min-h-[20px] bg-secondary-background rounded-sm right-[2px] peer-checked:bg-secondary-foreground transition-all duration-[0.1s]"></div>
 
             <div>{label}</div>
             {element ? element : null}
           </label>
-          {errors[name] ? <span>{errors[name].message}</span> : null}
+          {getError(errors, name) ? (
+            <span className="text-error text-size14">
+              {getError(errors, name)?.message}
+            </span>
+          ) : null}
         </div>
       ) : (
         // other normal inputs
@@ -78,7 +114,7 @@ function Input({
         >
           {/* input label  */}
           {label ? (
-            <label htmlFor={name} className="text-fontColor mb-2">
+            <label htmlFor={name} className="text-primary-foreground mb-2">
               {label}
             </label>
           ) : null}
@@ -99,18 +135,18 @@ function Input({
                 onChange={(e) => {
                   if (
                     numberRegex.test(e.target.value) &&
-                    (!min || e.target.value >= min) &&
-                    (!max || e.target.value <= max)
+                    (!min || Number(e.target.value) >= min) &&
+                    (!max || Number(e.target.value) <= max)
                   ) {
                     if (e.target.value === "") {
                       setValue(name, undefined);
                     } else {
                       setValue(name, Number(e.target.value));
                     }
-                    trigger(name);
+                    trigger?.(name);
                   }
                 }}
-                value={watch(name) ?? undefined}
+                value={watch?.(name) ?? undefined}
                 step={step}
               />
             ) : (
@@ -130,7 +166,7 @@ function Input({
             {/* show input content with password input type */}
             {type == "password" ? (
               <div
-                className="text-fontColor text-opacity-80 hover:text-opacity-100 transition-all absolute h-max w-max left-4 top-[16px] flex justify-center items-center cursor-pointer"
+                className="text-primary-foreground/80 hover:text-primary-foreground/100 transition-all absolute h-max w-max left-4 top-[16px] flex justify-center items-center cursor-pointer"
                 onClick={() => {
                   if (type == "password") setShow(!show);
                 }}
@@ -142,8 +178,8 @@ function Input({
 
             {/* validation errors  */}
             {getError(errors, name) ? (
-              <span className="text-errorColor text-size14">
-                {getError(errors, name).message}
+              <span className="text-error text-size14">
+                {getError(errors, name)?.message}
               </span>
             ) : null}
           </div>

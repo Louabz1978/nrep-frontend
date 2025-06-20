@@ -1,22 +1,22 @@
 import getRowShow from "./getRowShow";
 
 function checkFilter(
-  ele,
-  filter,
-  row,
-  isArray = false,
-  isObject = false,
-  objectKey = "",
-  filterKeys,
-  filterOperations = {}
-) {
+  ele: string,
+  filter: Record<string, any>,
+  row: Record<string, any>,
+  isArray: boolean = false,
+  isObject: boolean = false,
+  objectKey: string = "",
+  filterKeys?: Record<string, string>,
+  filterOperations: Record<string, string> = {}
+): boolean {
   const operation = filterOperations[ele] === "equal" ? "equals" : "includes";
-  const compare = (a, b) =>
+  const compare = (a: any, b: any) =>
     operation === "equals"
       ? (a + "").toLowerCase() === (b + "").toLowerCase()
       : (a + "").toLowerCase().includes((b + "").toLowerCase());
 
-  const isEmptyFilter = (value) => !value && value !== 0 && value !== "0";
+  const isEmptyFilter = (value: any) => !value && value !== 0 && value !== "0";
 
   if (isArray) {
     return operation === "equals"

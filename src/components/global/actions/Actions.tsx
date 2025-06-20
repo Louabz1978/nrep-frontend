@@ -7,7 +7,7 @@ import type ADMIN_PERMISSIONS from "@/data/admin/permissoins";
 
 interface Action {
   title: string;
-  onClick: () => void;
+  onClick: () => any;
   permissions?: (
     | keyof typeof WEBSITE_PERMISSIONS
     | keyof typeof ADMIN_PERMISSIONS
@@ -17,7 +17,7 @@ interface Action {
 
 interface ActionsProps {
   actions: Action[];
-  index: number;
+  index?: number;
   pageName: string;
   Icon?: React.ComponentType;
   className?: string;
@@ -66,7 +66,7 @@ function Actions({
                   ? ""
                   : "لا تملك صلاحية"
               }
-              className={`p-2 text-primary w-full min-w-[150px] bg-tertiary/50 backdrop-blur-[15px] border-b border-solid border-primary/10 last:border-b-0 ${
+              className={`p-2 text-primary-foreground w-full min-w-[150px] bg-tertiary/50 backdrop-blur-[15px] border-b border-solid border-primary-foreground/10 last:border-b-0 ${
                 (!action?.permissions ||
                   checkPermissions(action?.permissions)) &&
                 !action?.disabled

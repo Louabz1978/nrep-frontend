@@ -1,27 +1,61 @@
+import { useState } from "react";
 import Pagination from "./Pagination";
 import Loader from "../loader/Loader";
 import checkFilter from "@/utils/checkFilter";
 import EmptyContent from "../emptyContent/EmptyContent";
-import { useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { RxCaretSort } from "react-icons/rx";
 import getRowShow from "@/utils/getRowShow";
 import ErrorComponent from "../error/ErrorComponent";
 import Card from "./Card";
 import sortedData from "@/utils/sortedData";
+import { type UseQueryResult } from "@tanstack/react-query";
+
+interface Field {
+  title: string;
+  width?: string;
+  justify?: string;
+  showKey?: string;
+  component?: ({ row, index }: { row: any; index: number }) => React.ReactNode;
+}
+
+interface TableProps {
+  fields: Field[];
+  data: any[] | undefined;
+  paginationData?: {
+    last_page: number;
+  };
+  isPagination?: boolean;
+  CardComponent?: React.ComponentType<any>;
+  isTable?: boolean;
+  cardProps?: Record<string, any>;
+  emptyContent?: React.ReactNode;
+  filter?: Record<string, any>;
+  cardsContainerStyle?: string;
+  query?: UseQueryResult;
+  setPage?: (page: number) => void;
+  page?: number;
+  setSize?: (size: number) => void;
+  size?: number;
+  addingHeaderStyle?: string;
+  filterKeys?: Record<string, any>;
+  filterOperations?: Record<string, any>;
+  keyValue?: string | boolean;
+  actionKey?: string;
+}
 
 function Table({
   fields,
   data,
   paginationData,
-  isPagination,
+  isPagination = true,
   CardComponent = Card,
   isTable = true,
   cardProps = {},
   emptyContent = "---",
   filter = {},
   cardsContainerStyle = "grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10",
-  query = {},
+  query,
   setPage = () => {},
   page = 1,
   setSize = () => {},
@@ -31,14 +65,11 @@ function Table({
   filterOperations = {},
   keyValue = false,
   actionKey,
-}) {
-  // the field that you sort depending on it
-  const [sortedField, setSortedField] = useState(null);
-  // asc or desc
-  const [sortOrder, setSortOrder] = useState("");
+}: TableProps) {
+  const [sortedField, setSortedField] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<"desc" | "asc" | "">("");
 
-  // function to handle click on title of the column to sort data by it
-  const handleTitleClick = (field) => {
+  const handleTitleClick = (field: Field) => {
     if (field.showKey) {
       if (field.showKey && sortedField === field.showKey) {
         if (sortOrder === "asc") {
@@ -59,7 +90,7 @@ function Table({
       {query?.isPending ? (
         <Loader isFull={true} />
       ) : query?.isError ? (
-        <ErrorComponent isFull={true} />
+        <ErrorComponent />
       ) : (
         <>
           {/* table container */}
@@ -70,7 +101,7 @@ function Table({
           >
             {/* table header */}
             <div
-              className={`w-full bg-blockBackgroundColor text-fontColor rounded-md p-4 flex items-center mb-2 ${addingHeaderStyle}`}
+              className={`w-full bg-block-background text-primary-foreground rounded-md p-4 flex items-center mb-2 ${addingHeaderStyle}`}
             >
               {fields?.map((field, index) => {
                 return (
@@ -104,7 +135,7 @@ function Table({
             </div>
 
             {/* table body */}
-            {sortedData(data, sortedField, sortOrder)?.filter((row) => {
+            {sortedData(data, sortedField, sortOrder)?.filter((row: any) => {
               return (
                 Object.keys(filter)?.filter((ele) =>
                   checkFilter(
@@ -124,53 +155,68 @@ function Table({
                 <EmptyContent />
               </div>
             ) : (
-              sortedData(data, sortedField, sortOrder)?.map((row, rowIndex) => {
-                // table row
-                if (
-                  Object.keys(filter)?.filter((ele) =>
-                    checkFilter(
-                      ele,
-                      filter,
-                      row,
-                      false,
-                      false,
-                      "",
-                      filterKeys,
-                      filterOperations
-                    )
-                  )?.length == Object.keys(filter)?.length
-                )
-                  return (
-                    <div
-                      key={keyValue ? row?.[keyValue] : rowIndex}
-                      className={`w-full p-2 flex items-center text-fontColor border-b border-solid row-parent border-borderColor`}
-                    >
-                      {fields?.map((field, index) => {
-                        return (
-                          <div
-                            key={index}
-                            style={{
-                              width: field.width ?? "10%",
-                              minWidth: field.width ?? "10%",
-                              maxWidth: field.width ?? "10%",
-                            }}
-                            className={`flex items-center text-center ${
-                              field?.justify ? field.justify : "justify-center"
-                            }`}
-                          >
-                            {field?.component
-                              ? field?.component({ row, index })
-                              : getRowShow(row, field.showKey) ||
-                                getRowShow(row, field.showKey) === 0 ||
-                                getRowShow(row, field.showKey) === "0"
-                              ? getRowShow(row, field.showKey)
-                              : emptyContent}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-              })
+              sortedData(data, sortedField, sortOrder)?.map(
+                (row: any, rowIndex: number) => {
+                  if (
+                    Object.keys(filter)?.filter((ele) =>
+                      checkFilter(
+                        ele,
+                        filter,
+                        row,
+                        false,
+                        false,
+                        "",
+                        filterKeys,
+                        filterOperations
+                      )
+                    )?.length == Object.keys(filter)?.length
+                  )
+                    return (
+                      <div
+                        key={keyValue ? row?.[keyValue as string] : rowIndex}
+                        className={`w-full p-2 flex items-center text-primary-foreground border-b border-solid row-parent border-border`}
+                      >
+                        {fields?.map((field, index) => {
+                          return (
+                            <div
+                              key={index}
+                              style={{
+                                width: field.width ?? "10%",
+                                minWidth: field.width ?? "10%",
+                                maxWidth: field.width ?? "10%",
+                              }}
+                              className={`flex items-center text-center ${
+                                field?.justify
+                                  ? field.justify
+                                  : "justify-center"
+                              }`}
+                            >
+                              {field?.component
+                                ? field?.component({ row, index })
+                                : getRowShow(
+                                    row,
+                                    field?.showKey as string[] | string
+                                  ) ||
+                                  getRowShow(
+                                    row,
+                                    field?.showKey as string[] | string
+                                  ) === 0 ||
+                                  getRowShow(
+                                    row,
+                                    field?.showKey as string[] | string
+                                  ) === "0"
+                                ? getRowShow(
+                                    row,
+                                    field?.showKey as string[] | string
+                                  )
+                                : emptyContent}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                }
+              )
             )}
           </div>
 
@@ -179,7 +225,7 @@ function Table({
             className={`${!isTable ? "lg:grid" : "lg:hidden"} ${
               isPagination ? "pb-4" : ""
             } ${cardsContainerStyle} ${
-              sortedData(data, sortedField, sortOrder)?.filter((row) => {
+              sortedData(data, sortedField, sortOrder)?.filter((row: any) => {
                 return (
                   Object.keys(filter)?.filter((ele) =>
                     checkFilter(
@@ -199,7 +245,7 @@ function Table({
                 : ""
             }`}
           >
-            {sortedData(data, sortedField, sortOrder)?.filter((row) => {
+            {sortedData(data, sortedField, sortOrder)?.filter((row: any) => {
               return (
                 Object.keys(filter)?.filter((ele) =>
                   checkFilter(
@@ -219,37 +265,39 @@ function Table({
                 <EmptyContent />
               </div>
             ) : (
-              sortedData(data, sortedField, sortOrder)?.map((card, index) => {
-                if (
-                  Object.keys(filter)?.filter((ele) =>
-                    checkFilter(
-                      ele,
-                      filter,
-                      card,
-                      false,
-                      false,
-                      "",
-                      filterKeys,
-                      filterOperations
-                    )
-                  )?.length == Object.keys(filter)?.length
-                )
-                  return (
-                    <CardComponent
-                      key={keyValue ? card?.[keyValue] : index}
-                      index={index}
-                      data={card}
-                      emptyContent={emptyContent}
-                      fields={fields}
-                      getRowShow={getRowShow}
-                      handleTitleClick={handleTitleClick}
-                      sortOrder={sortOrder}
-                      sortedField={sortedField}
-                      actionKey={actionKey}
-                      {...cardProps}
-                    />
-                  );
-              })
+              sortedData(data, sortedField, sortOrder)?.map(
+                (card: any, index: number) => {
+                  if (
+                    Object.keys(filter)?.filter((ele) =>
+                      checkFilter(
+                        ele,
+                        filter,
+                        card,
+                        false,
+                        false,
+                        "",
+                        filterKeys,
+                        filterOperations
+                      )
+                    )?.length == Object.keys(filter)?.length
+                  )
+                    return (
+                      <CardComponent
+                        key={keyValue ? card?.[keyValue as string] : index}
+                        index={index}
+                        data={card}
+                        emptyContent={emptyContent}
+                        fields={fields}
+                        getRowShow={getRowShow}
+                        handleTitleClick={handleTitleClick}
+                        sortOrder={sortOrder}
+                        sortedField={sortedField}
+                        actionKey={actionKey}
+                        {...cardProps}
+                      />
+                    );
+                }
+              )
             )}
           </div>
         </>
@@ -260,7 +308,7 @@ function Table({
           data={data}
           paginationData={paginationData}
           page={page}
-          isFetching={query?.isFetching}
+          isFetching={query?.isFetching ?? false}
           setPage={setPage}
           size={size}
           setSize={setSize}

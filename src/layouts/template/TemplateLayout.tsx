@@ -4,7 +4,7 @@ import Navbar from "./navbar/Navbar";
 import Footer from "./footer/Footer";
 import Page from "./page/Page";
 
-function WebsiteLayout() {
+function TemplateLayout() {
   return (
     <div className="w-full h-full overflow-auto relative bg-background flex flex-col scroll-bar transition-colors duration-[0.3s]">
       <Navbar />
@@ -18,4 +18,4 @@ function WebsiteLayout() {
   );
 }
 
-export default WebsiteLayout;
+export default TemplateLayout;
