@@ -44,7 +44,7 @@ function useTemplatesQuery() {
     setPage(1);
     setSize(size);
   }
-  const debounceSize = debounce(fetchTemplatesSize, 300);
+  const debounceSize = debounce(fetchTemplatesSize, 1000);
 
   // current template details
   const [currentTemplate, setCurrentTemplate] = useState<number | null>(null);

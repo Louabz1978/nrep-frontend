@@ -3,7 +3,7 @@ import { Toaster } from "sonner";
 function SonnerToast() {
   return (
     <Toaster
-      position={"bottom-right"}
+      position={"top-left"}
       closeButton
       toastOptions={{
         classNames: {

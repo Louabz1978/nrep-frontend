@@ -5,7 +5,7 @@ interface getTemplateDetailsProps {
   queryKey: any[];
 }
 
-interface TemplateDetailsType {
+export interface TemplateDetailsType {
   id: number;
   name: string;
   phone: string;

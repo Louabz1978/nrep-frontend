@@ -62,6 +62,8 @@ export default [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-floating-promises": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-useless-escape": "off",
+      "no-useless-escape": "off",
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         {

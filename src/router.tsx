@@ -9,6 +9,8 @@ import GlobalLayout from "./layouts/global/GlobalLayout";
 import TestHome from "./pages/website/TestHome/TestHome";
 import TemplateLayout from "./layouts/template/TemplateLayout";
 import Template from "./pages/template/template/Template";
+import PageContainer from "./components/global/pageContainer/PageContainer";
+import TemplateLogic from "./pages/template/template/TemplateLogic";
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -99,8 +101,16 @@ const router = createBrowserRouter([
     element: <PrivateRoute element={<TemplateLayout />} role={"allow"} />,
     children: [
       {
-        index: true,
-        element: <Template />,
+        path: "",
+        element: <PageContainer>home</PageContainer>,
+      },
+      {
+        path: "main/*",
+        element: <TemplateLogic />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
       },
     ],
   },

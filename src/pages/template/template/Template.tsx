@@ -3,36 +3,51 @@ import Actions from "@/components/global/actions/Actions";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import RefetchLoader from "@/components/global/refetchLoader/RefetchLoader";
 import Table from "@/components/global/table/Table";
-import useTemplatesQuery from "@/hooks/template/template/useTemplatesQuery";
-import { useState } from "react";
+import { type TemplatesFilterType } from "@/hooks/template/template/useTemplatesQuery";
+import { useState, type Dispatch } from "react";
 import TemplatesHeader from "./components/TemplatesHeader";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import type { PaginationData } from "@/types/global/pagination";
+import type { TemplateDetailsType } from "@/api/template/template/getTemplateDetails";
+import type { DebouncedFunc } from "lodash";
+import type { deleteTemplateFunctionProps } from "@/api/template/template/deleteTemplate";
 
-function Template() {
-  // templates query methods
-  const {
-    templates,
-    page,
-    setPage,
-    size,
-    setSize,
-    templateDetails,
-    setCurrentTemplate,
-    currentTemplate,
-    setFilter,
-  } = useTemplatesQuery();
-
-  console.log(templates);
-
-  // templates mutation methods
-  // const {
-  //   handleAddTemplate,
-  //   addTemplate,
-  //   handleEditTemplate,
-  //   editTemplate,
-  //   handleDeleteTemplate,
-  //   deleteTemplate,
-  // } = useTemplatesMutation();
-
+interface TemplateProps {
+  templates: UseQueryResult<
+    {
+      data: TemplateType[];
+    } & PaginationData,
+    Error
+  >;
+  page: number;
+  setPage: Dispatch<React.SetStateAction<number>>;
+  size: number;
+  setSize: DebouncedFunc<(size: number) => Promise<void>>;
+  templateDetails: UseQueryResult<TemplateDetailsType, Error>;
+  setCurrentTemplate: Dispatch<React.SetStateAction<number | null>>;
+  currentTemplate: number | null;
+  setFilter: DebouncedFunc<(filter: TemplatesFilterType) => Promise<void>>;
+  deleteTemplate: UseMutationResult<
+    any,
+    Error,
+    deleteTemplateFunctionProps,
+    unknown
+  >;
+  handleDeleteTemplate: (id: number) => Promise<void>;
+}
+function Template({
+  templates,
+  page,
+  setPage,
+  size,
+  setSize,
+  templateDetails,
+  setCurrentTemplate,
+  currentTemplate,
+  deleteTemplate,
+  handleDeleteTemplate,
+  setFilter,
+}: TemplateProps) {
   const [currentLayout, setCurrentLayout] = useState<boolean>(true);
 
   type rowType = { row: TemplateType };
@@ -101,11 +116,11 @@ function Template() {
           //   onClick: () => setIsOpen(row),
           //   permissions: ["Edit Template"],
           // },
-          // {
-          //   title: "حذف",
-          //   onClick: () => handleDeleteTemplate(row?.id),
-          //   permissions: ["Delete Template"],
-          // },
+          {
+            title: "حذف",
+            onClick: () => handleDeleteTemplate(row?.id),
+            permissions: [],
+          },
         ];
         return <Actions actions={actions} pageName={"templates"} />;
       },
@@ -136,8 +151,8 @@ function Template() {
         cardProps={{
           pageName: "templates",
           // setIsOpen: setIsOpen,
-          // deleteTemplate: deleteTemplate,
-          // handleDeleteTemplate: handleDeleteTemplate,
+          deleteTemplate: deleteTemplate,
+          handleDeleteTemplate: handleDeleteTemplate,
           setCurrentTemplate: setCurrentTemplate,
         }}
         // CardComponent={TemplateCard}

@@ -6,11 +6,10 @@ import TEMPLATES_FILTER_SCHEMA, {
 } from "@/data/template/template/templateFilterSchema";
 import Input from "@/components/global/form/input/Input";
 import { useTheme } from "@/hooks/global/useTheme";
-import useTemplatesQuery, {
-  type TemplatesFilterType,
-} from "@/hooks/template/template/useTemplatesQuery";
+import { type TemplatesFilterType } from "@/hooks/template/template/useTemplatesQuery";
 import Select from "@/components/global/form/select/Select";
 import { GENDERS } from "@/data/global/select";
+import { Link } from "react-router-dom";
 
 interface TemplateHeaderProps {
   currentLayout: boolean;
@@ -71,6 +70,8 @@ function TemplatesHeader({
             toggleTheme();
           }}
         >{`${theme == "dark" ? "لايت" : "دارك"}`}</div>
+
+        <Link to={"add"}>إضافة</Link>
       </div>
 
       {/* filter */}

@@ -1,15 +1,19 @@
 import axiosClient from "@/libs/axios/axios-client";
+import waitSeconds from "@/utils/waitSeconds";
 
-interface deleteTemplateFunctionProps {
+export interface deleteTemplateFunctionProps {
   id: number | string;
 }
 
 // delete template api call function
 // gets: id of template
 async function deleteTemplateFunction({ id }: deleteTemplateFunctionProps) {
-  const res = await axiosClient.delete(`/center/templates/${id}`);
+  console.log({ id });
+  // const res = await axiosClient.delete(`/center/templates/${id}`);
 
-  return res.data.data;
+  // return res.data.data;
+  await waitSeconds();
+  return { message: "تمت الضافة بنجاح" };
 }
 
 export default deleteTemplateFunction;
