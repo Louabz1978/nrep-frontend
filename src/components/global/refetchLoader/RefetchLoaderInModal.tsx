@@ -28,15 +28,15 @@ function RefetchLoaderInModal({ isError, flag }: RefetchLoaderProps) {
           animate={{ width: "max-content" }}
           exit={{ width: 0 }}
           transition={{ ease: "linear", duration: 0.3 }}
-          className={`absolute z-[24] flex items-center justify-center bottom-[2px] gap-1 px-2 py-[1px] bg-blockBackgroundColor bg-opacity-50 backdrop-blur-[15px] shadow-sm shadow-borderColor right-0 w-max text-size12 border-solid ${
-            isError ? "border-errorColor" : "border-borderColor"
-          }  border border-r-0 text-fontColor text-opacity-70 rounded-l-full overflow-hidden text-nowrap`}
+          className={`absolute z-[24] flex items-center justify-center bottom-[2px] gap-1 px-2 py-[1px] bg-block-background/50 backdrop-blur-[15px] shadow-sm right-0 w-max text-size12 border-solid ${
+            isError ? "border-error" : "border-border"
+          }  border border-r-0 text-primary-foreground/70 rounded-l-full overflow-hidden text-nowrap`}
         >
           {isError ? (
             // refetch error message
             <>
               حدثت مشكلة في تحديث البيانات{" "}
-              <FaXmark className="text-erroborder-errorColor" />
+              <FaXmark className="text-error border-error" />
             </>
           ) : (
             // refetching message and loader

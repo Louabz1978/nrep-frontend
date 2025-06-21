@@ -11,6 +11,9 @@ import type { PaginationData } from "@/types/global/pagination";
 import type { TemplateDetailsType } from "@/api/template/template/getTemplateDetails";
 import type { DebouncedFunc } from "lodash";
 import type { deleteTemplateFunctionProps } from "@/api/template/template/deleteTemplate";
+import { useNavigate } from "react-router-dom";
+import Modal from "@/components/global/modal/Modal";
+import TemplateDetails from "./components/TemplateDetails";
 
 interface TemplateProps {
   templates: UseQueryResult<
@@ -35,6 +38,9 @@ interface TemplateProps {
   >;
   handleDeleteTemplate: (id: number) => Promise<void>;
 }
+
+type rowType = { row: TemplateType };
+
 function Template({
   templates,
   page,
@@ -48,9 +54,16 @@ function Template({
   handleDeleteTemplate,
   setFilter,
 }: TemplateProps) {
+  // navigate methods
+  const navigate = useNavigate();
+
+  // current layout
   const [currentLayout, setCurrentLayout] = useState<boolean>(true);
 
-  type rowType = { row: TemplateType };
+  // current open TemplateDetails
+  const [currentOpenTemplate, setCurrentOpenTemplate] = useState<number | null>(
+    null
+  );
 
   const fields = [
     {
@@ -108,14 +121,14 @@ function Template({
         const actions = [
           {
             title: "التفاصيل",
-            onClick: () => setCurrentTemplate(row?.id),
+            onClick: () => setCurrentOpenTemplate(row?.id),
             permissions: [],
           },
-          // {
-          //   title: "تعديل",
-          //   onClick: () => setIsOpen(row),
-          //   permissions: ["Edit Template"],
-          // },
+          {
+            title: "تعديل",
+            onClick: () => navigate(`edit/${row?.id}`),
+            permissions: [],
+          },
           {
             title: "حذف",
             onClick: () => handleDeleteTemplate(row?.id),
@@ -153,7 +166,7 @@ function Template({
           // setIsOpen: setIsOpen,
           deleteTemplate: deleteTemplate,
           handleDeleteTemplate: handleDeleteTemplate,
-          setCurrentTemplate: setCurrentTemplate,
+          setCurrentTemplate: setCurrentOpenTemplate,
         }}
         // CardComponent={TemplateCard}
         cardsContainerStyle={
@@ -166,6 +179,15 @@ function Template({
         flag={templates?.isRefetching}
         isError={templates?.isRefetchError}
       />
+
+      {/* details modal */}
+      <Modal isOpen={!!currentOpenTemplate} setIsOpen={setCurrentOpenTemplate}>
+        <TemplateDetails
+          id={currentOpenTemplate as number}
+          templateDetails={templateDetails}
+          setCurrentTemplate={setCurrentTemplate}
+        />
+      </Modal>
     </PageContainer>
   );
 }

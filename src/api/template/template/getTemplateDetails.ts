@@ -1,5 +1,6 @@
 import axiosClient from "@/libs/axios/axios-client";
 import type { Gender } from "./getTemplates";
+import waitSeconds from "@/utils/waitSeconds";
 
 interface getTemplateDetailsProps {
   queryKey: any[];
@@ -27,17 +28,16 @@ async function getTemplateDetails({
   // const res = await axiosClient.get(`/center/templates/${queryKey?.[1]}`);
 
   // return res?.data?.data;
+  await waitSeconds();
   return {
     id: 11,
-    name: "Thomas White",
-    phone: "+12125551234",
-    email: "thomas.white@gmail.com",
-    age: 40,
-    gender: "male",
-    address: "852 Spruce St, Austin, TX",
-    isActive: true,
-    createdAt: "2023-02-05",
-    updatedAt: "2023-05-10",
+    arabic_name: "عبدالله بحلاق",
+    english_name: "Abdullah Buhalq",
+    gender: "ذكر",
+    phone_number: "0923822343",
+    level: "ماجستير",
+    email: "3bdullah.bu7la8@gmail.com",
+    note: "anything",
   };
 }
 

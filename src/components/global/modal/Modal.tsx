@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import PopupContainer from "../popupContainer/PopupContainer";
-import { type ReactNode } from "react";
+import { type Dispatch, type ReactNode } from "react";
 
 interface ModalProps {
   children: ReactNode;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: Dispatch<React.SetStateAction<number | null>>;
   isOpen: boolean;
   addingStyle?: string;
 }

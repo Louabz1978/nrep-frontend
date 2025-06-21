@@ -44,10 +44,12 @@ function useTemplatesMutation() {
     mutationFn: editTemplateFunction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.templates.query] });
+      navigate("/template/main");
     },
   });
 
   async function handleEditTemplate(id: number, data: TemplateFormType) {
+    console.log("hisdfk");
     toast.promise(editTemplate.mutateAsync({ id, data }), {
       loading: MESSAGES?.templates?.edit?.loading,
       // change the toast status and message when successfully response

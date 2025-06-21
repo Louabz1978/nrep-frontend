@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import type { ReactNode, MouseEvent } from "react";
+import type { ReactNode, MouseEvent, Dispatch } from "react";
 
 interface PopupContainerProps {
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: Dispatch<React.SetStateAction<number | null>>;
   children: ReactNode;
   addingStyle?: string;
 }
@@ -15,7 +15,7 @@ function PopupContainer({
   const handleParentClick = (event: MouseEvent<HTMLDivElement>) => {
     // Prevent click events from children to bubble up to the parent
     if (event.target === event.currentTarget) {
-      setIsOpen(false);
+      setIsOpen(null);
     }
   };
 

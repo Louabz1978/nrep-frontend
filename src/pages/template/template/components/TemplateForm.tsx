@@ -7,8 +7,10 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { GENDER, LEVELS } from "@/data/global/enums";
 import {
   TEMPLATE_FORM_SCHEMA,
+  TEMPLATE_FORM_SCHEMA_INITIAL_VALUES,
   type TemplateFormType,
 } from "@/data/template/template/templateFormSchema";
+import cleanValues from "@/utils/cleanValues";
 import { joiResolver } from "@hookform/resolvers/joi";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -32,6 +34,7 @@ function TemplateForm({
   editTemplate,
   data,
 }: TemplateFormProps) {
+  console.log({ data });
   // template form
   const {
     handleSubmit,
@@ -42,7 +45,8 @@ function TemplateForm({
     formState: { errors },
   } = useForm({
     resolver: joiResolver(TEMPLATE_FORM_SCHEMA),
-    defaultValues: data,
+    defaultValues: cleanValues(TEMPLATE_FORM_SCHEMA_INITIAL_VALUES, data),
+
     mode: "onChange",
   });
 

@@ -1,12 +1,17 @@
 import useTemplatesQuery from "@/hooks/template/template/useTemplatesQuery";
 import Template from "./Template";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import { useUser } from "@/stores/useUser";
 import TemplateForm from "./components/TemplateForm";
 import useTemplatesMutation from "@/hooks/template/template/useTemplateMutation";
 import { TEMPLATE_FORM_SCHEMA_INITIAL_VALUES } from "@/data/template/template/templateFormSchema";
+import { useEffect } from "react";
+import Loader from "@/components/global/loader/Loader";
 
 function TemplateLogic() {
+  // current template id
+  const templateId = useParams()["*"]?.split("/")?.at(-1);
+
   // check permissions methods
   const { checkPermissions } = useUser();
 
@@ -23,6 +28,8 @@ function TemplateLogic() {
     setFilter,
   } = useTemplatesQuery();
 
+  console.log({ currentTemplate });
+
   // templates mutation methods
   const {
     handleAddTemplate,
@@ -32,6 +39,11 @@ function TemplateLogic() {
     handleDeleteTemplate,
     deleteTemplate,
   } = useTemplatesMutation();
+
+  // set current template if exists
+  useEffect(() => {
+    setCurrentTemplate(templateId);
+  }, [templateId]);
 
   return (
     <Routes>
@@ -71,6 +83,28 @@ function TemplateLogic() {
               handleAdd={handleAddTemplate}
               handleEdit={handleEditTemplate}
             />
+          ) : (
+            <>not allowed</>
+          )
+        }
+      />
+
+      {/* edit page */}
+      <Route
+        path="/edit/:id"
+        element={
+          checkPermissions([]) ? (
+            templateId == templateDetails?.data?.id ? (
+              <TemplateForm
+                addTemplate={addTemplate}
+                editTemplate={editTemplate}
+                data={templateDetails?.data}
+                handleAdd={handleAddTemplate}
+                handleEdit={handleEditTemplate}
+              />
+            ) : (
+              <Loader isFull />
+            )
           ) : (
             <>not allowed</>
           )
