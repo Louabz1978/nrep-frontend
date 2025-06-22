@@ -1,6 +1,6 @@
 // default style of confirmation popup
 const ALERT_STYLE = {
-  icon: "warning",
+  icon: "warning" as const,
   showCancelButton: true,
   confirmButtonColor: "var(--primary)",
   cancelButtonColor: "var(--tertiary)",
