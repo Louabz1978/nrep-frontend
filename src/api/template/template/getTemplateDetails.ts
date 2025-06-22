@@ -12,7 +12,7 @@ export interface TemplateDetailsType {
   phone: string;
   email: string;
   age: number;
-  gender: Gender;
+  gender: { value: Gender };
   address: string;
   isActive: boolean;
   profilePicture?: string;

@@ -65,6 +65,8 @@ function Template({
     null
   );
 
+  console.log(templates?.data?.data);
+
   const fields = [
     {
       width: "15%", // Increased from 20%
@@ -89,10 +91,11 @@ function Template({
     {
       width: "10%", // Same as original
       title: "الجنس",
+      showKey: ["gender", "value"],
       component: ({ row }: rowType) => {
-        return row?.gender === "male"
+        return row?.gender?.value === "male"
           ? "ذكر"
-          : row?.gender === "female"
+          : row?.gender?.value === "female"
           ? "أنثى"
           : "غير محدد";
       },
@@ -105,6 +108,7 @@ function Template({
     {
       width: "5%", // Reduced from 10%
       title: "الحالة",
+      // showKey: "isActive",
       component: ({ row }: rowType) => {
         return row?.isActive ? "نشط" : "غير نشط";
       },

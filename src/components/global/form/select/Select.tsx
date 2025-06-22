@@ -213,7 +213,7 @@ function Select({
         {/* select */}
         <button
           type="button"
-          className={`custom-select ${addingInputStyle} ${
+          className={`custom-select !outline-none focus:outline-none focus-visible:outline-none ${addingInputStyle} ${
             isOpen ? "rounded-t-[6px]" : "rounded-[6px]"
           } flex justify-between items-center cursor-pointer`}
           onKeyDown={handleKeyDown}
@@ -288,7 +288,7 @@ function Select({
               type="text"
               id={`select_${name}_search_${formId}`}
               autoFocus={true}
-              className="w-full bg-background/65 backdrop-blur-[15px] focus:bg-background/30 py-2 px-3 border-solid border border-border text-primary-foreground/90 rounded-[3px]"
+              className="w-full outline-none focus:outline-none focus-visible:outline-none bg-background/65 backdrop-blur-[15px] focus:bg-background/30 py-2 px-3 border-solid border border-border text-primary-foreground/90 rounded-[3px]"
               placeholder="بحث..."
               value={searchTerm}
               onChange={(e) => {
