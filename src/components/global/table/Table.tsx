@@ -15,7 +15,7 @@ interface Field {
   title: string;
   width?: string;
   justify?: string;
-  showKey?: string;
+  showKey?: string[] | string;
   component?: ({ row, index }: { row: any; index: number }) => React.ReactNode;
 }
 
@@ -66,7 +66,9 @@ function Table({
   keyValue = false,
   actionKey,
 }: TableProps) {
-  const [sortedField, setSortedField] = useState<string | null>(null);
+  const [sortedField, setSortedField] = useState<string | null | string[]>(
+    null
+  );
   const [sortOrder, setSortOrder] = useState<"desc" | "asc" | "">("");
 
   const handleTitleClick = (field: Field) => {

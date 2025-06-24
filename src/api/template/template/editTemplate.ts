@@ -15,7 +15,7 @@ async function editTemplateFunction({ id, data }: editTemplateFunctionProps) {
 
   // return res.data.data;
   await waitSeconds();
-  return { message: "تمت الضافة بنجاح" };
+  return { message: "تمت الضافة بنجاح", id: id };
 }
 
 export default editTemplateFunction;

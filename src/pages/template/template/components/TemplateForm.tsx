@@ -130,7 +130,6 @@ function TemplateForm({
         </div>
         <div className="flex flex-wrap gap-4 w-full items-center justify-center">
           <Button
-            variant={"default"}
             id="add_template_form"
             disabled={
               (data?.id && editTemplate?.isPending) ||

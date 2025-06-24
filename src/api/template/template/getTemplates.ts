@@ -16,7 +16,7 @@ export interface TemplateType {
   phone: string;
   email: string;
   age: number;
-  gender: Gender;
+  gender: { value: Gender };
   address: string;
   isActive: boolean;
   profilePicture?: string;
@@ -44,7 +44,6 @@ async function getTemplates({ queryKey }: getTemplatesProps): Promise<
 
   await waitSeconds();
 
-  if (queryKey?.[1]?.search == "one") return paginatedData?.[6];
   return paginatedData?.[queryKey?.[2]];
 }
 

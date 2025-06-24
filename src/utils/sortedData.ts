@@ -6,7 +6,7 @@ interface SortableData {
 
 const sortedData = (
   data: SortableData[] | undefined,
-  sortedField: string | null,
+  sortedField: string | null | string[],
   sortOrder: "asc" | "desc" | "" = "asc"
 ): SortableData[] | undefined => {
   try {
@@ -29,15 +29,15 @@ const sortedData = (
             return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
           }
 
-          case "boolean": // Treat true as 1 and false as 0
-          {
+          case "boolean": {
+            // Treat true as 1 and false as 0
             const aBool = aValue ? 1 : 0;
             const bBool = bValue ? 1 : 0;
             return sortOrder === "asc" ? aBool - bBool : bBool - aBool;
           }
 
-          default: // Default to string comparison
-          {
+          default: {
+            // Default to string comparison
             return sortOrder === "asc"
               ? String(aValue).localeCompare(String(bValue))
               : String(bValue).localeCompare(String(aValue));

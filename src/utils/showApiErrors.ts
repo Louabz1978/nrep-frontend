@@ -12,6 +12,8 @@ export function showApiErrors(
     else if (error?.code == "ECONNABORTED") return "timeoutError";
     else if (error?.response?.status == 500) {
       return "serverError";
+    } else if (error?.response?.status == 404) {
+      return "404 not found";
     } else {
       return "genericError";
     }
