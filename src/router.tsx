@@ -11,6 +11,7 @@ import TemplateLayout from "./layouts/template/TemplateLayout";
 import Template from "./pages/template/template/Template";
 import PageContainer from "./components/global/pageContainer/PageContainer";
 import TemplateLogic from "./pages/template/template/TemplateLogic";
+import Login from "./pages/global/Login";
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -87,11 +88,11 @@ const router = createBrowserRouter([
   // specific pages that require the user without token
   {
     path: "/login",
-    element: <PrivateRoute element={<GlobalLayout />} role={undefined} />,
+    element: <PrivateRoute element={<GlobalLayout />} role={"allow"} />,
     children: [
       {
         index: true,
-        element: <>login</>,
+        element: <Login />,
       },
     ],
   },

@@ -45,7 +45,7 @@ export const TEMPLATE_FORM_SCHEMA = Joi.object({
     .label("المرحلة التدريسية"),
   email: Joi.string()
     .trim()
-    .pattern(/[a-zA-Z0-9\_\.]+(@gmail\.com)$/)
+    .pattern(/[a-zA-Z0-9_.]+(@gmail\.com)$/)
     .allow(null)
     .messages({
       ...VALIDATION_MESSAGES,

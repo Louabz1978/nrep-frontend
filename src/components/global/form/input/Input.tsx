@@ -41,6 +41,7 @@ function Input({
   register,
   name,
   label,
+  labelStyle,
   errors,
   element,
   disabled,
@@ -114,7 +115,7 @@ function Input({
         >
           {/* input label  */}
           {label ? (
-            <label htmlFor={name} className="text-primary-foreground mb-2">
+            <label htmlFor={name} className={labelStyle}>
               {label}
             </label>
           ) : null}

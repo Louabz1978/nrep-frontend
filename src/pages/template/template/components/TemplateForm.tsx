@@ -46,7 +46,6 @@ function TemplateForm({
   } = useForm({
     resolver: joiResolver(TEMPLATE_FORM_SCHEMA),
     defaultValues: cleanValues(TEMPLATE_FORM_SCHEMA_INITIAL_VALUES, data),
-
     mode: "onChange",
   });
 

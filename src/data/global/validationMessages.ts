@@ -1,4 +1,4 @@
-const VALIDATION_MESSAGES = {
+const VALIDATION_MESSAGES: Record<string, string> = {
   // General Validation Messages
   "any.required": "الحقل {{#label}} مطلوب.",
   "any.custom": "الحقل {{#label}} غير صالح.",

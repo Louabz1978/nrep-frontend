@@ -7,7 +7,7 @@
   font-weight: normal;
   font-style: normal;
 }
-  
+
 @font-face {
   font-family: 'Tajawal';
   src: url("../assets/fonts/Tajawal/Tajawal-Medium.ttf") format("truetype");
@@ -81,7 +81,9 @@ body {
   --background: #eeeeee;
   --block-background: #ffffff;
   --secondary-background: #dddddd;
-  
+  --gold-background: #D4AF37;
+  --form-background:#181A20;
+
   /* Blue Tints (Light to Dark) */
   --secondary-block-background: #eef5ff;
   --tertiary-block-background: #c7ddff;
@@ -91,26 +93,26 @@ body {
   --quaternary: #f6a000;       /* Orange */
   --quinary: #2365c8;
   --senary: #8676fe;        /* Purple */
-  
+
   /* Text & Borders (Near-neutral) */
   --primary-foreground: #000000;
   --secondary-foreground: #5196ff;
   --tertiary-foreground: #444444;
   --border: #d4d4d4;
   --secondary-border: #2b5ea9;
-  
+
   /* Status Colors */
   --error: #ff5039;        /* Red */
   --success: #00c91e;      /* Green */
   --sun: #ffc700;          /* Yellow */
   --true: #71ffb2;         /* Mint Green */
-  
-  
+
+
   /* Other special fonts */
   --semi-dark-font-color: #232323;
   --light-font-color: #757575;
-  
-  
+
+
   /* Neutrals */
   --placeholder: #999999;
   --white: #ffffff;
@@ -130,7 +132,9 @@ body {
   --background: #1c2026;               /* Soft graphite */
   --block-background: #282d34;         /* Warm dark gray */
   --secondary-background: #373c44;        /* Medium gray */
-  
+  --gold-background: #D4AF37;
+
+  --form-background:#181A20;
   /* Blues (Muted and neutralized) */
   --secondary-block-background: #232d3c;  /* Faded denim */
   --tertiary-block-background: #2d4664;   /* Weathered blue */
@@ -140,26 +144,26 @@ body {
   --quaternary: #f6a000;                  /* Pumpkin spice */
   --quinary: #5078c8;                   /* Overcast blue */
   --senary: #8278e6;                   /* Dulled periwinkle */
-  
+
   /* Text & Borders (Near-neutral) */
   --primary-foreground: #ebeeef;                    /* 98% white (hint of frost) */
   --secondary-foreground: #a0b4dc;             /* Morning mist */
   --tertiary-foreground: #aaafb9;              /* Pebble gray */
   --border: #3c4650;                  /* Shale border */
   --secondary-border: #466eb4;           /* Distant blue */
-  
+
   /* Accents (Natural tones) */
   --error: #e65a5a;                   /* Terra cotta */
   --success: #50dc82;                 /* Eucalyptus */
   --sun: #f0c864;                     /* Honey */
   --true: #64e6a0;                    /* Patina green */
-  
+
   /* Neutrals (Warmed slightly) */
   --placeholder: #828791;             /* Foggy gray */
   --white: #ffffff;                   /* Pure white */
   --notification-background: #323741; /* Wet concrete */
   --popup-blur: #14191e;              /* Charcoal veil */
-  
+
   /* Shadows (Neutral undertones) */
   --shadow: 0 0.25rem 0.625rem #0f14194d;
   --drop-shadow: 0 0.25rem 0.625rem #0a0f1466;
@@ -195,7 +199,8 @@ body {
   --color-white: var(--white);
   --color-notification-background: var(--notification-background);
   --color-popup-blur: var(--popup-blur);
-
+  --color-gold-background: var(--gold-background);
+  --color-form-background: var(--form-background);
 
   /* Spacing */
   --spacing-11xl: 160px;
@@ -279,7 +284,7 @@ body {
   --spacing-width-lg: 640px;
   --spacing-width-md: 560px;
   --spacing-paragraph-max-width: 720px;
-  
+
 
   /* radius */
   --radius-7xl: 64px;
