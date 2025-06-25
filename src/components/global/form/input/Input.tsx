@@ -170,7 +170,7 @@ function Input({
             {/* show input content with password input type */}
             {type == "password" ? (
               <div
-                className="text-primary-foreground/80 hover:text-primary-foreground/100 transition-all absolute h-max w-max left-4 top-[16px] flex justify-center items-center cursor-pointer"
+                className="text-primary-foreground/80 hover:text-primary-foreground/100 transition-all absolute h-max w-max left-4 top-[50%] -translate-y-[50%] flex justify-center items-center cursor-pointer"
                 onClick={() => {
                   if (type == "password") setShow(!show);
                 }}
