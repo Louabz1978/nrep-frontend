@@ -10,19 +10,14 @@ import LOGIN_FORM_SCHEMA, {
 import type { UseMutationResult } from "@tanstack/react-query";
 
 interface LoginProps {
-  login: UseMutationResult<
-    {
-      message: string;
-    },
-    Error,
-    {
-      data: LoginFormType;
-    },
-    unknown
-  >;
+  login: UseMutationResult<unknown>;
   handleLogin: (data: LoginFormType) => Promise<void>;
 }
+
+// login page
+// gets: login mutation, handleLogin method
 const Login = ({ login, handleLogin }: LoginProps) => {
+  // form control methods
   const {
     register,
     handleSubmit,
@@ -32,8 +27,8 @@ const Login = ({ login, handleLogin }: LoginProps) => {
     mode: "onChange",
   });
 
+  // handle submit form data
   const onSubmit = (data: any) => {
-    // Print the values of inputs in console
     handleLogin(data);
   };
 
@@ -43,9 +38,15 @@ const Login = ({ login, handleLogin }: LoginProps) => {
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       <div className="bg-form-background  rounded-2xl shadow-lg p-10 w-[430px] flex flex-col items-center rtl text-right ml-24">
+        {/* logo */}
         <img src={logo} alt="NREP Logo" className="w-20 h-20 mb-2" />
+
+        {/* title */}
         <div className="text-white text-lg mb-6">منصة العقارات الوطنية</div>
+
+        {/* form area */}
         <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+          {/* username */}
           <Input
             name="username"
             type="text"
@@ -56,6 +57,7 @@ const Login = ({ login, handleLogin }: LoginProps) => {
             addingStyle="mb-4"
           />
 
+          {/* password */}
           <Input
             name="password"
             type="password"
@@ -66,6 +68,7 @@ const Login = ({ login, handleLogin }: LoginProps) => {
             addingStyle="mb-4"
           />
 
+          {/* forget password */}
           <div
             className="text-white text-sm mb-8 mt-3 text-right cursor-pointer underline"
             style={{ direction: "rtl" }}
@@ -74,6 +77,7 @@ const Login = ({ login, handleLogin }: LoginProps) => {
           </div>
           <div className="text-white text-sm mb-2 text-right cursor-pointer"></div>
 
+          {/* submit button */}
           <Button
             disabled={login?.isPending}
             variant="login"

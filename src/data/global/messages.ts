@@ -21,6 +21,10 @@ const MESSAGES = {
       confirmText: "لن تستطيع استعادته بعد حذفه!",
     },
   },
+  login: {
+    loading: "جار تسجيل الدخول...",
+    success: "تم تسجيل الدخول بنجاح",
+  },
 };
 
 export default MESSAGES;

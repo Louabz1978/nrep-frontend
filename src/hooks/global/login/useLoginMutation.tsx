@@ -2,10 +2,9 @@ import loginFunction from "@/api/global/login/login";
 import MESSAGES from "@/data/global/messages";
 import type { LoginFormType } from "@/data/global/LoginFormSchema";
 import { showApiErrors } from "@/utils/showApiErrors";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate, type To } from "react-router-dom";
 import { toast } from "sonner";
-import { replace } from "lodash";
 
 function useLoginMutation() {
   // navigate method
@@ -15,15 +14,17 @@ function useLoginMutation() {
   const login = useMutation({
     mutationFn: loginFunction,
     onSuccess: () => {
-      navigate(-1, { replace: true });
+      navigate(-1 as To, { replace: true });
     },
   });
 
+  // handle submit login form
+  // gets: submitted data
   async function handleLogin(data: LoginFormType) {
     toast.promise(login.mutateAsync({ data }), {
-      loading: MESSAGES?.templates?.add?.loading,
+      loading: MESSAGES?.login?.loading,
       // change the toast status and message when successfully response
-      success: MESSAGES?.templates?.add?.success,
+      success: MESSAGES?.login?.success,
       error: (error) => {
         //toast the api returned errors
         return showApiErrors(error);
