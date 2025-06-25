@@ -5,6 +5,7 @@ import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { replace } from "lodash";
 
 function useLoginMutation() {
   // navigate method
@@ -14,7 +15,7 @@ function useLoginMutation() {
   const login = useMutation({
     mutationFn: loginFunction,
     onSuccess: () => {
-      // navigate(navigateTo ?? "/");
+      navigate(-1, { replace: true });
     },
   });
 

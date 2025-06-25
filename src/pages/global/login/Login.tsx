@@ -50,32 +50,20 @@ const Login = ({ login, handleLogin }: LoginProps) => {
             name="username"
             type="text"
             label="اسم المستخدم"
-            labelStyle="text-white mb-2 cursor-pointer"
             placeholder="أدخل اسم المستخدم"
             register={register}
             errors={errors}
             addingStyle="mb-4"
-            addingInputStyle={`rounded-lg border-2 h-[40px] ${
-              errors.username
-                ? "border-red-500 "
-                : "border-gold-background focus:ring-gold-background"
-            } bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80]`}
           />
 
           <Input
             name="password"
             type="password"
             label="كلمة المرور"
-            labelStyle="text-white mb-2 cursor-pointer"
             placeholder="أدخل كلمة المرور"
             register={register}
             errors={errors}
             addingStyle="mb-4"
-            addingInputStyle={`rounded-lg border-2 h-[40px] ${
-              errors.password
-                ? "border-red-500"
-                : "border-gold-background focus:ring-gold-background"
-            } bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80]`}
           />
 
           <div
