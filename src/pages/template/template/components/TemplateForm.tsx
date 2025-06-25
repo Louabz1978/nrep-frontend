@@ -72,6 +72,15 @@ function TemplateForm({
               placeholder={"أدخل الاسم بالعربية"}
             />
             <Input
+              type={"checkbox"}
+              label={"الاسم بالعربية"}
+              setValue={setValue}
+              register={register}
+              errors={errors}
+              name={"check"}
+              watch={watch}
+            />
+            <Input
               type={"text"}
               label={"الاسم بالإنجليزية"}
               register={register}

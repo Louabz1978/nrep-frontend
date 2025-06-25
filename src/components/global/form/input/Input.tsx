@@ -88,7 +88,7 @@ function Input({
               {...register(name)}
               disabled={disabled}
               onChange={(e) => {
-                setValue(name, e?.target?.checked ? 1 : 0);
+                setValue(name, e?.target?.checked ? true : false);
                 trigger?.(name);
                 onChange({ trigger } as { trigger: UseFormTrigger<any> });
               }}

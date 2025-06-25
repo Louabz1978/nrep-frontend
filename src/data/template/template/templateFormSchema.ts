@@ -11,6 +11,7 @@ export interface TemplateFormType {
   note: string;
 }
 export const TEMPLATE_FORM_SCHEMA = Joi.object({
+  check: Joi.boolean(),
   arabic_name: Joi.string()
     .required()
     .min(2)
@@ -63,6 +64,7 @@ export const TEMPLATE_FORM_SCHEMA = Joi.object({
 export const TEMPLATE_FORM_SCHEMA_INITIAL_VALUES = {
   arabic_name: "",
   english_name: "",
+  check: false,
   gender: "",
   phone_number: "",
   level: "",
