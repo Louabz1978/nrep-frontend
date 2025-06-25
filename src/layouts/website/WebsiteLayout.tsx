@@ -8,11 +8,12 @@ function WebsiteLayout() {
   return (
     <div className="w-full h-full overflow-auto relative bg-primary flex flex-col scroll-bar transition-colors duration-[0.3s]">
       <Navbar />
-      <Page>
+      <Page />
+      <main className="flex-1">
         <AnimatePresence mode="wait">
           <Outlet />
         </AnimatePresence>
-      </Page>
+      </main>
       <Footer />
     </div>
   );
