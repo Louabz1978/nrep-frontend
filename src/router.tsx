@@ -7,6 +7,7 @@ import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
 import TestHome from "./pages/website/TestHome/TestHome";
+import Page from "./layouts/website/page/Page";
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <TestHome />,
-      },
+      }
     ],
   },
   {

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
-import {  AiOutlineClose, AiOutlineBell } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
 import logo from "../../../assets/images/logo.png";
+
 
 function Navbar() {
   return (
