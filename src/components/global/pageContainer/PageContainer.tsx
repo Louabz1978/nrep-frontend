@@ -26,7 +26,7 @@ function PageContainer({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className={`flex flex-col flex-1 gap-6 md:py-7 py-5 md:px-5 px-3 ${className}`}
+      className={`flex flex-col flex-1 ${className}`}
     >
       {checkPermissions(permissions) ? children : <>not allowed</>}
     </motion.div>

@@ -10,15 +10,16 @@ const userAtom = atom<User | null>(
   jsonParse(secureLocalStorage.getItem("USER"))
 );
 
+// permissions type
+export type PermissionsType = (
+  | keyof typeof WEBSITE_PERMISSIONS
+  | keyof typeof ADMIN_PERMISSIONS
+)[];
+
 // Derived atom for permissions check
 const checkPermissionsAtom = atom(
   (get) =>
-    (
-      requiredPermissions: (
-        | keyof typeof WEBSITE_PERMISSIONS
-        | keyof typeof ADMIN_PERMISSIONS
-      )[] = []
-    ): boolean => {
+    (requiredPermissions: PermissionsType = []): boolean => {
       const user = get(userAtom);
       const permissionsList = { ...WEBSITE_PERMISSIONS, ...ADMIN_PERMISSIONS };
       let permissionStatus = false;

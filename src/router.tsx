@@ -12,6 +12,7 @@ import PageContainer from "./components/global/pageContainer/PageContainer";
 import TemplateLogic from "./pages/template/template/TemplateLogic";
 import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
+import ListingLogic from "./pages/website/listing/ListingLogic";
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: "input",
         element: <InputLogic />,
+      },
+      {
+        path: "listing/*",
+        element: <ListingLogic />,
       },
     ],
   },

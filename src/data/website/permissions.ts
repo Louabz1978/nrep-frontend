@@ -1,7 +1,5 @@
 const WEBSITE_PERMISSIONS = {
   "Add Item": "Backend Add Item ID",
-};
-
-export type WebsitePermissionsKeysType = "Add Item";
+} as const;
 
 export default WEBSITE_PERMISSIONS;
