@@ -1,0 +1,9 @@
+.vscode
+
+dist
+
+out
+
+node_modules/**/*
+
+src/cdn/**/*.js

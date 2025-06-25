@@ -6,14 +6,13 @@ import Page from "./page/Page";
 
 function WebsiteLayout() {
   return (
-    <div className="w-full h-full overflow-auto relative bg-background flex flex-col scroll-bar transition-colors duration-[0.3s]">
+    <div className="w-full h-full overflow-auto relative bg-primary flex flex-col scroll-bar transition-colors duration-[0.3s]">
       <Navbar />
-      <Page />
-      <main className="flex-1">
+      <Page>
         <AnimatePresence mode="wait">
           <Outlet />
         </AnimatePresence>
-      </main>
+      </Page>
       <Footer />
     </div>
   );
