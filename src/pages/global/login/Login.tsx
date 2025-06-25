@@ -2,11 +2,27 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
-import bgImage from "../../assets/images/bgImage.jpg";
-import logo from "../../assets/images/logo.png";
-import LOGIN_FORM_SCHEMA from "./LoginFormSchema";
+import bgImage from "@/assets/images/bgImage.jpg";
+import logo from "@/assets/images/logo.png";
+import LOGIN_FORM_SCHEMA, {
+  type LoginFormType,
+} from "@/data/global/LoginFormSchema";
+import type { UseMutationResult } from "@tanstack/react-query";
 
-const Login = () => {
+interface LoginProps {
+  login: UseMutationResult<
+    {
+      message: string;
+    },
+    Error,
+    {
+      data: LoginFormType;
+    },
+    unknown
+  >;
+  handleLogin: (data: LoginFormType) => Promise<void>;
+}
+const Login = ({ login, handleLogin }: LoginProps) => {
   const {
     register,
     handleSubmit,
@@ -18,8 +34,7 @@ const Login = () => {
 
   const onSubmit = (data: any) => {
     // Print the values of inputs in console
-    console.log("Username:", data.username);
-    console.log("Password:", data.password);
+    handleLogin(data);
   };
 
   return (
@@ -71,7 +86,12 @@ const Login = () => {
           </div>
           <div className="text-white text-sm mb-2 text-right cursor-pointer"></div>
 
-          <Button variant="login" type="submit" size={"login"}>
+          <Button
+            disabled={login?.isPending}
+            variant="login"
+            type="submit"
+            size={"login"}
+          >
             تسجيل الدخول
           </Button>
         </form>

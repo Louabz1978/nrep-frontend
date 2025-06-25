@@ -31,6 +31,7 @@ interface InputProps {
   onBlur?: () => void;
   min?: number;
   max?: number;
+  labelStyle?: string;
 }
 
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not

@@ -8,10 +8,10 @@ import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
 import TestHome from "./pages/website/TestHome/TestHome";
 import TemplateLayout from "./layouts/template/TemplateLayout";
-import Template from "./pages/template/template/Template";
 import PageContainer from "./components/global/pageContainer/PageContainer";
 import TemplateLogic from "./pages/template/template/TemplateLogic";
-import Login from "./pages/global/Login";
+import LoginLogic from "@/pages/global/login/LoginLogic";
+import InputLogic from "./pages/website/Input/InputLogic";
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -77,22 +77,26 @@ const router = createBrowserRouter([
   // private website pages
   {
     path: "/",
-    element: <PrivateRoute element={<WebsiteLayout />} role={"free"} />,
+    element: <PrivateRoute element={<WebsiteLayout />} role={"allow"} />,
     children: [
       {
         index: true,
         element: <>private route in website</>,
       },
+      {
+        path: "input",
+        element: <InputLogic />,
+      },
     ],
   },
   // specific pages that require the user without token
   {
-    path: "/login",
+    path: "/",
     element: <PrivateRoute element={<GlobalLayout />} role={"allow"} />,
     children: [
       {
-        index: true,
-        element: <Login />,
+        path: "login",
+        element: <LoginLogic />,
       },
     ],
   },
