@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CiFileOn } from "react-icons/ci";
+import { MdOutlineRealEstateAgent } from 'react-icons/md';
+import { TbBuildingEstate } from 'react-icons/tb';
 
 function Input() {
   return (
@@ -24,7 +26,8 @@ function Input() {
             <div className="flex items-center justify-between">
               <span>استيراد من سجل عقارات آخر</span>
               <span className="mr-2 bg-white text-[#D4AF37] w-8 h-8 flex items-center justify-center rounded-2xl">
-                <CiFileOn />
+              <MdOutlineRealEstateAgent />
+
               </span>
             </div>
           </button>
@@ -36,7 +39,7 @@ function Input() {
             <div className="flex items-center justify-between">
               <span>استيراد من عقار سابق</span>
               <span className="mr-2 bg-white text-[#D4AF37] w-8 h-8 flex items-center justify-center rounded-2xl">
-                <CiFileOn />
+              <TbBuildingEstate />
               </span>
             </div>
           </button>
