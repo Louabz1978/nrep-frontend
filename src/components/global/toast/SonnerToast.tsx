@@ -3,14 +3,14 @@ import { Toaster } from "sonner";
 function SonnerToast() {
   return (
     <Toaster
-      position={"bottom-right"}
+      position={"top-left"}
       closeButton
       toastOptions={{
         classNames: {
           toast:
-            "!bg-primary !border !border-solid !border-border-primary !text-text-primary",
+            "!bg-background !border !border-solid !border-border !text-primary",
           closeButton:
-            "!bg-primary !border !border-solid !border-border-primary !text-text-primary",
+            "!bg-background !border !border-solid !border-border !text-primary",
         },
       }}
     />

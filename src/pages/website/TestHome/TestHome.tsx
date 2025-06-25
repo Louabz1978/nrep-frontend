@@ -3,6 +3,7 @@ import { useTheme } from "@/hooks/global/useTheme";
 import useItemsQuery from "@/hooks/website/testHome/useTestHomeQuery";
 import ItemSkeleton from "./components/ItemSkeleton";
 import useItemsMutations from "@/hooks/website/testHome/useTestHomeMutations";
+import { Link } from "react-router-dom";
 
 function TestHome() {
   const { theme, toggleTheme } = useTheme();
@@ -11,7 +12,7 @@ function TestHome() {
 
   return (
     <div>
-      <div
+      {/* <div
         className="dark:text-red-600 text-blue-600"
         onClick={() => {
           toggleTheme();
@@ -31,7 +32,13 @@ function TestHome() {
 
       <div className="mt-[30px]" onClick={handleSubscribe}>
         submit
-      </div>
+      </div> */}
+      <Link
+        to={"/template/main"}
+        className="cursor-pointer text-primary-foreground"
+      >
+        template
+      </Link>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import ErrorComponent from "../../error/ErrorComponent";
 import Loader from "../../loader/Loader";
 import { GoTriangleDown } from "react-icons/go";
@@ -6,14 +6,50 @@ import { FaXmark } from "react-icons/fa6";
 import handleClickOutside from "@/utils/handleClickOutside";
 import { isArray } from "lodash";
 import EmptyContent from "../../emptyContent/EmptyContent";
+import {
+  type UseFormRegister,
+  type FieldErrors,
+  type UseFormSetValue,
+  type UseFormTrigger,
+  type UseFormWatch,
+} from "react-hook-form";
+
+interface SelectProps {
+  placeholder?: string;
+  register?: UseFormRegister<any>;
+  name: string;
+  label?: string;
+  errors?: FieldErrors;
+  element?: React.ReactNode;
+  disabled?: boolean;
+  setValue: UseFormSetValue<any>;
+  trigger: UseFormTrigger<any>;
+  choices?: any[];
+  showValue?: string;
+  keyValue?: string;
+  watch: UseFormWatch<any>;
+  isLoading?: boolean;
+  isError?: boolean;
+  emptyValue?: any;
+  addingStyle?: string;
+  addingInputStyle?: string;
+  addingSelectStyle?: string;
+  addingElement?: (data: { isOpen: boolean }) => React.ReactNode;
+  choiceElement?: (data: { choice: any }) => React.ReactNode;
+  multiple?: boolean;
+  preventRemove?: boolean;
+  belowComponent?: () => React.ReactNode;
+  formId?: string;
+  query?: any;
+}
 
 function Select({
   placeholder,
-  register,
+  // register,
   name,
   label,
   errors,
-  element,
+  // element,
   disabled,
   setValue,
   trigger,
@@ -27,20 +63,20 @@ function Select({
   addingStyle = "",
   addingInputStyle = "",
   addingSelectStyle = "",
-  addingElement = () => {},
-  choiceElement = () => {},
+  addingElement = () => null,
+  choiceElement = () => null,
   multiple = false,
   preventRemove = false,
   belowComponent,
-  formId,
-}) {
+  formId, // query
+}: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const clickRef = useRef();
+  const clickRef = useRef<HTMLDivElement>(null);
   useEffect(() => handleClickOutside(clickRef, setIsOpen, null), []);
 
   // handle choice click
-  function handleChoiceClick(e, choice, key) {
-    if (e?.target?.id == "prevent-click") return;
+  function handleChoiceClick(e: React.MouseEvent, choice: any, key?: number) {
+    if ((e?.target as HTMLElement)?.id == "prevent-click") return;
     let finalChoice = choice;
     if (typeof choice == "string") {
       const [rtlPart, ltrPart] = finalChoice.split(" - ");
@@ -49,9 +85,11 @@ function Select({
 
     const isChoosen = multiple
       ? keyValue
-        ? watch(name).filter((ele) => ele[showValue] == finalChoice[showValue])
-            ?.length
-        : watch(name)?.includes(finalChoice[keyValue])
+        ? watch(name).filter(
+            (ele: any) =>
+              ele?.[showValue as string] == finalChoice?.[showValue as string]
+          )?.length
+        : watch(name)?.includes(finalChoice)
       : keyValue
       ? finalChoice[keyValue] == watch(name)?.[keyValue]
       : finalChoice == watch(name);
@@ -63,14 +101,16 @@ function Select({
       if (multiple) {
         if (keyValue) {
           const index = watch(name).findIndex(
-            (ele) => ele[keyValue] == finalChoice[keyValue]
+            (ele: any) => ele[keyValue] == finalChoice[keyValue]
           );
-          watch(name).splice(index, 1);
+          const newValue = [...watch(name)];
+          newValue.splice(index, 1);
+          setValue(name, newValue);
         } else {
-          const index = watch(name).findIndex(
-            (ele) => ele[showValue] == finalChoice[showValue]
-          );
-          watch(name).splice(index, 1);
+          const index = watch(name).findIndex((ele: any) => ele == finalChoice);
+          const newValue = [...watch(name)];
+          newValue.splice(index, 1);
+          setValue(name, newValue);
         }
       }
       // single
@@ -89,11 +129,11 @@ function Select({
       }
     }
     trigger(name);
-    if (key) setFocusedChoose(key);
+    if (key !== undefined) setFocusedChoose(key);
   }
 
   // the focused option
-  const [focusedChoose, setFocusedChoose] = useState(null);
+  const [focusedChoose, setFocusedChoose] = useState<number | null>(null);
   // scroll to the focused row to be on screen
   useEffect(() => {
     if (focusedChoose !== null) {
@@ -106,7 +146,7 @@ function Select({
     }
   }, [focusedChoose, isOpen]);
   // handle press down and up key press
-  function handleKeyDown(e) {
+  function handleKeyDown(e: React.KeyboardEvent) {
     // transition up and down between the options
     if (e.key == "ArrowDown" && !e.ctrlKey) {
       e.preventDefault();
@@ -130,7 +170,11 @@ function Select({
       e.preventDefault();
       // choose the focused option
       if (focusedChoose !== null && isOpen) {
-        handleChoiceClick(e, choices?.[focusedChoose], focusedChoose);
+        handleChoiceClick(
+          e as unknown as React.MouseEvent,
+          choices?.[focusedChoose],
+          focusedChoose
+        );
       }
       // open select options
       if (!isOpen) setIsOpen(true);
@@ -140,7 +184,7 @@ function Select({
   }
 
   // scroll to the end of options section when open the select field options
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (ref?.current && isOpen) {
       ref.current.scrollIntoView({
@@ -150,13 +194,13 @@ function Select({
     }
   }, [isOpen]);
 
-  const [searchTerm, setSearchTerm] = useState();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
     <div className={`flex flex-col w-full ${addingStyle}`}>
       {/* select label  */}
       {label ? (
-        <label htmlFor={name} className="text-fontColor mb-2">
+        <label htmlFor={name} className="text-primary-foreground mb-2">
           {label}
         </label>
       ) : null}
@@ -169,19 +213,18 @@ function Select({
         {/* select */}
         <button
           type="button"
-          className={`custom-select ${addingInputStyle} ${
+          className={`custom-select !outline-none focus:outline-none focus-visible:outline-none ${addingInputStyle} ${
             isOpen ? "rounded-t-[6px]" : "rounded-[6px]"
           } flex justify-between items-center cursor-pointer`}
           onKeyDown={handleKeyDown}
           onClick={(e) => {
-            e.preventDefault;
+            e.preventDefault();
             if (!disabled) setIsOpen((prev) => !prev);
           }}
         >
           <div className="overflow-auto text-nowrap">
-            {watch(name) &&
-            (!isArray(watch(name)) ||
-              (isArray(watch(name)) && watch(name).length)) ? (
+            {(watch(name) && !isArray(watch(name))) ||
+            (isArray(watch(name)) && watch(name).length) ? (
               !multiple ? (
                 showValue ? (
                   watch(name)[showValue]
@@ -189,20 +232,20 @@ function Select({
                   watch(name)
                 )
               ) : showValue ? (
-                watch(name).map((ele, index) => {
+                watch(name).map((ele: any, index: number) => {
                   return `${ele[showValue]}${
                     index + 1 == watch(name).length ? "" : " - "
                   }`;
                 })
               ) : (
-                watch(name).map((ele, index) => {
+                watch(name).map((ele: any, index: number) => {
                   return `${ele}${
                     index + 1 == watch(name).length ? "" : " - "
                   }`;
                 })
               )
             ) : (
-              <span className="text-placeholderColor">{placeholder}</span>
+              <span className="text-placeholder">{placeholder}</span>
             )}
           </div>
 
@@ -210,7 +253,7 @@ function Select({
           {!multiple && !preventRemove && watch(name) ? (
             <span
               title="إفراغ"
-              className={`relative font-light text-size12 p-1 text-errorColor rounded-full bg-errorColor bg-opacity-30 opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
+              className={`relative font-light text-size12 p-1 text-error rounded-full bg-error/30 opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
             >
               <FaXmark />
               <div
@@ -236,16 +279,16 @@ function Select({
 
         {/* choices list */}
         <div
-          className={`bg-secondBlockBackgroundColor bg-opacity-65 backdrop-blur-[15px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
+          className={`bg-secondary-block-background/65 backdrop-blur-[15px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
             isOpen ? "h-[240px] overflow-auto py-1 pt-0" : "h-0 overflow-hidden"
           } transition-all flex flex-col gap-1 px-1 shadow-md `}
         >
-          <div className="bg-secondBlockBackgroundColor bg-opacity-65 backdrop-blur-[15px] pt-2 z-[2] sticky top-0">
+          <div className="bg-secondary-block-background/65 backdrop-blur-[15px] pt-2 z-[2] sticky top-0">
             <input
               type="text"
               id={`select_${name}_search_${formId}`}
               autoFocus={true}
-              className="w-full bg-backgroundColor bg-opacity-65 backdrop-blur-[15px] focus:bg-opacity-30 py-2 px-3 border-solid border border-borderColor text-fontColor text-opacity-90 rounded-[3px]"
+              className="w-full outline-none focus:outline-none focus-visible:outline-none bg-background/65 backdrop-blur-[15px] focus:bg-background/30 py-2 px-3 border-solid border border-border text-primary-foreground/90 rounded-[3px]"
               placeholder="بحث..."
               value={searchTerm}
               onChange={(e) => {
@@ -268,9 +311,9 @@ function Select({
             ) : isLoading ? (
               <Loader />
             ) : choices?.length == 0 ? (
-              <EmptyContent width="w-[100px]" fontSize="text-size12" />
+              <EmptyContent />
             ) : (
-              choices?.map((choice, key) => {
+              choices?.map((choice: any, key: number) => {
                 let finalChoice = choice;
                 if (typeof choice == "string") {
                   const [rtlPart, ltrPart] = finalChoice.split(" - ");
@@ -280,7 +323,9 @@ function Select({
                 const isChoosen = multiple
                   ? keyValue
                     ? watch(name).filter(
-                        (ele) => ele[showValue] == finalChoice[showValue]
+                        (ele: any) =>
+                          ele[showValue as string] ==
+                          finalChoice[showValue as string]
                       )?.length
                     : watch(name)?.includes(finalChoice)
                   : keyValue
@@ -300,12 +345,12 @@ function Select({
                       }}
                       className={`py-2 px-3 flex items-center cursor-pointer group relative ${
                         focusedChoose == key
-                          ? "border-solid border border-mainColor"
+                          ? "border-solid border border-primary"
                           : "border-solid border border-transparent"
                       } ${
                         isChoosen
-                          ? "bg-secondFontColor rounded-md text-whiteColor"
-                          : "hover:bg-secondFontColor hover:bg-opacity-20 rounded-md text-fontColor text-opacity-80"
+                          ? "bg-secondary-foreground rounded-md text-white"
+                          : "hover:bg-secondary-foreground/20 rounded-md text-primary-foreground/80"
                       } transition-all duration-[0.1s]`}
                       id={`option_${name}_${key}_${formId}`}
                     >
@@ -331,8 +376,8 @@ function Select({
       </div>
       {/* validation errors  */}
       {errors?.[name] ? (
-        <span className="text-errorColor text-size14">
-          {errors[name].message}
+        <span className="text-error text-size14">
+          {errors?.[name]?.message as ReactNode}
         </span>
       ) : null}
       {belowComponent ? belowComponent() : null}

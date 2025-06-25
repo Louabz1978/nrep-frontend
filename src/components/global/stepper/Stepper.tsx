@@ -1,6 +1,11 @@
 import { Fragment } from "react";
 
-function Stepper({ stepsNumber, currentStep }) {
+interface StepperProps {
+  stepsNumber: number;
+  currentStep: number;
+}
+
+function Stepper({ stepsNumber, currentStep }: StepperProps) {
   return (
     <div className="flex flex-row-reverse items-center py-2 md:px-0 px-3">
       {/* steps */}
@@ -11,16 +16,16 @@ function Stepper({ stepsNumber, currentStep }) {
             return (
               <Fragment key={number}>
                 {number + 1 < stepsNumber ? (
-                  <div className="h-[3px] bg-backgroundColor flex-1 brightness-[0.85]"></div>
+                  <div className="h-[3px] bg-background flex-1 brightness-[0.85]"></div>
                 ) : null}
                 {
                   //   prev steps
                   number + 1 == currentStep ? (
-                    <div className="w-[25px] h-[25px] rounded-full border-solid border border-secondColor bg-secondColor flex justify-center items-center p-1 text-whiteColor">
+                    <div className="w-[25px] h-[25px] rounded-full border-solid border border-secondary bg-secondary flex justify-center items-center p-1 text-white">
                       {number + 1}
                     </div>
                   ) : (
-                    <div className="w-[25px] h-[25px] rounded-full border-solid border border-secondColor bg-backgroundColor flex justify-center items-center p-1 text-fontColor font-bold">
+                    <div className="w-[25px] h-[25px] rounded-full border-solid border border-secondary bg-background flex justify-center items-center p-1 text-primary-foreground font-bold">
                       {number + 1}
                     </div>
                   )

@@ -1,9 +1,22 @@
 import { AnimatePresence, motion } from "framer-motion";
 import PopupContainer from "../popupContainer/PopupContainer";
+import { type Dispatch, type ReactNode } from "react";
+
+interface ModalProps {
+  children: ReactNode;
+  setIsOpen: Dispatch<React.SetStateAction<number | null>>;
+  isOpen: boolean;
+  addingStyle?: string;
+}
 
 // modal container, gets: method to close modal, flag to specify if the modal is opened or not, and the inner component in the modal
 // returns: popup modal container
-const Modal = ({ children, setIsOpen, isOpen, addingStyle }) => {
+const Modal = ({
+  children,
+  setIsOpen,
+  isOpen,
+  addingStyle = "",
+}: ModalProps) => {
   return (
     <AnimatePresence>
       {isOpen ? (
@@ -14,7 +27,7 @@ const Modal = ({ children, setIsOpen, isOpen, addingStyle }) => {
             <motion.div
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
-              className=" bg-blockBackgroundColor rounded-[18px] sm:w-max w-[90vw] flex justify-center max-w-[90vw] relative"
+              className="bg-block-background rounded-[18px] sm:w-max w-[90vw] flex justify-center max-w-[90vw] relative"
             >
               {children}
             </motion.div>

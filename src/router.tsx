@@ -7,7 +7,12 @@ import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
 import TestHome from "./pages/website/TestHome/TestHome";
-import Page from "./layouts/website/page/Page";
+import TemplateLayout from "./layouts/template/TemplateLayout";
+import PageContainer from "./components/global/pageContainer/PageContainer";
+import TemplateLogic from "./pages/template/template/TemplateLogic";
+import LoginLogic from "@/pages/global/login/LoginLogic";
+import InputLogic from "./pages/website/Input/InputLogic";
+
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -44,6 +49,7 @@ const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
 
 // Browser URL router container
 const router = createBrowserRouter([
+  // admin pages
   {
     path: "/admin",
     element: <PrivateRoute element={<AdminLayout />} role={"admin"} />,
@@ -58,6 +64,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  // global website pages
   {
     path: "/",
     element: <PrivateRoute element={<WebsiteLayout />} role={"allow"} />,
@@ -68,26 +75,52 @@ const router = createBrowserRouter([
       }
     ],
   },
+  // private website pages
   {
     path: "/",
-    element: <PrivateRoute element={<WebsiteLayout />} role={"free"} />,
+    element: <PrivateRoute element={<WebsiteLayout />} role={"allow"} />,
     children: [
       {
         index: true,
         element: <>private route in website</>,
       },
-    ],
-  },
-  {
-    path: "/login",
-    element: <PrivateRoute element={<GlobalLayout />} role={undefined} />,
-    children: [
       {
-        index: true,
-        element: <>login</>,
+        path: "input",
+        element: <InputLogic />,
       },
     ],
   },
+  // specific pages that require the user without token
+  {
+    path: "/",
+    element: <PrivateRoute element={<GlobalLayout />} role={"allow"} />,
+    children: [
+      {
+        path: "login",
+        element: <LoginLogic />,
+      },
+    ],
+  },
+  // templage
+  {
+    path: "/template",
+    element: <PrivateRoute element={<TemplateLayout />} role={"allow"} />,
+    children: [
+      {
+        path: "",
+        element: <PageContainer>home</PageContainer>,
+      },
+      {
+        path: "main/*",
+        element: <TemplateLogic />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
+    ],
+  },
+  // not found
   {
     path: "*",
     element: <>404</>,

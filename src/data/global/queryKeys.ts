@@ -3,6 +3,10 @@ const QUERY_KEYS = {
     query: "itemsQuery",
     details: "itemsDetails",
   },
+  templates: {
+    query: "templatesQuery",
+    details: "templatesDetails",
+  },
 };
 
 export default QUERY_KEYS;

@@ -1,8 +1,15 @@
-function Loader({ size = 8, isFull }) {
-  const SIZE = {
-    3: "w-3 h-3",
-    8: "w-8 h-8",
-  };
+const SIZE = {
+  3: "w-3 h-3",
+  8: "w-8 h-8",
+};
+
+function Loader({
+  size = 8,
+  isFull,
+}: {
+  size?: keyof typeof SIZE;
+  isFull?: boolean;
+}) {
   return (
     <div
       className={`h-full flex justify-center items-center text-size3 ${
@@ -10,7 +17,7 @@ function Loader({ size = 8, isFull }) {
       }`}
     >
       <svg
-        className={`${SIZE[size]} text-fontColor text-opacity-20 animate-spin fill-mainColor`}
+        className={`${SIZE[size]} text-primary-foreground/20 animate-spin fill-primary`}
         viewBox="0 0 100 101"
         fill="none"
       >

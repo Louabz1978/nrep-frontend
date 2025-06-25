@@ -1,10 +1,27 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+  type ButtonHTMLAttributes,
+  type DetailedHTMLProps,
+} from "react";
 import {
   FaAngleLeft,
   FaAngleRight,
   FaAnglesLeft,
   FaAnglesRight,
 } from "react-icons/fa6";
+
+interface PaginationProps {
+  data: any[] | undefined;
+  isFetching: boolean;
+  paginationData?: {
+    last_page: number;
+  };
+  page: number;
+  setPage: (page: number) => void;
+  size: number;
+  setSize: (size: number) => void;
+}
 
 const buttonStyles = {
   border: "1px solid #eee",
@@ -27,13 +44,13 @@ function Pagination({
   setPage,
   size,
   setSize,
-}) {
+}: PaginationProps) {
   const [pagination, setPagination] = useState({
     currentPage: page,
     lastPage: page,
     prevPage: page,
     nextPage: page,
-    firstPage: page,
+    firstPage: 1,
   });
 
   useEffect(() => {
@@ -48,7 +65,7 @@ function Pagination({
     }
   }, [page, paginationData]);
 
-  const rerunDataFunc = async (pageNumber) => {
+  const rerunDataFunc = async (pageNumber: number) => {
     setPage(pageNumber);
   };
 
@@ -61,10 +78,10 @@ function Pagination({
   }, [data?.length]);
 
   return (
-    <div className="relative p-4 flex gap-4 items-center justify-center bg-blockBackgroundColor text-fontColor border-t border-solid border-borderColor ">
+    <div className="relative p-4 flex gap-4 items-center justify-center bg-block-background text-primary-foreground border-t border-solid border-border ">
       <div className="absolute top-0 h-full p-4 right-0">
         <input
-          className="bg-blockBackgroundColor text-fontColor"
+          className="bg-block-background text-primary-foreground"
           type="text"
           value={size}
           step={1}
@@ -73,23 +90,38 @@ function Pagination({
           onChange={(e) => {
             if (
               /^\d*$/.test(e.target.value) &&
-              e.target.value <= 1000 &&
-              e.target.value >= 1
+              Number(e.target.value) <= 1000 &&
+              Number(e.target.value) >= 1
             ) {
               setSize(Number(e.target.value));
             }
           }}
-          style={{ ...buttonStyles }}
+          style={
+            { ...buttonStyles } as DetailedHTMLProps<
+              ButtonHTMLAttributes<HTMLButtonElement>,
+              HTMLButtonElement
+            >
+          }
         />
       </div>
       <button
-        style={{ ...buttonStyles }}
+        style={
+          { ...buttonStyles } as DetailedHTMLProps<
+            ButtonHTMLAttributes<HTMLButtonElement>,
+            HTMLButtonElement
+          >
+        }
         onClick={() => rerunDataFunc(firstPage)}
       >
         <FaAnglesRight />
       </button>
       <button
-        style={{ ...buttonStyles }}
+        style={
+          { ...buttonStyles } as DetailedHTMLProps<
+            ButtonHTMLAttributes<HTMLButtonElement>,
+            HTMLButtonElement
+          >
+        }
         onClick={() => rerunDataFunc(prevPage)}
       >
         <FaAngleRight />
@@ -119,7 +151,7 @@ function Pagination({
 
         {/* current page number  */}
         {currentPage ? (
-          <span className="cursor-pointer bg-mainColor px-2 rounded-sm text-whiteColor aspect-square w-fit">
+          <span className="cursor-pointer bg-primary px-2 rounded-sm text-white aspect-square w-fit">
             {currentPage}
           </span>
         ) : null}
@@ -147,13 +179,23 @@ function Pagination({
       </div>
 
       <button
-        style={{ ...buttonStyles }}
+        style={
+          { ...buttonStyles } as DetailedHTMLProps<
+            ButtonHTMLAttributes<HTMLButtonElement>,
+            HTMLButtonElement
+          >
+        }
         onClick={() => rerunDataFunc(nextPage)}
       >
         <FaAngleLeft />
       </button>
       <button
-        style={{ ...buttonStyles }}
+        style={
+          { ...buttonStyles } as DetailedHTMLProps<
+            ButtonHTMLAttributes<HTMLButtonElement>,
+            HTMLButtonElement
+          >
+        }
         onClick={() => rerunDataFunc(lastPage)}
       >
         <FaAnglesLeft />

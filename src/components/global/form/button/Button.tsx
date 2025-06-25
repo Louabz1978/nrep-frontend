@@ -9,7 +9,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "font-medium !text-13p py-9p px-16p bg-primary text-primary-foreground hover:bg-primary-hover rounded-xs border border-solid border-primary hover:border-primary-hover",
+          "font-medium !text-[13px] py-9p px-16p bg-primary text-white hover:bg-primary/80 rounded-[6px] border border-solid border-primary hover:border-primary/80 cursor-pointer",
         destructive:
           "font-medium !text-13p py-9p px-16p bg-destructive text-destructive-foreground hover:bg-destructive-hover rounded-xs border border-solid border-destructive hover:border-destructive-hover",
         outline:
@@ -23,11 +23,15 @@ const buttonVariants = cva(
           "font-medium !text-13p py-9p px-16p bg-transparent text-foreground-secondary hover:bg-background-hover rounded-xs",
         panel:
           "font-medium !text-13p py-9p px-16p bg-top-panel-button text-top-panel-button-foreground hover:brightness-95 rounded-[7px]",
+        login:
+          "w-full cursor-pointer bg-gold-background text-xl text-white font-bold rounded-[18px] py-3 transition border border-gold-background hover:bg-[#18181B] hover:text-gold-background hover:border-gold-background",
       },
+
       size: {
         default: "h-9 px-6 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
+        login:" rounded-[18px] h-[50px]",
         icon: "h-9 w-9 flex justify-center items-center !p-0",
         "icon-circle":
           "h-[32px] w-[32px] flex justify-center items-center rounded-full !p-0",

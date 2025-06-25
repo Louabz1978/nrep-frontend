@@ -1,38 +1,54 @@
 import getRowShow from "./getRowShow";
 
-const sortedData = (data, sortedField, sortOrder = "asc") => {
-  if (sortedField) {
-    return data.slice().sort((a, b) => {
-      const aValue = getRowShow(a, sortedField);
-      const bValue = getRowShow(b, sortedField);
+interface SortableData {
+  [key: string]: any;
+}
 
-      // Dynamically determine the data type of the field
-      const dataType = typeof aValue;
+const sortedData = (
+  data: SortableData[] | undefined,
+  sortedField: string | null | string[],
+  sortOrder: "asc" | "desc" | "" = "asc"
+): SortableData[] | undefined => {
+  try {
+    if (sortedField) {
+      return data?.slice().sort((a, b) => {
+        const aValue = getRowShow(a, sortedField);
+        const bValue = getRowShow(b, sortedField);
 
-      // Handle null/undefined cases first
-      if (aValue == null || bValue == null) {
-        return (aValue == null ? 1 : -1) * (sortOrder === "asc" ? 1 : -1);
-      }
+        // Dynamically determine the data type of the field
+        const dataType = typeof aValue;
 
-      // Perform sorting based on data type
-      switch (dataType) {
-        case "number":
-          return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+        // Handle null/undefined cases first
+        if (aValue == null || bValue == null) {
+          return (aValue == null ? 1 : -1) * (sortOrder === "asc" ? 1 : -1);
+        }
 
-        case "boolean":
-          // Treat true as 1 and false as 0
-          const aBool = aValue ? 1 : 0;
-          const bBool = bValue ? 1 : 0;
-          return sortOrder === "asc" ? aBool - bBool : bBool - aBool;
+        // Perform sorting based on data type
+        switch (dataType) {
+          case "number": {
+            return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+          }
 
-        default:
-          // Default to string comparison
-          return sortOrder === "asc"
-            ? String(aValue).localeCompare(String(bValue))
-            : String(bValue).localeCompare(String(aValue));
-      }
-    });
-  } else {
+          case "boolean": {
+            // Treat true as 1 and false as 0
+            const aBool = aValue ? 1 : 0;
+            const bBool = bValue ? 1 : 0;
+            return sortOrder === "asc" ? aBool - bBool : bBool - aBool;
+          }
+
+          default: {
+            // Default to string comparison
+            return sortOrder === "asc"
+              ? String(aValue).localeCompare(String(bValue))
+              : String(bValue).localeCompare(String(aValue));
+          }
+        }
+      });
+    } else {
+      return data;
+    }
+  } catch (err) {
+    console.log(err);
     return data;
   }
 };
