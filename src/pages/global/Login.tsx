@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button } from "@/components/global/form/button/Button";
@@ -7,16 +6,14 @@ import bgImage from "../../assets/images/bgImage.jpg";
 import logo from "../../assets/images/logo.png";
 import LOGIN_FORM_SCHEMA from "./LoginFormSchema";
 
-
-
-const Login= () => {
+const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: joiResolver(LOGIN_FORM_SCHEMA),
-    mode: "onTouched",
+    mode: "onChange",
   });
 
   const onSubmit = (data: any) => {
