@@ -18,7 +18,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="w-full bg-[#1C2026] h-16 flex items-center px-12 justify-start text-white">
+    <nav className="w-full bg-dark-gray h-16 flex items-center px-12 justify-start text-white">
       <div className="flex items-center gap-4">
         {tabs.map((tab, index) => {
           const hasPermission = tab.permission
@@ -34,9 +34,9 @@ function Navbar() {
                     setActiveTab(tab.label);
                     setActiveSubMenu(null);
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded transition-colors bg-[#1C2026] duration-200 cursor-pointer ${
-                    activeTab === tab.label ? "text-[#D4AF37]" : "text-white"
-                  } hover:text-[#D4AF37] focus:outline-none`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded transition-colors bg-dark-gray duration-200 cursor-pointer ${
+                    activeTab === tab.label ? "text-gold-background" : "text-white"
+                  } hover:text-gold-background focus:outline-none`}
                 >
                   <TbListSearch className="w-8 h-8" />
                   <span className="text-2xl">{tab.label}</span>
@@ -48,7 +48,7 @@ function Navbar() {
                 </button>
 
                 <div
-                  className={`absolute -left-10 top-12 mt-2 w-48 bg-[#1C2026] rounded-lg  z-20 border-t border-white transition-all duration-300 ease-in-out ${
+                  className={`absolute -left-10 top-12 mt-2 w-48 bg-dark-gray rounded-lg  z-20 border-t border-white transition-all duration-300 ease-in-out ${
                     menuOpen ? "opacity-100" : "opacity-0  "
                   }`}
                 >
@@ -58,11 +58,11 @@ function Navbar() {
                         <>
                           <button
                             onClick={() => handleSubMenuToggle(item.label)}
-                            className={`w-full text-right cursor-pointer px-4 py-2 bg-[#1C2026] border-t border-white flex justify-between items-center transition-colors duration-200 ${
+                            className={`w-full text-right cursor-pointer px-4 py-2 bg-dark-gray border-t border-white flex justify-between items-center transition-colors duration-200 ${
                               activeSubMenu === item.label
-                                ? "text-[#D4AF37]"
+                                ? "text-gold-background"
                                 : "text-white"
-                            } hover:text-[#D4AF37] focus:outline-none`}
+                            } hover:text-gold-background focus:outline-none`}
                           >
                             <span className="text-2xl">{item.label}</span>
                             <MdKeyboardArrowDown
@@ -74,7 +74,7 @@ function Navbar() {
 
                           {activeSubMenu === item.label && (
                             <div
-                              className={`absolute right-full w-48 bg-[#1C2026] rounded-lg shadow-lg z-30 transition-all duration-500 ${
+                              className={`absolute right-full w-48 bg-dark-gray rounded-lg shadow-lg z-30 transition-all duration-500 ${
                                 activeSubMenu === item.label
                                   ? "opacity-100"
                                   : "opacity-0"
@@ -88,16 +88,16 @@ function Navbar() {
                                 <button
                                   key={subIdx}
                                   onClick={() => setActiveSubTab(sub?.label)}
-                                  className={`w-full text-right text-2xl px-4 cursor-pointer border-t border-white py-2 bg-[#1C2026] hover:text-[#D4AF37] transition-colors duration-200  ${
+                                  className={`w-full text-right text-2xl px-4 cursor-pointer border-t border-white py-2 bg-dark-gray hover:text-gold-background transition-colors duration-200  ${
                                     activeSubTab === sub?.label
-                                      ? "text-[#D4AF37] bg-[#1C2026] "
+                                      ? "text-gold-background bg-dark-gray "
                                       : "text-white"
                                   } focus:outline-none`}
                                 >
                                   <span
                                     className={`${
                                       activeSubTab === sub?.label
-                                        ? "border-b-2 border-[#D4AF37]"
+                                        ? "border-b-2 border-gold-background"
                                         : "border-none"
                                     }`}
                                   >
@@ -111,9 +111,9 @@ function Navbar() {
                       ) : (
                         <button
                           onClick={() => setActiveSubTab(item.label)}
-                          className={`w-full text-right px-4 py-2 hover:bg-[#1C2026] transition-colors duration-200 rounded-lg ${
+                          className={`w-full text-right px-4 py-2 hover:bg-dark-gray transition-colors duration-200 rounded-lg ${
                             activeSubTab === item.label
-                              ? "text-[#D4AF37] font-semibold bg-[#1C2026]"
+                              ? "text-gold-background font-semibold bg-dark-gray"
                               : "text-white"
                           } focus:outline-none`}
                         >
@@ -133,8 +133,8 @@ function Navbar() {
               key={index}
               to={tab.to}
               onClick={() => setActiveTab(tab.label)}
-              className={`transition-colors text-2xl duration-200 hover:text-[#D4AF37] ${
-                activeTab === tab.label ? "text-[#D4AF37]" : "text-white"
+              className={`transition-colors text-2xl duration-200 hover:text-gold-background ${
+                activeTab === tab.label ? "text-gold-background" : "text-white"
               }`}
             >
               <div className="flex align-center gap-3">

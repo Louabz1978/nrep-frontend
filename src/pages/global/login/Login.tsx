@@ -48,7 +48,7 @@ const Login = ({ login, handleLogin }: LoginProps) => {
         className="w-screen h-screen min-h-screen flex items-center justify-end bg-cover bg-center"
         style={{ backgroundImage: `url(${bgImage})` }}
       >
-        <div className="bg-form-background  rounded-2xl shadow-lg p-10 w-[430px] flex flex-col items-center rtl text-right ml-24">
+        <div className="bg-dark-gray  rounded-2xl shadow-lg p-10 w-[430px] flex flex-col items-center rtl text-right ml-24">
           {/* logo */}
           <img src={logo} alt="NREP Logo" className="w-20 h-20 mb-2" />
 

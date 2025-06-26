@@ -5,7 +5,7 @@ import logo from "../../../assets/images/logo.png";
 
 function Header() {
   return (
-    <header className="w-full bg-[#1C2026] h-20 flex items-center px-12 justify-between border-b border-amber-50">
+    <header className="w-full bg-dark-gray h-20 flex items-center px-12 justify-between border-b border-amber-50">
       <div className="flex items-center">
         <Link to="/">
           <img src={logo} alt="logo" className="h-16 w-auto" />

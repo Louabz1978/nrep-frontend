@@ -82,7 +82,7 @@ body {
   --block-background: #ffffff;
   --secondary-background: #dddddd;
   --gold-background: #D4AF37;
-  --form-background:#181A20;
+  --dark-gray:#181A20;
 
   /* Blue Tints (Light to Dark) */
   --secondary-block-background: #eef5ff;
@@ -200,7 +200,7 @@ body {
   --color-notification-background: var(--notification-background);
   --color-popup-blur: var(--popup-blur);
   --color-gold-background: var(--gold-background);
-  --color-form-background: var(--form-background);
+  --color-dark-gray: var(--dark-gray);
 
   /* Spacing */
   --spacing-11xl: 160px;

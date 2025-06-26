@@ -1,41 +1,64 @@
-import { Fragment } from "react";
+import { useState } from "react";
 
-interface StepperProps {
-  stepsNumber: number;
-  currentStep: number;
-}
+const steps = [
+  "الحالة",
+  "معلومات عامة",
+  "الغرف والمساحات",
+  "الميزات",
+  "المعلومات المالية",
+  "العمولة",
+  "الوكيل المسؤول",
+  "ملاحظات",
+];
 
-function Stepper({ stepsNumber, currentStep }: StepperProps) {
+const Stepper = ({ currentStep }: { currentStep: number }) => {
+  const [currStep, setCurrStep] = useState(currentStep);
+  const firstStep = currentStep
+
+  const handleTravelStep = (idx: number) => idx <= firstStep ? setCurrStep(idx) : setCurrStep(currStep);
+
   return (
-    <div className="flex flex-row-reverse items-center py-2 md:px-0 px-3">
-      {/* steps */}
-      <div className="flex flex-row-reverse justify-between items-center w-[100%]">
-        {Array.from(Array(stepsNumber).keys())
-          .reverse()
-          .map((number) => {
-            return (
-              <Fragment key={number}>
-                {number + 1 < stepsNumber ? (
-                  <div className="h-[3px] bg-background flex-1 brightness-[0.85]"></div>
-                ) : null}
-                {
-                  //   prev steps
-                  number + 1 == currentStep ? (
-                    <div className="w-[25px] h-[25px] rounded-full border-solid border border-secondary bg-secondary flex justify-center items-center p-1 text-white">
-                      {number + 1}
-                    </div>
-                  ) : (
-                    <div className="w-[25px] h-[25px] rounded-full border-solid border border-secondary bg-background flex justify-center items-center p-1 text-primary-foreground font-bold">
-                      {number + 1}
-                    </div>
-                  )
-                }
-              </Fragment>
-            );
-          })}
-      </div>
+    <div className="flex flex-col w-48 pr-6 pt-10 ">
+      {steps.map((step, idx) => {
+        const isActive = idx === currStep;
+        const isCompleted = idx < currStep;
+        return (
+          <div key={step} className="flex flex-col relative min-h-[60px]">
+            <div className="flex ">
+              <div
+                onClick={() => handleTravelStep(idx)}
+                className={`w-4 h-4 cursor-pointer rounded-full border-2 ${
+                  isActive
+                    ? "bg-gold-background border-gold-background text-white"
+                    : isCompleted
+                    ? "bg-green-500 border-green-600 text-white"
+                    : "bg-white text-white"
+                }`}
+              ></div>
+              <span
+                onClick={() => handleTravelStep(idx)}
+                className={`mr-3 cursor-pointer text-base ${
+                  isActive
+                    ? "text-gold-background font-bold"
+                    : isCompleted
+                    ? "text-green-700"
+                    : "text-white"
+                }`}
+              >
+                {step}
+              </span>
+            </div>
+            {idx !== steps.length - 1 && (
+              <div
+                className="absolute right-[8px] top-[15px] w-[1px] h-12 bg-gray-300 z-0"
+                style={{ backgroundColor: isCompleted ? "#22c55e" : "#e5e7eb" }}
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
-}
+};
 
 export default Stepper;
