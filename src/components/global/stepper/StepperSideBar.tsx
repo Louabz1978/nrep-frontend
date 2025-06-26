@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import Stepper from "./Stepper";
 
 
 const StepperSideBar = ()=>{
+
+  const steps = [
+    "الحالة",
+    "معلومات عامة",
+    "الغرف و المساحات",
+    "الميزات",
+    "المعلومات العامة",
+    "العمولة",
+    "الوكيل المسؤول",
+    "الملاحظلات",
+  ]
+
   return (
-    <div className="w-64 border-l border-gray-200 p-4 bg-dark-gray ">
-        <Stepper currentStep={4} />
-      </div>
+
+        <Stepper steps={steps} currentStep={4} />
   )
 
 };
