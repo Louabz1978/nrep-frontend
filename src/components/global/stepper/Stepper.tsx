@@ -32,7 +32,7 @@ const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
                 {/* Step circle indicator, clickable to travel to the step */}
                 <div
                   onClick={() => handleTravelStep(idx)}
-                  className={`w-4 h-4 cursor-pointer rounded-full border-2 ${
+                  className={`w-4 h-4 relative z-[2] cursor-pointer rounded-full border-2 ${
                     isActive
                       ? "bg-transparent border-gold-background text-white"
                       : isCompleted
@@ -57,7 +57,7 @@ const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
               {/* Render the vertical line between steps except for the last step */}
               {idx !== steps.length - 1 && (
                 <div
-                  className="absolute right-[8px] top-[15px] w-[1px] h-12 bg-gray-300 z-0"
+                  className="absolute right-[8px] top-[14px] w-[1px] h-12 bg-gray-300 z-[1]"
                   style={{
                     // Change line color if the step is completed
                     backgroundColor: isCompleted ? "#D4AF37" : "white",
