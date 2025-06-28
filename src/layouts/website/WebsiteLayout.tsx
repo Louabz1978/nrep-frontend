@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./navbar/Navbar";
-import Footer from "./footer/Footer";
 import Page from "./page/Page";
 import Header from "./header/Header";
 
@@ -15,7 +14,7 @@ function WebsiteLayout() {
           <Outlet />
         </AnimatePresence>
       </Page>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

@@ -1,18 +1,16 @@
-import { useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 interface StepperProps {
   currentStep: number;
   steps: string[];
+  setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 
-// Stepper component receives the currentStep and steps as props
-const Stepper = ({ currentStep, steps }: StepperProps) => {
-  // Local state to track the currently selected step
-  const [currentStepState, setCurrStepState] = useState(currentStep);
-
+// Stepper component receives the setCurrentStep, currentStep and steps as props
+const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
   // Handler to move to a step if it's not ahead of the currentStep
   const handleTravelStep = (idx: number) =>
-    idx <= currentStep ? setCurrStepState(idx) : setCurrStepState(currentStepState);
+    idx <= currentStep ? setCurrentStep(idx) : setCurrentStep(currentStep);
 
   return (
     // Make the sidebar scrollable and cover all steps
@@ -21,19 +19,22 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
         {/* Map through each step to render step indicators and labels */}
         {steps.map((step, idx) => {
           // Determine if the step is active
-          const isActive = idx === currentStepState;
+          const isActive = idx === currentStep;
           // Determine if the step is completed
-          const isCompleted = idx < currentStepState;
+          const isCompleted = idx < currentStep;
           return (
             // Each step container
-            <div key={step + idx} className="flex flex-col relative min-h-[60px]">
+            <div
+              key={step + idx}
+              className="flex flex-col relative min-h-[60px]"
+            >
               <div className="flex ">
                 {/* Step circle indicator, clickable to travel to the step */}
                 <div
                   onClick={() => handleTravelStep(idx)}
                   className={`w-4 h-4 cursor-pointer rounded-full border-2 ${
                     isActive
-                      ? "bg-white border-gold-background text-white"
+                      ? "bg-transparent border-gold-background text-white"
                       : isCompleted
                       ? "bg-gold-background border-gold-background text-white"
                       : "bg-white text-white"
