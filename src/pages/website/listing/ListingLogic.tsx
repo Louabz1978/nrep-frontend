@@ -2,6 +2,7 @@ import NotAllowed from "@/components/global/notAllowed/NotAllowed";
 import { useUser } from "@/stores/useUser";
 import { Route, Routes } from "react-router-dom";
 import ListingForm from "./ListingForm";
+import Status from "./Steps/status";
 
 function ListingLogic() {
   // checkPermissions method
@@ -13,6 +14,10 @@ function ListingLogic() {
       <Route
         path="/add"
         element={checkPermissions([]) ? <ListingForm /> : <NotAllowed />}
+      />
+      <Route
+        path="/add/status"
+        element={checkPermissions([]) ? <Status /> : <NotAllowed />}
       />
     </Routes>
   );

@@ -49,7 +49,7 @@ function Navbar() {
 
                 <div
                   className={`absolute -left-10 top-12 mt-2 w-48 bg-dark-gray rounded-lg  z-20 border-t border-white transition-all duration-300 ease-in-out ${
-                    menuOpen ? "opacity-100" : "opacity-0  "
+                    menuOpen ? "block" : "hidden"
                   }`}
                 >
                   {tab.submenu?.map((item, idx) => (

@@ -27,7 +27,7 @@ function ListingForm() {
         steps={STEPS}
         currentStep={currentStep}
         setCurrentStep={setCurrentStep}
-      />
+        stepRoutes={[]} />
 
       {/* form steps area */}
       <div className="flex-1"></div>

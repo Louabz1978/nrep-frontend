@@ -14,7 +14,7 @@ const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
 
   return (
     // Make the sidebar scrollable and cover all steps
-    <div className="w-64 border-l border-gray-200 p-4 bg-dark-gray  flex flex-col">
+    <div className="w-64 border-l border-gray-200 p-4 bg-dark-gray h-full  flex flex-col">
       <div className="flex flex-col w-48 mr-3 mt-3 flex-1 overflow-y-auto">
         {/* Map through each step to render step indicators and labels */}
         {steps.map((step, idx) => {
