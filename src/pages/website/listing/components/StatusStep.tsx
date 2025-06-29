@@ -18,6 +18,7 @@ function StatusStep({ form, setCurrentStep }: StatusStepProps) {
   return (
     <form id="status_step_form" onSubmit={form?.handleSubmit(onSubmit)}>
       {/* render inputs here */}
+      status
     </form>
   );
 }

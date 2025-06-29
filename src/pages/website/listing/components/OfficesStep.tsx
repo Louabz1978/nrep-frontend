@@ -1,5 +1,5 @@
 function OfficesStep() {
-  return <div></div>;
+  return <div>offices</div>;
 }
 
 export default OfficesStep;

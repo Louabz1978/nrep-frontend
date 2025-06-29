@@ -1,5 +1,5 @@
 function CompensationStep() {
-  return <div></div>;
+  return <div>comp</div>;
 }
 
 export default CompensationStep;

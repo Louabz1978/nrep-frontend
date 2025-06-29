@@ -62,20 +62,6 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     mode: "onChange",
   });
 
-  // form steps
-  const STEPS = useMemo(
-    () => [
-      "الحالة",
-      "معلومات عامة",
-      "الغرف و المساحات",
-      "الميزات",
-      "المعلومات العامة",
-      "العمولة",
-      "الوكيل المسؤول",
-      "الملاحظلات",
-    ],
-    []
-  );
   // general step form
   const generalStep = useForm({
     resolver: joiResolver(generalStepSchema),
@@ -142,6 +128,21 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     ),
     mode: "onChange",
   });
+
+  // form steps
+  const STEPS = useMemo(
+    () => [
+      "الحالة",
+      "معلومات عامة",
+      "الغرف و المساحات",
+      "الميزات",
+      "المعلومات العامة",
+      "العمولة",
+      "الوكيل المسؤول",
+      "الملاحظلات",
+    ],
+    []
+  );
 
   // handle submit all form steps
   const handleSubmitForm = () => {

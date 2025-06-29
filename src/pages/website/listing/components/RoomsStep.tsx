@@ -1,5 +1,5 @@
 function RoomsStep() {
-  return <div></div>;
+  return <div>rooms</div>;
 }
 
 export default RoomsStep;

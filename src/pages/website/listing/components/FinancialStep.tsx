@@ -1,5 +1,5 @@
 function FinancialStep() {
-  return <div></div>;
+  return <div>fin</div>;
 }
 
 export default FinancialStep;

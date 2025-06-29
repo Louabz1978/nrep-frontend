@@ -1,5 +1,5 @@
 function FeaturesStep() {
-  return <div></div>;
+  return <div>feat</div>;
 }
 
 export default FeaturesStep;
