@@ -1,38 +1,28 @@
 import Stepper from "@/components/global/stepper/Stepper";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-function ListingForm() {
-  // current step
-  const [currentStep, setCurrentStep] = useState(4);
+const steps = [
+  "الحالة",
+  "معلومات عامة",
+  "الغرف و المساحات",
+  "الميزات",
+  "المعلومات المالية",
+  "العمولة",
+  "الوكيل المسؤول",
+  "ملاحظات",
+];
+const [currentStep, setCurrentStep]=useState(1)
 
-  // form steps
-  const STEPS = useMemo(
-    () => [
-      "الحالة",
-      "معلومات عامة",
-      "الغرف و المساحات",
-      "الميزات",
-      "المعلومات العامة",
-      "العمولة",
-      "الوكيل المسؤول",
-      "الملاحظلات",
-    ],
-    []
-  );
+const ListingForm = () => {
 
   return (
-    <div className="flex">
-      {/* stepper */}
-      <Stepper
-        steps={STEPS}
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-        stepRoutes={[]} />
+    <div className="flex min-h-screen]">
+      {/* Sidebar Stepper */}
+      <Stepper currentStep={currentStep} steps={steps} setCurrentStep={setCurrentStep} />
+      {/* Main Content */}
 
-      {/* form steps area */}
-      <div className="flex-1"></div>
     </div>
   );
-}
+};
 
 export default ListingForm;
