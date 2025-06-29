@@ -66,6 +66,7 @@ export default [
       "no-useless-escape": "off",
       "@typescript-eslint/nprefer-const": "off",
       "nprefer-const": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         {

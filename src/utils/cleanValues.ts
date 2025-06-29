@@ -1,4 +1,4 @@
-function cleanValues(keys = {}, obj: any) {
+function cleanValues<T>(keys = {}, obj: T): T {
   let finalObj = {};
   finalObj = {};
   Object.keys(keys).map((key) => {

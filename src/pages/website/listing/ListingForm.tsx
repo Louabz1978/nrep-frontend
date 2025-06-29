@@ -27,65 +27,38 @@ import {
   roomsStepSchema,
   statusStepInitialValues,
   statusStepSchema,
+  type CompensationStepType,
+  type FeaturesStepType,
+  type FinancialStepType,
+  type GeneralStepType,
+  type OfficesStepType,
+  type RemarksStepType,
+  type RoomsStepType,
+  type StatusStepType,
 } from "@/data/website/schema/ListingFormSchema";
+import cleanValues from "@/utils/cleanValues";
+import PageContainer from "@/components/global/pageContainer/PageContainer";
 
-function ListingForm() {
+interface ListingFormProps {
+  defaultValues: {
+    status: StatusStepType;
+    general: GeneralStepType;
+    rooms: RoomsStepType;
+    features: FeaturesStepType;
+    financial: FinancialStepType;
+    compensation: CompensationStepType;
+    offices: OfficesStepType;
+    remarks: RemarksStepType;
+  };
+}
+function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
   const [currentStep, setCurrentStep] = useState(4);
 
   // status step form
   const statusStep = useForm({
     resolver: joiResolver(statusStepSchema),
-    defaultValues: statusStepInitialValues,
-    mode: "onChange",
-  });
-
-  // general step form
-  const generalStep = useForm({
-    resolver: joiResolver(generalStepSchema),
-    defaultValues: generalStepInitialValues,
-    mode: "onChange",
-  });
-
-  // rooms step form
-  const roomsStep = useForm({
-    resolver: joiResolver(roomsStepSchema),
-    defaultValues: roomsStepInitialValues,
-    mode: "onChange",
-  });
-
-  // features step form
-  const featuresStep = useForm({
-    resolver: joiResolver(featuresStepSchema),
-    defaultValues: featuresStepInitialValues,
-    mode: "onChange",
-  });
-
-  // financial step form
-  const financialStep = useForm({
-    resolver: joiResolver(financialStepSchema),
-    defaultValues: financialStepInitialValues,
-    mode: "onChange",
-  });
-
-  // compensation step form
-  const compensationStep = useForm({
-    resolver: joiResolver(compensationStepSchema),
-    defaultValues: compensationStepInitialValues,
-    mode: "onChange",
-  });
-
-  // offices step form
-  const officesStep = useForm({
-    resolver: joiResolver(officesStepSchema),
-    defaultValues: officesStepInitialValues,
-    mode: "onChange",
-  });
-
-  // remarks step form
-  const remarksStep = useForm({
-    resolver: joiResolver(remarksStepSchema),
-    defaultValues: remarksStepInitialValues,
+    defaultValues: cleanValues(statusStepInitialValues, defaultValues?.status),
     mode: "onChange",
   });
 
@@ -103,9 +76,89 @@ function ListingForm() {
     ],
     []
   );
+  // general step form
+  const generalStep = useForm({
+    resolver: joiResolver(generalStepSchema),
+    defaultValues: cleanValues(
+      generalStepInitialValues,
+      defaultValues?.general
+    ),
+    mode: "onChange",
+  });
+
+  // rooms step form
+  const roomsStep = useForm({
+    resolver: joiResolver(roomsStepSchema),
+    defaultValues: cleanValues(roomsStepInitialValues, defaultValues?.rooms),
+    mode: "onChange",
+  });
+
+  // features step form
+  const featuresStep = useForm({
+    resolver: joiResolver(featuresStepSchema),
+    defaultValues: cleanValues(
+      featuresStepInitialValues,
+      defaultValues?.features
+    ),
+    mode: "onChange",
+  });
+
+  // financial step form
+  const financialStep = useForm({
+    resolver: joiResolver(financialStepSchema),
+    defaultValues: cleanValues(
+      financialStepInitialValues,
+      defaultValues?.financial
+    ),
+    mode: "onChange",
+  });
+
+  // compensation step form
+  const compensationStep = useForm({
+    resolver: joiResolver(compensationStepSchema),
+    defaultValues: cleanValues(
+      compensationStepInitialValues,
+      defaultValues?.compensation
+    ),
+    mode: "onChange",
+  });
+
+  // offices step form
+  const officesStep = useForm({
+    resolver: joiResolver(officesStepSchema),
+    defaultValues: cleanValues(
+      officesStepInitialValues,
+      defaultValues?.offices
+    ),
+    mode: "onChange",
+  });
+
+  // remarks step form
+  const remarksStep = useForm({
+    resolver: joiResolver(remarksStepSchema),
+    defaultValues: cleanValues(
+      remarksStepInitialValues,
+      defaultValues?.remarks
+    ),
+    mode: "onChange",
+  });
+
+  // handle submit all form steps
+  const handleSubmitForm = () => {
+    console.log({
+      ...statusStep.watch(),
+      ...generalStep.watch(),
+      ...roomsStep.watch(),
+      ...featuresStep.watch(),
+      ...financialStep.watch(),
+      ...compensationStep.watch(),
+      ...officesStep.watch(),
+      ...remarksStep.watch(),
+    });
+  };
 
   return (
-    <div className="flex">
+    <PageContainer className="!flex-row">
       {/* stepper */}
       <Stepper
         steps={STEPS}
@@ -133,7 +186,7 @@ function ListingForm() {
           <RemarksStep />
         )}
       </div>
-    </div>
+    </PageContainer>
   );
 }
 
