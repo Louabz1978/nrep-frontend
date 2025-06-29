@@ -38,6 +38,7 @@ import {
 } from "@/data/website/schema/ListingFormSchema";
 import cleanValues from "@/utils/cleanValues";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
+import type { UseQueryResult } from "@tanstack/react-query";
 
 interface ListingFormProps {
   defaultValues: {
@@ -50,8 +51,11 @@ interface ListingFormProps {
     offices: OfficesStepType;
     remarks: RemarksStepType;
   };
+  listingResources: UseQueryResult<any>;
 }
-function ListingForm({ defaultValues }: ListingFormProps) {
+
+// listing form page, gets: default values for each step in the form
+function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
   // current step
   const [currentStep, setCurrentStep] = useState(4);
 
