@@ -10,7 +10,7 @@ interface StepperProps {
 const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
   // Handler to move to a step if it's not ahead of the currentStep
   const handleTravelStep = (idx: number) =>
-    idx <= currentStep ? setCurrentStep(idx) : setCurrentStep(currentStep);
+    idx <= currentStep ? setCurrStepState(idx) : setCurrStepState(currentStepState);
 
   return (
     // Make the sidebar scrollable and cover all steps
@@ -57,7 +57,7 @@ const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
               {/* Render the vertical line between steps except for the last step */}
               {idx !== steps.length - 1 && (
                 <div
-                  className="absolute right-[8px] top-[14px] w-[1px] h-12 bg-gray-300 z-[1]"
+                  className="absolute right-[8px] top-[15px] w-[1px] h-12 bg-gray-300 z-0"
                   style={{
                     // Change line color if the step is completed
                     backgroundColor: isCompleted ? "#D4AF37" : "white",
