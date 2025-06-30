@@ -1,19 +1,22 @@
-import React from "react";
+import { FaArrowLeftLong } from "react-icons/fa6";
+interface NextButtonProps {
+  onClick?: () => void;
+  setCurrent?: number;
+}
+const NextButton = ({ onClick }: NextButtonProps) => {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="cursor-pointer bg-[#005BBB] py-4 px-7 rounded-4xl text-white">
+      <div className="flex justify-between items-center">
+        <p className="text-2xl">التالي</p>
+        <span className="mr-5 w-8 h-8 bg-white rounded-2xl flex items-center justify-center">
+          <FaArrowLeftLong className="text-[#0057B0]" />
+        </span>
+      </div>
+    </button>
+  );
+}
 
-/**
- * Reusable Next button for form steps.
- * Uses Tailwind CSS classes for styling. If you use CSS variables, replace the className with style={{ background: "var(--primary-color)" }}.
- */
-
-const NextButton = ({ onClick, disabled, children = "Next" }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    disabled={disabled}
-    className="px-4 py-2 rounded bg-primary text-white disabled:opacity-50"
-  >
-    {children}
-  </button>
-);
-
-export default NextButton; 
+export default NextButton;

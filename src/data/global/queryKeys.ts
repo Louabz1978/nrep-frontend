@@ -7,6 +7,9 @@ const QUERY_KEYS = {
     query: "templatesQuery",
     details: "templatesDetails",
   },
+  listings: {
+    resources: "listingsResources",
+  },
 };
 
 export default QUERY_KEYS;
