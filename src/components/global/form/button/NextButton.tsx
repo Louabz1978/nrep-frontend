@@ -1,14 +1,14 @@
 import { FaArrowLeftLong } from "react-icons/fa6";
 interface NextButtonProps {
-  onClick?: () => void;
-  setCurrent?: number;
+  id: string;
 }
-const NextButton = ({ onClick }: NextButtonProps) => {
+const NextButton = ({ id }: NextButtonProps) => {
   return (
     <button
-      type="button"
-      onClick={onClick}
-      className="cursor-pointer bg-[#005BBB] py-4 px-7 rounded-4xl text-white">
+      type="submit"
+      id={id}
+      className="cursor-pointer bg-[#005BBB] py-4 px-7 rounded-4xl text-white"
+    >
       <div className="flex justify-between items-center">
         <p className="text-2xl">التالي</p>
         <span className="mr-5 w-8 h-8 bg-white rounded-2xl flex items-center justify-center">
@@ -17,6 +17,6 @@ const NextButton = ({ onClick }: NextButtonProps) => {
       </div>
     </button>
   );
-}
+};
 
 export default NextButton;

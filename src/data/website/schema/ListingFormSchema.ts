@@ -1,11 +1,17 @@
 import Joi from "joi";
 
 // status step -----------------------------------------------------------
-export const statusStepSchema = Joi.object({});
+export const statusStepSchema = Joi.object({
+  status: Joi.string(),
+});
 
-export type StatusStepType = {};
+export type StatusStepType = {
+  status: string;
+};
 
-export const statusStepInitialValues = {};
+export const statusStepInitialValues = {
+  status: "active",
+};
 
 // general step -----------------------------------------------------------
 export const generalStepSchema = Joi.object({});
