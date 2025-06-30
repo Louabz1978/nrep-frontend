@@ -12,7 +12,9 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
 
   // Handler to move to a step if it's not ahead of the currentStep
   const handleTravelStep = (idx: number) =>
-    idx <= currentStep ? setCurrStepState(idx) : setCurrStepState(currentStepState);
+    idx <= currentStep
+      ? setCurrStepState(idx)
+      : setCurrStepState(currentStepState);
 
   return (
     // Make the sidebar scrollable and cover all steps
@@ -26,7 +28,10 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
           const isCompleted = idx < currentStepState;
           return (
             // Each step container
-            <div key={step + idx} className="flex flex-col relative min-h-[60px]">
+            <div
+              key={step + idx}
+              className="flex flex-col relative min-h-[60px]"
+            >
               <div className="flex ">
                 {/* Step circle indicator, clickable to travel to the step */}
                 <div
@@ -56,11 +61,9 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
               {/* Render the vertical line between steps except for the last step */}
               {idx !== steps.length - 1 && (
                 <div
-                  className="absolute right-[8px] top-[15px] w-[1px] h-12 bg-gray-300 z-0"
-                  style={{
-                    // Change line color if the step is completed
-                    backgroundColor: isCompleted ? "#D4AF37" : "white",
-                  }}
+                  className={`absolute right-[8px] top-[15px] w-[1px] h-12 z-0 ${
+                    isCompleted ? "bg-gold-background" : "bg-white"
+                  }`}
                 />
               )}
             </div>
