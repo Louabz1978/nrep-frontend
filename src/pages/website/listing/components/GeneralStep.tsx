@@ -24,6 +24,14 @@ function GeneralStep() {
         icon={<MdRealEstateAgent />}
         isOpen={isOpenFirst}
       >
+        <div>
+          hello hi
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+        </div>
       </Accrodion>
       {/* Accordion for property category */}
       <Accrodion
@@ -32,6 +40,14 @@ function GeneralStep() {
         icon={<HiOutlineBuildingOffice2 />}
         isOpen={isOpenSecond}
       >
+        <div>
+          hello hi
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+        </div>
       </Accrodion>
       {/* Accordion for geographic data and documents */}
       <Accrodion
@@ -40,6 +56,14 @@ function GeneralStep() {
         icon={<FiMapPin />}
         isOpen={isOpenThird}
       >
+        <div>
+          hello hi
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+          <div>bro</div>
+        </div>
       </Accrodion>
     </div>
   );

@@ -1,6 +1,6 @@
 // Accordion component for expanding/collapsing content sections
 import { type ReactNode } from "react";
-import { FaArrowAltCircleDown, FaArrowAltCircleLeft } from "react-icons/fa";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 
 // Props for the Accordion component
@@ -31,15 +31,22 @@ const Accrodion = ({
           {/* Icon next to the title */}
           <div className="text-[30px] text-gold-background">{icon}</div>
           {/* Accordion title */}
-          <div className="text-[30px] text-3xl text-black m-5 font-bold">{title}</div>
+          <div className="text-[30px] text-3xl text-black m-5 font-bold">
+            {title}
+          </div>
         </div>
+
         {/* Arrow icon indicating open/closed state */}
         <div
           className={` text-[30px] ${
             isOpen ? "text-gold-background" : "text-black"
           }`}
         >
-          {isOpen ? <FaArrowAltCircleDown /> : <FaArrowAltCircleLeft />}
+          <FaArrowAltCircleLeft
+            className={`${
+              isOpen ? "-rotate-90" : ""
+            } transition-all duration-[0.35s]`}
+          />
         </div>
       </div>
       {/* Animate the children with framer-motion when open/closed */}

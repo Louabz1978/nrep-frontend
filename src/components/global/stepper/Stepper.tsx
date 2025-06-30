@@ -10,7 +10,7 @@ interface StepperProps {
 const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
   // Handler to move to a step if it's not ahead of the currentStep
   const handleTravelStep = (idx: number) =>
-    idx <= currentStep ? setCurrStepState(idx) : setCurrStepState(currentStepState);
+    idx <= currentStep ? setCurrentStep(idx) : setCurrentStep(currentStep);
 
   return (
     // Make the sidebar scrollable and cover all steps
