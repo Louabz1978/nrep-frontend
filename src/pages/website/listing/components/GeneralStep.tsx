@@ -1,5 +1,6 @@
+
 function GeneralStep() {
-  return <div>gene</div>;
+  return <div></div>
 }
 
 export default GeneralStep;

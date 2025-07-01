@@ -14,7 +14,10 @@ export const statusStepInitialValues = {
 };
 
 // general step -----------------------------------------------------------
-export const generalStepSchema = Joi.object({});
+export const generalStepSchema = Joi.object({
+  //mraq label 
+
+});
 
 export type GeneralStepType = {};
 
