@@ -107,6 +107,11 @@ body {
   --sun: #ffc700;          /* Yellow */
   --true: #71ffb2;         /* Mint Green */
 
+  /*general Colors*/
+  --main-background-color: #FDF9EF;
+  --second-background-color:#FFF
+  var(--primary-foreground)
+  
 
   /* Other special fonts */
   --semi-dark-font-color: #232323;

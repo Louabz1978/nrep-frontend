@@ -11,7 +11,7 @@ import {
 interface InputProps {
   type?: string;
   placeholder?: string;
-  register: UseFormRegister<any>;
+  register?: UseFormRegister<any>;
   name: string;
   label?: string;
   errors?: any;
@@ -85,7 +85,7 @@ function Input({
               type={type}
               className="peer hidden"
               id={name}
-              {...register(name)}
+              {...(register ? register(name) : {})}
               disabled={disabled}
               onChange={(e) => {
                 setValue(name, e?.target?.checked ? true : false);
@@ -129,7 +129,7 @@ function Input({
                 type={"number"}
                 placeholder={placeholder}
                 id={name}
-                {...register(name)}
+                {...(register ? register(name) : {})}
                 disabled={disabled}
                 className={`custom-input ${addingInputStyle}`}
                 onChange={(e) => {
@@ -154,7 +154,7 @@ function Input({
                 type={show ? "text" : type}
                 placeholder={placeholder}
                 id={name}
-                {...register(name)}
+                {...(register ? register(name) : {})}
                 disabled={disabled}
                 className={`custom-input rounded-lg border-2 h-[40px]  bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80] ${
                   getError(errors, name)

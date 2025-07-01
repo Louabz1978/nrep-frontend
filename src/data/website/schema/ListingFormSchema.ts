@@ -1,3 +1,4 @@
+import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
 // status step -----------------------------------------------------------
@@ -15,9 +16,39 @@ export const statusStepInitialValues = {
 
 // general step -----------------------------------------------------------
 export const generalStepSchema = Joi.object({
-  //mraq label 
-
+  idProperty: Joi.number()
+    .required()
+    .min(1)
+    .max(1000)
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم تعريف العقار"),
+  hideIdproperty: Joi.string()
+    .required()
+    .min(1)
+    .max(1000)
+    .messages(VALIDATION_MESSAGES)
+    .label("اخفاء رقم العقار"),
+  city: Joi.string().required().label("المدينة"),
+  streetType: Joi.string().required().label("نوع الشارع"),
+  streetNumber: Joi.string().required().label("رقم الشارع"),
+  streetName: Joi.string().required().label("اسم الشارع"),
+  adjacentGeoDirection: Joi.string().required().label("الاتجاه الجغرافي الملاصق"),
+  adjacentGeoStreet: Joi.string().required().label("الشارع الجغرافي الملاصق"),
+  postalCode: Joi.string().required().label("الرمز البريدي"),
+  buildingNumber: Joi.string().required().label("رقم المبنى"),
+  apartmentNumber: Joi.string().required().label("رقم الشقة"),
+  designCode: Joi.string().required().label("كود التصميم العقاري"),
+  region: Joi.string().required().label("المنطقة الجغرافية"),
+  projectName: Joi.string().required().label("اسم المشروع العقاري"),
+  unitCode: Joi.string().required().label("كود الوحدة العقارية"),
+  residentialComplex: Joi.string().required().label("اسم المجمع السكني"),
+  realEstateAxis: Joi.string().required().label("اسم المحور العقاري"),
 });
+
+export const LOGIN_FORM_SCHEMA_INITIAL_VALUES = {
+  username: "",
+  password: "",
+};
 
 export type GeneralStepType = {};
 

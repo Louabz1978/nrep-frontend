@@ -95,7 +95,7 @@ function StatusStep({ form, setCurrentStep }: StatusStepProps) {
 
               {/* next button */}
               <div className="flex justify-center w-full gap-4 mt-3">
-                <NextButton id={"status_step_form"} />
+                <NextButton title={"التالي"} id={"status_step_form"} />
               </div>
             </div>
           </div>

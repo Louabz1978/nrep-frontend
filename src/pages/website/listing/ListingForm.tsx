@@ -172,11 +172,11 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
       />
 
       {/* form steps area */}
-      <div className="flex-1 bg-[#FDF9EF]">
+      <div className="flex-1 bg-[#FDF9EF] min-h-full">
         {currentStep == 0 ? (
           <StatusStep form={statusStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 1 ? (
-          <GeneralStep />
+          <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 2 ? (
           <RoomsStep />
         ) : currentStep == 3 ? (

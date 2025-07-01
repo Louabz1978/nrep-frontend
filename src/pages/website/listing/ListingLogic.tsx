@@ -2,7 +2,7 @@ import NotAllowed from "@/components/global/notAllowed/NotAllowed";
 import { useUser } from "@/stores/useUser";
 import { Route, Routes } from "react-router-dom";
 import ListingForm from "./ListingForm";
-import Status from "./Steps/status";
+import Status from "./components/StatusStep";
 import {
   compensationStepInitialValues,
   featuresStepInitialValues,
