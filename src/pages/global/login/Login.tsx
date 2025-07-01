@@ -62,6 +62,7 @@ const Login = ({ login, handleLogin }: LoginProps) => {
               name="username"
               type="text"
               label="اسم المستخدم"
+              labelStyle="text-white"
               placeholder="أدخل اسم المستخدم"
               register={register}
               errors={errors}
@@ -73,6 +74,7 @@ const Login = ({ login, handleLogin }: LoginProps) => {
               name="password"
               type="password"
               label="كلمة المرور"
+              labelStyle="text-white"
               placeholder="أدخل كلمة المرور"
               register={register}
               errors={errors}
