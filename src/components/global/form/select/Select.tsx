@@ -19,6 +19,7 @@ interface SelectProps {
   register?: UseFormRegister<any>;
   name: string;
   label?: string;
+  labelStyle?:string,
   errors?: FieldErrors;
   element?: React.ReactNode;
   disabled?: boolean;
@@ -48,6 +49,7 @@ function Select({
   // register,
   name,
   label,
+  labelStyle,
   errors,
   // element,
   disabled,
@@ -200,7 +202,7 @@ function Select({
     <div className={`flex flex-col w-full ${addingStyle}`}>
       {/* select label  */}
       {label ? (
-        <label htmlFor={name} className="text-primary-foreground mb-2">
+        <label htmlFor={name} className={`text-primary-foreground mb-2 ${labelStyle}`} >
           {label}
         </label>
       ) : null}
@@ -213,8 +215,12 @@ function Select({
         {/* select */}
         <button
           type="button"
-          className={`custom-select !outline-none focus:outline-none focus-visible:outline-none ${addingInputStyle} ${
-            isOpen ? "rounded-t-[6px]" : "rounded-[6px]"
+          className={`custom-input custom-select !outline-none focus:outline-none focus-visible:outline-none border-2 h-[40px] bg-white text-black px-4 py-2 focus:ring-2 placeholder:text-[#49515B80] ${
+            errors?.[name]
+              ? "border-red-500"
+              : "border-gold-background focus:ring-gold-background"
+          } ${addingInputStyle} ${
+            isOpen ? "rounded-t-[8px]" : "rounded-[8px]"
           } flex justify-between items-center cursor-pointer`}
           onKeyDown={handleKeyDown}
           onClick={(e) => {

@@ -1,0 +1,170 @@
+
+// Array for select options (cityChoices)
+export const cityChoices = [
+  { value: "damascus", label: "دمشق" },
+  { value: "homs", label: "حمص" },
+  { value: "aleppo", label: "حلب" },
+  { value: "latakia", label: "اللاذقية" },
+  { value: "daraa", label: "درعا" },
+  { value: "hama", label: "حماة" },
+  // Add more cities as needed
+];
+
+// Array describing all rows and their fields
+export const generalFields = [
+  [
+    {
+      type: "input",
+      name: "propertyId",
+      label: "رقم تعريف العقار",
+      placeholder: "",
+      info: true,
+    },
+    {
+      type: "select",
+      name: "hiddenPropertyId",
+      label: "إخفاء رقم العقار",
+      placeholder: "نعم",
+      choices: cityChoices,
+    },
+    {
+      type: "select",
+      name: "city",
+      label: "المدينة",
+      placeholder: "اختر المدينة",
+      choices: cityChoices,
+    },
+  ],
+  [
+    {
+      type: "input",
+      name: "streetName",
+      label: "اسم الشارع",
+      placeholder: "شارع الدبلان",
+      info: true,
+    },
+    {
+      type: "input",
+      name: "streetNumber",
+      label: "رقم الشارع",
+      placeholder: "1234",
+    },
+    {
+      type: "select",
+      name: "streetType",
+      label: "نوع الشارع",
+      placeholder: "طريق عام",
+      choices: cityChoices,
+    },
+  ],
+  [
+    {
+      type: "select",
+      name: "previousGeoDirection",
+      label: "الاتجاه الجغرافي السابق",
+      placeholder: "شمال",
+      choices: cityChoices,
+      info: false,
+    },
+    {
+      type: "select",
+      name: "nextGeoDirection",
+      label: "الاتجاه الجغرافي اللاحق",
+      placeholder: "شمال",
+      choices: cityChoices,
+    },
+    {
+      type: "input",
+      name: "postalCode",
+      label: "الرمز البريدي",
+      placeholder: "33914",
+      info: true,
+
+    },
+  ],
+  [
+    {
+      type: "input",
+      name: "buildingDesign",
+      label: "نوع تصميم المبنى",
+      placeholder: "",
+      info: true,
+    },
+    {
+      type: "input",
+      name: "buildingNumber",
+      label: "رقم المبنى",
+      placeholder: "47",
+      choices: cityChoices,
+      info: true,
+
+    },
+    {
+      type: "input",
+      name: "apartmentNumber",
+      label: "رقم الشقة",
+      placeholder: "02",
+      info: true,
+
+    },
+  ],
+  [
+    {
+      type: "input",
+      name: "geoArea",
+      label: "المنطقة الجغرافية",
+      placeholder: "",
+      info: true,
+    },
+    {
+      type: "input",
+      name: "regulatoryCode",
+      label: "كود التنظيم(العقاري)",
+      placeholder: "",
+      info: true,
+
+    },
+    {
+      type: "input",
+      name: "projectName",
+      label: "المشروع العقاري",
+      placeholder: "",
+      info: true,
+
+    },
+  ],
+  [
+    {
+      type: "input",
+      name: "projectCode",
+      label: "رمز المجمع",
+      placeholder: "",
+      info: true,
+    },
+    {
+      type: "input",
+      name: "projectName",
+      label: "اسم المجمع السكني",
+      placeholder: "",
+      info: true,
+
+    },
+    {
+      type: "input",
+      name: "unitType",
+      label: "نوع الوحدة العقارية",
+      placeholder: "",
+      info: true,
+
+    },
+  ],
+  [
+    {
+      type: "input",
+      name: "developerName",
+      label: "اسم المطور العقاري",
+      placeholder: "",
+      info: true,
+    },
+  ],
+];

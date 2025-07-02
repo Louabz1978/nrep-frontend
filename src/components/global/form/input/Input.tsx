@@ -14,6 +14,7 @@ interface InputProps {
   register?: UseFormRegister<any>;
   name: string;
   label?: string;
+  labelStyle?: string;
   errors?: any;
   element?: React.ReactNode;
   disabled?: boolean;
@@ -41,6 +42,7 @@ function Input({
   register,
   name,
   label,
+  labelStyle,
   errors,
   element,
   disabled,
@@ -114,7 +116,7 @@ function Input({
         >
           {/* input label  */}
           {label ? (
-            <label htmlFor={name} className="text-white mb-2 cursor-pointer">
+            <label htmlFor={name} className={`mb-2 cursor-pointer ${labelStyle}`}>
               {label}
             </label>
           ) : null}
@@ -156,7 +158,7 @@ function Input({
                 id={name}
                 {...(register ? register(name) : {})}
                 disabled={disabled}
-                className={`custom-input rounded-lg border-2 h-[40px]  bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80] ${
+                className={`custom-input rounded-lg border-2 h-[40px]  bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80]  ${
                   getError(errors, name)
                     ? "border-red-500"
                     : "border-gold-background focus:ring-gold-background"

@@ -1,9 +1,7 @@
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import NextButton from "@/components/global/form/button/NextButton";
-import { generalStepSchema, type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import type { Dispatch, SetStateAction } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import { useWatch } from "react-hook-form";
 import Accrodion from "@/components/global/accrodion/Accrodion";
 import Input from "@/components/global/form/input/Input";
 import { useState } from "react";
@@ -12,18 +10,15 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { MdRealEstateAgent } from "react-icons/md";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import Select from "@/components/global/form/select/Select";
+import { generalFields } from "@/data/website/GeneralData";
 
 interface GeneralStepProps {
   form: UseFormReturn<any>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 
-function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
-  const general = useWatch({
-    control: form.control,
-    name: "general",
-  });
 
+function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // State for each accordion section
   const [isOpenFirst, setIsOpenFirst] = useState(false);
   const [isOpenSecond, setIsOpenSecond] = useState(false);
@@ -34,25 +29,56 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const toggleStateSecond = () => setIsOpenSecond((prev) => !prev);
   const toggleStateThird = () => setIsOpenThird((prev) => !prev);
 
-  // City choices for the select dropdown
-  const cityChoices = [
-    { value: "damascus", label: "دمشق" },
-    { value: "homs", label: "حمص" },
-    { value: "aleppo", label: "حلب" },
-    { value: "latakia", label: "اللاذقية" },
-    { value: "daraa", label: "درعا" },
-    { value: "hama", label: "حماة" },
-    // Add more cities as needed
-  ];
-
   // handle submit form
-  const onSubmit = (data: GeneralStepType) => {
+  const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
-    console.log(data);
+  };
+
+  // Helper to render a field
+  const renderField = (field: any) => {
+    if (field.type === "input") {
+      return (
+        <div className="w-75" key={field.name}>
+          <div className="flex items-center justify-center relative">
+            <Input
+              name={field.name}
+              type="text"
+              label={field.label}
+              labelStyle="font-bold"
+              placeholder={field.placeholder}
+              errors={form.formState.errors}
+              addingInputStyle="text-black"
+            />
+            {field.info && <IoIosInformationCircleOutline className="absolute left-[-20px]  top-[43px]" />}
+          </div>
+        </div>
+      );
+    }
+    if (field.type === "select") {
+      return (
+        <div className="w-75" key={field.name}>
+          <Select
+            label={field.label}
+            labelStyle="font-bold"
+            name={field.name}
+            placeholder={field.placeholder}
+            choices={field.choices}
+            setValue={form.setValue}
+            trigger={form.trigger}
+            watch={form.watch}
+            errors={form.formState.errors}
+            showValue="label"
+            keyValue="value"
+          />
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
     <PageContainer className="h-full overflow-auto">
+      {/* Form */}
       <form id="general_step_form" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-row bg-[#FDF9EF]">
           <div className="min-h-100 flex w-full">
@@ -65,242 +91,17 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 isOpen={isOpenFirst}
               >
                 <div>
-                  {/* First Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
+                  {generalFields.map((row, rowIdx) => (
+                    <div className="flex row mr-12 gap-35" key={rowIdx}>
+                      {row.map((field) => renderField(field))}
                     </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="نعم"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="حمص"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                  </div>
-                  {/* Second Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="نعم"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="حمص"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                  </div>
-                  {/* third Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="نعم"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="حمص"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                  </div>
-                  {/* Fourth Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
-                    </div>
-                    <div className="w-75">
-                      <Select
-                        label="المدينة"
-                        name="city"
-                        placeholder="اختر المدينة"
-                        choices={cityChoices}
-                        setValue={form.setValue}
-                        trigger={form.trigger}
-                        watch={form.watch}
-                        errors={form.formState.errors}
-                        showValue="label"
-                        keyValue="value"
-                      />
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="حمص"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                  </div>
-                  {/* Five Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="نعم"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="حمص"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                  </div>
-                  {/* six Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="نعم"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                    <div className="w-75">
-                      <Input
-                        name="propertyId"
-                        type="text"
-                        label="رقم تعريف العقار"
-                        placeholder="حمص"
-                        errors={form.formState.errors}
-                        addingInputStyle="mb-4 text-black"
-                      />
-                    </div>
-                  </div>
-                  {/* Seven Row */}
-                  <div className="flex row mr-12 gap-35">
-                    <div className="w-75">
-                      <div className="flex items-center justify-center">
-                        <Input
-                          name="propertyId"
-                          type="text"
-                          label="رقم تعريف العقار"
-                          placeholder=""
-                          errors={form.formState.errors}
-                          addingInputStyle="mb-4 text-black"
-                        />
-                        <IoIosInformationCircleOutline />
-                      </div>
-                    </div>
-                  </div>
+                  ))}
+                </div>
+                <div className="mr-1 m-auto flex justify-center items-center mb-4">
+                  <NextButton
+                    title={"تم"}
+                    id={''}
+                  />
                 </div>
               </Accrodion>
 
