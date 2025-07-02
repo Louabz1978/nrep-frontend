@@ -19,6 +19,7 @@ interface SelectProps {
   register?: UseFormRegister<any>;
   name: string;
   label?: string;
+  labelStyle?:string,
   errors?: FieldErrors;
   element?: React.ReactNode;
   disabled?: boolean;
@@ -48,6 +49,7 @@ function Select({
   // register,
   name,
   label,
+  labelStyle,
   errors,
   // element,
   disabled,
@@ -200,7 +202,7 @@ function Select({
     <div className={`flex flex-col w-full ${addingStyle}`}>
       {/* select label  */}
       {label ? (
-        <label htmlFor={name} className="text-primary-foreground mb-2">
+        <label htmlFor={name} className={`text-primary-foreground mb-2 ${labelStyle}`} >
           {label}
         </label>
       ) : null}

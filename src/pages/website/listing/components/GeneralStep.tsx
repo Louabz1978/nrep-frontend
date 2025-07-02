@@ -199,6 +199,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               name={field.name}
               type="text"
               label={field.label}
+              labelStyle="font-bold"
               placeholder={field.placeholder}
               errors={form.formState.errors}
               addingInputStyle="mb-4 text-black"
@@ -213,6 +214,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
         <div className="w-75" key={field.name}>
           <Select
             label={field.label}
+            labelStyle="font-bold"
             name={field.name}
             placeholder={field.placeholder}
             choices={field.choices}
