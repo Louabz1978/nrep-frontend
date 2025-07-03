@@ -22,13 +22,18 @@ export const generalStepSchema = Joi.object({
     .max(1000)
     .messages(VALIDATION_MESSAGES)
     .label("رقم تعريف العقار"),
-  hiddenPropertyId: Joi.string()
+  hiddenPropertyId: Joi.object({ value: Joi.string() })
+    .unknown()
     .required()
     .min(1)
     .max(1000)
     .messages(VALIDATION_MESSAGES)
     .label("إخفاء رقم العقار"),
-  city: Joi.string().required().messages(VALIDATION_MESSAGES).label("المدينة"),
+  city: Joi.object({ value: Joi.string() })
+    .unknown()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المدينة"),
   streetName: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -37,15 +42,18 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("رقم الشارع"),
-  streetType: Joi.string()
+  streetType: Joi.object({ value: Joi.string() })
+    .unknown()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("نوع الشارع"),
-  previousGeoDirection: Joi.string()
+  previousGeoDirection: Joi.object({ value: Joi.string() })
+    .unknown()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الاتجاه الجغرافي السابق"),
-  nextGeoDirection: Joi.string()
+  nextGeoDirection: Joi.object({ value: Joi.string() })
+    .unknown()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الاتجاه الجغرافي اللاحق"),
@@ -93,6 +101,58 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم المطور العقاري"),
+
+  // second section in general step:
+  //second step in general
+  propertyStatus: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("حالة العقار"),
+  offeredPrice: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("السعر المعروض"),
+  yearBuilt: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("سنة البناء"),
+  totalArea: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المساحة الإجمالية التقريبية"),
+  livingArea: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المساحة التقريبية للمعيشة"),
+  furnished: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("مفروشة"),
+  bedrooms: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد غرف النوم"),
+  bathroomsWithShower: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد دورات المياه (مع دش)"),
+  bathroomsWithoutShower: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد دورات المياه (بدون دش)"),
+  ceilingFans: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد مراوح السقف"),
+  elevator: Joi.string().required().messages(VALIDATION_MESSAGES).label("مصعد"),
+  garageSpaces: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد مواقف الكراج"),
+  cableAvailable: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الكابل متوفر (التلفزيون/الإنترنت)"),
 });
 
 export type GeneralStepType = {};
@@ -160,3 +220,35 @@ export const remarksStepSchema = Joi.object({});
 export type RemarksStepType = {};
 
 export const remarksStepInitialValues = {};
+
+export type PropertyCategoryStepType = {
+  propertyStatus: string;
+  offeredPrice: number;
+  yearBuilt: number;
+  totalArea: number;
+  livingArea: number;
+  furnished: string;
+  bedrooms: number;
+  bathroomsWithShower: number;
+  bathroomsWithoutShower: number;
+  ceilingFans: number;
+  elevator: string;
+  garageSpaces: number;
+  cableAvailable: string;
+};
+
+export const propertyCategoryStepInitialValues = {
+  propertyStatus: "",
+  offeredPrice: 0,
+  yearBuilt: 0,
+  totalArea: 0,
+  livingArea: 0,
+  furnished: "",
+  bedrooms: 0,
+  bathroomsWithShower: 0,
+  bathroomsWithoutShower: 0,
+  ceilingFans: 0,
+  elevator: "",
+  garageSpaces: 0,
+  cableAvailable: "",
+};

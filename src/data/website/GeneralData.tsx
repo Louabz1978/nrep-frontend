@@ -8,6 +8,12 @@ export const cityChoices = [
   { value: "hama", label: "حماة" },
 ];
 
+// Array for select options (cityChoices)
+export const yesNo = [
+  { value: "yes", label: "نعم" },
+  { value: "no", label: "لا" },
+];
+
 // Array describing all rows and their fields
 export const generalFields = [
   [

@@ -1,15 +1,14 @@
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import NextButton from "@/components/global/form/button/NextButton";
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import Accrodion from "@/components/global/accrodion/Accrodion";
 import Input from "@/components/global/form/input/Input";
-import { useState } from "react";
+import Select from "@/components/global/form/select/Select";
 import { FiMapPin } from "react-icons/fi";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { MdRealEstateAgent } from "react-icons/md";
-import Select from "@/components/global/form/select/Select";
-import { cityChoices } from "@/data/website/GeneralData";
+import { cityChoices, yesNo } from "@/data/website/GeneralData";
 
 interface GeneralStepProps {
   form: UseFormReturn<any>;
@@ -57,7 +56,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 icon={<MdRealEstateAgent />}
                 isOpen={isOpenFirst}
               >
-                <div className="ps-[39px] pe-[71px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
+                <div className="ps-[39px] pe-[71px] pb-[30px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
                   <Input
                     errors={errors}
                     label={"رقم تعريف العقار"}
@@ -74,7 +73,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     trigger={trigger}
                     setValue={setValue}
                     watch={watch}
-                    choices={cityChoices}
+                    choices={yesNo}
                     showValue="label"
                     keyValue="value"
                     register={register}
@@ -263,10 +262,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     info={"hello"}
                   />
                 </div>
-
-                <div className="mr-1 m-auto flex justify-center items-center mb-4">
-                  <NextButton title={"تم"} id={""} />
-                </div>
               </Accrodion>
 
               {/* Accordion for property category */}
@@ -276,13 +271,133 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 icon={<HiOutlineBuildingOffice2 />}
                 isOpen={isOpenSecond}
               >
-                <div>
-                  hello hi
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
+                <div className="ps-[39px] pe-[71px] pb-[30px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
+                  <Input
+                    name="propertyStatus"
+                    label="حالة العقار"
+                    labelStyle="font-bold"
+                    placeholder="معروض للبيع"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="offeredPrice"
+                    type="number"
+                    label="السعر المعروض"
+                    labelStyle="font-bold"
+                    placeholder="1,000,000 ل.س"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="yearBuilt"
+                    type="number"
+                    label="سنة البناء"
+                    labelStyle="font-bold"
+                    placeholder="2010"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="totalArea"
+                    type="number"
+                    label="المساحة الإجمالية التقريبية"
+                    labelStyle="font-bold"
+                    placeholder=""
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="livingArea"
+                    type="number"
+                    label="المساحة التقريبية للمعيشة"
+                    labelStyle="font-bold"
+                    placeholder=""
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="furnished"
+                    label="مفروشة"
+                    labelStyle="font-bold"
+                    placeholder="غير مفروشة"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="bedrooms"
+                    type="number"
+                    label="عدد غرف النوم"
+                    labelStyle="font-bold"
+                    placeholder="3"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="bathroomsWithShower"
+                    type="number"
+                    label="عدد دورات المياه (مع دش)"
+                    labelStyle="font-bold"
+                    placeholder="2"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="bathroomsWithoutShower"
+                    type="number"
+                    label="عدد دورات المياه (بدون دش)"
+                    labelStyle="font-bold"
+                    placeholder="1"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="ceilingFans"
+                    type="number"
+                    label="عدد مراوح السقف"
+                    labelStyle="font-bold"
+                    placeholder="0"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="elevator"
+                    label="مصعد"
+                    labelStyle="font-bold"
+                    placeholder="لا يوجد"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="garageSpaces"
+                    type="number"
+                    label="عدد مواقف الكراج"
+                    labelStyle="font-bold"
+                    placeholder="1"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
+                  <Input
+                    name="cableAvailable"
+                    label="الكابل متوفر (التلفزيون/الإنترنت)"
+                    labelStyle="font-bold"
+                    placeholder="لا يوجد"
+                    errors={errors}
+                    register={register}
+                    info={"hello"}
+                  />
                 </div>
               </Accrodion>
 
