@@ -30,7 +30,7 @@ async function getTemplateDetails({
   // return res?.data?.data;
   await waitSeconds();
   return {
-    id: 11,
+    id: queryKey?.[1],
     arabic_name: "عبدالله بحلاق",
     english_name: "Abdullah Buhalq",
     gender: "ذكر",

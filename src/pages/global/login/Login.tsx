@@ -66,7 +66,8 @@ const Login = ({ login, handleLogin }: LoginProps) => {
               placeholder="أدخل اسم المستخدم"
               register={register}
               errors={errors}
-              addingStyle="mb-4"
+              addingStyle="mb-4 !rounded-lg"
+              addingValidStyle="!border-gold-background focus:!ring-gold-background"
             />
 
             {/* password */}
@@ -78,7 +79,8 @@ const Login = ({ login, handleLogin }: LoginProps) => {
               placeholder="أدخل كلمة المرور"
               register={register}
               errors={errors}
-              addingStyle="mb-4"
+              addingStyle="mb-4 !rounded-lg"
+              addingValidStyle="!border-gold-background focus:!ring-gold-background"
             />
 
             {/* forget password */}

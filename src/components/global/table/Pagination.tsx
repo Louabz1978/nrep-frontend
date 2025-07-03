@@ -34,6 +34,7 @@ const buttonStyles = {
   fontSize: "18px",
   fontWeight: "400",
   textAlign: "center",
+  cursor: "pointer",
 };
 
 function Pagination({
@@ -131,7 +132,7 @@ function Pagination({
         {/* first page number  */}
         {firstPage !== currentPage && currentPage && (
           <span
-            className="cursor-pointer"
+            className="!cursor-pointer"
             onClick={() => rerunDataFunc(firstPage)}
           >
             {firstPage}
@@ -142,7 +143,7 @@ function Pagination({
         {/* prev page number  */}
         {prevPage > 0 && prevPage !== firstPage && (
           <span
-            className="cursor-pointer"
+            className="!cursor-pointer"
             onClick={() => rerunDataFunc(prevPage)}
           >
             {prevPage}
@@ -159,7 +160,7 @@ function Pagination({
         {/* next page number  */}
         {nextPage < lastPage && (
           <span
-            className="cursor-pointer"
+            className="!cursor-pointer"
             onClick={() => rerunDataFunc(nextPage)}
           >
             {nextPage}
@@ -170,7 +171,7 @@ function Pagination({
         {/* last page number  */}
         {lastPage !== currentPage && (
           <span
-            className="cursor-pointer"
+            className="!cursor-pointer"
             onClick={() => rerunDataFunc(lastPage)}
           >
             {lastPage}

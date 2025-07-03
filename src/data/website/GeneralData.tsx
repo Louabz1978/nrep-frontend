@@ -1,4 +1,3 @@
-
 // Array for select options (cityChoices)
 export const cityChoices = [
   { value: "damascus", label: "دمشق" },
@@ -7,7 +6,6 @@ export const cityChoices = [
   { value: "latakia", label: "اللاذقية" },
   { value: "daraa", label: "درعا" },
   { value: "hama", label: "حماة" },
-  // Add more cities as needed
 ];
 
 // Array describing all rows and their fields
@@ -79,7 +77,6 @@ export const generalFields = [
       label: "الرمز البريدي",
       placeholder: "33914",
       info: true,
-
     },
   ],
   [
@@ -97,7 +94,6 @@ export const generalFields = [
       placeholder: "47",
       choices: cityChoices,
       info: true,
-
     },
     {
       type: "input",
@@ -105,7 +101,6 @@ export const generalFields = [
       label: "رقم الشقة",
       placeholder: "02",
       info: true,
-
     },
   ],
   [
@@ -122,7 +117,6 @@ export const generalFields = [
       label: "كود التنظيم(العقاري)",
       placeholder: "",
       info: true,
-
     },
     {
       type: "input",
@@ -130,7 +124,6 @@ export const generalFields = [
       label: "المشروع العقاري",
       placeholder: "",
       info: true,
-
     },
   ],
   [
@@ -147,7 +140,6 @@ export const generalFields = [
       label: "اسم المجمع السكني",
       placeholder: "",
       info: true,
-
     },
     {
       type: "input",
@@ -155,7 +147,6 @@ export const generalFields = [
       label: "نوع الوحدة العقارية",
       placeholder: "",
       info: true,
-
     },
   ],
   [

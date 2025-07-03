@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
 import logo from "../../../assets/images/logo.png";
+import { useUser } from "@/stores/useUser";
+import { FaSignInAlt } from "react-icons/fa";
 
 function Header() {
+  // user info
+  const { user } = useUser();
+  console.log(user);
   return (
     <header className="w-full bg-dark-gray h-20 flex items-center px-12 justify-between border-b border-amber-50">
       <div className="flex items-center">
@@ -14,7 +19,11 @@ function Header() {
 
       <div className="flex items-center gap-4 text-white">
         <Link to="/login" aria-label="Profile">
-          <CgProfile className="h-8 w-9 text-white cursor-pointer" />
+          {user?.access_token ? (
+            <CgProfile className="h-8 w-9 text-white cursor-pointer" />
+          ) : (
+            <FaSignInAlt className="h-8 w-9 text-white cursor-pointer" />
+          )}
         </Link>
 
         <Link

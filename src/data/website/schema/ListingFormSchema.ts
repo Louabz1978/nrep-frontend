@@ -16,43 +16,108 @@ export const statusStepInitialValues = {
 
 // general step -----------------------------------------------------------
 export const generalStepSchema = Joi.object({
-  idProperty: Joi.number()
+  propertyId: Joi.number()
     .required()
     .min(1)
     .max(1000)
     .messages(VALIDATION_MESSAGES)
     .label("رقم تعريف العقار"),
-  hideIdproperty: Joi.string()
+  hiddenPropertyId: Joi.string()
     .required()
     .min(1)
     .max(1000)
     .messages(VALIDATION_MESSAGES)
-    .label("اخفاء رقم العقار"),
-  city: Joi.string().required().label("المدينة"),
-  streetType: Joi.string().required().label("نوع الشارع"),
-  streetNumber: Joi.string().required().label("رقم الشارع"),
-  streetName: Joi.string().required().label("اسم الشارع"),
-  adjacentGeoDirection: Joi.string().required().label("الاتجاه الجغرافي الملاصق"),
-  adjacentGeoStreet: Joi.string().required().label("الشارع الجغرافي الملاصق"),
-  postalCode: Joi.string().required().label("الرمز البريدي"),
-  buildingNumber: Joi.string().required().label("رقم المبنى"),
-  apartmentNumber: Joi.string().required().label("رقم الشقة"),
-  designCode: Joi.string().required().label("كود التصميم العقاري"),
-  region: Joi.string().required().label("المنطقة الجغرافية"),
-  projectName: Joi.string().required().label("اسم المشروع العقاري"),
-  unitCode: Joi.string().required().label("كود الوحدة العقارية"),
-  residentialComplex: Joi.string().required().label("اسم المجمع السكني"),
-  realEstateAxis: Joi.string().required().label("اسم المحور العقاري"),
+    .label("إخفاء رقم العقار"),
+  city: Joi.string().required().messages(VALIDATION_MESSAGES).label("المدينة"),
+  streetName: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم الشارع"),
+  streetNumber: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم الشارع"),
+  streetType: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("نوع الشارع"),
+  previousGeoDirection: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الاتجاه الجغرافي السابق"),
+  nextGeoDirection: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الاتجاه الجغرافي اللاحق"),
+  postalCode: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الرمز البريدي"),
+  buildingDesign: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("نوع تصميم المبنى"),
+  buildingNumber: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم المبنى"),
+  apartmentNumber: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم الشقة"),
+  geoArea: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المنطقة الجغرافية"),
+  regulatoryCode: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("كود التنظيم(العقاري)"),
+  projectName: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المشروع العقاري"),
+  projectCode: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("رمز المجمع"),
+  projectHomeName: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المجمع السكني"),
+  unitType: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("نوع الوحدة العقارية"),
+  developerName: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المطور العقاري"),
 });
-
-export const LOGIN_FORM_SCHEMA_INITIAL_VALUES = {
-  username: "",
-  password: "",
-};
 
 export type GeneralStepType = {};
 
-export const generalStepInitialValues = {};
+export const generalStepInitialValues = {
+  propertyId: null,
+  hiddenPropertyId: "",
+  city: "",
+  streetName: "",
+  streetNumber: "",
+  streetType: "",
+  previousGeoDirection: "",
+  nextGeoDirection: "",
+  postalCode: "",
+  buildingDesign: "",
+  buildingNumber: "",
+  apartmentNumber: "",
+  geoArea: "",
+  regulatoryCode: "",
+  projectName: "",
+  projectCode: "",
+  projectHomeName: "",
+  unitType: "",
+  developerName: "",
+};
 
 // rooms step -----------------------------------------------------------
 export const roomsStepSchema = Joi.object({});

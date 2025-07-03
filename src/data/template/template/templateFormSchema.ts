@@ -12,6 +12,10 @@ export interface TemplateFormType {
 }
 export const TEMPLATE_FORM_SCHEMA = Joi.object({
   check: Joi.boolean(),
+  features: Joi.array()
+    .items(Joi.string())
+    .messages(VALIDATION_MESSAGES)
+    .label("الهوايات"),
   arabic_name: Joi.string()
     .required()
     .min(2)
@@ -70,6 +74,7 @@ export const TEMPLATE_FORM_SCHEMA_INITIAL_VALUES = {
   level: "",
   email: "",
   note: "",
+  features: [],
 };
 
 export default TEMPLATE_FORM_SCHEMA;

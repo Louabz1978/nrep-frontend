@@ -5,15 +5,23 @@ import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, type To } from "react-router-dom";
 import { toast } from "sonner";
+import secureLocalStorage from "react-secure-storage";
+import { useUser } from "@/stores/useUser";
 
 function useLoginMutation() {
   // navigate method
   const navigate = useNavigate();
 
+  // user store
+  const { setUser } = useUser();
+
   // login mutation
   const login = useMutation({
     mutationFn: loginFunction,
-    onSuccess: () => {
+    onSuccess: ({ user }) => {
+      secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
+      secureLocalStorage.setItem("USER", { data: user });
+      setUser(user);
       navigate(-1 as To, { replace: true });
     },
   });

@@ -4,7 +4,7 @@ import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
-import { GENDER, LEVELS } from "@/data/global/enums";
+import { FEATURES, GENDER, LEVELS } from "@/data/global/enums";
 import {
   TEMPLATE_FORM_SCHEMA,
   TEMPLATE_FORM_SCHEMA_INITIAL_VALUES,
@@ -71,15 +71,7 @@ function TemplateForm({
               name={"arabic_name"}
               placeholder={"أدخل الاسم بالعربية"}
             />
-            <Input
-              type={"checkbox"}
-              label={"الاسم بالعربية"}
-              setValue={setValue}
-              register={register}
-              errors={errors}
-              name={"check"}
-              watch={watch}
-            />
+
             <Input
               type={"text"}
               label={"الاسم بالإنجليزية"}
@@ -98,6 +90,18 @@ function TemplateForm({
               errors={errors}
               name={"level"}
               placeholder={"أدخل المرحلة الدراسية"}
+            />
+            <Select
+              label={"الهوايات"}
+              trigger={trigger}
+              setValue={setValue}
+              watch={watch}
+              choices={FEATURES}
+              register={register}
+              errors={errors}
+              multiple={true}
+              name={"features"}
+              placeholder={"أدخل هواياتك المفضلة"}
             />
             <Input
               type={"text"}
@@ -133,6 +137,15 @@ function TemplateForm({
               errors={errors}
               name={"note"}
               placeholder={"ملاحظات"}
+            />
+            <Input
+              type={"checkbox"}
+              label={"إرسال إخر الأخبار للبريد"}
+              setValue={setValue}
+              register={register}
+              errors={errors}
+              name={"check"}
+              watch={watch}
             />
             {/* action buttons */}
           </div>

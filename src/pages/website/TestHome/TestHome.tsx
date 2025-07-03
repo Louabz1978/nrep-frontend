@@ -37,7 +37,7 @@ function TestHome() {
         to={"/template/main"}
         className="cursor-pointer text-primary-foreground"
       >
-        template
+        Click here to view CRUD Template
       </Link>
     </div>
   );

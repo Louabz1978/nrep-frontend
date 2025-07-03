@@ -1,16 +1,17 @@
 import type { LoginFormType } from "@/data/global/LoginFormSchema";
-import waitSeconds from "@/utils/waitSeconds";
+import axiosClient from "@/libs/axios/axios-client";
 
 // login api call function
 // gets: data of template
 async function loginFunction({ data }: { data: LoginFormType }) {
-  console.log({ data });
-  // const res = await axiosClient.post(`/center/templates`, data);
+  const formData = new FormData();
+  Object.keys(data)?.map((key) => {
+    formData.append(key, data[key as keyof typeof data]);
+  });
 
-  // return res.data.data;
-  await waitSeconds();
+  const res = await axiosClient.post(`auth/login`, formData);
 
-  return { message: "تمت الضافة بنجاح" };
+  return { user: res.data };
 }
 
 export default loginFunction;

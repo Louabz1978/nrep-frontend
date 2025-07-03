@@ -312,10 +312,10 @@ body {
 
 @layer components {
   .custom-input {
-      @apply w-full bg-background p-3 py-[6px] text-primary/90 rounded-[6px] overflow-auto outline-none focus-visible:outline-none;
+      @apply flex-1 bg-background p-3 py-[6px] text-primary/90 rounded-[6px] overflow-auto outline-none focus-visible:outline-none;
   }
 
   .custom-select {
-      @apply w-full bg-background p-3 py-[6px] text-primary/90;
+      @apply flex-1 bg-background p-3 py-[6px] text-primary/90;
   }
 }

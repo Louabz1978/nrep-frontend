@@ -4,7 +4,6 @@ import Joi from "joi";
 export interface LoginFormType {
   username: string;
   password: string;
-
 }
 export const LOGIN_FORM_SCHEMA = Joi.object({
   username: Joi.string()
@@ -16,17 +15,15 @@ export const LOGIN_FORM_SCHEMA = Joi.object({
     .label("اسم المستخدم"),
   password: Joi.string()
     .required()
-    .min(6)
+    .min(4)
     .max(50)
     .messages(VALIDATION_MESSAGES)
     .label("كلمة المرور"),
-
 });
 
 export const LOGIN_FORM_SCHEMA_INITIAL_VALUES = {
   username: "",
   password: "",
-
 };
 
 export default LOGIN_FORM_SCHEMA;

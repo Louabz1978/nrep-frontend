@@ -23,7 +23,7 @@ interface PrivateRouteProps {
 const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
   const isThereToken = secureLocalStorage.getItem("ACCESS_TOKEN");
   const userType = jsonParse(secureLocalStorage.getItem("USER"))?.data
-    ?.userType as UserType;
+    ?.token_type as UserType;
 
   if (
     (isThereToken && userType === role) ||
