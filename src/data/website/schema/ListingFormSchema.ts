@@ -16,6 +16,8 @@ export const statusStepInitialValues = {
 
 // general step -----------------------------------------------------------
 export const generalStepSchema = Joi.object({
+  //first step in general
+
   idProperty: Joi.number()
     .required()
     .min(1)
@@ -32,7 +34,9 @@ export const generalStepSchema = Joi.object({
   streetType: Joi.string().required().label("نوع الشارع"),
   streetNumber: Joi.string().required().label("رقم الشارع"),
   streetName: Joi.string().required().label("اسم الشارع"),
-  adjacentGeoDirection: Joi.string().required().label("الاتجاه الجغرافي الملاصق"),
+  adjacentGeoDirection: Joi.string()
+    .required()
+    .label("الاتجاه الجغرافي الملاصق"),
   adjacentGeoStreet: Joi.string().required().label("الشارع الجغرافي الملاصق"),
   postalCode: Joi.string().required().label("الرمز البريدي"),
   buildingNumber: Joi.string().required().label("رقم المبنى"),
@@ -43,6 +47,57 @@ export const generalStepSchema = Joi.object({
   unitCode: Joi.string().required().label("كود الوحدة العقارية"),
   residentialComplex: Joi.string().required().label("اسم المجمع السكني"),
   realEstateAxis: Joi.string().required().label("اسم المحور العقاري"),
+
+  //second step in general
+  propertyStatus: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("حالة العقار"),
+  offeredPrice: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("السعر المعروض"),
+  yearBuilt: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("سنة البناء"),
+  totalArea: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المساحة الإجمالية التقريبية"),
+  livingArea: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المساحة التقريبية للمعيشة"),
+  furnished: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("مفروشة"),
+  bedrooms: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد غرف النوم"),
+  bathroomsWithShower: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد دورات المياه (مع دش)"),
+  bathroomsWithoutShower: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد دورات المياه (بدون دش)"),
+  ceilingFans: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد مراوح السقف"),
+  elevator: Joi.string().required().messages(VALIDATION_MESSAGES).label("مصعد"),
+  garageSpaces: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد مواقف الكراج"),
+  cableAvailable: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الكابل متوفر (التلفزيون/الإنترنت)"),
 });
 
 export const LOGIN_FORM_SCHEMA_INITIAL_VALUES = {
@@ -95,3 +150,35 @@ export const remarksStepSchema = Joi.object({});
 export type RemarksStepType = {};
 
 export const remarksStepInitialValues = {};
+
+export type PropertyCategoryStepType = {
+  propertyStatus: string;
+  offeredPrice: number;
+  yearBuilt: number;
+  totalArea: number;
+  livingArea: number;
+  furnished: string;
+  bedrooms: number;
+  bathroomsWithShower: number;
+  bathroomsWithoutShower: number;
+  ceilingFans: number;
+  elevator: string;
+  garageSpaces: number;
+  cableAvailable: string;
+};
+
+export const propertyCategoryStepInitialValues = {
+  propertyStatus: "",
+  offeredPrice: 0,
+  yearBuilt: 0,
+  totalArea: 0,
+  livingArea: 0,
+  furnished: "",
+  bedrooms: 0,
+  bathroomsWithShower: 0,
+  bathroomsWithoutShower: 0,
+  ceilingFans: 0,
+  elevator: "",
+  garageSpaces: 0,
+  cableAvailable: "",
+};

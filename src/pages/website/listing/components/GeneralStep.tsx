@@ -2,15 +2,14 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import NextButton from "@/components/global/form/button/NextButton";
 import type { Dispatch, SetStateAction } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import { useWatch } from "react-hook-form";
+import { useState } from "react";
 import Accrodion from "@/components/global/accrodion/Accrodion";
 import Input from "@/components/global/form/input/Input";
-import { useState } from "react";
+import Select from "@/components/global/form/select/Select";
 import { FiMapPin } from "react-icons/fi";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { MdRealEstateAgent } from "react-icons/md";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-import Select from "@/components/global/form/select/Select";
 
 interface GeneralStepProps {
   form: UseFormReturn<any>;
@@ -26,151 +25,6 @@ const cityChoices = [
   { value: "daraa", label: "درعا" },
   { value: "hama", label: "حماة" },
   // Add more cities as needed
-];
-
-// Array describing all rows and their fields
-const generalFields = [
-  [
-    {
-      type: "input",
-      name: "propertyId",
-      label: "رقم تعريف العقار",
-      placeholder: "",
-      info: true,
-    },
-    {
-      type: "select",
-      name: "hiddenPropertyId",
-      label: "إخفاء رقم العقار",
-      placeholder: "نعم",
-      choices: cityChoices,
-    },
-    {
-      type: "select",
-      name: "city",
-      label: "المدينة",
-      placeholder: "اختر المدينة",
-      choices: cityChoices,
-    },
-  ],
-  [
-    {
-      type: "input",
-      name: "streetName",
-      label: "اسم الشارع",
-      placeholder: "شارع الدبلان",
-      info: true,
-    },
-    {
-      type: "input",
-      name: "streetNumber",
-      label: "رقم الشارع",
-      placeholder: "1234",
-    },
-    {
-      type: "select",
-      name: "streetType",
-      label: "نوع الشارع",
-      placeholder: "طريق عام",
-      choices: cityChoices,
-    },
-  ],
-  [
-    {
-      type: "select",
-      name: "previousGeoDirection",
-      label: "الاتجاه الجغرافي السابق",
-      placeholder: "شمال",
-      choices: cityChoices,
-      info: false,
-    },
-    {
-      type: "select",
-      name: "nextGeoDirection",
-      label: "الاتجاه الجغرافي اللاحق",
-      placeholder: "شمال",
-      choices: cityChoices,
-    },
-    {
-      type: "input",
-      name: "postalCode",
-      label: "الرمز البريدي",
-      placeholder: "33914",
-    },
-  ],
-  [
-    {
-      type: "input",
-      name: "buildingDesign",
-      label: "نوع تصميم المبنى",
-      placeholder: "",
-      info: true,
-    },
-    {
-      type: "input",
-      name: "buildingNumber",
-      label: "رقم المبنى",
-      placeholder: "47",
-      choices: cityChoices,
-    },
-    {
-      type: "input",
-      name: "apartmentNumber",
-      label: "رقم الشقة",
-      placeholder: "02",
-    },
-  ],
-  [
-    {
-      type: "input",
-      name: "geoArea",
-      label: "المنطقة الجغرافية",
-      placeholder: "",
-      info: true,
-    },
-    {
-      type: "input",
-      name: "regulatoryCode",
-      label: "كود التنظيم(العقاري)",
-      placeholder: "",
-    },
-    {
-      type: "input",
-      name: "projectName",
-      label: "المشروع العقاري",
-      placeholder: "",
-    },
-  ],
-  [
-    {
-      type: "input",
-      name: "projectCode",
-      label: "رمز المجمع",
-      placeholder: "",
-      info: true,
-    },
-    {
-      type: "input",
-      name: "projectName",
-      label: "اسم المجمع السكني",
-      placeholder: "",
-    },
-    {
-      type: "input",
-      name: "unitType",
-      label: "نوع الوحدة العقارية",
-      placeholder: "",
-    },
-  ],
-  [
-    {
-      type: "input",
-      name: "developerName",
-      label: "اسم المطور العقاري",
-      placeholder: "",
-      info: true,
-    },
-  ],
 ];
 
 function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
@@ -189,48 +43,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
     setCurrentStep((prev) => prev + 1);
   };
 
-  // Helper to render a field
-  const renderField = (field: any, idx: number) => {
-    if (field.type === "input") {
-      return (
-        <div className="w-75" key={field.name}>
-          <div className="flex items-center justify-center relative">
-            <Input
-              name={field.name}
-              type="text"
-              label={field.label}
-              labelStyle="font-bold"
-              placeholder={field.placeholder}
-              errors={form.formState.errors}
-              addingInputStyle="mb-4 text-black"
-            />
-            {field.info && <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]"/>}
-          </div>
-        </div>
-      );
-    }
-    if (field.type === "select") {
-      return (
-        <div className="w-75" key={field.name}>
-          <Select
-            label={field.label}
-            labelStyle="font-bold"
-            name={field.name}
-            placeholder={field.placeholder}
-            choices={field.choices}
-            setValue={form.setValue}
-            trigger={form.trigger}
-            watch={form.watch}
-            errors={form.formState.errors}
-            showValue="label"
-            keyValue="value"
-          />
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <PageContainer className="h-full overflow-auto">
       <form id="general_step_form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -245,11 +57,274 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 isOpen={isOpenFirst}
               >
                 <div>
-                  {generalFields.map((row, rowIdx) => (
-                    <div className="flex row mr-12 gap-35" key={rowIdx}>
-                      {row.map((field, idx) => renderField(field, idx))}
+                  {/* Row 1 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <div className="flex items-center justify-center relative">
+                        <Input
+                          name="propertyId"
+                          type="text"
+                          label="رقم تعريف العقار"
+                          labelStyle="font-bold"
+                          placeholder=""
+                          errors={form.formState.errors}
+                          addingInputStyle="mb-4 text-black"
+                        />
+                        <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]" />
+                      </div>
                     </div>
-                  ))}
+                    <div className="w-75">
+                      <Select
+                        label="إخفاء رقم العقار"
+                        labelStyle="font-bold"
+                        name="hiddenPropertyId"
+                        placeholder="نعم"
+                        choices={cityChoices}
+                        setValue={form.setValue}
+                        trigger={form.trigger}
+                        watch={form.watch}
+                        errors={form.formState.errors}
+                        showValue="label"
+                        keyValue="value"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Select
+                        label="المدينة"
+                        labelStyle="font-bold"
+                        name="city"
+                        placeholder="اختر المدينة"
+                        choices={cityChoices}
+                        setValue={form.setValue}
+                        trigger={form.trigger}
+                        watch={form.watch}
+                        errors={form.formState.errors}
+                        showValue="label"
+                        keyValue="value"
+                      />
+                    </div>
+                  </div>
+                  {/* Row 2 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <div className="flex items-center justify-center relative">
+                        <Input
+                          name="streetName"
+                          type="text"
+                          label="اسم الشارع"
+                          labelStyle="font-bold"
+                          placeholder="شارع الدبلان"
+                          errors={form.formState.errors}
+                          addingInputStyle="mb-4 text-black"
+                        />
+                        <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]" />
+                      </div>
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="streetNumber"
+                        type="text"
+                        label="رقم الشارع"
+                        labelStyle="font-bold"
+                        placeholder="1234"
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Select
+                        label="نوع الشارع"
+                        labelStyle="font-bold"
+                        name="streetType"
+                        placeholder="طريق عام"
+                        choices={cityChoices}
+                        setValue={form.setValue}
+                        trigger={form.trigger}
+                        watch={form.watch}
+                        errors={form.formState.errors}
+                        showValue="label"
+                        keyValue="value"
+                      />
+                    </div>
+                  </div>
+                  {/* Row 3 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <Select
+                        label="الاتجاه الجغرافي السابق"
+                        labelStyle="font-bold"
+                        name="previousGeoDirection"
+                        placeholder="شمال"
+                        choices={cityChoices}
+                        setValue={form.setValue}
+                        trigger={form.trigger}
+                        watch={form.watch}
+                        errors={form.formState.errors}
+                        showValue="label"
+                        keyValue="value"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Select
+                        label="الاتجاه الجغرافي اللاحق"
+                        labelStyle="font-bold"
+                        name="nextGeoDirection"
+                        placeholder="شمال"
+                        choices={cityChoices}
+                        setValue={form.setValue}
+                        trigger={form.trigger}
+                        watch={form.watch}
+                        errors={form.formState.errors}
+                        showValue="label"
+                        keyValue="value"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="postalCode"
+                        type="text"
+                        label="الرمز البريدي"
+                        labelStyle="font-bold"
+                        placeholder="33914"
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                  </div>
+                  {/* Row 4 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <div className="flex items-center justify-center relative">
+                        <Input
+                          name="buildingDesign"
+                          type="text"
+                          label="نوع تصميم المبنى"
+                          labelStyle="font-bold"
+                          placeholder=""
+                          errors={form.formState.errors}
+                          addingInputStyle="mb-4 text-black"
+                        />
+                        <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]" />
+                      </div>
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="buildingNumber"
+                        type="text"
+                        label="رقم المبنى"
+                        labelStyle="font-bold"
+                        placeholder="47"
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="apartmentNumber"
+                        type="text"
+                        label="رقم الشقة"
+                        labelStyle="font-bold"
+                        placeholder="02"
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                  </div>
+                  {/* Row 5 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <div className="flex items-center justify-center relative">
+                        <Input
+                          name="geoArea"
+                          type="text"
+                          label="المنطقة الجغرافية"
+                          labelStyle="font-bold"
+                          placeholder=""
+                          errors={form.formState.errors}
+                          addingInputStyle="mb-4 text-black"
+                        />
+                        <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]" />
+                      </div>
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="regulatoryCode"
+                        type="text"
+                        label="كود التنظيم(العقاري)"
+                        labelStyle="font-bold"
+                        placeholder=""
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="projectName"
+                        type="text"
+                        label="المشروع العقاري"
+                        labelStyle="font-bold"
+                        placeholder=""
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                  </div>
+                  {/* Row 6 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <div className="flex items-center justify-center relative">
+                        <Input
+                          name="projectCode"
+                          type="text"
+                          label="رمز المجمع"
+                          labelStyle="font-bold"
+                          placeholder=""
+                          errors={form.formState.errors}
+                          addingInputStyle="mb-4 text-black"
+                        />
+                        <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]" />
+                      </div>
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="projectName"
+                        type="text"
+                        label="اسم المجمع السكني"
+                        labelStyle="font-bold"
+                        placeholder=""
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                    <div className="w-75">
+                      <Input
+                        name="unitType"
+                        type="text"
+                        label="نوع الوحدة العقارية"
+                        labelStyle="font-bold"
+                        placeholder=""
+                        errors={form.formState.errors}
+                        addingInputStyle="mb-4 text-black"
+                      />
+                    </div>
+                  </div>
+                  {/* Row 7 */}
+                  <div className="flex row mr-12 gap-35">
+                    <div className="w-75">
+                      <div className="flex items-center justify-center relative">
+                        <Input
+                          name="developerName"
+                          type="text"
+                          label="اسم المطور العقاري"
+                          labelStyle="font-bold"
+                          placeholder=""
+                          errors={form.formState.errors}
+                          addingInputStyle="mb-4 text-black"
+                        />
+                        <IoIosInformationCircleOutline className="absolute left-[-20px] top-[43px]" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Accrodion>
 
@@ -260,14 +335,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 icon={<HiOutlineBuildingOffice2 />}
                 isOpen={isOpenSecond}
               >
-                <div>
-                  hello hi
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                </div>
               </Accrodion>
 
               {/* Accordion for geographic data and documents */}

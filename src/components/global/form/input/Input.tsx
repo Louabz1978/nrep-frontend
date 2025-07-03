@@ -133,7 +133,7 @@ function Input({
                 id={name}
                 {...(register ? register(name) : {})}
                 disabled={disabled}
-                className={`custom-input ${addingInputStyle}`}
+                className={`custom-input rounded-lg border-2 border-gold-background h-[40px]  bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80] ${addingInputStyle}`}
                 onChange={(e) => {
                   if (
                     numberRegex.test(e.target.value) &&
