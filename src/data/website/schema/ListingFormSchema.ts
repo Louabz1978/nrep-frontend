@@ -187,11 +187,42 @@ export type RoomsStepType = {};
 export const roomsStepInitialValues = {};
 
 // features step -----------------------------------------------------------
-export const featuresStepSchema = Joi.object({});
+export const featuresStepSchema = Joi.object({
+  guestRoom: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("غرف إضافية"),
+  safty: Joi.array().required().messages(VALIDATION_MESSAGES).label("الأمان"),
+  privatePool: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("مسبح خاص"),
+  jaccuzi: Joi.array().required().messages(VALIDATION_MESSAGES).label("جاكوزي"),
+  facilities: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الخدمات و المرافق"),
+  bedroomDetailes: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("تفاصيل غرف النوم"),
+  approvalInfo: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("معلومات الموافقة"),
+});
 
 export type FeaturesStepType = {};
 
-export const featuresStepInitialValues = {};
+export const featuresStepInitialValues = {
+  guestRoom:[],
+  safty: [],
+  privatePool: [],
+  jaccuzi: [],
+  facilities: [],
+  bedroomDetailes: [],
+  approvalInfo: [],
+};
 
 // financial step -----------------------------------------------------------
 export const financialStepSchema = Joi.object({});
