@@ -155,6 +155,10 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الكابل متوفر (التلفزيون/الإنترنت)"),
+  landAreaSource: Joi.any(),
+  landDimensionsSource: Joi.any(),
+  totalAreaSource: Joi.any(),
+  residentialAreaSource: Joi.any(),
 });
 
 export type GeneralStepType = {
@@ -190,6 +194,10 @@ export type GeneralStepType = {
   elevator: string;
   garageSpaces: number;
   cableAvailable: string;
+  landAreaSource: string;
+  landDimensionsSource: string;
+  totalAreaSource: string;
+  residentialAreaSource: string;
 };
 
 export const generalStepInitialValues = {
@@ -225,6 +233,10 @@ export const generalStepInitialValues = {
   elevator: "",
   garageSpaces: "",
   cableAvailable: "",
+  landAreaSource: "",
+  landDimensionsSource: "",
+  totalAreaSource: "",
+  residentialAreaSource: "",
 };
 
 // rooms step -----------------------------------------------------------
@@ -235,11 +247,42 @@ export type RoomsStepType = {};
 export const roomsStepInitialValues = {};
 
 // features step -----------------------------------------------------------
-export const featuresStepSchema = Joi.object({});
+export const featuresStepSchema = Joi.object({
+  guestRoom: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("غرف إضافية"),
+  safty: Joi.array().required().messages(VALIDATION_MESSAGES).label("الأمان"),
+  privatePool: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("مسبح خاص"),
+  jaccuzi: Joi.array().required().messages(VALIDATION_MESSAGES).label("جاكوزي"),
+  facilities: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الخدمات و المرافق"),
+  bedroomDetailes: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("تفاصيل غرف النوم"),
+  approvalInfo: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("معلومات الموافقة"),
+});
 
 export type FeaturesStepType = {};
 
-export const featuresStepInitialValues = {};
+export const featuresStepInitialValues = {
+  guestRoom: [],
+  safty: [],
+  privatePool: [],
+  jaccuzi: [],
+  facilities: [],
+  bedroomDetailes: [],
+  approvalInfo: [],
+};
 
 // financial step -----------------------------------------------------------
 export const financialStepSchema = Joi.object({});

@@ -10,6 +10,13 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { MdRealEstateAgent } from "react-icons/md";
 import { cityChoices, yesNo } from "@/data/website/GeneralData";
 import type { GeneralStepType } from "@/data/website/schema/ListingFormSchema";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import { useEffect } from "react";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
@@ -34,6 +41,19 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
   };
+
+  console.log(form);
+
+  // Fix Leaflet marker icon path for Vite/React
+  useEffect(() => {
+    // @ts-ignore
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: markerIcon2x,
+      iconUrl: markerIcon,
+      shadowUrl: markerShadow,
+    });
+  }, []);
 
   return (
     <PageContainer className="h-full overflow-auto">
@@ -339,13 +359,91 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 icon={<FiMapPin />}
                 isOpen={isOpenThird}
               >
-                <div>
-                  hello hi
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
-                  <div>bro</div>
+                <div className="flex flex-row-reverse items-center w-full justify-around p-10">
+                  {/* Buttons */}
+                  <div className="flex flex-col gap-3 w-full max-w-[500px] mb-4">
+                    <button
+                      type="button"
+                      className="bg-[#0066d6] text-white rounded-xl py-2 px-4 font-bold text-lg shadow hover:bg-[#0055b3] transition-colors"
+                    >
+                      الحصول على خطوط الطول/العرض من العنوان
+                    </button>
+                    <button
+                      type="button"
+                      className="bg-[#0066d6] text-white rounded-xl py-2 px-4 font-bold text-lg shadow hover:bg-[#0055b3] transition-colors"
+                    >
+                      الحصول على خطوط الطول/العرض/العرض يدويًا
+                    </button>
+                    <button
+                      type="button"
+                      className="border-2 border-[#0066d6] text-[#0066d6] rounded-xl py-2 px-4 font-bold text-lg hover:bg-[#e6f0fa] transition-colors"
+                    >
+                      عرض الخريطة برؤية Google street
+                    </button>
+                  </div>
+                  {/* Map with overlay */}
+                  <div
+                    style={{
+                      width: "100%",
+                      maxWidth: 500,
+                      height: 350,
+                      borderRadius: 16,
+                      overflow: "hidden",
+                      boxShadow: "0 2px 8px #0001",
+                      marginBottom: 24,
+                      position: "relative",
+                    }}
+                  >
+                    <MapContainer
+                      center={[34.7324, 36.7131] as [number, number]}
+                      zoom={15}
+                      style={{ width: "100%", height: "100%" }}
+                      scrollWheelZoom={true}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={[34.7324, 36.7131]}>
+                        <Popup>
+                          لم يتم تحديد الموقع
+                          <br />
+                          اضغط على الخريطة لتحديد الموقع
+                        </Popup>
+                      </Marker>
+                    </MapContainer>
+                  </div>
+                </div>
+                {/* Four select inputs */}
+                <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
+                  <Select
+                    form={form}
+                    label={"مصدر القياسات (مساحة الأرض)"}
+                    name={"landAreaSource"}
+                    placeholder={"اختر المصدر"}
+                    info={"معلومات عن مصدر القياس"}
+                  />
+                  <Select
+                    form={form}
+                    label={"مصدر القياسات (أبعاد الأرض)"}
+                    name={"landDimensionsSource"}
+                    placeholder={"اختر المصدر"}
+                    info={"معلومات عن مصدر القياس"}
+                  />
+                  <Select
+                    form={form}
+                    label={"مصدر القياسات (المساحة الكلية)"}
+                    name={"totalAreaSource"}
+                    placeholder={"اختر المصدر"}
+                    info={"معلومات عن مصدر القياس"}
+                  />
+                  <Select
+                    form={form}
+                    label={"مصدر القياسات (المساحة السكنية)"}
+                    name={"residentialAreaSource"}
+                    placeholder={"اختر المصدر"}
+                    info={"معلومات عن مصدر القياس"}
+                  />
                 </div>
               </Accrodion>
 

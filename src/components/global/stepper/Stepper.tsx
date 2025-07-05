@@ -16,7 +16,7 @@ const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
   return (
     // Make the sidebar scrollable and cover all steps
     <div className="w-[304px] border-l border-gray-200 p-4 bg-quaternary-bg h-full  flex flex-col">
-      <div className="flex flex-col gap-[40px] w-48 mr-3 mt-3 flex-1 overflow-y-auto">
+      <div className="flex flex-col gap-[40px] p-3 flex-1 overflow-y-auto">
         {/* Map through each step to render step indicators and labels */}
         {steps.map((step, index) => {
           // Determine if the step is active
