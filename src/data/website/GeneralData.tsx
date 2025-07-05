@@ -14,6 +14,36 @@ export const yesNo = [
   { value: "no", label: "لا" },
 ];
 
+// Array for measurement sources
+export const measurementSources = [
+  { value: "official_document", label: "مستند رسمي" },
+  { value: "survey", label: "مسح ميداني" },
+  { value: "estimate", label: "تقدير تقريبي" },
+  { value: "owner_declaration", label: "إعلان المالك" },
+  { value: "other", label: "أخرى" },
+];
+
+// Array for street types
+export const streetTypes = [
+  { value: "main_road", label: "طريق عام" },
+  { value: "secondary_road", label: "طريق فرعي" },
+  { value: "alley", label: "زقاق" },
+  { value: "boulevard", label: "شارع رئيسي" },
+  { value: "highway", label: "طريق سريع" },
+];
+
+// Array for geographic directions
+export const geoDirections = [
+  { value: "north", label: "شمال" },
+  { value: "south", label: "جنوب" },
+  { value: "east", label: "شرق" },
+  { value: "west", label: "غرب" },
+  { value: "northeast", label: "شمال شرق" },
+  { value: "northwest", label: "شمال غرب" },
+  { value: "southeast", label: "جنوب شرق" },
+  { value: "southwest", label: "جنوب غرب" },
+];
+
 // Array describing all rows and their fields
 export const generalFields = [
   [
