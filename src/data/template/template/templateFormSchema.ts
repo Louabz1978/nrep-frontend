@@ -9,6 +9,8 @@ export interface TemplateFormType {
   level: string;
   email: string;
   note: string;
+  check: boolean;
+  features: string[];
 }
 export const TEMPLATE_FORM_SCHEMA = Joi.object({
   check: Joi.boolean(),

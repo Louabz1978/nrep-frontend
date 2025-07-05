@@ -1,6 +1,6 @@
 import { useEffect, type Dispatch } from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useForm } from "react-hook-form";
+import { Form, useForm } from "react-hook-form";
 import TEMPLATES_FILTER_SCHEMA, {
   TEMPLATES_FILTER_SCHEMA_INITIAL,
 } from "@/data/template/template/templateFilterSchema";
@@ -29,17 +29,12 @@ function TemplatesHeader({
   // const { setFilter } = useTemplatesQuery();
 
   // initialize filter form
-  const {
-    watch,
-    setValue,
-    trigger,
-    register,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     resolver: joiResolver(TEMPLATES_FILTER_SCHEMA),
     defaultValues: TEMPLATES_FILTER_SCHEMA_INITIAL,
     mode: "onChange",
   });
+  const { watch } = form;
 
   //if the form type is search then in each change of the form data will perform the onSubmit
   useEffect(() => {
@@ -50,8 +45,6 @@ function TemplatesHeader({
       subscription.unsubscribe();
     };
   }, [watch]);
-
-  console.log({ errors });
 
   return (
     <div className="flex flex-col gap-1 p-2 border-b border-border">
@@ -75,34 +68,30 @@ function TemplatesHeader({
       </div>
 
       {/* filter */}
-      <div className="grid md:grid-cols-3 gap-2">
+      <form className="grid md:grid-cols-3 gap-2">
         <Input
+          form={form}
           name={"search"}
           placeholder={"بحث"}
-          register={register}
           addingInputStyle="bg-secondary-background"
         />
         <Input
+          form={form}
           name={"age"}
           placeholder={"العمر"}
-          register={register}
           type="number"
-          trigger={trigger}
-          setValue={setValue}
           addingInputStyle="bg-secondary-background"
         />
         <Select
+          form={form}
           name={"gender"}
           placeholder={"الجنس"}
-          trigger={trigger}
-          watch={watch}
-          setValue={setValue}
           keyValue={"value"}
           showValue={"label"}
           choices={GENDERS}
           addingInputStyle="bg-block-background"
         />
-      </div>
+      </form>
     </div>
   );
 }

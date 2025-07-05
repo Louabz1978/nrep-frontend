@@ -39,6 +39,7 @@ import {
 import cleanValues from "@/utils/cleanValues";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import type { UseQueryResult } from "@tanstack/react-query";
+import { type StepType } from "@/components/global/stepper/Stepper";
 
 interface ListingFormProps {
   defaultValues: {
@@ -133,17 +134,62 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
     mode: "onChange",
   });
 
-  // form steps
-  const STEPS = useMemo(
+  // steps
+  const Steps: StepType[] = useMemo(
     () => [
-      "الحالة",
-      "معلومات عامة",
-      "الغرف و المساحات",
-      "الميزات",
-      "المعلومات العامة",
-      "العمولة",
-      "الوكيل المسؤول",
-      "الملاحظلات",
+      {
+        name: "الحالة",
+        onClick: async () => null,
+      },
+      {
+        name: "معلومات عامة",
+        onClick: async () => {
+          const isValid = await statusStep.trigger();
+          if (isValid) setCurrentStep(1);
+        },
+      },
+      {
+        name: "الغرف و المساحات",
+        onClick: async () => {
+          const isValid = await generalStep.trigger();
+          if (isValid) setCurrentStep(2);
+        },
+      },
+      {
+        name: "الميزات",
+        onClick: async () => {
+          const isValid = await roomsStep.trigger();
+          if (isValid) setCurrentStep(3);
+        },
+      },
+      {
+        name: "العمولة",
+        onClick: async () => {
+          const isValid = await featuresStep.trigger();
+          if (isValid) setCurrentStep(4);
+        },
+      },
+      {
+        name: "المعلومات العامة",
+        onClick: async () => {
+          const isValid = await financialStep.trigger();
+          if (isValid) setCurrentStep(5);
+        },
+      },
+      {
+        name: "الوكيل المسؤول",
+        onClick: async () => {
+          const isValid = await compensationStep.trigger();
+          if (isValid) setCurrentStep(6);
+        },
+      },
+      {
+        name: "ملاحظات",
+        onClick: async () => {
+          const isValid = await officesStep.trigger();
+          if (isValid) setCurrentStep(7);
+        },
+      },
     ],
     []
   );
@@ -166,13 +212,13 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
     <PageContainer className="!flex-row">
       {/* stepper */}
       <Stepper
-        steps={STEPS}
+        steps={Steps}
         currentStep={currentStep}
         setCurrentStep={setCurrentStep}
       />
 
       {/* form steps area */}
-      <div className="flex-1 bg-[#FDF9EF] min-h-full">
+      <div className="flex-1 h-full overflow-auto">
         {currentStep == 0 ? (
           <StatusStep form={statusStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 1 ? (

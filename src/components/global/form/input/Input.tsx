@@ -1,31 +1,28 @@
 import { useState, type ReactNode } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 import {
-  type UseFormRegister,
   type FieldErrors,
-  type UseFormSetValue,
   type UseFormTrigger,
-  type UseFormWatch,
+  type UseFormReturn,
+  type FieldValues,
+  type Path,
+  type PathValue,
 } from "react-hook-form";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
-interface InputProps {
+interface InputProps<T extends FieldValues> {
+  form: UseFormReturn<T>;
   type?: string;
   placeholder?: string;
-  register?: UseFormRegister<any>;
-  name: string;
+  name: Path<T>;
   label?: string;
   labelStyle?: string;
-  errors?: any;
   element?: React.ReactNode;
   disabled?: boolean;
   addingStyle?: string;
   addingInputStyle?: string;
   customInput?: React.ReactNode;
   step?: number;
-  setValue?: UseFormSetValue<any>;
-  trigger?: UseFormTrigger<any>;
-  watch?: UseFormWatch<any>;
   numberRegex?: RegExp;
   onClick?: () => void;
   onFocus?: () => void;
@@ -35,18 +32,18 @@ interface InputProps {
   max?: number;
   info?: string | ReactNode;
   addingValidStyle?: string;
+  bottomElement?: string | ReactNode;
 }
 
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
 // returns: input component controlled by react hook form
-function Input({
+function Input<T extends FieldValues>({
+  form,
   type = "text",
   placeholder,
-  register,
   name,
   label,
   labelStyle,
-  errors,
   element,
   disabled,
   addingStyle = "",
@@ -54,9 +51,6 @@ function Input({
   addingInputStyle = "",
   customInput,
   step = 1,
-  setValue = () => {},
-  trigger,
-  watch,
   numberRegex = /^\d*$/,
   onClick = () => {},
   onFocus = () => {},
@@ -65,9 +59,17 @@ function Input({
   min,
   max,
   info,
-}: InputProps) {
+  bottomElement,
+}: InputProps<T>) {
   // to show password
   const [show, setShow] = useState(false);
+  const {
+    watch,
+    register,
+    setValue,
+    formState: { errors },
+    trigger,
+  } = form;
 
   function getError(errors: FieldErrors | undefined, name: string): any {
     let res: any = false;
@@ -79,6 +81,21 @@ function Input({
     });
     return res;
   }
+
+  // helper function to check if field is valid
+  function isValid<T extends FieldValues>(
+    form: UseFormReturn<T>,
+    name: Path<T>
+  ): boolean {
+    const { formState } = form;
+    console.log(
+      formState.dirtyFields,
+      formState.errors[name],
+      formState.touchedFields
+    );
+    return !!(formState.dirtyFields as Record<Path<T>, boolean>);
+  }
+
   return (
     <>
       {/* checkbox input with its style */}
@@ -95,7 +112,10 @@ function Input({
               {...(register ? register(name) : {})}
               disabled={disabled}
               onChange={(e) => {
-                setValue(name, e?.target?.checked ? true : false);
+                setValue(
+                  name,
+                  (e?.target?.checked ? true : false) as PathValue<T, Path<T>>
+                );
                 trigger?.(name);
                 onChange({ trigger } as { trigger: UseFormTrigger<any> });
               }}
@@ -116,85 +136,99 @@ function Input({
       ) : (
         // other normal inputs
         <div
-          className={`flex flex-col w-full ${addingStyle}`}
+          className={`flex flex-col w-full gap-[4px] ${addingStyle}`}
           onClick={onClick}
         >
           {/* input label  */}
           {label ? (
             <label
               htmlFor={name}
-              className={`mb-2 cursor-pointer font-black ${labelStyle}`}
+              className={`font-bold text-size24 text-primary-fg cursor-pointer ${labelStyle}`}
             >
               {label}
             </label>
           ) : null}
 
-          <div className="w-full flex flex-col gap-1">
+          <div className="w-full flex flex-col gap-[4px]">
             {/* input container to link icon to its position */}
             <div className="relative flex items-center gap-[8px]">
-              {/* input with react hook form register control  */}
-              {type == "custom" ? (
-                <div className="custom-input">{customInput}</div>
-              ) : type == "number" ? (
-                <input
-                  type={"number"}
-                  placeholder={placeholder}
-                  id={name}
-                  {...(register ? register(name) : {})}
-                  disabled={disabled}
-                  className={`custom-input rounded-[16px] border-2 h-[40px]  bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80]  ${
-                    getError(errors, name)
-                      ? "border-red-500"
-                      : "border-[#1C2026] focus:ring-[#1C2026] "
-                  } ${addingInputStyle}`}
-                  onChange={(e) => {
-                    if (
-                      numberRegex.test(e.target.value) &&
-                      (!min || Number(e.target.value) >= min) &&
-                      (!max || Number(e.target.value) <= max)
-                    ) {
-                      if (e.target.value === "") {
-                        setValue(name, undefined);
-                      } else {
-                        setValue(name, Number(e.target.value));
+              <div className="relative flex-1 flex items-center overflow-hidden">
+                {/* input with react hook form register control  */}
+                {type == "custom" ? (
+                  <div className="custom-input">{customInput}</div>
+                ) : type == "number" ? (
+                  <input
+                    type={"number"}
+                    placeholder={placeholder}
+                    id={name}
+                    {...(register ? register(name) : {})}
+                    disabled={disabled}
+                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-foreground rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                      getError(errors, name)
+                        ? "border-error"
+                        : `border-primary-border ${
+                            isValid(form, name)
+                              ? "focus-visible:border-success"
+                              : "focus-visible:border-secondary"
+                          } hover:border-secondary ${addingValidStyle}`
+                    } ${addingInputStyle}`}
+                    onChange={(e) => {
+                      if (
+                        numberRegex.test(e.target.value) &&
+                        (!min || Number(e.target.value) >= min) &&
+                        (!max || Number(e.target.value) <= max)
+                      ) {
+                        if (e.target.value === "") {
+                          setValue(name, undefined as PathValue<T, Path<T>>);
+                        } else {
+                          setValue(
+                            name,
+                            Number(e.target.value) as PathValue<T, Path<T>>
+                          );
+                        }
+                        trigger?.(name);
                       }
-                      trigger?.(name);
-                    }
-                  }}
-                  value={watch?.(name) ?? undefined}
-                  step={step}
-                />
-              ) : (
-                <input
-                  type={show ? "text" : type}
-                  placeholder={placeholder}
-                  id={name}
-                  {...(register ? register(name) : {})}
-                  disabled={disabled}
-                  className={`custom-input rounded-[16px] border-2 h-[40px]  bg-white text-black px-4 py-2 focus:outline-none focus:ring-2 placeholder:text-[#49515B80]  ${
-                    getError(errors, name)
-                      ? "border-red-500"
-                      : `border-[#1C2026] focus:ring-[#1C2026] ${addingValidStyle}`
-                  } ${addingInputStyle}`}
-                  // border-gold-background focus:ring-gold-background rounded-lg
-                  step={step}
-                  onFocus={onFocus}
-                  onBlur={onBlur}
-                />
-              )}
-
-              {/* show input content with password input type */}
-              {type == "password" ? (
-                <div
-                  className="text-primary-foreground/80 hover:text-primary-foreground/100 transition-all absolute h-max w-max left-4 top-[50%] -translate-y-[50%] flex justify-center items-center cursor-pointer"
-                  onClick={() => {
-                    if (type == "password") setShow(!show);
-                  }}
-                >
-                  {/* toggle icon depending on show value */}
-                  {show ? <FaEyeSlash /> : <FaEye />}
-                </div>
-              ) : null}
+                    }}
+                    value={watch?.(name) ?? undefined}
+                    step={step}
+                  />
+                ) : (
+                  <input
+                    type={show ? "text" : type}
+                    placeholder={placeholder}
+                    id={name}
+                    {...(register ? register(name) : {})}
+                    disabled={disabled}
+                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-foreground rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                      getError(errors, name)
+                        ? "border-error"
+                        : `border-primary-border ${
+                            isValid(form, name)
+                              ? "focus-visible:border-success"
+                              : "focus-visible:border-secondary"
+                          } hover:border-secondary ${addingValidStyle}`
+                    } ${
+                      type == "password" ? "!pl-[56px]" : ""
+                    } ${addingInputStyle}`}
+                    // border-gold-background focus:ring-gold-background rounded-lg
+                    step={step}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                  />
+                )}
+                {/* show input content with password input type */}
+                {type == "password" ? (
+                  <div
+                    className="text-primary-fg/80 hover:text-primary-fg/100 transition-all absolute h-[calc(100%_-_3.28px)] rounded-l-[12.27px] aspect-square left-[1.64px] bg-transparent top-[50%] -translate-y-[50%] flex justify-center items-center cursor-pointer"
+                    onClick={() => {
+                      if (type == "password") setShow(!show);
+                    }}
+                  >
+                    {/* toggle icon depending on show value */}
+                    {show ? <FaEyeSlash /> : <FaEye />}
+                  </div>
+                ) : null}
+              </div>
 
               {/* beside element */}
               {info ? (
@@ -204,10 +238,13 @@ function Input({
 
             {/* validation errors  */}
             {getError(errors, name) ? (
-              <span className="text-error text-size14">
+              <span className="text-error font-medium text-size16">
                 {getError(errors, name)?.message}
               </span>
             ) : null}
+
+            {/* bottom element */}
+            {bottomElement ? bottomElement : null}
           </div>
         </div>
       )}

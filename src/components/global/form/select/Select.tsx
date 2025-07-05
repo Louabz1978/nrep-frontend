@@ -7,29 +7,24 @@ import handleClickOutside from "@/utils/handleClickOutside";
 import { isArray } from "lodash";
 import EmptyContent from "../../emptyContent/EmptyContent";
 import {
-  type UseFormRegister,
-  type FieldErrors,
-  type UseFormSetValue,
-  type UseFormTrigger,
-  type UseFormWatch,
+  type FieldValues,
+  type Path,
+  type PathValue,
+  type UseFormReturn,
 } from "react-hook-form";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
-interface SelectProps {
+interface SelectProps<T extends FieldValues> {
+  form: UseFormReturn<T>;
   placeholder?: string;
-  register?: UseFormRegister<any>;
-  name: string;
+  name: Path<T>;
   label?: string;
   labelStyle?: string;
-  errors?: FieldErrors;
   element?: React.ReactNode;
   disabled?: boolean;
-  setValue: UseFormSetValue<any>;
-  trigger: UseFormTrigger<any>;
   choices?: any[];
   showValue?: string;
   keyValue?: string;
-  watch: UseFormWatch<any>;
   isLoading?: boolean;
   isError?: boolean;
   emptyValue?: any;
@@ -46,21 +41,17 @@ interface SelectProps {
   info?: string | ReactNode;
 }
 
-function Select({
+function Select<T extends FieldValues>({
+  form,
   placeholder,
-  // register,
   name,
   label,
   labelStyle,
-  errors,
   // element,
   disabled,
-  setValue,
-  trigger,
   choices = [],
   showValue,
   keyValue,
-  watch,
   isLoading,
   isError,
   emptyValue = null,
@@ -74,10 +65,17 @@ function Select({
   belowComponent,
   formId, // query
   info,
-}: SelectProps) {
+}: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const clickRef = useRef<HTMLDivElement>(null);
   useEffect(() => handleClickOutside(clickRef, setIsOpen, null), []);
+  const {
+    watch,
+    register,
+    setValue,
+    formState: { errors },
+    trigger,
+  } = form;
 
   // handle choice click
   function handleChoiceClick(e: React.MouseEvent, choice: any, key?: number) {
@@ -110,12 +108,12 @@ function Select({
           );
           const newValue = [...watch(name)];
           newValue.splice(index, 1);
-          setValue(name, newValue);
+          setValue(name, newValue as PathValue<T, Path<T>>);
         } else {
           const index = watch(name).findIndex((ele: any) => ele == finalChoice);
           const newValue = [...watch(name)];
           newValue.splice(index, 1);
-          setValue(name, newValue);
+          setValue(name, newValue as PathValue<T, Path<T>>);
         }
       }
       // single
@@ -125,7 +123,7 @@ function Select({
     else {
       // multiple
       if (multiple) {
-        setValue(name, [...watch(name), finalChoice]);
+        setValue(name, [...watch(name), finalChoice] as PathValue<T, Path<T>>);
       }
       // single
       else {

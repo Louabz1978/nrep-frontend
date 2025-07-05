@@ -2,12 +2,14 @@ import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
 // status step -----------------------------------------------------------
+export type ListingStatusType = "active" | "incomplete";
+
 export const statusStepSchema = Joi.object({
   status: Joi.string(),
 });
 
 export type StatusStepType = {
-  status: string;
+  status: ListingStatusType;
 };
 
 export const statusStepInitialValues = {
@@ -155,7 +157,40 @@ export const generalStepSchema = Joi.object({
     .label("الكابل متوفر (التلفزيون/الإنترنت)"),
 });
 
-export type GeneralStepType = {};
+export type GeneralStepType = {
+  propertyId: number;
+  hiddenPropertyId: string;
+  city: string;
+  streetName: string;
+  streetNumber: string;
+  streetType: string;
+  previousGeoDirection: string;
+  nextGeoDirection: string;
+  postalCode: string;
+  buildingDesign: string;
+  buildingNumber: string;
+  apartmentNumber: string;
+  geoArea: string;
+  regulatoryCode: string;
+  projectName: string;
+  projectCode: string;
+  projectHomeName: string;
+  unitType: string;
+  developerName: string;
+  propertyStatus: string;
+  offeredPrice: number;
+  yearBuilt: number;
+  totalArea: number;
+  livingArea: number;
+  furnished: string;
+  bedrooms: number;
+  bathroomsWithShower: number;
+  bathroomsWithoutShower: number;
+  ceilingFans: number;
+  elevator: string;
+  garageSpaces: number;
+  cableAvailable: string;
+};
 
 export const generalStepInitialValues = {
   propertyId: null,
@@ -177,6 +212,19 @@ export const generalStepInitialValues = {
   projectHomeName: "",
   unitType: "",
   developerName: "",
+  propertyStatus: "",
+  offeredPrice: "",
+  yearBuilt: "",
+  totalArea: "",
+  livingArea: "",
+  furnished: "",
+  bedrooms: "",
+  bathroomsWithShower: "",
+  bathroomsWithoutShower: "",
+  ceilingFans: "",
+  elevator: "",
+  garageSpaces: "",
+  cableAvailable: "",
 };
 
 // rooms step -----------------------------------------------------------

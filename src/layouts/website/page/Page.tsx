@@ -5,7 +5,7 @@ interface PageProps {
 }
 
 function Page({ children }: PageProps) {
-  return <main className="flex flex-1 overflow-auto">{children}</main>;
+  return <main className="flex flex-col flex-1 overflow-auto">{children}</main>;
 }
 
 export default Page;

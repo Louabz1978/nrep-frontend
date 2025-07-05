@@ -25,8 +25,8 @@ function PageContainer({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: "easeInOut" }}
-      className={`flex flex-col flex-1 ${className}`}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={`flex flex-col flex-1 overflow-auto ${className}`}
     >
       {checkPermissions(permissions) ? children : <>not allowed</>}
     </motion.div>

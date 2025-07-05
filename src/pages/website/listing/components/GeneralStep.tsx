@@ -9,22 +9,17 @@ import { FiMapPin } from "react-icons/fi";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { MdRealEstateAgent } from "react-icons/md";
 import { cityChoices, yesNo } from "@/data/website/GeneralData";
+import type { GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 
 interface GeneralStepProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 
 function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // extract form utils
-  const {
-    formState: { errors },
-    register,
-    handleSubmit,
-    watch,
-    trigger,
-    setValue,
-  } = form;
+  const { handleSubmit } = form;
+
   // State for each accordion section
   const [isOpenFirst, setIsOpenFirst] = useState(false);
   const [isOpenSecond, setIsOpenSecond] = useState(false);
@@ -39,8 +34,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
   };
-
-  console.log(form);
 
   return (
     <PageContainer className="h-full overflow-auto">
@@ -58,207 +51,158 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               >
                 <div className="ps-[39px] pe-[71px] pb-[30px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"رقم تعريف العقار"}
                     placeholder={""}
                     name={"propertyId"}
                     type={"number"}
-                    setValue={setValue}
-                    trigger={trigger}
-                    register={register}
                     info={"hello"}
                   />
                   <Select
+                    form={form}
                     label={"إخفاء رقم العقار"}
-                    trigger={trigger}
-                    setValue={setValue}
-                    watch={watch}
                     choices={yesNo}
                     showValue="label"
                     keyValue="value"
-                    register={register}
-                    errors={errors}
                     name={"hiddenPropertyId"}
                     placeholder={"نعم"}
                     info={"hello"}
                   />
                   <Select
+                    form={form}
                     label={"المدينة"}
-                    trigger={trigger}
-                    setValue={setValue}
-                    watch={watch}
                     choices={cityChoices}
                     showValue="label"
                     keyValue="value"
-                    register={register}
-                    errors={errors}
                     name={"city"}
                     placeholder={"اختر المدينة"}
                     info={"hello"}
                   />
 
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"اسم الشارع"}
                     placeholder={"شارع الدبلان"}
                     name={"streetName"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"رقم الشارع"}
                     placeholder={"1234"}
                     name={"streetNumber"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Select
+                    form={form}
                     label={"نوع الشارع"}
-                    trigger={trigger}
-                    setValue={setValue}
-                    watch={watch}
                     choices={cityChoices}
                     showValue="label"
                     keyValue="value"
-                    register={register}
-                    errors={errors}
                     name={"streetType"}
                     placeholder={"طريق عام"}
                     info={"hello"}
                   />
 
                   <Select
+                    form={form}
                     label={"الاتجاه الجغرافي السابق"}
-                    trigger={trigger}
-                    setValue={setValue}
-                    watch={watch}
                     choices={cityChoices}
                     showValue="label"
                     keyValue="value"
-                    register={register}
-                    errors={errors}
                     name={"previousGeoDirection"}
                     placeholder={"شمال"}
                     info={"hello"}
                   />
                   <Select
+                    form={form}
                     label={"الاتجاه الجغرافي اللاحق"}
-                    trigger={trigger}
-                    setValue={setValue}
-                    watch={watch}
                     choices={cityChoices}
                     showValue="label"
                     keyValue="value"
-                    register={register}
-                    errors={errors}
                     name={"nextGeoDirection"}
                     placeholder={"شمال"}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"الرمز البريدي"}
                     placeholder={"33914"}
                     name={"postalCode"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
 
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"نوع تصميم المبنى"}
                     placeholder={""}
                     name={"buildingDesign"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"رقم المبنى"}
                     placeholder={"47"}
                     name={"buildingNumber"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"رقم الشقة"}
                     placeholder={"02"}
                     name={"apartmentNumber"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
 
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"المنطقة الجغرافية"}
                     placeholder={""}
                     name={"geoArea"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"كود التنظيم(العقاري)"}
                     placeholder={""}
                     name={"regulatoryCode"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"المشروع العقاري"}
                     placeholder={""}
                     name={"projectName"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
 
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"رمز المجمع"}
                     placeholder={""}
                     name={"projectCode"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"اسم المجمع السكني"}
                     placeholder={""}
                     name={"projectHomeName"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"نوع الوحدة العقارية"}
                     placeholder={""}
                     name={"unitType"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
 
                   <Input
-                    errors={errors}
+                    form={form}
                     label={"اسم المطور العقاري"}
                     placeholder={""}
                     name={"developerName"}
-                    type={"text"}
-                    register={register}
                     info={"hello"}
                   />
                 </div>
@@ -273,129 +217,116 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               >
                 <div className="ps-[39px] pe-[71px] pb-[30px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
                   <Input
+                    form={form}
                     name="propertyStatus"
                     label="حالة العقار"
                     labelStyle="font-bold"
                     placeholder="معروض للبيع"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="offeredPrice"
                     type="number"
                     label="السعر المعروض"
                     labelStyle="font-bold"
                     placeholder="1,000,000 ل.س"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="yearBuilt"
                     type="number"
                     label="سنة البناء"
                     labelStyle="font-bold"
                     placeholder="2010"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="totalArea"
                     type="number"
                     label="المساحة الإجمالية التقريبية"
                     labelStyle="font-bold"
                     placeholder=""
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="livingArea"
                     type="number"
                     label="المساحة التقريبية للمعيشة"
                     labelStyle="font-bold"
                     placeholder=""
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="furnished"
                     label="مفروشة"
                     labelStyle="font-bold"
                     placeholder="غير مفروشة"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="bedrooms"
                     type="number"
                     label="عدد غرف النوم"
                     labelStyle="font-bold"
                     placeholder="3"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="bathroomsWithShower"
                     type="number"
                     label="عدد دورات المياه (مع دش)"
                     labelStyle="font-bold"
                     placeholder="2"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="bathroomsWithoutShower"
                     type="number"
                     label="عدد دورات المياه (بدون دش)"
                     labelStyle="font-bold"
                     placeholder="1"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="ceilingFans"
                     type="number"
                     label="عدد مراوح السقف"
                     labelStyle="font-bold"
                     placeholder="0"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="elevator"
                     label="مصعد"
                     labelStyle="font-bold"
                     placeholder="لا يوجد"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="garageSpaces"
                     type="number"
                     label="عدد مواقف الكراج"
                     labelStyle="font-bold"
                     placeholder="1"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                   <Input
+                    form={form}
                     name="cableAvailable"
                     label="الكابل متوفر (التلفزيون/الإنترنت)"
                     labelStyle="font-bold"
                     placeholder="لا يوجد"
-                    errors={errors}
-                    register={register}
                     info={"hello"}
                   />
                 </div>

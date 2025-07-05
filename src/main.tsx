@@ -7,6 +7,7 @@ import AppInitializer from "./providers/AppInitializer";
 import { RouterProvider } from "react-router-dom";
 import router from "./router";
 import "@/styles/global/index.css";
+import { AnimatePresence } from "framer-motion";
 
 // build query client that every useQuery and useMutation use it
 const queryClient = new QueryClient();
@@ -16,7 +17,9 @@ createRoot(document.getElementById("root")!).render(
     <AppInitializer>
       <QueryClientProvider client={queryClient}>
         <SonnerToast />
-        <RouterProvider router={router} />
+        <AnimatePresence mode="wait">
+          <RouterProvider router={router} />
+        </AnimatePresence>
         {/* <ReactQueryDevtools /> */}
       </QueryClientProvider>
     </AppInitializer>

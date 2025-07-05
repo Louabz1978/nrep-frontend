@@ -4,17 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 transition-all duration-[0.3s]",
+  "inline-flex items-center justify-center whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer disabled:!cursor-not-allowed transition-all duration-[0.3s]",
   {
-    variants:
-    {
+    variants: {
       variant: {
         default:
-          "font-medium !text-[13px] py-9p px-16p bg-primary text-white hover:bg-primary/80 rounded-[6px] border border-solid border-primary hover:border-primary/80 cursor-pointer",
+          "h-[40px] gap-[25px] py-[7.5px] px-[18.5px] rounded-full !text-inverse-fg bg-primary text-size24",
         destructive:
           "font-medium !text-13p py-9p px-16p bg-destructive text-destructive-foreground hover:bg-destructive-hover rounded-xs border border-solid border-destructive hover:border-destructive-hover",
         outline:
-          "font-medium !text-13p py-9p px-16p bg-transparent text-primary-hover hover:text-primary-foreground hover:bg-primary-hover rounded-xs border border-solid border-primary-hover",
+          "h-[40px] border-[3.16px] border-primary rounded-[23.55px] !text-primary bg-transparent text-size24",
         secondary:
           "font-medium !text-13p py-9p px-16p bg-secondary text-secondary-foreground hover:bg-secondary-hover rounded-xs border border-solid border-secondary hover:border-secondary-hover",
         ghost:
@@ -24,12 +23,12 @@ const buttonVariants = cva(
           "font-medium !text-13p py-9p px-16p bg-transparent text-foreground-secondary hover:bg-background-hover rounded-xs",
         panel:
           "font-medium !text-13p py-9p px-16p bg-top-panel-button text-top-panel-button-foreground hover:brightness-95 rounded-[7px]",
-        login:
-          "w-full cursor-pointer bg-gold-background text-xl text-white font-bold rounded-[18px] py-3 transition border border-gold-background hover:bg-[#18181B] hover:text-gold-background hover:border-gold-background",
+        radio:
+          "w-[180px] h-[40px] rounded-full py-[13px] px-[30px] bg-quinary-bg text-inverse-fg",
       },
 
       size: {
-        default: "h-9 px-6 py-2",
+        default: "",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         login: " rounded-[18px] h-[50px]",
@@ -38,22 +37,28 @@ const buttonVariants = cva(
           "h-[32px] w-[32px] flex justify-center items-center rounded-full !p-0",
         "panel-icon": "h-[36px] w-[36px] flex justifyContent interface !p-0",
       },
+      status: {
+        default: "",
+        "active-radio": "!bg-secondary",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      status: "default",
     },
   }
 );
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  status?: "default" | "active-radio";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, status, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return (
       <Comp

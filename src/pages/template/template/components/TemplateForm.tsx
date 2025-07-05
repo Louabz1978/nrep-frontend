@@ -34,16 +34,8 @@ function TemplateForm({
   editTemplate,
   data,
 }: TemplateFormProps) {
-  console.log({ data });
   // template form
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    trigger,
-    register,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     resolver: joiResolver(TEMPLATE_FORM_SCHEMA),
     defaultValues: cleanValues(TEMPLATE_FORM_SCHEMA_INITIAL_VALUES, data),
     mode: "onChange",
@@ -59,93 +51,73 @@ function TemplateForm({
       <form
         id="add_template_form"
         className="flex flex-col flex-1 w-full bg-white rounded-2xl p-[20px]"
-        onSubmit={handleSubmit(submitData)}
+        onSubmit={form.handleSubmit(submitData)}
       >
         <div className="flex-1">
           <div className="grid grid-cols-2 gap-[20px] ">
             <Input
+              form={form}
               type={"text"}
               label={"الاسم بالعربية"}
-              register={register}
-              errors={errors}
               name={"arabic_name"}
               placeholder={"أدخل الاسم بالعربية"}
             />
 
             <Input
+              form={form}
               type={"text"}
               label={"الاسم بالإنجليزية"}
-              register={register}
-              errors={errors}
               name={"english_name"}
               placeholder={"أدخل الاسم بالإنجليزية"}
             />
             <Select
+              form={form}
               label={"المرحلة الدراسية"}
-              trigger={trigger}
-              setValue={setValue}
-              watch={watch}
               choices={LEVELS}
-              register={register}
-              errors={errors}
               name={"level"}
               placeholder={"أدخل المرحلة الدراسية"}
             />
             <Select
+              form={form}
               label={"الهوايات"}
-              trigger={trigger}
-              setValue={setValue}
-              watch={watch}
               choices={FEATURES}
-              register={register}
-              errors={errors}
               multiple={true}
               name={"features"}
               placeholder={"أدخل هواياتك المفضلة"}
             />
             <Input
+              form={form}
               type={"text"}
               label={"رقم الهاتف"}
-              register={register}
-              errors={errors}
               name={"phone_number"}
               placeholder={"أدخل رقم هاتف الطالب"}
             />
             <Select
+              form={form}
               label={"الجنس"}
-              trigger={trigger}
-              setValue={setValue}
-              watch={watch}
               choices={GENDER}
-              register={register}
-              errors={errors}
               name={"gender"}
               placeholder={"أدخل الجنس"}
             />
             <Input
-              errors={errors}
+              form={form}
               label={"البريد الإلكتروني"}
               placeholder={"أدخل إيميل المدير"}
               name={"email"}
               type={"email"}
-              register={register}
             />
             <Input
+              form={form}
               type={"text"}
               label={"ملاحظات"}
-              register={register}
-              errors={errors}
               name={"note"}
               placeholder={"ملاحظات"}
             />
             <Input
+              form={form}
               type={"checkbox"}
               label={"إرسال إخر الأخبار للبريد"}
-              setValue={setValue}
-              register={register}
-              errors={errors}
               name={"check"}
-              watch={watch}
             />
             {/* action buttons */}
           </div>

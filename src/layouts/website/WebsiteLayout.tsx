@@ -1,20 +1,20 @@
 import { Outlet } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import Navbar from "./navbar/Navbar";
 import Page from "./page/Page";
 import Header from "./header/Header";
+import PageContainer from "@/components/global/pageContainer/PageContainer";
 
 function WebsiteLayout() {
   return (
-    <div className="w-full h-full overflow-auto relative bg-background flex flex-col scroll-bar transition-colors duration-[0.3s]">
-      <Header />
-      <Navbar />
-      <Page>
-        <AnimatePresence mode="wait">
+    <div className="w-full h-full flex-1 overflow-auto relative bg-primary-bg flex flex-col scroll-bar transition-colors duration-[0.3s]">
+      <PageContainer>
+        <Header />
+        <Navbar />
+        <Page>
           <Outlet />
-        </AnimatePresence>
-      </Page>
-      {/* <Footer /> */}
+        </Page>
+        {/* <Footer /> */}
+      </PageContainer>
     </div>
   );
 }
