@@ -71,7 +71,6 @@ function Select<T extends FieldValues>({
   useEffect(() => handleClickOutside(clickRef, setIsOpen, null), []);
   const {
     watch,
-    register,
     setValue,
     formState: { errors },
     trigger,
@@ -199,26 +198,6 @@ function Select<T extends FieldValues>({
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // Helper for multiple select display
-  function getMultipleDisplay() {
-    const value = watch(name);
-    if (!isArray(value) || value.length === 0) {
-      return <span className="text-placeholder">{placeholder}</span>;
-    }
-    // Show summary: "X عناصر محددة" or showValue of first + count
-    if (showValue) {
-      if (value.length === 1) {
-        return value[0][showValue];
-      }
-      return `${value[0][showValue]} +${value.length - 1}`;
-    } else {
-      if (value.length === 1) {
-        return value[0]?.label ?? value[0];
-      }
-      return `${value[0]?.label ?? value[0]} +${value.length - 1}`;
-    }
-  }
-
   return (
     <div className={`flex flex-col w-full ${addingStyle}`}>
       {/* select label  */}
@@ -236,11 +215,11 @@ function Select<T extends FieldValues>({
         ref={clickRef}
         className={`relative w-full flex items-center gap-1 ${addingSelectStyle}`}
       >
-        <div className="flex-1 relative flex items-center">
+        <div className="flex-1 w-full relative flex items-center">
           {/* select */}
           <button
             type="button"
-            className={`custom-input custom-select border-2 h-[40px] bg-white text-black px-4 py-2 min-w-[350px] max-w-[350px] w-[350px] ${
+            className={`custom-input custom-select  border-2 h-[40px] bg-white text-black px-4 py-2 ${
               errors?.[name]
                 ? "border-red-500"
                 : "border-[#1C2026] focus:ring-2 focus:ring-[#1C2026]"
@@ -253,7 +232,7 @@ function Select<T extends FieldValues>({
               if (!disabled) setIsOpen((prev) => !prev);
             }}
           >
-            <div className="overflow-hidden text-ellipsis whitespace-nowrap w-full">
+            <div className="overflow-auto text-nowrap">
               {(watch(name) && !isArray(watch(name))) ||
               (isArray(watch(name)) && watch(name).length) ? (
                 !multiple ? (
@@ -262,8 +241,50 @@ function Select<T extends FieldValues>({
                   ) : (
                     watch(name)
                   )
+                ) : showValue ? (
+                  <div className="flex w-full overflow-auto items-center gap-[4px]">
+                    {watch(name).map((ele: any, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className="py-[2px] group px-[6px] flex items-center gap-[4px] rounded-[5px] bg-primary/80 text-white"
+                        >
+                          {ele[showValue]}
+
+                          <FaXmark
+                            className="size-[12px] text-white/80 hidden group-hover:block hover:text-white"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleChoiceClick(e, ele);
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
                 ) : (
-                  getMultipleDisplay()
+                  <div className="flex items-center overflow-auto gap-[4px]">
+                    {watch(name).map((ele: any, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className="py-[2px] group px-[6px] flex items-center gap-[4px] rounded-[5px] bg-primary/80 text-white"
+                        >
+                          {ele}
+
+                          <FaXmark
+                            className="size-[12px] text-white/80 hidden group-hover:block hover:text-white"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleChoiceClick(e, ele);
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
                 )
               ) : (
                 <span className="text-placeholder">{placeholder}</span>
