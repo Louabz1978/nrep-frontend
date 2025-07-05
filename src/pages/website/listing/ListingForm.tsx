@@ -58,7 +58,7 @@ interface ListingFormProps {
 // listing form page, gets: default values for each step in the form
 function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
   // current step
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(0);
 
   // status step form
   const statusStep = useForm({
@@ -149,23 +149,23 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
         },
       },
       {
-        name: "الغرف و المساحات",
+        name: "الميزات",
         onClick: async () => {
           const isValid = await generalStep.trigger();
           if (isValid) setCurrentStep(2);
         },
       },
       {
-        name: "الميزات",
+        name: "الغرف و المساحات",
         onClick: async () => {
-          const isValid = await roomsStep.trigger();
+          const isValid = await featuresStep.trigger();
           if (isValid) setCurrentStep(3);
         },
       },
       {
         name: "العمولة",
         onClick: async () => {
-          const isValid = await featuresStep.trigger();
+          const isValid = await roomsStep.trigger();
           if (isValid) setCurrentStep(4);
         },
       },
@@ -224,9 +224,9 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
         ) : currentStep == 1 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 2 ? (
-          <RoomsStep />
+          <FeaturesStep form={featuresStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 3 ? (
-          <FeaturesStep form={featuresStep} setCurrentStep={setCurrentStep}/>
+          <RoomsStep />
         ) : currentStep == 4 ? (
           <FinancialStep />
         ) : currentStep == 5 ? (

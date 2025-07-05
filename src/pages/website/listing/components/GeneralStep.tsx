@@ -8,9 +8,21 @@ import Select from "@/components/global/form/select/Select";
 import { FiMapPin } from "react-icons/fi";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { MdRealEstateAgent } from "react-icons/md";
-import { cityChoices, yesNo } from "@/data/website/GeneralData";
 import type { GeneralStepType } from "@/data/website/schema/ListingFormSchema";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  cityChoices,
+  yesNo,
+  measurementSources,
+  streetTypes,
+  geoDirections,
+} from "@/data/website/GeneralData";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useEffect } from "react";
@@ -22,31 +34,106 @@ interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
+// handle the map click event
+function MapClickHandler({
+  onMapClick,
+  isManualMode,
+}: {
+  onMapClick: (lat: number, lng: number) => void;
+  isManualMode: boolean;
+}) {
+  useMapEvents({
+    click: ({ latlng }) => {
+      // if the manual mode is disabled, don't do anything
+      if (!isManualMode) return;
+      // if the manual mode is enabled, call the onMapClick function
+      onMapClick(latlng.lat, latlng.lng);
+    },
+  });
+  return null;
+}
 
+// general step component
 function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // extract form utils
-  const { handleSubmit } = form;
+  const { handleSubmit, watch, setValue, trigger } = form;
 
   // State for each accordion section
   const [isOpenFirst, setIsOpenFirst] = useState(false);
   const [isOpenSecond, setIsOpenSecond] = useState(false);
   const [isOpenThird, setIsOpenThird] = useState(false);
 
-  // Toggle handlers for each accordion
+  const [markerPosition, setMarkerPosition] = useState<[number, number]>([
+    34.7324, 36.7131,
+  ]);
+  const [isSatelliteView, setIsSatelliteView] = useState(false);
+  const [isManualMode, setIsManualMode] = useState(false);
+
   const toggleStateFirst = () => setIsOpenFirst((prev) => !prev);
   const toggleStateSecond = () => setIsOpenSecond((prev) => !prev);
   const toggleStateThird = () => setIsOpenThird((prev) => !prev);
 
-  // handle submit form
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
   };
 
-  console.log(form);
+  // choose the location on the map by clicking on the map
+  const handleMapClick = (lat: number, lng: number) => {
+    setMarkerPosition([lat, lng]);
+    setValue("latitude", lat);
+    setValue("longitude", lng);
 
-  // Fix Leaflet marker icon path for Vite/React
+    void trigger(["latitude", "longitude"]);
+  };
+  // change the latitude when the user edits on the input field
+  const handleLatitudeChange = () => {
+    const lat = watch("latitude");
+    if (lat && !isNaN(Number(lat))) {
+      setMarkerPosition([Number(lat), markerPosition[1]]);
+    }
+  };
+
+  // change the longitude when the user edits on the input field
+  const handleLongitudeChange = () => {
+    const lng = watch("longitude");
+    if (lng && !isNaN(Number(lng))) {
+      setMarkerPosition([markerPosition[0], Number(lng)]);
+    }
+  };
+
+  // get the user location by clicking on the button
+  const getUserLocation = () => {
+    // check if the browser supports geolocation
+    if (navigator.geolocation) {
+      // get the user location
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setMarkerPosition([latitude, longitude]);
+          setValue("latitude", latitude);
+          setValue("longitude", longitude);
+          void trigger(["latitude", "longitude"]);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    }
+  };
+
+  // toggle the manual mode by clicking on the button
+  const toggleManualMode = () => {
+    setIsManualMode((prev) => !prev);
+  };
+
+  // toggle the satellite view by clicking on the button
+  const toggleSatelliteView = () => {
+    setIsSatelliteView(!isSatelliteView);
+  };
+
+  // fix the leaflet icon for the marker
   useEffect(() => {
-    // @ts-ignore
+    // @ts-expect-error - Leaflet icon fix for Vite/React
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: markerIcon2x,
@@ -55,14 +142,33 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
     });
   }, []);
 
+  // create the regular marker icon
+  const regularMarkerIcon = new L.Icon({
+    iconUrl: markerIcon,
+    iconRetinaUrl: markerIcon2x,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [0, -41],
+    shadowSize: [41, 41],
+    shadowAnchor: [12, 41],
+  });
+
+  useEffect(() => {
+    const lat = watch("latitude");
+    const lng = watch("longitude");
+
+    if (lat && lng && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
+      setMarkerPosition([Number(lat), Number(lng)]);
+    }
+  }, [watch("latitude"), watch("longitude")]);
+
   return (
     <PageContainer className="h-full overflow-auto">
-      {/* Form */}
       <form id="general_step_form" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-row bg-[#FDF9EF]">
           <div className="min-h-100 flex w-full">
             <div className="rounded-lg text-black w-full mt-3">
-              {/* Accordion for general property information */}
               <Accrodion
                 onClick={toggleStateFirst}
                 title="معلومات عامة عن العقار"
@@ -98,7 +204,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     placeholder={"اختر المدينة"}
                     info={"hello"}
                   />
-
                   <Input
                     form={form}
                     label={"اسم الشارع"}
@@ -116,18 +221,17 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                   <Select
                     form={form}
                     label={"نوع الشارع"}
-                    choices={cityChoices}
+                    choices={streetTypes}
                     showValue="label"
                     keyValue="value"
                     name={"streetType"}
                     placeholder={"طريق عام"}
                     info={"hello"}
                   />
-
                   <Select
                     form={form}
                     label={"الاتجاه الجغرافي السابق"}
-                    choices={cityChoices}
+                    choices={geoDirections}
                     showValue="label"
                     keyValue="value"
                     name={"previousGeoDirection"}
@@ -137,7 +241,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                   <Select
                     form={form}
                     label={"الاتجاه الجغرافي اللاحق"}
-                    choices={cityChoices}
+                    choices={geoDirections}
                     showValue="label"
                     keyValue="value"
                     name={"nextGeoDirection"}
@@ -151,7 +255,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     name={"postalCode"}
                     info={"hello"}
                   />
-
                   <Input
                     form={form}
                     label={"نوع تصميم المبنى"}
@@ -173,7 +276,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     name={"apartmentNumber"}
                     info={"hello"}
                   />
-
                   <Input
                     form={form}
                     label={"المنطقة الجغرافية"}
@@ -195,7 +297,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     name={"projectName"}
                     info={"hello"}
                   />
-
                   <Input
                     form={form}
                     label={"رمز المجمع"}
@@ -217,7 +318,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     name={"unitType"}
                     info={"hello"}
                   />
-
                   <Input
                     form={form}
                     label={"اسم المطور العقاري"}
@@ -228,7 +328,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 </div>
               </Accrodion>
 
-              {/* Accordion for property category */}
               <Accrodion
                 onClick={toggleStateSecond}
                 title="فئة العقار : سكني"
@@ -352,74 +451,124 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 </div>
               </Accrodion>
 
-              {/* Accordion for geographic data and documents */}
               <Accrodion
                 onClick={toggleStateThird}
                 title="البيانات الجغرافية و المستندات"
                 icon={<FiMapPin />}
                 isOpen={isOpenThird}
               >
-                <div className="flex flex-row-reverse items-center w-full justify-around p-10">
-                  {/* Buttons */}
-                  <div className="flex flex-col gap-3 w-full max-w-[500px] mb-4">
+                <div className="flex flex-col lg:flex-row-reverse items-start w-full gap-6 p-6">
+                  <div className="flex flex-col gap-3 w-full lg:w-auto lg:min-w-[280px] mb-4">
                     <button
                       type="button"
-                      className="bg-[#0066d6] text-white rounded-xl py-2 px-4 font-bold text-lg shadow hover:bg-[#0055b3] transition-colors"
+                      onClick={getUserLocation}
+                      className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-xl py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105"
                     >
                       الحصول على خطوط الطول/العرض من العنوان
                     </button>
                     <button
                       type="button"
-                      className="bg-[#0066d6] text-white rounded-xl py-2 px-4 font-bold text-lg shadow hover:bg-[#0055b3] transition-colors"
+                      onClick={toggleManualMode}
+                      title={
+                        isManualMode
+                          ? "تعطيل التحديد اليدوي"
+                          : "تفعيل التحديد اليدوي"
+                      }
+                      className={`rounded-xl cursor-pointer py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105 ${
+                        isManualMode
+                          ? "bg-green-600 text-white hover:bg-green-700"
+                          : "bg-blue-600 text-white hover:bg-blue-700"
+                      }`}
                     >
-                      الحصول على خطوط الطول/العرض/العرض يدويًا
+                      {isManualMode
+                        ? "تعطيل التحديد اليدوي"
+                        : "تفعيل التحديد اليدوي"}
                     </button>
                     <button
                       type="button"
-                      className="border-2 border-[#0066d6] text-[#0066d6] rounded-xl py-2 px-4 font-bold text-lg hover:bg-[#e6f0fa] transition-colors"
+                      onClick={toggleSatelliteView}
+                      className={`border-2 cursor-pointer border-blue-600 text-blue-600 rounded-xl py-3 px-4 font-bold text-lg hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 ${
+                        isSatelliteView
+                          ? "bg-blue-600 text-white hover:bg-blue-700"
+                          : ""
+                      }`}
                     >
-                      عرض الخريطة برؤية Google street
+                      {isSatelliteView
+                        ? "عرض الخريطة العادية"
+                        : "عرض الخريطة برؤية Google street"}
                     </button>
                   </div>
-                  {/* Map with overlay */}
-                  <div
-                    style={{
-                      width: "100%",
-                      maxWidth: 500,
-                      height: 350,
-                      borderRadius: 16,
-                      overflow: "hidden",
-                      boxShadow: "0 2px 8px #0001",
-                      marginBottom: 24,
-                      position: "relative",
-                    }}
-                  >
-                    <MapContainer
-                      center={[34.7324, 36.7131] as [number, number]}
-                      zoom={15}
-                      style={{ width: "100%", height: "100%" }}
-                      scrollWheelZoom={true}
-                    >
-                      <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <Marker position={[34.7324, 36.7131]}>
-                        <Popup>
-                          لم يتم تحديد الموقع
-                          <br />
-                          اضغط على الخريطة لتحديد الموقع
-                        </Popup>
-                      </Marker>
-                    </MapContainer>
+
+                  <div className="w-full lg:flex-1">
+                    <div className="w-160 h-[350px] rounded-2xl overflow-hidden shadow-2xl mb-6 relative border-2 border-gray-200">
+                      <MapContainer
+                        center={markerPosition}
+                        zoom={10}
+                        className="w-full h-full"
+                        scrollWheelZoom={true}
+                        attributionControl={false}
+                        zoomControl={true}
+                      >
+                        <TileLayer
+                          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                          url={
+                            isSatelliteView
+                              ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                              : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          }
+                        />
+                        <Marker
+                          position={markerPosition}
+                          icon={regularMarkerIcon}
+                        >
+                          <Popup>
+                            الموقع المحدد
+                            <br />
+                            خط العرض: {markerPosition[0].toFixed(6)}
+                            <br />
+                            خط الطول: {markerPosition[1].toFixed(6)}
+                          </Popup>
+                        </Marker>
+                        <MapClickHandler
+                          onMapClick={handleMapClick}
+                          isManualMode={isManualMode}
+                        />
+                      </MapContainer>
+                    </div>
                   </div>
                 </div>
-                {/* Four select inputs */}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
+                  <Input
+                    form={form}
+                    label={"خط العرض (Latitude)"}
+                    placeholder={"34.7324"}
+                    name={"latitude"}
+                    type={"number"}
+                    numberRegex={/^\d*.\d*$/}
+                    onChange={handleLatitudeChange}
+                    info={"أدخل خط العرض أو انقر على الخريطة"}
+                  />
+                  <Input
+                    form={form}
+                    label={"خط الطول (Longitude)"}
+                    placeholder={"36.7131"}
+                    name={"longitude"}
+                    type={"number"}
+                    numberRegex={/^\d*.\d*$/}
+                    onChange={handleLongitudeChange}
+                    info={"أدخل خط الطول أو انقر على الخريطة"}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
                   <Select
                     form={form}
                     label={"مصدر القياسات (مساحة الأرض)"}
                     name={"landAreaSource"}
+                    choices={measurementSources}
+                    showValue="label"
+                    keyValue="value"
                     placeholder={"اختر المصدر"}
                     info={"معلومات عن مصدر القياس"}
                   />
@@ -427,6 +576,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     form={form}
                     label={"مصدر القياسات (أبعاد الأرض)"}
                     name={"landDimensionsSource"}
+                    choices={measurementSources}
+                    showValue="label"
+                    keyValue="value"
                     placeholder={"اختر المصدر"}
                     info={"معلومات عن مصدر القياس"}
                   />
@@ -434,6 +586,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     form={form}
                     label={"مصدر القياسات (المساحة الكلية)"}
                     name={"totalAreaSource"}
+                    choices={measurementSources}
+                    showValue="label"
+                    keyValue="value"
                     placeholder={"اختر المصدر"}
                     info={"معلومات عن مصدر القياس"}
                   />
@@ -441,14 +596,16 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     form={form}
                     label={"مصدر القياسات (المساحة السكنية)"}
                     name={"residentialAreaSource"}
+                    choices={measurementSources}
+                    showValue="label"
+                    keyValue="value"
                     placeholder={"اختر المصدر"}
                     info={"معلومات عن مصدر القياس"}
                   />
                 </div>
               </Accrodion>
 
-              {/* next button */}
-              <div className="flex justify-center w-full gap-4 mt-3">
+              <div className="flex justify-center w-full gap-4 mb-4 mt-3">
                 <NextButton title={"التالي"} id={"general_step_form"} />
               </div>
             </div>

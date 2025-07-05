@@ -19,7 +19,7 @@ function Navbar() {
 
   return (
     // navbar container
-    <nav className="w-full bg-quaternary-bg relative h-[72px] shadow-navbar-shadow flex items-center gap-[64px] px-[48px] py-[19px] text-quaternary-fg">
+    <nav className="w-full bg-quaternary-bg relative h-[72px] shadow-navbar-shadow flex items-center gap-[32px] px-[48px] py-[19px] text-quaternary-fg">
       {tabs.map((tab, index) => {
         const hasPermission = tab.permission
           ? checkPermissions(tab.permission)

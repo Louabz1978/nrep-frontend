@@ -159,6 +159,8 @@ export const generalStepSchema = Joi.object({
   landDimensionsSource: Joi.any(),
   totalAreaSource: Joi.any(),
   residentialAreaSource: Joi.any(),
+  latitude: Joi.number(),
+  longitude: Joi.number(),
 });
 
 export type GeneralStepType = {
@@ -198,6 +200,8 @@ export type GeneralStepType = {
   landDimensionsSource: string;
   totalAreaSource: string;
   residentialAreaSource: string;
+  latitude: number;
+  longitude: number;
 };
 
 export const generalStepInitialValues = {
@@ -237,6 +241,8 @@ export const generalStepInitialValues = {
   landDimensionsSource: "",
   totalAreaSource: "",
   residentialAreaSource: "",
+  latitude: "",
+  longitude: "",
 };
 
 // rooms step -----------------------------------------------------------
