@@ -89,7 +89,7 @@
   --senary: #8676fe;        /* Purple */
 
   /* Text & Borders (Near-neutral) */
-  --primary-foreground: #000000;
+  --primary-foreground: #333333;
   --secondary-foreground: #5196ff;
   --tertiary-foreground: #444444;
   --border: #d4d4d4;
@@ -197,7 +197,7 @@
   --senary: #8278e6;                   /* Dulled periwinkle */
   
   /* Text & Borders (Near-neutral) */
-  --primary-foreground: #ebeeef;                    /* 98% white (hint of frost) */
+  --primary-foreground: #333333;                    /* 98% white (hint of frost) */
   --secondary-foreground: #a0b4dc;             /* Morning mist */
   --tertiary-foreground: #aaafb9;              /* Pebble gray */
   --border: #3c4650;                  /* Shale border */

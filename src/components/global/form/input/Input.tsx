@@ -163,7 +163,7 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={disabled}
-                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-foreground rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
                         : `border-primary-border ${
@@ -199,7 +199,7 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={disabled}
-                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-foreground rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
                         : `border-primary-border ${
