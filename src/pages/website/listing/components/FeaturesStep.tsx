@@ -64,7 +64,6 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
             placeholder={"اختر وجود غرفة ضيوف"}
             multiple={true}
             info={"hello"}
-            disabled={true}
           />
           <Select
             form={form}
