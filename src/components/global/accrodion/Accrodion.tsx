@@ -1,54 +1,77 @@
 // Accordion component for expanding/collapsing content sections
 import { type ReactNode } from "react";
-import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { FaArrowAltCircleLeft, FaCheckCircle } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
+import type { IconType } from "react-icons/lib";
+import type {
+  FieldValues,
+  Path,
+  PathValue,
+  UseFormReturn,
+} from "react-hook-form";
 
 // Props for the Accordion component
-interface AccrodionProps {
+interface AccrodionProps<T extends FieldValues> {
   children: ReactNode;
   title: string;
   isOpen: boolean;
-  icon: ReactNode;
+  icon: IconType;
   onClick: () => void;
+  accordionFields: string[];
+  form: UseFormReturn<T>;
 }
 
 // Main Accordion component
-const Accrodion = ({
+function Accrodion<T extends FieldValues>({
   onClick,
   children,
   title,
   isOpen,
-  icon,
-}: AccrodionProps) => {
+  icon: Icon,
+  accordionFields,
+  form,
+}: AccrodionProps<T>) {
+  const {
+    watch,
+    formState: { errors },
+  } = form;
+
+  const hasError = accordionFields.some((field) => errors[field]);
+
+  const isValid =
+    !hasError &&
+    accordionFields.every((field) => watch(field as PathValue<T, Path<T>>));
+
   return (
-    <div>
+    <div className="rounded-[15px] flex flex-col bg-secondary-bg">
       {/* Accordion header: clickable area to toggle open/close */}
       <div
         onClick={onClick}
-        className="flex items-center justify-between p-2 mx-8 cursor-pointer"
+        className={`flex shadow-accordion-shadow ${
+          hasError ? "bg-error" : "bg-primary"
+        } transition-all rounded-[15px] items-center justify-between py-[22px] px-[48px] cursor-pointer`}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-[16px]">
           {/* Icon next to the title */}
-          <div className="text-[30px] text-gold-background">{icon}</div>
+          <Icon className="text-inverse-fg size-[30px]" />
           {/* Accordion title */}
-          <div className="text-[30px] text-3xl text-black m-5 font-bold">
-            {title}
-          </div>
+          <div className="text-[32px] font-medium text-inverse-fg">{title}</div>
         </div>
 
         {/* Arrow icon indicating open/closed state */}
-        <div
-          className={` text-[30px] ${
-            isOpen ? "text-gold-background" : "text-black"
-          }`}
-        >
+        {isValid ? (
+          <FaCheckCircle
+            className={`text-inverse-fg transition-all duration-[0.35s] size-[50px]`}
+          />
+        ) : (
           <FaArrowAltCircleLeft
             className={`${
               isOpen ? "-rotate-90" : ""
-            } transition-all duration-[0.35s]`}
+            } text-inverse-fg transition-all duration-[0.35s] size-[50px]`}
           />
-        </div>
+        )}
       </div>
+
       {/* Animate the children with framer-motion when open/closed */}
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -64,10 +87,8 @@ const Accrodion = ({
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Divider below the accordion */}
-      <hr />
     </div>
   );
-};
+}
 
 export default Accrodion;

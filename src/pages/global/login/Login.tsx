@@ -82,6 +82,9 @@ const Login = ({ login, handleLogin }: LoginProps) => {
                 name="username"
                 label="البريد الإلكتروني أو اسم المستخدم:"
                 placeholder="البريد الإلكتروني"
+                labelStyle="!font-bold !text-size24"
+                addingInputStyle="!h-[52.35px] !rounded-[12.27px]"
+                addingValidStyle={"border-primary-border"}
               />
 
               {/* password */}
@@ -91,6 +94,9 @@ const Login = ({ login, handleLogin }: LoginProps) => {
                 type="password"
                 label="كلمة السر :"
                 placeholder="كلمة السر"
+                labelStyle="!font-bold !text-size24"
+                addingInputStyle="!h-[52.35px] !rounded-[12.27px]"
+                addingValidStyle={"border-primary-border"}
                 bottomElement={
                   <Link
                     to={"/forgot-password"}

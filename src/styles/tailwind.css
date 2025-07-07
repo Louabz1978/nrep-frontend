@@ -161,7 +161,7 @@
 
   /* input */
   --input-bg: #FFFFFF;
-  --placeholder: #E5E5E5;
+  --placeholder: #ADA7A7;
   --placeholder-secondary: #ADA7A7;
 
   /* icons */
@@ -173,6 +173,7 @@
   /* shadows */
   --primary-shadow: 0px 3.63px 3.63px 0px #00000080;
   --navbar-shadow: 0px 4px 4px 0px #00000040;
+  --accordion-shadow: 0px 5px 4px 0px #00000087;
   
   
 }
@@ -253,7 +254,7 @@
 
   /* input */
   --input-bg: #FFFFFF;
-  --placeholder: #E5E5E5;
+  --placeholder: #ADA7A7;
   --placeholder-secondary: #ADA7A7;
   
   /* icons */
@@ -265,6 +266,7 @@
   /* shadows */
   --primary-shadow: 0px 3.63px 3.63px 0px #00000080;
   --navbar-shadow: 0px 4px 4px 0px #00000040;
+  --accordion-shadow: 0px 5px 4px 0px #00000087;
   
 }
 
@@ -435,6 +437,8 @@
   /* shadows */
   --shadow-primary-shadow: var(--primary-shadow);
   --shadow-navbar-shadow: var(--navbar-shadow);
+  --shadow-accordion-shadow: var(--accordion-shadow);
+
 }
 
 

@@ -12,7 +12,9 @@ import {
   type PathValue,
   type UseFormReturn,
 } from "react-hook-form";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import getError, { isValid } from "@/utils/getErrors";
+import { FaAngleDown } from "react-icons/fa6";
+import { IoInformationCircleOutline } from "react-icons/io5";
 
 interface SelectProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -199,12 +201,12 @@ function Select<T extends FieldValues>({
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
-    <div className={`flex flex-col w-full ${addingStyle}`}>
+    <div className={`flex flex-col w-full gap-[4px] ${addingStyle}`}>
       {/* select label  */}
       {label ? (
         <label
           htmlFor={name}
-          className={`text-primary-foreground mb-2 font-black ${labelStyle}`}
+          className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
         >
           {label}
         </label>
@@ -213,26 +215,28 @@ function Select<T extends FieldValues>({
       {/* select container to link choices list to its position */}
       <div
         ref={clickRef}
-        className={`relative w-full flex items-center gap-1 ${addingSelectStyle}`}
+        className={`relative w-full flex items-center gap-[15px] ${addingSelectStyle}`}
       >
         <div className="flex-1 w-full relative flex items-center">
           {/* select */}
           <button
             type="button"
-            className={`custom-input custom-select  border-2 h-[40px] bg-white text-black px-4 py-2 ${
-              errors?.[name]
-                ? "border-red-500"
-                : "border-[#1C2026] focus:ring-2 focus:ring-[#1C2026]"
-            } ${addingInputStyle} ${
-              isOpen ? "rounded-t-[16px]" : "rounded-[16px]"
-            } flex justify-between items-center cursor-pointer`}
+            className={`cursor-pointer flex-1 h-[40px] text-[16.36px] bg-input-bg px-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+              getError(errors, name)
+                ? "border-error"
+                : `border-secondary-border ${
+                    isValid(form)
+                      ? "focus-visible:border-success"
+                      : "focus-visible:border-secondary"
+                  } hover:border-secondary`
+            } ${addingInputStyle} flex justify-between items-center`}
             onKeyDown={handleKeyDown}
             onClick={(e) => {
               e.preventDefault();
               if (!disabled) setIsOpen((prev) => !prev);
             }}
           >
-            <div className="overflow-auto text-nowrap">
+            <div className="overflow-auto text-nowrap flex-1 text-start">
               {(watch(name) && !isArray(watch(name))) ||
               (isArray(watch(name)) && watch(name).length) ? (
                 !multiple ? (
@@ -311,11 +315,11 @@ function Select<T extends FieldValues>({
 
             {/* select arrow */}
             <div
-              className={`relative toggle-button ${
+              className={`relative toggle-button text-primary ${
                 isOpen ? "rotate-180 duration-[0.3s]" : "duration-[0.3s]"
               } transition-all`}
             >
-              <GoTriangleDown />
+              <FaAngleDown />
             </div>
           </button>
 
@@ -422,13 +426,13 @@ function Select<T extends FieldValues>({
 
         {/* beside element */}
         {info ? (
-          <IoIosInformationCircleOutline className="cursor-pointer text-[#585858] size-[24px] min-w-[18px]" />
+          <IoInformationCircleOutline className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]" />
         ) : null}
       </div>
       {/* validation errors  */}
-      {errors?.[name] ? (
-        <span className="text-error text-size14">
-          {errors?.[name]?.message as ReactNode}
+      {getError(errors, name) ? (
+        <span className="text-error font-medium text-size16">
+          {getError(errors, name)?.message}
         </span>
       ) : null}
       {belowComponent ? belowComponent() : null}

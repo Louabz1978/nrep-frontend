@@ -8,7 +8,7 @@ import {
   type Path,
   type PathValue,
 } from "react-hook-form";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import { IoInformationCircleOutline } from "react-icons/io5";
 
 interface InputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -83,16 +83,9 @@ function Input<T extends FieldValues>({
   }
 
   // helper function to check if field is valid
-  function isValid<T extends FieldValues>(
-    form: UseFormReturn<T>,
-    name: Path<T>
-  ): boolean {
+  function isValid<T extends FieldValues>(form: UseFormReturn<T>): boolean {
     const { formState } = form;
-    console.log(
-      formState.dirtyFields,
-      formState.errors[name],
-      formState.touchedFields
-    );
+
     return !!(formState.dirtyFields as Record<Path<T>, boolean>);
   }
 
@@ -143,7 +136,7 @@ function Input<T extends FieldValues>({
           {label ? (
             <label
               htmlFor={name}
-              className={`font-bold text-size24 text-primary-fg cursor-pointer ${labelStyle}`}
+              className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
             >
               {label}
             </label>
@@ -151,7 +144,7 @@ function Input<T extends FieldValues>({
 
           <div className="w-full flex flex-col gap-[4px]">
             {/* input container to link icon to its position */}
-            <div className="relative flex items-center gap-[8px]">
+            <div className="relative flex items-center gap-[15px]">
               <div className="relative flex-1 flex items-center overflow-hidden">
                 {/* input with react hook form register control  */}
                 {type == "custom" ? (
@@ -163,14 +156,18 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={disabled}
-                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    className={`flex-1 h-[40px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
-                        : `border-primary-border ${
-                            isValid(form, name)
+                        : `${
+                            isValid(form)
                               ? "focus-visible:border-success"
                               : "focus-visible:border-secondary"
-                          } hover:border-secondary ${addingValidStyle}`
+                          } hover:border-secondary ${
+                            addingValidStyle
+                              ? addingValidStyle
+                              : "border-secondary-border"
+                          }`
                     } ${addingInputStyle}`}
                     onChange={(e) => {
                       if (
@@ -199,14 +196,18 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={disabled}
-                    className={`flex-1 h-[52.35px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[12.27px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    className={`flex-1 h-[40px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
-                        : `border-primary-border ${
-                            isValid(form, name)
+                        : `${
+                            isValid(form)
                               ? "focus-visible:border-success"
                               : "focus-visible:border-secondary"
-                          } hover:border-secondary ${addingValidStyle}`
+                          } hover:border-secondary ${
+                            addingValidStyle
+                              ? addingValidStyle
+                              : "border-secondary-border"
+                          }`
                     } ${
                       type == "password" ? "!pl-[56px]" : ""
                     } ${addingInputStyle}`}
@@ -232,7 +233,7 @@ function Input<T extends FieldValues>({
 
               {/* beside element */}
               {info ? (
-                <IoIosInformationCircleOutline className="cursor-pointer text-[#585858] size-[24px] min-w-[18px]" />
+                <IoInformationCircleOutline className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]" />
               ) : null}
             </div>
 

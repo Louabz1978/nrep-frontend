@@ -5,9 +5,6 @@ import type { UseFormReturn } from "react-hook-form";
 import Accrodion from "@/components/global/accrodion/Accrodion";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
-import { FiMapPin } from "react-icons/fi";
-import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
-import { MdRealEstateAgent } from "react-icons/md";
 import type { GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import {
   cityChoices,
@@ -29,6 +26,12 @@ import { useEffect } from "react";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import PreviouseButton from "@/components/global/form/button/PreviouseButton";
+import { FaRegListAlt } from "react-icons/fa";
+import { TbBuildingCommunity } from "react-icons/tb";
+import { FaMapLocationDot } from "react-icons/fa6";
+import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
+import { Button } from "@/components/global/form/button/Button";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
@@ -59,7 +62,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const { handleSubmit, watch, setValue, trigger } = form;
 
   // State for each accordion section
-  const [isOpenFirst, setIsOpenFirst] = useState(false);
+  const [isOpenFirst, setIsOpenFirst] = useState(true);
   const [isOpenSecond, setIsOpenSecond] = useState(false);
   const [isOpenThird, setIsOpenThird] = useState(false);
 
@@ -164,452 +167,485 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   }, [watch("latitude"), watch("longitude")]);
 
   return (
-    <PageContainer className="h-full overflow-auto">
-      <form id="general_step_form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-row bg-[#FDF9EF]">
-          <div className="min-h-100 flex w-full">
-            <div className="rounded-lg text-black w-full mt-3">
-              <Accrodion
-                onClick={toggleStateFirst}
-                title="معلومات عامة عن العقار"
-                icon={<MdRealEstateAgent />}
-                isOpen={isOpenFirst}
-              >
-                <div className="ps-[39px] pe-[71px] pb-[30px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
-                  <Input
-                    form={form}
-                    label={"رقم تعريف العقار"}
-                    placeholder={""}
-                    name={"propertyId"}
-                    type={"number"}
-                    info={"hello"}
-                  />
-                  <Select
-                    form={form}
-                    label={"إخفاء رقم العقار"}
-                    choices={yesNo}
-                    showValue="label"
-                    keyValue="value"
-                    name={"hiddenPropertyId"}
-                    placeholder={"نعم"}
-                    info={"hello"}
-                  />
-                  <Select
-                    form={form}
-                    label={"المدينة"}
-                    choices={cityChoices}
-                    showValue="label"
-                    keyValue="value"
-                    name={"city"}
-                    placeholder={"اختر المدينة"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"اسم الشارع"}
-                    placeholder={"شارع الدبلان"}
-                    name={"streetName"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"رقم الشارع"}
-                    placeholder={"1234"}
-                    name={"streetNumber"}
-                    info={"hello"}
-                  />
-                  <Select
-                    form={form}
-                    label={"نوع الشارع"}
-                    choices={streetTypes}
-                    showValue="label"
-                    keyValue="value"
-                    name={"streetType"}
-                    placeholder={"طريق عام"}
-                    info={"hello"}
-                  />
-                  <Select
-                    form={form}
-                    label={"الاتجاه الجغرافي السابق"}
-                    choices={geoDirections}
-                    showValue="label"
-                    keyValue="value"
-                    name={"previousGeoDirection"}
-                    placeholder={"شمال"}
-                    info={"hello"}
-                  />
-                  <Select
-                    form={form}
-                    label={"الاتجاه الجغرافي اللاحق"}
-                    choices={geoDirections}
-                    showValue="label"
-                    keyValue="value"
-                    name={"nextGeoDirection"}
-                    placeholder={"شمال"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"الرمز البريدي"}
-                    placeholder={"33914"}
-                    name={"postalCode"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"نوع تصميم المبنى"}
-                    placeholder={""}
-                    name={"buildingDesign"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"رقم المبنى"}
-                    placeholder={"47"}
-                    name={"buildingNumber"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"رقم الشقة"}
-                    placeholder={"02"}
-                    name={"apartmentNumber"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"المنطقة الجغرافية"}
-                    placeholder={""}
-                    name={"geoArea"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"كود التنظيم(العقاري)"}
-                    placeholder={""}
-                    name={"regulatoryCode"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"المشروع العقاري"}
-                    placeholder={""}
-                    name={"projectName"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"رمز المجمع"}
-                    placeholder={""}
-                    name={"projectCode"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"اسم المجمع السكني"}
-                    placeholder={""}
-                    name={"projectHomeName"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"نوع الوحدة العقارية"}
-                    placeholder={""}
-                    name={"unitType"}
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    label={"اسم المطور العقاري"}
-                    placeholder={""}
-                    name={"developerName"}
-                    info={"hello"}
-                  />
-                </div>
-              </Accrodion>
+    <PageContainer className="flex-1 h-full overflow-auto">
+      <form
+        id="general_step_form"
+        className="flex flex-col p-[48px] gap-[80px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {/* accordions container */}
+        <div className="w-full flex flex-col gap-[48px] flex-1">
+          <Accrodion
+            onClick={toggleStateFirst}
+            title="معلومات عامة عن العقار"
+            icon={FaRegListAlt}
+            isOpen={isOpenFirst}
+            accordionFields={["hiddenPropertyId", "propertyId"]}
+            form={form}
+          >
+            <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
+              <FormSectionHeader>معلومات المنطقة</FormSectionHeader>
 
-              <Accrodion
-                onClick={toggleStateSecond}
-                title="فئة العقار : سكني"
-                icon={<HiOutlineBuildingOffice2 />}
-                isOpen={isOpenSecond}
-              >
-                <div className="ps-[39px] pe-[71px] pb-[30px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[56px]">
-                  <Input
-                    form={form}
-                    name="propertyStatus"
-                    label="حالة العقار"
-                    labelStyle="font-bold"
-                    placeholder="معروض للبيع"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="offeredPrice"
-                    type="number"
-                    label="السعر المعروض"
-                    labelStyle="font-bold"
-                    placeholder="1,000,000 ل.س"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="yearBuilt"
-                    type="number"
-                    label="سنة البناء"
-                    labelStyle="font-bold"
-                    placeholder="2010"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="totalArea"
-                    type="number"
-                    label="المساحة الإجمالية التقريبية"
-                    labelStyle="font-bold"
-                    placeholder=""
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="livingArea"
-                    type="number"
-                    label="المساحة التقريبية للمعيشة"
-                    labelStyle="font-bold"
-                    placeholder=""
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="furnished"
-                    label="مفروشة"
-                    labelStyle="font-bold"
-                    placeholder="غير مفروشة"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="bedrooms"
-                    type="number"
-                    label="عدد غرف النوم"
-                    labelStyle="font-bold"
-                    placeholder="3"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="bathroomsWithShower"
-                    type="number"
-                    label="عدد دورات المياه (مع دش)"
-                    labelStyle="font-bold"
-                    placeholder="2"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="bathroomsWithoutShower"
-                    type="number"
-                    label="عدد دورات المياه (بدون دش)"
-                    labelStyle="font-bold"
-                    placeholder="1"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="ceilingFans"
-                    type="number"
-                    label="عدد مراوح السقف"
-                    labelStyle="font-bold"
-                    placeholder="0"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="elevator"
-                    label="مصعد"
-                    labelStyle="font-bold"
-                    placeholder="لا يوجد"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="garageSpaces"
-                    type="number"
-                    label="عدد مواقف الكراج"
-                    labelStyle="font-bold"
-                    placeholder="1"
-                    info={"hello"}
-                  />
-                  <Input
-                    form={form}
-                    name="cableAvailable"
-                    label="الكابل متوفر (التلفزيون/الإنترنت)"
-                    labelStyle="font-bold"
-                    placeholder="لا يوجد"
-                    info={"hello"}
-                  />
-                </div>
-              </Accrodion>
+              <Input
+                form={form}
+                label={"رقم تعريف العقار"}
+                placeholder={""}
+                name={"propertyId"}
+                type={"number"}
+                info={"hello"}
+              />
+              <Select
+                form={form}
+                label={"إخفاء رقم العقار"}
+                choices={yesNo}
+                showValue="label"
+                keyValue="value"
+                name={"hiddenPropertyId"}
+                placeholder={"نعم"}
+                info={"hello"}
+              />
+              <Select
+                form={form}
+                label={"المدينة"}
+                choices={cityChoices}
+                showValue="label"
+                keyValue="value"
+                name={"city"}
+                placeholder={"اختر المدينة"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"اسم الشارع"}
+                placeholder={"شارع الدبلان"}
+                name={"streetName"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"رقم الشارع"}
+                placeholder={"1234"}
+                name={"streetNumber"}
+                info={"hello"}
+              />
+              <Select
+                form={form}
+                label={"نوع الشارع"}
+                choices={streetTypes}
+                showValue="label"
+                keyValue="value"
+                name={"streetType"}
+                placeholder={"طريق عام"}
+                info={"hello"}
+              />
+              <Select
+                form={form}
+                label={"الاتجاه الجغرافي السابق"}
+                choices={geoDirections}
+                showValue="label"
+                keyValue="value"
+                name={"previousGeoDirection"}
+                placeholder={"شمال"}
+                info={"hello"}
+              />
+              <Select
+                form={form}
+                label={"الاتجاه الجغرافي اللاحق"}
+                choices={geoDirections}
+                showValue="label"
+                keyValue="value"
+                name={"nextGeoDirection"}
+                placeholder={"شمال"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"الرمز البريدي"}
+                placeholder={"33914"}
+                name={"postalCode"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"نوع تصميم المبنى"}
+                placeholder={""}
+                name={"buildingDesign"}
+                info={"hello"}
+              />
 
-              <Accrodion
-                onClick={toggleStateThird}
-                title="البيانات الجغرافية و المستندات"
-                icon={<FiMapPin />}
-                isOpen={isOpenThird}
-              >
-                <div className="flex flex-col lg:flex-row-reverse items-start w-full gap-6 p-6">
-                  <div className="flex flex-col gap-3 w-full lg:w-auto lg:min-w-[280px] mb-4">
-                    <button
-                      type="button"
-                      onClick={getUserLocation}
-                      className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-xl py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105"
-                    >
-                      الحصول على خطوط الطول/العرض من العنوان
-                    </button>
-                    <button
-                      type="button"
-                      onClick={toggleManualMode}
-                      title={
-                        isManualMode
-                          ? "تعطيل التحديد اليدوي"
-                          : "تفعيل التحديد اليدوي"
+              <FormSectionHeader>معلومات البناء</FormSectionHeader>
+
+              <Input
+                form={form}
+                label={"رقم المبنى"}
+                placeholder={"47"}
+                name={"buildingNumber"}
+                info={"hello"}
+              />
+
+              <Input
+                form={form}
+                label={"رقم الشقة"}
+                placeholder={"02"}
+                name={"apartmentNumber"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"المنطقة الجغرافية"}
+                placeholder={""}
+                name={"geoArea"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"كود التنظيم(العقاري)"}
+                placeholder={""}
+                name={"regulatoryCode"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"المشروع العقاري"}
+                placeholder={""}
+                name={"projectName"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"رمز المجمع"}
+                placeholder={""}
+                name={"projectCode"}
+                info={"hello"}
+              />
+
+              <Input
+                form={form}
+                label={"اسم المجمع السكني"}
+                placeholder={""}
+                name={"projectHomeName"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"نوع الوحدة العقارية"}
+                placeholder={""}
+                name={"unitType"}
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                label={"اسم المطور العقاري"}
+                placeholder={""}
+                name={"developerName"}
+                info={"hello"}
+              />
+              <div className="col-span-full flex justify-center">
+                <Button
+                  className="!bg-success"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    const isValid = await trigger(
+                      ["hiddenPropertyId", "propertyId"],
+                      {
+                        shouldFocus: true,
                       }
-                      className={`rounded-xl cursor-pointer py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105 ${
-                        isManualMode
-                          ? "bg-green-600 text-white hover:bg-green-700"
-                          : "bg-blue-600 text-white hover:bg-blue-700"
-                      }`}
-                    >
-                      {isManualMode
-                        ? "تعطيل التحديد اليدوي"
-                        : "تفعيل التحديد اليدوي"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={toggleSatelliteView}
-                      className={`border-2 cursor-pointer border-blue-600 text-blue-600 rounded-xl py-3 px-4 font-bold text-lg hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 ${
-                        isSatelliteView
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : ""
-                      }`}
-                    >
-                      {isSatelliteView
-                        ? "عرض الخريطة العادية"
-                        : "عرض الخريطة برؤية Google street"}
-                    </button>
-                  </div>
-
-                  <div className="w-full lg:flex-1">
-                    <div className="w-160 h-[350px] rounded-2xl overflow-hidden shadow-2xl mb-6 relative border-2 border-gray-200">
-                      <MapContainer
-                        center={markerPosition}
-                        zoom={10}
-                        className="w-full h-full"
-                        scrollWheelZoom={true}
-                        attributionControl={false}
-                        zoomControl={true}
-                      >
-                        <TileLayer
-                          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                          url={
-                            isSatelliteView
-                              ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                              : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          }
-                        />
-                        <Marker
-                          position={markerPosition}
-                          icon={regularMarkerIcon}
-                        >
-                          <Popup>
-                            الموقع المحدد
-                            <br />
-                            خط العرض: {markerPosition[0].toFixed(6)}
-                            <br />
-                            خط الطول: {markerPosition[1].toFixed(6)}
-                          </Popup>
-                        </Marker>
-                        <MapClickHandler
-                          onMapClick={handleMapClick}
-                          isManualMode={isManualMode}
-                        />
-                      </MapContainer>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
-                  <Input
-                    form={form}
-                    label={"خط العرض (Latitude)"}
-                    placeholder={"34.7324"}
-                    name={"latitude"}
-                    type={"number"}
-                    numberRegex={/^\d*.\d*$/}
-                    onChange={handleLatitudeChange}
-                    info={"أدخل خط العرض أو انقر على الخريطة"}
-                  />
-                  <Input
-                    form={form}
-                    label={"خط الطول (Longitude)"}
-                    placeholder={"36.7131"}
-                    name={"longitude"}
-                    type={"number"}
-                    numberRegex={/^\d*.\d*$/}
-                    onChange={handleLongitudeChange}
-                    info={"أدخل خط الطول أو انقر على الخريطة"}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
-                  <Select
-                    form={form}
-                    label={"مصدر القياسات (مساحة الأرض)"}
-                    name={"landAreaSource"}
-                    choices={measurementSources}
-                    showValue="label"
-                    keyValue="value"
-                    placeholder={"اختر المصدر"}
-                    info={"معلومات عن مصدر القياس"}
-                  />
-                  <Select
-                    form={form}
-                    label={"مصدر القياسات (أبعاد الأرض)"}
-                    name={"landDimensionsSource"}
-                    choices={measurementSources}
-                    showValue="label"
-                    keyValue="value"
-                    placeholder={"اختر المصدر"}
-                    info={"معلومات عن مصدر القياس"}
-                  />
-                  <Select
-                    form={form}
-                    label={"مصدر القياسات (المساحة الكلية)"}
-                    name={"totalAreaSource"}
-                    choices={measurementSources}
-                    showValue="label"
-                    keyValue="value"
-                    placeholder={"اختر المصدر"}
-                    info={"معلومات عن مصدر القياس"}
-                  />
-                  <Select
-                    form={form}
-                    label={"مصدر القياسات (المساحة السكنية)"}
-                    name={"residentialAreaSource"}
-                    choices={measurementSources}
-                    showValue="label"
-                    keyValue="value"
-                    placeholder={"اختر المصدر"}
-                    info={"معلومات عن مصدر القياس"}
-                  />
-                </div>
-              </Accrodion>
-
-              <div className="flex justify-center w-full gap-4 mb-4 mt-3">
-                <NextButton title={"التالي"} id={"general_step_form"} />
+                    );
+                    if (isValid) {
+                      setIsOpenFirst(false);
+                      setIsOpenSecond(true);
+                    }
+                  }}
+                >
+                  تأكيد البيانات
+                </Button>
               </div>
             </div>
-          </div>
+          </Accrodion>
+
+          <Accrodion
+            onClick={toggleStateSecond}
+            title="فئة العقار : سكني"
+            icon={TbBuildingCommunity}
+            isOpen={isOpenSecond}
+            accordionFields={["bathroomsWithoutShower"]}
+            form={form}
+          >
+            <div className="p-[40px] pt-[64px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[24px]">
+              <Input
+                form={form}
+                name="propertyStatus"
+                label="حالة العقار"
+                labelStyle="font-bold"
+                placeholder="معروض للبيع"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="offeredPrice"
+                type="number"
+                label="السعر المعروض"
+                labelStyle="font-bold"
+                placeholder="1,000,000 ل.س"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="yearBuilt"
+                type="number"
+                label="سنة البناء"
+                labelStyle="font-bold"
+                placeholder="2010"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="totalArea"
+                type="number"
+                label="المساحة الإجمالية التقريبية"
+                labelStyle="font-bold"
+                placeholder=""
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="livingArea"
+                type="number"
+                label="المساحة التقريبية للمعيشة"
+                labelStyle="font-bold"
+                placeholder=""
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="furnished"
+                label="مفروشة"
+                labelStyle="font-bold"
+                placeholder="غير مفروشة"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="bedrooms"
+                type="number"
+                label="عدد غرف النوم"
+                labelStyle="font-bold"
+                placeholder="3"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="bathroomsWithShower"
+                type="number"
+                label="عدد دورات المياه (مع دش)"
+                labelStyle="font-bold"
+                placeholder="2"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="bathroomsWithoutShower"
+                type="number"
+                label="عدد دورات المياه (بدون دش)"
+                labelStyle="font-bold"
+                placeholder="1"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="ceilingFans"
+                type="number"
+                label="عدد مراوح السقف"
+                labelStyle="font-bold"
+                placeholder="0"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="elevator"
+                label="مصعد"
+                labelStyle="font-bold"
+                placeholder="لا يوجد"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="garageSpaces"
+                type="number"
+                label="عدد مواقف الكراج"
+                labelStyle="font-bold"
+                placeholder="1"
+                info={"hello"}
+              />
+              <Input
+                form={form}
+                name="cableAvailable"
+                label="الكابل متوفر (التلفزيون/الإنترنت)"
+                labelStyle="font-bold"
+                placeholder="لا يوجد"
+                info={"hello"}
+              />
+            </div>
+          </Accrodion>
+
+          <Accrodion
+            onClick={toggleStateThird}
+            title="المعلومات الجغرافية و المستندات"
+            icon={FaMapLocationDot}
+            isOpen={isOpenThird}
+            accordionFields={["landAreaSource"]}
+            form={form}
+          >
+            <div className="flex flex-col lg:flex-row-reverse items-start w-full gap-6 p-6">
+              <div className="flex flex-col gap-3 w-full lg:w-auto lg:min-w-[280px] mb-4">
+                <button
+                  type="button"
+                  onClick={getUserLocation}
+                  className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-xl py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105"
+                >
+                  الحصول على خطوط الطول/العرض من العنوان
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleManualMode}
+                  title={
+                    isManualMode
+                      ? "تعطيل التحديد اليدوي"
+                      : "تفعيل التحديد اليدوي"
+                  }
+                  className={`rounded-xl cursor-pointer py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105 ${
+                    isManualMode
+                      ? "bg-green-600 text-white hover:bg-green-700"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  {isManualMode
+                    ? "تعطيل التحديد اليدوي"
+                    : "تفعيل التحديد اليدوي"}
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleSatelliteView}
+                  className={`border-2 cursor-pointer border-blue-600 text-blue-600 rounded-xl py-3 px-4 font-bold text-lg hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 ${
+                    isSatelliteView
+                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      : ""
+                  }`}
+                >
+                  {isSatelliteView
+                    ? "عرض الخريطة العادية"
+                    : "عرض الخريطة برؤية Google street"}
+                </button>
+              </div>
+
+              <div className="w-full lg:flex-1">
+                <div className="w-160 h-[350px] rounded-2xl overflow-hidden shadow-2xl mb-6 relative border-2 border-gray-200">
+                  <MapContainer
+                    center={markerPosition}
+                    zoom={10}
+                    className="w-full h-full"
+                    scrollWheelZoom={true}
+                    attributionControl={false}
+                    zoomControl={true}
+                  >
+                    <TileLayer
+                      attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url={
+                        isSatelliteView
+                          ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                          : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      }
+                    />
+                    <Marker position={markerPosition} icon={regularMarkerIcon}>
+                      <Popup>
+                        الموقع المحدد
+                        <br />
+                        خط العرض: {markerPosition[0].toFixed(6)}
+                        <br />
+                        خط الطول: {markerPosition[1].toFixed(6)}
+                      </Popup>
+                    </Marker>
+                    <MapClickHandler
+                      onMapClick={handleMapClick}
+                      isManualMode={isManualMode}
+                    />
+                  </MapContainer>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
+              <Input
+                form={form}
+                label={"خط العرض (Latitude)"}
+                placeholder={"34.7324"}
+                name={"latitude"}
+                type={"number"}
+                numberRegex={/^\d*\.?\d*$/}
+                onChange={handleLatitudeChange}
+                info={"أدخل خط العرض أو انقر على الخريطة"}
+              />
+              <Input
+                form={form}
+                label={"خط الطول (Longitude)"}
+                placeholder={"36.7131"}
+                name={"longitude"}
+                type={"number"}
+                numberRegex={/^\d*\.?\d*$/}
+                onChange={handleLongitudeChange}
+                info={"أدخل خط الطول أو انقر على الخريطة"}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
+              <Select
+                form={form}
+                label={"مصدر القياسات (مساحة الأرض)"}
+                name={"landAreaSource"}
+                choices={measurementSources}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر المصدر"}
+                info={"معلومات عن مصدر القياس"}
+              />
+              <Select
+                form={form}
+                label={"مصدر القياسات (أبعاد الأرض)"}
+                name={"landDimensionsSource"}
+                choices={measurementSources}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر المصدر"}
+                info={"معلومات عن مصدر القياس"}
+              />
+              <Select
+                form={form}
+                label={"مصدر القياسات (المساحة الكلية)"}
+                name={"totalAreaSource"}
+                choices={measurementSources}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر المصدر"}
+                info={"معلومات عن مصدر القياس"}
+              />
+              <Select
+                form={form}
+                label={"مصدر القياسات (المساحة السكنية)"}
+                name={"residentialAreaSource"}
+                choices={measurementSources}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر المصدر"}
+                info={"معلومات عن مصدر القياس"}
+              />
+            </div>
+          </Accrodion>
+        </div>
+
+        {/* buttons */}
+        <div className="flex justify-between w-full gap-4 px-[107px]">
+          <PreviouseButton setCurrentStep={setCurrentStep} />
+          <NextButton id={"general_step_form"} />
         </div>
       </form>
     </PageContainer>
