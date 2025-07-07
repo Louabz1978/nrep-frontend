@@ -146,7 +146,7 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
             form={form}
             label={
               <span onClick={toggleFisrt} className="flex items-center gap-2">
-                مسبح خاص {isOnFirst ? <FaToggleOn color="#34C759" fontSize="38px"/> :<FaToggleOff color="#C1272D" fontSize="38px"/>}
+                مسبح خاص {isOnFirst ? <FaToggleOn color="#005BBB" fontSize="38px"/> :<FaToggleOff color="#C1272D" fontSize="38px"/>}
               </span>
             }
             keyValue="value"
@@ -162,7 +162,7 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
             form={form}
             label={
               <span onClick={toggleSecond} className="flex items-center gap-2">
-                حمامات بخارية خاصة{isOnSecond ? <FaToggleOn color="#34C759" fontSize="38px"/> :<FaToggleOff color="#C1272D" fontSize="38px"/>}
+                حمامات بخارية خاصة{isOnSecond ? <FaToggleOn color="#005BBB" fontSize="38px"/> :<FaToggleOff color="#C1272D" fontSize="38px"/>}
               </span>
             }
             keyValue="value"
