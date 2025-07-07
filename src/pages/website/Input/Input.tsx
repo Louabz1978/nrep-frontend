@@ -13,10 +13,14 @@ function Input() {
         <div className="flex gap-4 mt-8">
           {/* blank form button */}
           <Link to="/listing/add">
-            <button className="bg-[#1C2026] text-2xl hover:bg-[#D4AF37] text-white font-bold py-3 px-6 rounded-full  flex items-center gap-2 transition-colors duration-300 cursor-pointer">
+            <button
+              className="group flex items-center justify-between gap-4 px-6 py-3 text-2xl font-bold text-white rounded-full bg-[var(--second-background)] transition-colors duration-300 hover:bg-[(--primary)] focus:outline-none  cursor-pointer "
+              onMouseOver={e => (e.currentTarget.style.background = 'var(--primary)')}
+              onMouseOut={e => (e.currentTarget.style.background = 'var(--second-background)')}
+            >
               <div className="flex items-center justify-between">
                 <span>إدخال جديد (نموذج فارغ)</span>
-                <span className="mr-2 bg-white text-[#D4AF37] w-8 h-8 flex items-center justify-center rounded-2xl">
+                <span className="mr-6 ml-6 bg-white text-[var(--primary)] w-8 h-8 flex items-center justify-center rounded-2xl">
                   <CiFileOn />
                 </span>
               </div>
@@ -25,10 +29,14 @@ function Input() {
 
           {/* fill from other button */}
           <Link to="/listing/import-other">
-            <button className="bg-[#1C2026] text-2xl hover:bg-[#D4AF37] text-white font-bold py-3 px-6 rounded-full  flex items-center gap-2 transition-colors duration-300 cursor-pointer">
+            <button
+              className="group flex items-center justify-between gap-4 px-6 py-3 text-2xl font-bold text-white rounded-full bg-[var(--second-background)] transition-colors duration-300 hover:bg-[(--primary)] focus:outline-none  cursor-pointer "
+              onMouseOver={e => (e.currentTarget.style.background = 'var(--primary)')}
+              onMouseOut={e => (e.currentTarget.style.background = 'var(--second-background)')}
+            >
               <div className="flex items-center justify-between">
                 <span>استيراد من سجل عقارات آخر</span>
-                <span className="mr-2 bg-white text-[#D4AF37] w-8 h-8 flex items-center justify-center rounded-2xl">
+                <span className="mr-6 ml-6 bg-white text-[var(--primary)] w-8 h-8 flex items-center justify-center rounded-2xl">
                   <MdOutlineRealEstateAgent />
                 </span>
               </div>
@@ -37,13 +45,14 @@ function Input() {
 
           {/* fill from previouse tax button */}
           <Link to="/listing/import-previous">
-            <button className="bg-[#1C2026] text-2xl hover:bg-[#D4AF37] text-white font-bold py-3 px-6 rounded-full  flex items-center gap-2 transition-colors duration-300 cursor-pointer">
-              <div className="flex items-center justify-between">
-                <span>استيراد من عقار سابق</span>
-                <span className="mr-2 bg-white text-[#D4AF37] w-8 h-8 flex items-center justify-center rounded-2xl">
-                  <TbBuildingEstate />
-                </span>
-              </div>
+            <button
+              className="group flex items-center justify-between gap-4 px-6 py-3 text-2xl font-bold text-white rounded-full bg-[var(--second-background)] transition-colors duration-300 hover:bg-[(--primary)] focus:outline-none  cursor-pointer "
+              onMouseOver={e => (e.currentTarget.style.background = 'var(--primary)')}
+              onMouseOut={e => (e.currentTarget.style.background = 'var(--second-background)')}            >
+              <span>استيراد من عقار سابق</span>
+              <span className="mr-6 ml-6 flex items-center justify-center w-8 h-8 bg-white text-[var(--primary)] rounded-2xl transition-colors duration-300 group-hover:bg-[var(--primary)] group-hover:text-white">
+                <TbBuildingEstate />
+              </span>
             </button>
           </Link>
         </div>
