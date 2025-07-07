@@ -252,54 +252,84 @@ export type RoomsStepType = {};
 
 export const roomsStepInitialValues = {};
 
+const selectElementSchema = Joi.object({
+  value: Joi.string(),
+}).unknown();
 // features step -----------------------------------------------------------
 export const featuresStepSchema = Joi.object({
   guestRoom: Joi.array()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("غرف إضافية"),
-  safty: Joi.array().required().messages(VALIDATION_MESSAGES).label("الأمان"),
+  safty: Joi.array()
+    .items(selectElementSchema)
+    .min(1)
+    .messages(VALIDATION_MESSAGES)
+    .label("الأمان"),
   privatePool: Joi.array()
-    .required()
+    .items(selectElementSchema)
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("مسبح خاص"),
-  jaccuzi: Joi.array().required().messages(VALIDATION_MESSAGES).label("جاكوزي"),
+  jaccuzi: Joi.array()
+    .items(selectElementSchema)
+    .min(1)
+    .messages(VALIDATION_MESSAGES)
+    .label("جاكوزي"),
   facilities: Joi.array()
-    .required()
+    .items(selectElementSchema)
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("الخدمات و المرافق"),
   bedroomDetailes: Joi.array()
-    .required()
+    .items(selectElementSchema)
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("تفاصيل غرف النوم"),
   approvalInfo: Joi.array()
-    .required()
+    .items(selectElementSchema)
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("معلومات الموافقة"),
-  view: Joi.array().required().messages(VALIDATION_MESSAGES).label("الأطلالة"),
+  view: Joi.array()
+    .items(selectElementSchema)
+    .min(1)
+    .messages(VALIDATION_MESSAGES)
+    .label("الأطلالة"),
   stormProtiction: Joi.array()
-    .required()
+    .items(selectElementSchema)
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("الحماية من العواصف"),
   portInfo: Joi.array()
-    .required()
+    .items(selectElementSchema)
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("معلومات الميناء/القارب"),
-  terms: Joi.array().required().messages(VALIDATION_MESSAGES).label("الشروط"),
+  terms: Joi.array()
+    .items(selectElementSchema)
+    .min(1)
+    .messages(VALIDATION_MESSAGES)
+    .label("الشروط"),
 });
 
+type SelectElement = {
+  label: string;
+  value: string;
+};
+
 export type FeaturesStepType = {
-  guestRoom: Array;
-  safty: Array;
-  privatePool: Array;
-  jaccuzi: Array;
-  facilities: Array;
-  bedroomDetailes: Array;
-  approvalInfo: Array;
-  view: Array;
-  stormProtiction: Array;
-  portInfo: Array;
-  terms: Array;
+  guestRoom: SelectElement[];
+  safty: SelectElement[];
+  privatePool: SelectElement[];
+  jaccuzi: SelectElement[];
+  facilities: SelectElement[];
+  bedroomDetailes: SelectElement[];
+  approvalInfo: SelectElement[];
+  view: SelectElement[];
+  stormProtiction: SelectElement[];
+  portInfo: SelectElement[];
+  terms: SelectElement[];
 };
 
 export const featuresStepInitialValues = {
