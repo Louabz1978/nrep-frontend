@@ -201,3 +201,129 @@ export const APPROVALINFO = [
     label: "لا شيء",
   },
 ];
+export const VIEW = [
+  {
+    value: "sea_view",
+    label: "إطلالة على بحر",
+  },
+  {
+    value: "garden_view",
+    label: "إطلالة على حديقة",
+  },
+  {
+    value: "street_view",
+    label: "إطلالة على شارع عام",
+  },
+  {
+    value: "mall_view",
+    label: "إطلالة على مجمع تجاري",
+  },
+  {
+    value: "mountain_view",
+    label: "إطلالة على جبل",
+  },
+  {
+    value: "pool_view",
+    label: "إطلالة على مسبح",
+  },
+  {
+    value: "open_view",
+    label: "إطلالة مفتوحة",
+  },
+  {
+    value: "no_view",
+    label: "بدون إطلالة",
+  },
+];
+
+export const TERMS = [
+  {
+    value: "no_pets",
+    label: "ممنوع اصطحاب الحيوانات الأليفة",
+  },
+  {
+    value: "no_smoking",
+    label: "ممنوع التدخين",
+  },
+  {
+    value: "family_only",
+    label: "للعائلات فقط",
+  },
+  {
+    value: "bachelor_only",
+    label: "للأفراد فقط",
+  },
+  {
+    value: "payment_in_advance",
+    label: "الدفع مقدماً",
+  },
+  {
+    value: "minimum_contract",
+    label: "مدة عقد أدنى مطلوبة",
+  },
+  {
+    value: "other",
+    label: "شروط أخرى",
+  },
+];
+
+export const PORTINFO = [
+  {
+    value: "private_dock",
+    label: "رصيف خاص",
+  },
+  {
+    value: "shared_dock",
+    label: "رصيف مشترك",
+  },
+  {
+    value: "boat_lift",
+    label: "رافعة قوارب",
+  },
+  {
+    value: "jet_ski_space",
+    label: "مساحة للدراجات المائية",
+  },
+  {
+    value: "no_port",
+    label: "بدون ميناء/رصيف",
+  },
+  {
+    value: "other",
+    label: "معلومات أخرى",
+  },
+];
+
+export const STORMPROTECTION = [
+  {
+    value: "hurricane_shutters",
+    label: "ستائر إعصار",
+  },
+  {
+    value: "impact_windows",
+    label: "نوافذ مقاومة للصدمات",
+  },
+  {
+    value: "reinforced_doors",
+    label: "أبواب معززة",
+  },
+  {
+    value: "elevated_structure",
+    label: "هيكل مرتفع",
+  },
+  {
+    value: "storm_shelter",
+    label: "مأوى للعواصف",
+  },
+  {
+    value: "no_protection",
+    label: "بدون حماية",
+  },
+  {
+    value: "other",
+    label: "طرق حماية أخرى",
+  },
+];
+
+
+
