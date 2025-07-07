@@ -221,7 +221,7 @@ function Select<T extends FieldValues>({
           {/* select */}
           <button
             type="button"
-            className={`cursor-pointer flex-1 h-[40px] text-[16.36px] bg-input-bg px-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+            className={`cursor-pointer  flex-1 h-[40px] text-[16.36px] ${!disabled ? "bg-input-bg " : "#ADA7A7" } px-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
               getError(errors, name)
                 ? "border-error"
                 : `border-secondary-border ${

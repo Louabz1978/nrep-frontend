@@ -276,9 +276,31 @@ export const featuresStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("معلومات الموافقة"),
+  view: Joi.array().required().messages(VALIDATION_MESSAGES).label("الأطلالة"),
+  stormProtiction: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحماية من العواصف"),
+  portInfo: Joi.array()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("معلومات الميناء/القارب"),
+  terms: Joi.array().required().messages(VALIDATION_MESSAGES).label("الشروط"),
 });
 
-export type FeaturesStepType = {};
+export type FeaturesStepType = {
+  guestRoom: Array;
+  safty: Array;
+  privatePool: Array;
+  jaccuzi: Array;
+  facilities: Array;
+  bedroomDetailes: Array;
+  approvalInfo: Array;
+  view: Array;
+  stormProtiction: Array;
+  portInfo: Array;
+  terms: Array;
+};
 
 export const featuresStepInitialValues = {
   guestRoom: [],
@@ -288,6 +310,10 @@ export const featuresStepInitialValues = {
   facilities: [],
   bedroomDetailes: [],
   approvalInfo: [],
+  view: [],
+  stormProtiction: [],
+  portInfo: [],
+  terms: [],
 };
 
 // financial step -----------------------------------------------------------
