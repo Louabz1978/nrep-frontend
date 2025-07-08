@@ -37,6 +37,18 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المدينة"),
+  district: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المنطقة"),
+  geoArea: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("المنطقة الجغرافية"),
+  province: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المقاطعة"),
+  zone: Joi.string().required().messages(VALIDATION_MESSAGES).label("النطاق"),
   streetName: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -47,63 +59,80 @@ export const generalStepSchema = Joi.object({
     .label("رقم الشارع"),
   streetType: Joi.object({ value: Joi.string() })
     .unknown()
-    .required()
     .messages(VALIDATION_MESSAGES)
     .label("نوع الشارع"),
-  previousGeoDirection: Joi.object({ value: Joi.string() })
-    .unknown()
-    .required()
+  branchName: Joi.string()
     .messages(VALIDATION_MESSAGES)
-    .label("الاتجاه الجغرافي السابق"),
-  nextGeoDirection: Joi.object({ value: Joi.string() })
+    .label("اسم الشقة/الفرع"),
+  branchCode: Joi.string().messages(VALIDATION_MESSAGES).label("رمز الفرع"),
+  startDirection: Joi.object({ value: Joi.string() })
     .unknown()
-    .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الاتجاه الجغرافي اللاحق"),
+    .label("إتجاه البداية"),
+  endDirection: Joi.object({ value: Joi.string() })
+    .unknown()
+    .messages(VALIDATION_MESSAGES)
+    .label("إتجاه النهاية"),
   postalCode: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الرمز البريدي"),
+  development: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("التطوير"),
   buildingDesign: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("نوع تصميم المبنى"),
   buildingNumber: Joi.string()
-    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("رقم المبنى"),
-  apartmentNumber: Joi.string()
-    .allow(null, "")
+  buildingName: Joi.string().messages(VALIDATION_MESSAGES).label("اسم البناء"),
+  totalFloorsInOwnership: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("رقم الشقة"),
-  geoArea: Joi.string()
+    .label("عدد الطوابق الكلي في الملكية"),
+  totalFloorsInProperty: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد الطوابق الكلي في العقار"),
+  propertyFloor: Joi.number().messages(VALIDATION_MESSAGES).label("رقم الطابق"),
+  unitsInBuilding: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد العقارات في البناء"),
+  unitsInCompound: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد العقارات في المجمع"),
+  yearBuilt: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المنطقة الجغرافية"),
-  regulatoryCode: Joi.string()
-    .allow(null, "")
+    .label("سنة البناء"),
+  legalDescription: Joi.string()
     .messages(VALIDATION_MESSAGES)
-    .label("كود التنظيم(العقاري)"),
+    .label("الوصف القانوني"),
+  section: Joi.string().messages(VALIDATION_MESSAGES).label("القسم"),
+  municipality: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("البلدية"),
+  legalUnit: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الوحدة القانونية"),
+  field: Joi.string().messages(VALIDATION_MESSAGES).label("المجال"),
+  block: Joi.string().messages(VALIDATION_MESSAGES).label("الكتلة"),
+  landUnit: Joi.string()
+    .label("الأرض / الوحدة العقارية"),
   projectName: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
     .label("المشروع العقاري"),
   projectCode: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
     .label("رمز المجمع"),
   projectHomeName: Joi.string()
-    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("اسم المجمع السكني"),
   unitType: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("نوع الوحدة العقارية"),
-  developerName: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("اسم المطور العقاري"),
+
 
   // second accordion fields
   propertyStatus: Joi.string()
@@ -114,10 +143,6 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("السعر المعروض"),
-  yearBuilt: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("سنة البناء"),
   totalArea: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -170,27 +195,39 @@ export type GeneralStepType = {
   propertyId: number;
   hiddenPropertyId: string;
   city: string;
+  district: string;
+  geoArea: string;
+  province: string;
+  zone: string;
   streetName: string;
   streetNumber: string;
   streetType: string;
-  previousGeoDirection: string;
-  nextGeoDirection: string;
+  branchName: string;
+  branchCode: string;
+  startDirection: string;
+  endDirection: string;
   postalCode: string;
+  development: string;
   buildingDesign: string;
   buildingNumber: string;
-  apartmentNumber: string;
-  geoArea: string;
-  regulatoryCode: string;
-  projectName: string;
-  projectCode: string;
-  projectHomeName: string;
-  unitType: string;
-  developerName: string;
+  buildingName: string;
+  totalFloorsInOwnership: number;
+  totalFloorsInProperty: number;
+  propertyFloor: number;
+  unitsInBuilding: number;
+  unitsInCompound: number;
+  yearBuilt: number;
+  legalDescription: string;
+  section: string;
+  municipality: string;
+  legalUnit: string;
+  field: string;
+  block: string;
+  landUnit: string;
 
   // second accordion
   propertyStatus: string;
   offeredPrice: number;
-  yearBuilt: number;
   totalArea: number;
   livingArea: number;
   furnished: string;
@@ -216,27 +253,39 @@ export const generalStepInitialValues = {
   propertyId: null,
   hiddenPropertyId: "",
   city: "",
+  district: "",
+  geoArea: "",
+  province: "",
+  zone: "",
   streetName: "",
   streetNumber: "",
   streetType: "",
+  branchName: "",
+  branchCode: "",
   previousGeoDirection: "",
   nextGeoDirection: "",
   postalCode: "",
+  development: "",
   buildingDesign: "",
   buildingNumber: "",
-  apartmentNumber: "",
-  geoArea: "",
-  regulatoryCode: "",
-  projectName: "",
-  projectCode: "",
-  projectHomeName: "",
-  unitType: "",
-  developerName: "",
+  buildingName: "",
+  totalFloorsInOwnership: null,
+  totalFloorsInProperty: null,
+  propertyFloor: null,
+  unitsInBuilding: null,
+  unitsInCompound: null,
+  yearBuilt: null,
+  legalDescription: "",
+  section: "",
+  municipality: "",
+  legalUnit: "",
+  field: "",
+  block: "",
+  landUnit: "",
 
   // second accordion
   propertyStatus: "",
   offeredPrice: "",
-  yearBuilt: "",
   totalArea: "",
   livingArea: "",
   furnished: "",
