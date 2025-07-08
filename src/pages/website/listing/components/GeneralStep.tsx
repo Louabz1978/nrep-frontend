@@ -180,7 +180,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             title="معلومات عامة عن العقار"
             icon={FaRegListAlt}
             isOpen={isOpenFirst}
-            accordionFields={["hiddenPropertyId", "propertyId"]}
+            accordionFields={[]}
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
@@ -368,10 +368,10 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             title="فئة العقار : سكني"
             icon={TbBuildingCommunity}
             isOpen={isOpenSecond}
-            accordionFields={["bathroomsWithoutShower"]}
+            accordionFields={[]}
             form={form}
           >
-            <div className="p-[40px] pt-[64px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[72px] gap-y-[24px]">
+            <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
               <Input
                 form={form}
                 name="propertyStatus"
@@ -493,7 +493,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             title="المعلومات الجغرافية و المستندات"
             icon={FaMapLocationDot}
             isOpen={isOpenThird}
-            accordionFields={["landAreaSource"]}
+            accordionFields={[]}
             form={form}
           >
             <div className="flex flex-col lg:flex-row-reverse items-start w-full gap-6 p-6">

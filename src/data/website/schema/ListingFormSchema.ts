@@ -18,6 +18,7 @@ export const statusStepInitialValues = {
 
 // general step -----------------------------------------------------------
 export const generalStepSchema = Joi.object({
+  // first accordion fields
   propertyId: Joi.number()
     .required()
     .min(1)
@@ -104,8 +105,7 @@ export const generalStepSchema = Joi.object({
     .messages(VALIDATION_MESSAGES)
     .label("اسم المطور العقاري"),
 
-  // second section in general step:
-  //second step in general
+  // second accordion fields
   propertyStatus: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -155,6 +155,8 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الكابل متوفر (التلفزيون/الإنترنت)"),
+
+  // third accordion fields
   landAreaSource: Joi.any(),
   landDimensionsSource: Joi.any(),
   totalAreaSource: Joi.any(),
@@ -164,6 +166,7 @@ export const generalStepSchema = Joi.object({
 });
 
 export type GeneralStepType = {
+  // first accordion
   propertyId: number;
   hiddenPropertyId: string;
   city: string;
@@ -183,6 +186,8 @@ export type GeneralStepType = {
   projectHomeName: string;
   unitType: string;
   developerName: string;
+
+  // second accordion
   propertyStatus: string;
   offeredPrice: number;
   yearBuilt: number;
@@ -196,6 +201,8 @@ export type GeneralStepType = {
   elevator: string;
   garageSpaces: number;
   cableAvailable: string;
+
+  // third accordion
   landAreaSource: string;
   landDimensionsSource: string;
   totalAreaSource: string;
@@ -205,6 +212,7 @@ export type GeneralStepType = {
 };
 
 export const generalStepInitialValues = {
+  // first accordion
   propertyId: null,
   hiddenPropertyId: "",
   city: "",
@@ -224,6 +232,8 @@ export const generalStepInitialValues = {
   projectHomeName: "",
   unitType: "",
   developerName: "",
+
+  // second accordion
   propertyStatus: "",
   offeredPrice: "",
   yearBuilt: "",
@@ -237,6 +247,8 @@ export const generalStepInitialValues = {
   elevator: "",
   garageSpaces: "",
   cableAvailable: "",
+
+  // third accordion
   landAreaSource: "",
   landDimensionsSource: "",
   totalAreaSource: "",
