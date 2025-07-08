@@ -31,7 +31,8 @@ import { FaRegListAlt } from "react-icons/fa";
 import { TbBuildingCommunity } from "react-icons/tb";
 import { FaMapLocationDot } from "react-icons/fa6";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import { Button } from "@/components/global/form/button/Button";
+import AccordionSubmit from "@/components/global/form/button/AccordionSubmit";
+import Textarea from "@/components/global/form/textarea/Textarea";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
@@ -333,7 +334,15 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 name={"unitType"}
                 info={"hello"}
               />
-              <Input
+              {/* <Input
+                form={form}
+                label={"اسم المطور العقاري"}
+                placeholder={""}
+                name={"developerName"}
+                info={"hello"}
+              /> */}
+
+              <Textarea
                 form={form}
                 label={"اسم المطور العقاري"}
                 placeholder={""}
@@ -341,24 +350,14 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 info={"hello"}
               />
               <div className="col-span-full flex justify-center">
-                <Button
-                  className="!bg-success"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    const isValid = await trigger(
-                      ["hiddenPropertyId", "propertyId"],
-                      {
-                        shouldFocus: true,
-                      }
-                    );
-                    if (isValid) {
-                      setIsOpenFirst(false);
-                      setIsOpenSecond(true);
-                    }
+                <AccordionSubmit<GeneralStepType>
+                  trigger={trigger}
+                  onValid={() => {
+                    setIsOpenFirst(false);
+                    setIsOpenSecond(true);
                   }}
-                >
-                  تأكيد البيانات
-                </Button>
+                  validationArray={[]}
+                />
               </div>
             </div>
           </Accrodion>
@@ -477,7 +476,16 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 placeholder="1"
                 info={"hello"}
               />
-              <Input
+              {/* <Input
+                form={form}
+                name="cableAvailable"
+                label="الكابل متوفر (التلفزيون/الإنترنت)"
+                labelStyle="font-bold"
+                placeholder="لا يوجد"
+                info={"hello"}
+              /> */}
+
+              <Textarea
                 form={form}
                 name="cableAvailable"
                 label="الكابل متوفر (التلفزيون/الإنترنت)"
@@ -485,6 +493,17 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 placeholder="لا يوجد"
                 info={"hello"}
               />
+
+              <div className="col-span-full flex justify-center">
+                <AccordionSubmit<GeneralStepType>
+                  trigger={trigger}
+                  onValid={() => {
+                    setIsOpenSecond(false);
+                    setIsOpenThird(true);
+                  }}
+                  validationArray={[]}
+                />
+              </div>
             </div>
           </Accrodion>
 
