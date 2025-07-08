@@ -58,7 +58,7 @@ interface ListingFormProps {
 // listing form page, gets: default values for each step in the form
 function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
   // current step
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(0);
 
   // status step form
   const statusStep = useForm({

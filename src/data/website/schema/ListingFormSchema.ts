@@ -252,10 +252,12 @@ export type RoomsStepType = {};
 
 export const roomsStepInitialValues = {};
 
+// features step -----------------------------------------------------------
+
 const selectElementSchema = Joi.object({
   value: Joi.string(),
 }).unknown();
-// features step -----------------------------------------------------------
+
 export const featuresStepSchema = Joi.object({
   guestRoom: Joi.array()
     .required()
@@ -266,16 +268,29 @@ export const featuresStepSchema = Joi.object({
     .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("الأمان"),
-  privatePool: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("مسبح خاص"),
-  jaccuzi: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("جاكوزي"),
+
+  hasPrivatePool: Joi.boolean(),
+  privatePool: Joi.when("hasPrivatePool", {
+    is: true,
+    then: Joi.array()
+      .items(selectElementSchema)
+      .min(1)
+      .messages(VALIDATION_MESSAGES)
+      .label("مسبح خاص"),
+    otherwise: Joi.array().messages(VALIDATION_MESSAGES).label("مسبح خاص"),
+  }),
+
+  hasJaccuzi: Joi.boolean(),
+  jaccuzi: Joi.when("hasJaccuzi", {
+    is: true,
+    then: Joi.array()
+      .items(selectElementSchema)
+      .min(1)
+      .messages(VALIDATION_MESSAGES)
+      .label("جاكوزي"),
+    otherwise: Joi.array().messages(VALIDATION_MESSAGES).label("جاكوزي"),
+  }),
+
   facilities: Joi.array()
     .items(selectElementSchema)
     .min(1)
@@ -321,7 +336,9 @@ type SelectElement = {
 export type FeaturesStepType = {
   guestRoom: SelectElement[];
   safty: SelectElement[];
+  hasPrivatePool: boolean;
   privatePool: SelectElement[];
+  hasJaccuzi: boolean;
   jaccuzi: SelectElement[];
   facilities: SelectElement[];
   bedroomDetailes: SelectElement[];
@@ -335,7 +352,9 @@ export type FeaturesStepType = {
 export const featuresStepInitialValues = {
   guestRoom: [],
   safty: [],
+  hasPrivatePool: false,
   privatePool: [],
+  hasJaccuzi: false,
   jaccuzi: [],
   facilities: [],
   bedroomDetailes: [],

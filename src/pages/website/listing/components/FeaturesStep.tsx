@@ -2,7 +2,7 @@ import Select from "@/components/global/form/select/Select";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import NextButton from "@/components/global/form/button/NextButton";
 import type { SetStateAction } from "jotai";
-import { useState, type Dispatch } from "react";
+import { type Dispatch } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import {
   APPROVALINFO,
@@ -19,30 +19,17 @@ import {
 } from "@/data/global/select";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
-import { FaToggleOff, FaToggleOn } from "react-icons/fa6";
+import type { FeaturesStepType } from "@/data/website/schema/ListingFormSchema";
 
 interface FeaturesStepProps {
-  form: UseFormReturn<any>;
+  // form: UseFormReturn<any>;
+  form: UseFormReturn<FeaturesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 
 function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
-
-  const [isOnFirst , setIsOnFirst] = useState(false)
-  const [isOnSecond , setIsOnSecond] = useState(false)
-
-  const toggleFisrt = ()=>setIsOnFirst(prev => !prev)
-  const toggleSecond = ()=>setIsOnSecond(prev => !prev)
-
   // extract form utils
-  const {
-    formState: { errors },
-    register,
-    handleSubmit,
-    watch,
-    trigger,
-    setValue,
-  } = form;
+  const { handleSubmit } = form;
 
   // handle submit form
   const onSubmit = () => {
@@ -51,7 +38,11 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
 
   return (
     <PageContainer className="h-full overflow-auto ">
-      <form id="features_step_form" className="mb-10" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        id="features_step_form"
+        className="mb-10"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
           <FormSectionHeader>المميزات</FormSectionHeader>
           <Select
@@ -144,11 +135,8 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
           />
           <Select
             form={form}
-            label={
-              <span onClick={toggleFisrt} className="flex items-center gap-2">
-                مسبح خاص {isOnFirst ? <FaToggleOn color="#005BBB" fontSize="38px"/> :<FaToggleOff color="#C1272D" fontSize="38px"/>}
-              </span>
-            }
+            label={"مسبح خاص"}
+            toggle={"hasPrivatePool"}
             keyValue="value"
             showValue="label"
             choices={PRIVATEPOOL}
@@ -156,15 +144,11 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
             placeholder={"مسبح أرضي"}
             multiple={true}
             info={"hello"}
-            disabled={!isOnFirst}
           />
           <Select
             form={form}
-            label={
-              <span onClick={toggleSecond} className="flex items-center gap-2">
-                حمامات بخارية خاصة{isOnSecond ? <FaToggleOn color="#005BBB" fontSize="38px"/> :<FaToggleOff color="#C1272D" fontSize="38px"/>}
-              </span>
-            }
+            label={"جاكوزي"}
+            toggle={"hasJaccuzi"}
             keyValue="value"
             showValue="label"
             choices={JACCUZI}
@@ -172,7 +156,6 @@ function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
             placeholder={"مسبح أرضي"}
             multiple={true}
             info={"hello"}
-            disabled={!isOnSecond}
           />
           <Select
             form={form}

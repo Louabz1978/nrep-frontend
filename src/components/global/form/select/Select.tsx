@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ErrorComponent from "../../error/ErrorComponent";
 import Loader from "../../loader/Loader";
-import { GoTriangleDown } from "react-icons/go";
 import { FaXmark } from "react-icons/fa6";
 import handleClickOutside from "@/utils/handleClickOutside";
 import { isArray } from "lodash";
@@ -15,6 +14,7 @@ import {
 import getError, { isValid } from "@/utils/getErrors";
 import { FaAngleDown } from "react-icons/fa6";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import Toggle from "../toggle/Toggle";
 
 interface SelectProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -41,6 +41,7 @@ interface SelectProps<T extends FieldValues> {
   formId?: string;
   query?: any;
   info?: string | ReactNode;
+  toggle?: Path<T>;
 }
 
 function Select<T extends FieldValues>({
@@ -67,6 +68,7 @@ function Select<T extends FieldValues>({
   belowComponent,
   formId, // query
   info,
+  toggle,
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const clickRef = useRef<HTMLDivElement>(null);
@@ -77,6 +79,8 @@ function Select<T extends FieldValues>({
     formState: { errors },
     trigger,
   } = form;
+
+  const isDisabled = disabled || (toggle && !watch(toggle));
 
   // handle choice click
   function handleChoiceClick(e: React.MouseEvent, choice: any, key?: number) {
@@ -201,28 +205,41 @@ function Select<T extends FieldValues>({
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
-    <div className={`flex flex-col w-full gap-[4px] ${addingStyle}`}>
+    <div className={`flex flex-col w-full max-w-full gap-[4px] ${addingStyle}`}>
       {/* select label  */}
       {label ? (
         <label
           htmlFor={name}
-          className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
+          className={`text-size22 flex items-center gap-[16px] font-medium cursor-pointer ${labelStyle} ${
+            isDisabled ? "text-placeholder" : " text-primary-fg"
+          } transition-all`}
         >
           {label}
+          {toggle ? (
+            <Toggle form={form} name={toggle} onChange={() => trigger(name)} />
+          ) : null}
         </label>
       ) : null}
 
       {/* select container to link choices list to its position */}
       <div
         ref={clickRef}
-        className={`relative w-full flex items-center gap-[15px] ${addingSelectStyle}`}
+        className={`relative w-full max-w-full flex items-center gap-[15px] ${addingSelectStyle}`}
       >
-        <div className="flex-1 w-full relative flex items-center">
+        <div
+          className={`flex-1 relative ${
+            info ? "max-w-[calc(100%_-_40px)]" : "max-w-full"
+          } flex items-center`}
+        >
           {/* select */}
           <button
             type="button"
-            className={`cursor-pointer  flex-1 h-[40px] text-[16.36px] ${!disabled ? "bg-input-bg " : "#ADA7A7" } px-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
-              getError(errors, name)
+            className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto h-[40px] text-[16.36px] ${
+              isDisabled ? "bg-transparent" : "bg-input-bg"
+            } px-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+              isDisabled
+                ? "border-placeholder !cursor-not-allowed"
+                : getError(errors, name)
                 ? "border-error"
                 : `border-secondary-border ${
                     isValid(form)
@@ -233,10 +250,10 @@ function Select<T extends FieldValues>({
             onKeyDown={handleKeyDown}
             onClick={(e) => {
               e.preventDefault();
-              if (!disabled) setIsOpen((prev) => !prev);
+              if (!isDisabled) setIsOpen((prev) => !prev);
             }}
           >
-            <div className="overflow-auto text-nowrap flex-1 text-start">
+            <div className="overflow-auto text-nowrap flex-1 flex text-start">
               {(watch(name) && !isArray(watch(name))) ||
               (isArray(watch(name)) && watch(name).length) ? (
                 !multiple ? (
@@ -246,21 +263,21 @@ function Select<T extends FieldValues>({
                     watch(name)
                   )
                 ) : showValue ? (
-                  <div className="flex w-full overflow-auto items-center gap-[4px]">
+                  <div className="flex flex-1 overflow-auto items-center gap-[8px]">
                     {watch(name).map((ele: any, index: number) => {
                       return (
                         <div
                           key={index}
-                          className="py-[2px] group px-[6px] flex items-center gap-[4px] rounded-[5px] bg-primary/80 text-white"
+                          className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
                         >
                           {ele[showValue]}
 
                           <FaXmark
-                            className="size-[12px] text-white/80 hidden group-hover:block hover:text-white"
+                            className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              handleChoiceClick(e, ele);
+                              if (!isDisabled) handleChoiceClick(e, ele);
                             }}
                           />
                         </div>
@@ -268,21 +285,21 @@ function Select<T extends FieldValues>({
                     })}
                   </div>
                 ) : (
-                  <div className="flex items-center overflow-auto gap-[4px]">
+                  <div className="flex flex-1 items-center overflow-auto gap-[8px]">
                     {watch(name).map((ele: any, index: number) => {
                       return (
                         <div
                           key={index}
-                          className="py-[2px] group px-[6px] flex items-center gap-[4px] rounded-[5px] bg-primary/80 text-white"
+                          className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
                         >
                           {ele}
 
                           <FaXmark
-                            className="size-[12px] text-white/80 hidden group-hover:block hover:text-white"
+                            className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              handleChoiceClick(e, ele);
+                              if (!isDisabled) handleChoiceClick(e, ele);
                             }}
                           />
                         </div>
@@ -307,7 +324,7 @@ function Select<T extends FieldValues>({
                   id={`dont-close`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleChoiceClick(e, watch(name));
+                    if (!isDisabled) handleChoiceClick(e, watch(name));
                   }}
                 ></div>
               </span>
@@ -315,7 +332,11 @@ function Select<T extends FieldValues>({
 
             {/* select arrow */}
             <div
-              className={`relative toggle-button text-primary ${
+              className={`relative toggle-button ${
+                isDisabled
+                  ? "text-placeholder"
+                  : `${isOpen ? "text-secondary" : "text-primary"}`
+              } ${
                 isOpen ? "rotate-180 duration-[0.3s]" : "duration-[0.3s]"
               } transition-all`}
             >
@@ -325,18 +346,18 @@ function Select<T extends FieldValues>({
 
           {/* choices list */}
           <div
-            className={`bg-secondary-block-background/65 backdrop-blur-[15px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
+            className={`bg-tertiary-bg/65 backdrop-blur-[15px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
               isOpen
                 ? "h-[240px] overflow-auto py-1 pt-0"
                 : "h-0 overflow-hidden"
             } transition-all flex flex-col gap-1 px-1 shadow-md `}
           >
-            <div className="bg-secondary-block-background/65 backdrop-blur-[15px] pt-2 z-[2] sticky top-0">
+            <div className="bg-tertiary-bg/65 backdrop-blur-[15px] pt-2 z-[2] sticky top-0">
               <input
                 type="text"
                 id={`select_${name}_search_${formId}`}
                 autoFocus={true}
-                className="w-full outline-none focus:outline-none focus-visible:outline-none bg-background/65 backdrop-blur-[15px] focus:bg-background/30 py-2 px-3 border-solid border border-border text-primary-foreground/90 rounded-[3px]"
+                className="w-full outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-2 px-3 border-solid border border-border text-primary-fg/90 rounded-[3px]"
                 placeholder="بحث..."
                 value={searchTerm}
                 onChange={(e) => {
@@ -353,7 +374,7 @@ function Select<T extends FieldValues>({
               />
             </div>
 
-            <div className="h-full overflow-auto">
+            <div className="h-full overflow-auto flex flex-col gap-[8px]">
               {isError ? (
                 <ErrorComponent />
               ) : isLoading ? (
@@ -390,7 +411,7 @@ function Select<T extends FieldValues>({
                       <div
                         key={key}
                         onClick={(e) => {
-                          handleChoiceClick(e, choice, key);
+                          if (!isDisabled) handleChoiceClick(e, choice, key);
                         }}
                         className={`py-2 px-3 flex items-center cursor-pointer group relative ${
                           focusedChoose == key
@@ -398,8 +419,8 @@ function Select<T extends FieldValues>({
                             : "border-solid border border-transparent"
                         } ${
                           isChoosen
-                            ? "bg-secondary-foreground rounded-md text-white"
-                            : "hover:bg-secondary-foreground/20 rounded-md text-primary-foreground/80"
+                            ? "bg-secondary/50 rounded-md text-primary-fg"
+                            : "hover:bg-secondary/20 rounded-md text-primary-fg/80"
                         } transition-all duration-[0.1s]`}
                         id={`option_${name}_${key}_${formId}`}
                       >
