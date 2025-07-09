@@ -131,7 +131,6 @@ export const generalStepSchema = Joi.object({
     .messages(VALIDATION_MESSAGES)
     .label("المساحة التقريبية للنطاق الكلي"),
   NumberOfCeilingFans: Joi.number()
-    .required()
     .messages(VALIDATION_MESSAGES)
     .label("عدد المراوح السقفية"),
   GarageSpaces: Joi.number()
@@ -172,18 +171,27 @@ export const generalStepSchema = Joi.object({
     .messages(VALIDATION_MESSAGES)
     .label("الحد الأعلى لأنواع الحيوانات"),
   landSize: Joi.number()
+    .required()
     .messages(VALIDATION_MESSAGES)
     .label("حجم الأرض (بالفدان)"),
   landBack: Joi.number()
+    .required()
     .messages(VALIDATION_MESSAGES)
     .label("الجزء الخلفي من الأرض"),
   landFront: Joi.number()
+    .required()
     .messages(VALIDATION_MESSAGES)
     .label("الواجهة الأمامية من الأرض"),
-  landLeft: Joi.number().messages(VALIDATION_MESSAGES).label("يسارية الأرض"),
-  landRight: Joi.number().messages(VALIDATION_MESSAGES).label("يمينية الأرض"),
+  landLeft: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("يسارية الأرض"),
+  landRight: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("يمينية الأرض"),
   backDirection: Joi.object({ value: Joi.string() })
-    .unknown()
+    .required()
     .messages(VALIDATION_MESSAGES)
     .label("اتجاه الواجهة الخلفية"),
   virtualTour1: Joi.string()
@@ -192,9 +200,12 @@ export const generalStepSchema = Joi.object({
   virtualTour2: Joi.string()
     .messages(VALIDATION_MESSAGES)
     .label("رابط الجولة الإفتراضية 2"),
-  ownerName: Joi.string().messages(VALIDATION_MESSAGES).label("اسم المالك"),
+  ownerName: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المالك"),
   propertyDescription: Joi.object({ value: Joi.string() })
-    .unknown()
+    .required()
     .messages(VALIDATION_MESSAGES)
     .label("وصف المُلكية"),
   primarySchool: Joi.string()
