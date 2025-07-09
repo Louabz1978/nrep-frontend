@@ -187,169 +187,263 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
               <FormSectionHeader>معلومات المنطقة</FormSectionHeader>
-
-              <Input
-                form={form}
-                label={"رقم تعريف العقار"}
-                placeholder={""}
-                name={"propertyId"}
-                type={"number"}
-                info={"hello"}
-              />
               <Select
                 form={form}
-                label={"إخفاء رقم العقار"}
-                choices={yesNo}
-                showValue="label"
-                keyValue="value"
-                name={"hiddenPropertyId"}
-                placeholder={"نعم"}
-                info={"hello"}
-              />
-              <Select
-                form={form}
-                label={"المدينة"}
+                label="المدينة"
                 choices={cityChoices}
                 showValue="label"
                 keyValue="value"
-                name={"city"}
-                placeholder={"اختر المدينة"}
-                info={"hello"}
+                name="city"
+                placeholder="اختر المدينة"
+                info="اختر المدينة التي يقع فيها العقار"
               />
               <Input
                 form={form}
-                label={"اسم الشارع"}
-                placeholder={"شارع الدبلان"}
-                name={"streetName"}
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                label={"رقم الشارع"}
-                placeholder={"1234"}
-                name={"streetNumber"}
-                info={"hello"}
+                label="المنطقة"
+                placeholder="مثال: حي الغوطة"
+                name="district"
+                info="ادخل اسم المنطقة أو الحي"
               />
               <Select
                 form={form}
-                label={"نوع الشارع"}
+                label="المنطقة الجغرافية"
+                choices={cityChoices}
+                keyValue="value"
+                showValue="label"
+                name="geoArea"
+                placeholder="اختر المنطقة الجغرافية"
+                info="حدد المنطقة الجغرافية للعقار"
+              />
+              <Select
+                form={form}
+                label="المقاطعة"
+                choices={cityChoices}
+                showValue="label"
+                keyValue="value"
+                name="province"
+                placeholder="اختر المقاطعة"
+                info="اختر المقاطعة التي يتبع لها العقار"
+              />
+              <Input
+                form={form}
+                label="النطاق"
+                placeholder="مثال: النطاق الشرقي"
+                name="zone"
+                info="ادخل نطاق العقار (اختياري)"
+              />
+
+              <Input
+                form={form}
+                label="اسم الشارع"
+                placeholder="شارع الدبلان"
+                name="streetName"
+                info="ادخل اسم الشارع الرئيسي للعقار"
+              />
+              <Input
+                form={form}
+                label="رقم الشارع"
+                placeholder="1234"
+                name="streetNumber"
+                info="ادخل رقم الشارع إن وجد"
+              />
+              <Select
+                form={form}
+                label="نوع الشارع"
                 choices={streetTypes}
                 showValue="label"
                 keyValue="value"
-                name={"streetType"}
-                placeholder={"طريق عام"}
-                info={"hello"}
+                name="streetType"
+                placeholder="طريق عام"
+                info="حدد نوع الشارع"
               />
-              <Select
+
+              <Input
                 form={form}
-                label={"الاتجاه الجغرافي السابق"}
-                choices={geoDirections}
-                showValue="label"
-                keyValue="value"
-                name={"previousGeoDirection"}
-                placeholder={"شمال"}
-                info={"hello"}
-              />
-              <Select
-                form={form}
-                label={"الاتجاه الجغرافي اللاحق"}
-                choices={geoDirections}
-                showValue="label"
-                keyValue="value"
-                name={"nextGeoDirection"}
-                placeholder={"شمال"}
-                info={"hello"}
+                label="اسم الشقة/الفرع"
+                placeholder="مثال: شقة 2 أو فرع ب"
+                name="branchName"
+                info="ادخل اسم الشقة أو الفرع (إن وجد)"
               />
               <Input
                 form={form}
-                label={"الرمز البريدي"}
-                placeholder={"33914"}
-                name={"postalCode"}
-                info={"hello"}
+                label="رمز الفرع"
+                placeholder="مثال: ب"
+                name="branchCode"
+                info="ادخل رمز الفرع (إن وجد)"
               />
+
+
+              <Select
+                form={form}
+                label="اتجاه البداية"
+                choices={geoDirections}
+                showValue="label"
+                keyValue="value"
+                name="startDirection"
+                placeholder="شمال"
+                info="حدد اتجاه بداية العقار"
+              />
+              <Select
+                form={form}
+                label="اتجاه النهاية"
+                choices={geoDirections}
+                showValue="label"
+                keyValue="value"
+                name="endDirection"
+                placeholder="جنوب"
+                info="حدد اتجاه نهاية العقار"
+              />
+
               <Input
                 form={form}
-                label={"نوع تصميم المبنى"}
-                placeholder={""}
-                name={"buildingDesign"}
-                info={"hello"}
+                label="الرمز البريدي"
+                placeholder="33914"
+                name="postalCode"
+                info="ادخل الرمز البريدي للعنوان"
+              />
+
+              <Input
+                form={form}
+                label="التطوير"
+                placeholder="مثال: تطوير خاص"
+                name="development"
+                info="ادخل اسم أو نوع التطوير (إن وجد)"
               />
 
               <FormSectionHeader>معلومات البناء</FormSectionHeader>
 
+              <Select
+                form={form}
+                label="نوع تصميم المبنى"
+                placeholder="مثال: فيلا، عمارة، شقة"
+                name="buildingDesign"
+                choices={cityChoices}
+                keyValue="value"
+                showValue="label"
+                info="حدد نوع تصميم المبنى"
+              />
               <Input
                 form={form}
-                label={"رقم المبنى"}
-                placeholder={"47"}
-                name={"buildingNumber"}
-                info={"hello"}
+                label="رقم البناء"
+                placeholder="مثال: 47"
+                name="buildingNumber"
+                info="ادخل رقم البناء"
               />
+              <Input
+                form={form}
+                label="اسم البناء"
+                placeholder="مثال: برج الشام"
+                name="buildingName"
+                info="ادخل اسم البناء (إن وجد)"
+              />
+              <Input
+                form={form}
+                label="عدد الطوابق الكلي في الملكية"
+                placeholder="مثال: 10"
+                name="totalFloorsInOwnership"
+                type="number"
+                info="ادخل عدد الطوابق الكلي في الملكية"
+              />
+              <Input
+                form={form}
+                label="عدد الطوابق الكلي في العقار"
+                placeholder="مثال: 5"
+                name="totalFloorsInProperty"
+                type="number"
+                info="ادخل عدد الطوابق الكلي في العقار"
+              />
+              <Input
+                form={form}
+                label="رقم الطابق"
+                placeholder="مثال: 2"
+                name="propertyFloor"
+                type="number"
+                info="ادخل رقم الطابق الذي يقع فيه العقار"
+              />
+              <Input
+                form={form}
+                label="عدد العقارات في البناء"
+                placeholder="مثال: 20"
+                name="unitsInBuilding"
+                type="number"
+                info="ادخل عدد العقارات في البناء"
+              />
+              <Input
+                form={form}
+                label="عدد العقارات في المجمع"
+                placeholder="مثال: 100"
+                name="unitsInCompound"
+                type="number"
+                info="ادخل عدد العقارات في المجمع (إن وجد)"
+              />
+              <Input
+                form={form}
+                label="سنة البناء"
+                placeholder="مثال: 2010"
+                name="yearBuilt"
+                type="number"
+                info="ادخل سنة بناء العقار"
+              />
+              <FormSectionHeader>المعلومات القانونية</FormSectionHeader>
 
-              <Input
-                form={form}
-                label={"رقم الشقة"}
-                placeholder={"02"}
-                name={"apartmentNumber"}
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                label={"المنطقة الجغرافية"}
-                placeholder={""}
-                name={"geoArea"}
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                label={"كود التنظيم(العقاري)"}
-                placeholder={""}
-                name={"regulatoryCode"}
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                label={"المشروع العقاري"}
-                placeholder={""}
-                name={"projectName"}
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                label={"رمز المجمع"}
-                placeholder={""}
-                name={"projectCode"}
-                info={"hello"}
-              />
+              {/* الوصف القانوني */}
+              <div className="col-span-full">
+                {/* TODO: Add 'legalDescription' to schema */}
+                <Textarea
+                  form={form}
+                  label="الوصف القانوني :"
+                  placeholder="النص هنا"
+                  name="legalDescription"
+                  info="الوصف القانوني للعقار"
+                />
+              </div>
 
-              <Input
-                form={form}
-                label={"اسم المجمع السكني"}
-                placeholder={""}
-                name={"projectHomeName"}
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                label={"نوع الوحدة العقارية"}
-                placeholder={""}
-                name={"unitType"}
-                info={"hello"}
-              />
-              {/* <Input
-                form={form}
-                label={"اسم المطور العقاري"}
-                placeholder={""}
-                name={"developerName"}
-                info={"hello"}
-              /> */}
+                <Input
+                  form={form}
+                  label="القسم"
+                  placeholder=""
+                  name="section"
+                  info="ادخل رقم القسم"
+                />
+                <Input
+                  form={form}
+                  label="البلدية"
+                  placeholder=""
+                  name="municipality"
+                  info="ادخل اسم البلدية"
+                />
+                <Input
+                  form={form}
+                  label="الوحدة القانونية"
+                  placeholder=""
+                  name="legalUnit"
+                  info="ادخل الوحدة القانونية"
+                />
+                <Input
+                  form={form}
+                  label="المجال"
+                  placeholder=""
+                  name="field"
+                  info="ادخل المجال"
+                />
+                <Input
+                  form={form}
+                  label="الكتلة"
+                  placeholder=""
+                  name="block"
+                  info="ادخل الكتلة"
+                />
+                <Input
+                  form={form}
+                  label="الأرض / الوحدة العقارية"
+                  placeholder=""
+                  name="landUnit"
+                  info="ادخل رقم الأرض أو الوحدة العقارية"
+                />
 
-              <Textarea
-                form={form}
-                label={"اسم المطور العقاري"}
-                placeholder={""}
-                name={"developerName"}
-                info={"hello"}
-              />
+              <FormSectionHeader>خيارات إضافية</FormSectionHeader>
+
+
               <div className="col-span-full flex justify-center">
                 <AccordionSubmit<GeneralStepType>
                   trigger={trigger}
