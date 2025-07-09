@@ -33,6 +33,7 @@ interface InputProps<T extends FieldValues> {
   info?: string | ReactNode;
   addingValidStyle?: string;
   bottomElement?: string | ReactNode;
+  required?: boolean;
 }
 
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
@@ -60,6 +61,7 @@ function Input<T extends FieldValues>({
   max,
   info,
   bottomElement,
+  required,
 }: InputProps<T>) {
   // to show password
   const [show, setShow] = useState(false);

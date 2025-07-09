@@ -42,6 +42,7 @@ interface SelectProps<T extends FieldValues> {
   query?: any;
   info?: string | ReactNode;
   toggle?: Path<T>;
+  required?: boolean;
 }
 
 function Select<T extends FieldValues>({
@@ -69,6 +70,7 @@ function Select<T extends FieldValues>({
   formId, // query
   info,
   toggle,
+  required,
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const clickRef = useRef<HTMLDivElement>(null);
@@ -356,7 +358,7 @@ function Select<T extends FieldValues>({
               <input
                 type="text"
                 id={`select_${name}_search_${formId}`}
-                autoFocus={true}
+                // autoFocus={true}
                 className="w-full outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-2 px-3 border-solid border border-border text-primary-fg/90 rounded-[3px]"
                 placeholder="بحث..."
                 value={searchTerm}

@@ -21,6 +21,7 @@ interface TextareaProps<T extends FieldValues> {
   onBlur?: () => void;
   info?: string | ReactNode;
   addingValidStyle?: string;
+  required?: boolean;
 }
 
 function Textarea<T extends FieldValues>({
@@ -37,6 +38,7 @@ function Textarea<T extends FieldValues>({
   onFocus = () => {},
   onBlur = () => {},
   info,
+  required,
 }: TextareaProps<T>) {
   const {
     register,
