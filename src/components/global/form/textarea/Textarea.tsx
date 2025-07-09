@@ -63,8 +63,6 @@ function Textarea<T extends FieldValues>({
 
   return (
     <>
-      {/* checkbox input with its style */}
-
       {/* other normal inputs */}
       <div
         className={`flex flex-col w-full gap-[4px] ${addingStyle}`}

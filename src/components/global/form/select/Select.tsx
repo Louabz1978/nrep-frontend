@@ -93,7 +93,7 @@ function Select<T extends FieldValues>({
 
     const isChoosen = multiple
       ? keyValue
-        ? watch(name).filter(
+        ? (watch(name) ?? []).filter(
             (ele: any) =>
               ele?.[showValue as string] == finalChoice?.[showValue as string]
           )?.length

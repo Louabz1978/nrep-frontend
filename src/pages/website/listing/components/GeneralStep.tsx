@@ -5,10 +5,14 @@ import type { UseFormReturn } from "react-hook-form";
 import Accrodion from "@/components/global/accrodion/Accrodion";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
-import type { GeneralStepType } from "@/data/website/schema/ListingFormSchema";
+import {
+  firstSectionFields,
+  secondSectionFields,
+  thirdSectionFields,
+  type GeneralStepType,
+} from "@/data/website/schema/ListingFormSchema";
 import {
   cityChoices,
-  yesNo,
   measurementSources,
   streetTypes,
   geoDirections,
@@ -33,9 +37,13 @@ import { FaRegListAlt } from "react-icons/fa";
 import { TbBuildingCommunity } from "react-icons/tb";
 import { FaMapLocationDot } from "react-icons/fa6";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import AccordionSubmit from "@/components/global/form/button/AccordionSubmit";
+import AccordionSubmit, {
+  AccordionButtonsContainer,
+  AccordionCancel,
+} from "@/components/global/form/button/AccordionSubmit";
 import Textarea from "@/components/global/form/textarea/Textarea";
 import { Button } from "@/components/global/form/button/Button";
+import { GUESTROOM } from "@/data/global/select";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
@@ -184,7 +192,8 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             title="معلومات عامة عن العقار"
             icon={FaRegListAlt}
             isOpen={isOpenFirst}
-            accordionFields={[]}
+            accordionFields={firstSectionFields}
+            requiredFields={firstSectionFields}
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
@@ -388,16 +397,14 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <FormSectionHeader>المعلومات القانونية</FormSectionHeader>
 
               {/* الوصف القانوني */}
-              <div className="col-span-full">
-                {/* TODO: Add 'legalDescription' to schema */}
-                <Textarea
-                  form={form}
-                  label="الوصف القانوني :"
-                  placeholder="النص هنا"
-                  name="legalDescription"
-                  info="الوصف القانوني للعقار"
-                />
-              </div>
+              <Textarea
+                form={form}
+                label="الوصف القانوني :"
+                placeholder="النص هنا"
+                name="legalDescription"
+                info="الوصف القانوني للعقار"
+                addingStyle="col-span-full"
+              />
 
               <Input
                 form={form}
@@ -443,17 +450,31 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
 
               <FormSectionHeader>خيارات إضافية</FormSectionHeader>
-
               <div className="col-span-full flex justify-center">
+                <Select
+                  form={form}
+                  keyValue="value"
+                  showValue="label"
+                  choices={GUESTROOM}
+                  name={"moreGeneralOptions"}
+                  placeholder={"اختر مواصفات إضافية للعقار"}
+                  multiple={true}
+                  addingStyle="!w-[60%]"
+                  info={"hello"}
+                />
+              </div>
+
+              <AccordionButtonsContainer>
                 <AccordionSubmit<GeneralStepType>
                   trigger={trigger}
                   onValid={() => {
                     setIsOpenFirst(false);
                     setIsOpenSecond(true);
                   }}
-                  validationArray={[]}
+                  validationArray={firstSectionFields}
                 />
-              </div>
+                <AccordionCancel setIsOpen={setIsOpenFirst} />
+              </AccordionButtonsContainer>
             </div>
           </Accrodion>
 
@@ -462,12 +483,12 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             title="فئة العقار : سكني"
             icon={TbBuildingCommunity}
             isOpen={isOpenSecond}
-            accordionFields={[]}
+            accordionFields={secondSectionFields}
+            requiredFields={secondSectionFields}
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
               <FormSectionHeader>معلومات الغرف</FormSectionHeader>
-
               <Select
                 form={form}
                 label={"نوع الحالة"}
@@ -554,7 +575,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"وصف المرآب"}
-                name={"bedrooms"}
+                name={"DescriptionOfTheGarage"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -564,7 +585,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"المفروشات"}
-                name={"bedrooms"}
+                name={"Furniture"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -593,7 +614,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"وصف مصفّ السيارات"}
-                name={"bedrooms"}
+                name={"CarParkDescription"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -776,17 +797,31 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 info={"المدرسة الثانوية"}
               />
               <FormSectionHeader>خيارات إضافية</FormSectionHeader>
-
               <div className="col-span-full flex justify-center">
+                <Select
+                  form={form}
+                  keyValue="value"
+                  showValue="label"
+                  choices={GUESTROOM}
+                  name={"moreCategoryOptions"}
+                  placeholder={"اختر مواصفات إضافية للعقار"}
+                  multiple={true}
+                  addingStyle="!w-[60%]"
+                  info={"hello"}
+                />
+              </div>
+
+              <AccordionButtonsContainer>
                 <AccordionSubmit<GeneralStepType>
                   trigger={trigger}
                   onValid={() => {
                     setIsOpenSecond(false);
                     setIsOpenThird(true);
                   }}
-                  validationArray={[]}
+                  validationArray={secondSectionFields}
                 />
-              </div>
+                <AccordionCancel setIsOpen={setIsOpenSecond} />
+              </AccordionButtonsContainer>
             </div>
           </Accrodion>
 
@@ -795,7 +830,8 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             title="المعلومات الجغرافية و المستندات"
             icon={FaMapLocationDot}
             isOpen={isOpenThird}
-            accordionFields={[]}
+            accordionFields={thirdSectionFields}
+            requiredFields={["latitude", "longitude"]}
             form={form}
           >
             <div className="p-[48px] flex flex-col gap-[32px]">
@@ -837,15 +873,18 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
 
                 {/* map control */}
                 <div className="flex flex-col w-[45%] p-[10px] gap-[23px]">
-                  <Button onClick={getUserLocation}>
+                  <Button variant={"semi-round"} onClick={getUserLocation}>
                     الحصول على خطوط الطول/العرض من العنوان
                   </Button>
-                  <Button onClick={toggleManualMode}>
+                  <Button variant={"semi-round"} onClick={toggleManualMode}>
                     {isManualMode
                       ? "تعطيل التحديد اليدوي"
                       : "تفعيل التحديد اليدوي"}
                   </Button>
-                  <Button onClick={toggleSatelliteView}>
+                  <Button
+                    variant={"semi-round-outline"}
+                    onClick={toggleSatelliteView}
+                  >
                     {isSatelliteView
                       ? "عرض الخريطة العادية"
                       : "عرض الخريطة برؤية Google street"}
@@ -918,15 +957,16 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 />
 
                 {/* buttons */}
-                <div className="col-span-full flex justify-center mt-[12px]">
+                <AccordionButtonsContainer>
                   <AccordionSubmit<GeneralStepType>
                     trigger={trigger}
                     onValid={() => {
                       setIsOpenThird(false);
                     }}
-                    validationArray={[]}
+                    validationArray={thirdSectionFields}
                   />
-                </div>
+                  <AccordionCancel setIsOpen={setIsOpenThird} />
+                </AccordionButtonsContainer>
               </div>
             </div>
           </Accrodion>

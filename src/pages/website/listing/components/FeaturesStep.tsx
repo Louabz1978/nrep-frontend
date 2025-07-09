@@ -25,15 +25,21 @@ interface FeaturesStepProps {
   // form: UseFormReturn<any>;
   form: UseFormReturn<FeaturesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  handleSubmitForm: () => void;
 }
 
-function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
+function FeaturesStep({
+  form,
+  setCurrentStep,
+  handleSubmitForm,
+}: FeaturesStepProps) {
   // extract form utils
   const { handleSubmit } = form;
 
   // handle submit form
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
+    handleSubmitForm?.();
   };
 
   return (

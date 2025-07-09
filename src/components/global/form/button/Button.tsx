@@ -10,10 +10,14 @@ const buttonVariants = cva(
       variant: {
         default:
           "h-[40px] gap-[25px] py-[7.5px] px-[18.5px] rounded-full !text-inverse-fg bg-primary text-size24",
+        "semi-round":
+          "h-[45px] gap-[25px] py-[7.5px] px-[18.5px] rounded-[15.71px] !text-inverse-fg bg-primary text-size16",
         destructive:
           "font-medium !text-13p py-9p px-16p bg-destructive text-destructive-foreground hover:bg-destructive-hover rounded-xs border border-solid border-destructive hover:border-destructive-hover",
         outline:
           "h-[40px] border-[3.16px] border-primary rounded-[23.55px] !text-primary bg-transparent text-size24",
+        "semi-round-outline":
+          "h-[45px] border-[2.1px] border-primary rounded-[15.71px] !text-primary bg-transparent text-size16",
         secondary:
           "font-medium !text-13p py-9p px-16p bg-secondary text-secondary-foreground hover:bg-secondary-hover rounded-xs border border-solid border-secondary hover:border-secondary-hover",
         ghost:
@@ -65,6 +69,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
+        onClick={(e) => {
+          if (props.onClick) e.preventDefault();
+          props.onClick?.(e);
+        }}
       />
     );
   }

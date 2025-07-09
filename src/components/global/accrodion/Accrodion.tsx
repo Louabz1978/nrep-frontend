@@ -1,6 +1,10 @@
 // Accordion component for expanding/collapsing content sections
 import { type ReactNode } from "react";
-import { FaArrowAltCircleLeft, FaCheckCircle } from "react-icons/fa";
+import {
+  FaArrowAltCircleLeft,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import type { IconType } from "react-icons/lib";
 import type {
@@ -18,6 +22,7 @@ interface AccrodionProps<T extends FieldValues> {
   icon: IconType;
   onClick: () => void;
   accordionFields: string[];
+  requiredFields: string[];
   form: UseFormReturn<T>;
 }
 
@@ -29,6 +34,7 @@ function Accrodion<T extends FieldValues>({
   isOpen,
   icon: Icon,
   accordionFields,
+  requiredFields,
   form,
 }: AccrodionProps<T>) {
   const {
@@ -40,7 +46,11 @@ function Accrodion<T extends FieldValues>({
 
   const isValid =
     !hasError &&
-    accordionFields.every((field) => watch(field as PathValue<T, Path<T>>));
+    accordionFields.every(
+      (field) =>
+        !requiredFields?.includes(field) ||
+        watch(field as PathValue<T, Path<T>>)
+    );
 
   return (
     <div className="rounded-[15px] flex flex-col bg-secondary-bg">
@@ -59,7 +69,11 @@ function Accrodion<T extends FieldValues>({
         </div>
 
         {/* Arrow icon indicating open/closed state */}
-        {isValid ? (
+        {hasError ? (
+          <FaTimesCircle
+            className={`text-inverse-fg transition-all duration-[0.35s] size-[50px]`}
+          />
+        ) : isValid ? (
           <FaCheckCircle
             className={`text-inverse-fg transition-all duration-[0.35s] size-[50px]`}
           />
