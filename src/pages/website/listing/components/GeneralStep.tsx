@@ -12,6 +12,8 @@ import {
   measurementSources,
   streetTypes,
   geoDirections,
+  StatusType,
+  bedrooms,
 } from "@/data/website/GeneralData";
 import {
   MapContainer,
@@ -272,7 +274,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 info="ادخل رمز الفرع (إن وجد)"
               />
 
-
               <Select
                 form={form}
                 label="اتجاه البداية"
@@ -398,51 +399,50 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 />
               </div>
 
-                <Input
-                  form={form}
-                  label="القسم"
-                  placeholder=""
-                  name="section"
-                  info="ادخل رقم القسم"
-                />
-                <Input
-                  form={form}
-                  label="البلدية"
-                  placeholder=""
-                  name="municipality"
-                  info="ادخل اسم البلدية"
-                />
-                <Input
-                  form={form}
-                  label="الوحدة القانونية"
-                  placeholder=""
-                  name="legalUnit"
-                  info="ادخل الوحدة القانونية"
-                />
-                <Input
-                  form={form}
-                  label="المجال"
-                  placeholder=""
-                  name="field"
-                  info="ادخل المجال"
-                />
-                <Input
-                  form={form}
-                  label="الكتلة"
-                  placeholder=""
-                  name="block"
-                  info="ادخل الكتلة"
-                />
-                <Input
-                  form={form}
-                  label="الأرض / الوحدة العقارية"
-                  placeholder=""
-                  name="landUnit"
-                  info="ادخل رقم الأرض أو الوحدة العقارية"
-                />
+              <Input
+                form={form}
+                label="القسم"
+                placeholder=""
+                name="section"
+                info="ادخل رقم القسم"
+              />
+              <Input
+                form={form}
+                label="البلدية"
+                placeholder=""
+                name="municipality"
+                info="ادخل اسم البلدية"
+              />
+              <Input
+                form={form}
+                label="الوحدة القانونية"
+                placeholder=""
+                name="legalUnit"
+                info="ادخل الوحدة القانونية"
+              />
+              <Input
+                form={form}
+                label="المجال"
+                placeholder=""
+                name="field"
+                info="ادخل المجال"
+              />
+              <Input
+                form={form}
+                label="الكتلة"
+                placeholder=""
+                name="block"
+                info="ادخل الكتلة"
+              />
+              <Input
+                form={form}
+                label="الأرض / الوحدة العقارية"
+                placeholder=""
+                name="landUnit"
+                info="ادخل رقم الأرض أو الوحدة العقارية"
+              />
 
               <FormSectionHeader>خيارات إضافية</FormSectionHeader>
-
 
               <div className="col-span-full flex justify-center">
                 <AccordionSubmit<GeneralStepType>
@@ -466,110 +466,139 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
-              <Input
+              <FormSectionHeader>معلومات الغرف</FormSectionHeader>
+
+              <Select
                 form={form}
-                name="propertyStatus"
-                label="حالة العقار"
-                labelStyle="font-bold"
-                placeholder="معروض للبيع"
-                info={"hello"}
+                label={"نوع الحالة"}
+                name={"propertyStatus"}
+                choices={StatusType}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر نوع الحالة"}
+                info={"معلومات عن الحالة"}
               />
               <Input
                 form={form}
                 name="offeredPrice"
                 type="number"
-                label="السعر المعروض"
+                label="سعر العرض"
                 labelStyle="font-bold"
-                placeholder="1,000,000 ل.س"
-                info={"hello"}
+                placeholder="ادخل سعر العرض"
+                info={"سعر العقار"}
+              />
+              <Select
+                form={form}
+                label={"غرف النوم"}
+                name={"bedrooms"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر عدد غرف النوم"}
+                info={"اختر عدد غرف النوم"}
               />
               <Input
                 form={form}
-                name="yearBuilt"
+                name="completeBathrooms"
                 type="number"
-                label="سنة البناء"
+                label="الحمامات الكاملة"
                 labelStyle="font-bold"
-                placeholder="2010"
-                info={"hello"}
+                placeholder="ادخل عدد الحمامات الكاملة"
+                info={" عدد الحمامات الكاملة"}
               />
               <Input
                 form={form}
-                name="totalArea"
+                name="partialBathrooms"
                 type="number"
-                label="المساحة الإجمالية التقريبية"
+                label="الحمامات الجزئية "
                 labelStyle="font-bold"
-                placeholder=""
-                info={"hello"}
+                placeholder="ادخل عدد الحمامات الجزئية"
+                info={"عدد الحمامات الجزئية"}
               />
               <Input
                 form={form}
-                name="livingArea"
+                name="TheApproximateAreaOfTheResidentialZone"
                 type="number"
-                label="المساحة التقريبية للمعيشة"
+                label="المساحة التقريبية لنطاق السكني"
                 labelStyle="font-bold"
-                placeholder=""
-                info={"hello"}
+                placeholder="ادخل المساحة التقريبية لنطاق السكني"
+                info={"ادخل المساحة التقريبية لنطاق السكني"}
               />
               <Input
                 form={form}
-                name="furnished"
-                label="مفروشة"
-                labelStyle="font-bold"
-                placeholder="غير مفروشة"
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                name="bedrooms"
+                name="TheApproximateAreaOfTheTotalRange"
                 type="number"
-                label="عدد غرف النوم"
+                label="المساحة التقريبية للنطاق الكلي"
                 labelStyle="font-bold"
-                placeholder="3"
-                info={"hello"}
+                placeholder="ادخل المساحة التقريبية للنطاق الكلي"
+                info={"المساحة التقريبية للنطاق الكلي"}
               />
               <Input
                 form={form}
-                name="bathroomsWithShower"
+                name="NumberOfCeilingFans"
                 type="number"
-                label="عدد دورات المياه (مع دش)"
+                label="عدد المراوح السقفية "
                 labelStyle="font-bold"
-                placeholder="2"
-                info={"hello"}
+                placeholder="ادخل عدد المراوح السقفية"
+                info={"عدد المراوح السقفية"}
               />
               <Input
                 form={form}
-                name="bathroomsWithoutShower"
+                name="GarageSpaces"
                 type="number"
-                label="عدد دورات المياه (بدون دش)"
+                label="مساحات المرائب"
                 labelStyle="font-bold"
-                placeholder="1"
-                info={"hello"}
+                placeholder="ادخل مساحات المرآب"
+                info={"مساحات المرائب"}
+              />
+              <Select
+                form={form}
+                label={"وصف المرآب"}
+                name={"bedrooms"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر وصف المرآب"}
+                info={"وصف المرآب"}
+              />
+              <Select
+                form={form}
+                label={"المفروشات"}
+                name={"bedrooms"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر المفروشات"}
+                info={"المفروشات"}
+              />
+              <Select
+                form={form}
+                label={"المصعد"}
+                name={"Elevator"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر للمصعد"}
+                info={"المصعد"}
               />
               <Input
                 form={form}
-                name="ceilingFans"
+                name="ParkingLotArea"
                 type="number"
-                label="عدد مراوح السقف"
+                label="مساحة مصفّات السيارات"
                 labelStyle="font-bold"
-                placeholder="0"
-                info={"hello"}
+                placeholder="ادخل مساحة مصفّات السيارات"
+                info={"مساحة مصفّات السيارات "}
               />
-              <Input
+              <Select
                 form={form}
-                name="elevator"
-                label="مصعد"
-                labelStyle="font-bold"
-                placeholder="لا يوجد"
-                info={"hello"}
-              />
-              <Input
-                form={form}
-                name="garageSpaces"
-                type="number"
-                label="عدد مواقف الكراج"
-                labelStyle="font-bold"
-                placeholder="1"
-                info={"hello"}
+                label={"وصف مصفّ السيارات"}
+                name={"bedrooms"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر وصف مصّف السيارات"}
+                info={"وصف مصفّ السيارات"}
               />
               {/* <Input
                 form={form}
@@ -579,15 +608,174 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 placeholder="لا يوجد"
                 info={"hello"}
               /> */}
-
-              <Textarea
+              <FormSectionHeader>الحيوانات الأليفة</FormSectionHeader>
+              <Select
                 form={form}
-                name="cableAvailable"
-                label="الكابل متوفر (التلفزيون/الإنترنت)"
-                labelStyle="font-bold"
-                placeholder="لا يوجد"
-                info={"hello"}
+                label={"الحيوانات الأليفة"}
+                name={"Pets"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر عدد الحيوانات الأليفة"}
+                info={"الحيوانات الأليفة"}
               />
+              <Input
+                form={form}
+                name="maxPetWeight"
+                type="number"
+                label="الحد الأعلى لوزن الحيوان "
+                labelStyle="font-bold"
+                placeholder="ادخل الحد الأعلى لوزن الحيوان"
+                info={"الحد الأعلى لوزن الحيوان "}
+              />
+              <Input
+                form={form}
+                name="maxPetCount"
+                type="number"
+                label="الحد الأعلى لعدد الحيوانات"
+                labelStyle="font-bold"
+                placeholder="ادخل الحدالأعلى للحيوانات"
+                info={"الحد الأعلى لعدد الحيوانات"}
+              />
+              <Input
+                form={form}
+                name="maxPetBreeding"
+                type="number"
+                label="الحد الأعلى لتكاثر الحيوانات"
+                labelStyle="font-bold"
+                placeholder="ادخل الحد الأعلى لتكاثر الحيوانات"
+                info={"الحد الأعلى لتكاثر الحيوانات"}
+              />
+              <Input
+                form={form}
+                name="maxPetTypes"
+                type="number"
+                label="الحد الأعلى لأنواع الحيوانات"
+                labelStyle="font-bold"
+                placeholder="ادخل الحد الأعلى لأنواع الحيوانات"
+                info={"الحد الأعلى لأنواع الحيوانات"}
+              />
+              <FormSectionHeader>معلومات الأرض</FormSectionHeader>
+              <Input
+                form={form}
+                name="landSize"
+                type="number"
+                label="حجم الأرض (بالفدان)"
+                labelStyle="font-bold"
+                placeholder="ادخل حجم الأرض (بالفدان)"
+                info={"حجم الأرض (بالفدان)"}
+              />
+              <Input
+                form={form}
+                name="landBack"
+                type="number"
+                label="الجزء الخلفي من الأرض"
+                labelStyle="font-bold"
+                placeholder="ادخل الجزء الخلفي من الأرض "
+                info={"الجزء الخلفي من الأرض"}
+              />
+              <Input
+                form={form}
+                name="landFront"
+                type="number"
+                label="الواجهة الأمامية من الأرض"
+                labelStyle="font-bold"
+                placeholder="ادخل الواجهة الأمامية من الأرض"
+                info={"الواجهة الأمامية من الأرض"}
+              />
+              <Input
+                form={form}
+                name="landLeft"
+                type="number"
+                label="يسارية الأرض"
+                labelStyle="font-bold"
+                placeholder="ادخل يسارية الأرض"
+                info={"يسارية الأرض"}
+              />
+              <Input
+                form={form}
+                name="landRight"
+                type="number"
+                label="يمينية الأرض"
+                labelStyle="font-bold"
+                placeholder="ادخل يمينية الأرض"
+                info={"يمينية الأرض "}
+              />
+              <Select
+                form={form}
+                label={"اتجاه الواجهة الخلفية"}
+                name={"backDirection"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر اتجاه الواجهة الخلفية"}
+                info={"اتجاه الواجهة الخلفية"}
+              />
+              <Input
+                form={form}
+                name="virtualTour1"
+                type="text"
+                label="رابط الجولة الإفتراضية"
+                labelStyle="font-bold"
+                placeholder="ادخل رابط الجولة الأفتراضية"
+                info={"رابط الجولة الإفتراضية"}
+              />
+              <Input
+                form={form}
+                name="virtualTour2"
+                type="text"
+                label="رابط الجولة الإفتراضية 2"
+                labelStyle="font-bold"
+                placeholder="ادخل رابط الجولة الإفتراضية 2"
+                info={"رابط الجولة الإفتراضية 2"}
+              />
+              <Input
+                form={form}
+                name="ownerName"
+                type="text"
+                label="اسم المالك"
+                labelStyle="font-bold"
+                placeholder="اختر اسم المالك"
+                info={"اسم المالك"}
+              />
+              <Select
+                form={form}
+                label={"وصف المُلكية"}
+                name={"propertyDescription"}
+                choices={bedrooms}
+                showValue="label"
+                keyValue="value"
+                placeholder={"اختر عدد وصف المُلكية"}
+                info={"وصف المُلكية"}
+              />
+              <Input
+                form={form}
+                name="primarySchool"
+                type="text"
+                label="المدرسة الإبتدائية"
+                labelStyle="font-bold"
+                placeholder="ادخل المدرسة الإبتدائية"
+                info={"المدرسة الإبتدائية"}
+              />
+              <Input
+                form={form}
+                name="middleSchool"
+                type="text"
+                label="المدرسة الإعدادية"
+                labelStyle="font-bold"
+                placeholder="ادخل المدرسة الإعدادية"
+                info={"المدرسة الإعدادية"}
+              />
+              <Input
+                form={form}
+                name="highSchool"
+                type="text"
+                label="المدرسة الثانوية"
+                labelStyle="font-bold"
+                placeholder="ادخل المدرسة الثانوية"
+                info={"المدرسة الثانوية"}
+              />
+              <FormSectionHeader>خيارات إضافية</FormSectionHeader>
 
               <div className="col-span-full flex justify-center">
                 <AccordionSubmit<GeneralStepType>

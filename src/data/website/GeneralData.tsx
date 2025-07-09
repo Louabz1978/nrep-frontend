@@ -13,7 +13,19 @@ export const yesNo = [
   { value: "yes", label: "نعم" },
   { value: "no", label: "لا" },
 ];
-
+// Array for select options (status)
+export const StatusType = [
+  { value: "active", label: "نشط" },
+  { value: "not active", label: "غير نشط" }
+]
+// Array for select options (cityChoices)
+export const bedrooms = [
+  { value: "one", label: "غرفة" },
+  { value: "two", label: "غرفتان" },
+  { value: "three", label: "ثلاث غرف" },
+  { value: "four", label: "اربع غرف" },
+  { value: "more of four", label: "اكثر من اربع غرف" }
+]
 // Array for measurement sources
 export const measurementSources = [
   { value: "official_document", label: "مستند رسمي" },
