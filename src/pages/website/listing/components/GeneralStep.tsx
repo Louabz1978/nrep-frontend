@@ -33,6 +33,7 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import AccordionSubmit from "@/components/global/form/button/AccordionSubmit";
 import Textarea from "@/components/global/form/textarea/Textarea";
+import { Button } from "@/components/global/form/button/Button";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
@@ -515,50 +516,11 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             accordionFields={[]}
             form={form}
           >
-            <div className="flex flex-col lg:flex-row-reverse items-start w-full gap-6 p-6">
-              <div className="flex flex-col gap-3 w-full lg:w-auto lg:min-w-[280px] mb-4">
-                <button
-                  type="button"
-                  onClick={getUserLocation}
-                  className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-xl py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105"
-                >
-                  الحصول على خطوط الطول/العرض من العنوان
-                </button>
-                <button
-                  type="button"
-                  onClick={toggleManualMode}
-                  title={
-                    isManualMode
-                      ? "تعطيل التحديد اليدوي"
-                      : "تفعيل التحديد اليدوي"
-                  }
-                  className={`rounded-xl cursor-pointer py-3 px-4 font-bold text-lg shadow-lg transition-all duration-200 transform hover:scale-105 ${
-                    isManualMode
-                      ? "bg-green-600 text-white hover:bg-green-700"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
-                >
-                  {isManualMode
-                    ? "تعطيل التحديد اليدوي"
-                    : "تفعيل التحديد اليدوي"}
-                </button>
-                <button
-                  type="button"
-                  onClick={toggleSatelliteView}
-                  className={`border-2 cursor-pointer border-blue-600 text-blue-600 rounded-xl py-3 px-4 font-bold text-lg hover:bg-blue-50 transition-all duration-200 transform hover:scale-105 ${
-                    isSatelliteView
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
-                      : ""
-                  }`}
-                >
-                  {isSatelliteView
-                    ? "عرض الخريطة العادية"
-                    : "عرض الخريطة برؤية Google street"}
-                </button>
-              </div>
-
-              <div className="w-full lg:flex-1">
-                <div className="w-160 h-[350px] rounded-2xl overflow-hidden shadow-2xl mb-6 relative border-2 border-gray-200">
+            <div className="p-[48px] flex flex-col gap-[32px]">
+              {/* map */}
+              <div className="flex gap-[22px] px-[52px] justify-center items-center">
+                {/* map view */}
+                <div className="w-[55%] rounded-[15px] h-[470px] overflow-hidden relative">
                   <MapContainer
                     center={markerPosition}
                     zoom={10}
@@ -590,73 +552,100 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                     />
                   </MapContainer>
                 </div>
+
+                {/* map control */}
+                <div className="flex flex-col w-[45%] p-[10px] gap-[23px]">
+                  <Button onClick={getUserLocation}>
+                    الحصول على خطوط الطول/العرض من العنوان
+                  </Button>
+                  <Button onClick={toggleManualMode}>
+                    {isManualMode
+                      ? "تعطيل التحديد اليدوي"
+                      : "تفعيل التحديد اليدوي"}
+                  </Button>
+                  <Button onClick={toggleSatelliteView}>
+                    {isSatelliteView
+                      ? "عرض الخريطة العادية"
+                      : "عرض الخريطة برؤية Google street"}
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
-              <Input
-                form={form}
-                label={"خط العرض (Latitude)"}
-                placeholder={"34.7324"}
-                name={"latitude"}
-                type={"number"}
-                numberRegex={/^\d*\.?\d*$/}
-                onChange={handleLatitudeChange}
-                info={"أدخل خط العرض أو انقر على الخريطة"}
-              />
-              <Input
-                form={form}
-                label={"خط الطول (Longitude)"}
-                placeholder={"36.7131"}
-                name={"longitude"}
-                type={"number"}
-                numberRegex={/^\d*\.?\d*$/}
-                onChange={handleLongitudeChange}
-                info={"أدخل خط الطول أو انقر على الخريطة"}
-              />
-            </div>
+              {/* inputs */}
+              <div className="grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
+                <Input
+                  form={form}
+                  label={"خط العرض (Latitude)"}
+                  placeholder={"34.7324"}
+                  name={"latitude"}
+                  type={"number"}
+                  numberRegex={/^\d*\.?\d*$/}
+                  onChange={handleLatitudeChange}
+                  info={"أدخل خط العرض أو انقر على الخريطة"}
+                />
+                <Input
+                  form={form}
+                  label={"خط الطول (Longitude)"}
+                  placeholder={"36.7131"}
+                  name={"longitude"}
+                  type={"number"}
+                  numberRegex={/^\d*\.?\d*$/}
+                  onChange={handleLongitudeChange}
+                  info={"أدخل خط الطول أو انقر على الخريطة"}
+                />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 mr-50 mb-10 gap-x-8 gap-y-6 w-full max-w-[900px] mt-2">
-              <Select
-                form={form}
-                label={"مصدر القياسات (مساحة الأرض)"}
-                name={"landAreaSource"}
-                choices={measurementSources}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر المصدر"}
-                info={"معلومات عن مصدر القياس"}
-              />
-              <Select
-                form={form}
-                label={"مصدر القياسات (أبعاد الأرض)"}
-                name={"landDimensionsSource"}
-                choices={measurementSources}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر المصدر"}
-                info={"معلومات عن مصدر القياس"}
-              />
-              <Select
-                form={form}
-                label={"مصدر القياسات (المساحة الكلية)"}
-                name={"totalAreaSource"}
-                choices={measurementSources}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر المصدر"}
-                info={"معلومات عن مصدر القياس"}
-              />
-              <Select
-                form={form}
-                label={"مصدر القياسات (المساحة السكنية)"}
-                name={"residentialAreaSource"}
-                choices={measurementSources}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر المصدر"}
-                info={"معلومات عن مصدر القياس"}
-              />
+                <Select
+                  form={form}
+                  label={"مصدر القياسات (مساحة الأرض)"}
+                  name={"landAreaSource"}
+                  choices={measurementSources}
+                  showValue="label"
+                  keyValue="value"
+                  placeholder={"اختر المصدر"}
+                  info={"معلومات عن مصدر القياس"}
+                />
+                <Select
+                  form={form}
+                  label={"مصدر القياسات (أبعاد الأرض)"}
+                  name={"landDimensionsSource"}
+                  choices={measurementSources}
+                  showValue="label"
+                  keyValue="value"
+                  placeholder={"اختر المصدر"}
+                  info={"معلومات عن مصدر القياس"}
+                />
+                <Select
+                  form={form}
+                  label={"مصدر القياسات (المساحة الكلية)"}
+                  name={"totalAreaSource"}
+                  choices={measurementSources}
+                  showValue="label"
+                  keyValue="value"
+                  placeholder={"اختر المصدر"}
+                  info={"معلومات عن مصدر القياس"}
+                />
+                <Select
+                  form={form}
+                  label={"مصدر القياسات (المساحة السكنية)"}
+                  name={"residentialAreaSource"}
+                  choices={measurementSources}
+                  showValue="label"
+                  keyValue="value"
+                  placeholder={"اختر المصدر"}
+                  info={"معلومات عن مصدر القياس"}
+                />
+
+                {/* buttons */}
+                <div className="col-span-full flex justify-center mt-[12px]">
+                  <AccordionSubmit<GeneralStepType>
+                    trigger={trigger}
+                    onValid={() => {
+                      setIsOpenThird(false);
+                    }}
+                    validationArray={[]}
+                  />
+                </div>
+              </div>
             </div>
           </Accrodion>
         </div>

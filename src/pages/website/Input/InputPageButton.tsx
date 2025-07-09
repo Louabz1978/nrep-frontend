@@ -13,18 +13,17 @@ interface InputPageButtonProps {
 // title: button title
 function InputPageButton({ to, icon: Icon, title }: InputPageButtonProps) {
   return (
-    <Link to={to}>
-      <button className="group flex hover:bg-primary  items-center justify-between gap-4 px-6 py-3 text-2xl font-bold text-inverse-fg rounded-full bg-senary-bg transition-colors duration-300 focus:outline-none cursor-pointer ">
-        <div className="flex items-center justify-between">
-          {/* title */}
-          <span>{title}</span>
+    <Link
+      to={to}
+      className="group flex hover:bg-primary px-[10px] py-[8px] gap-[25px] justify-center flex-1 text-2xl text-inverse-fg rounded-full bg-quaternary-bg transition-colors duration-300 focus:outline-none cursor-pointer "
+    >
+      {/* title */}
+      <span>{title}</span>
 
-          {/* icon */}
-          <span className="mr-6 ml-6 bg-inverse-fg text-primary w-8 h-8 flex items-center justify-center rounded-2xl">
-            <Icon />
-          </span>
-        </div>
-      </button>
+      {/* icon */}
+      <span className="bg-inverse-fg text-primary w-8 h-8 flex items-center justify-center rounded-2xl">
+        <Icon />
+      </span>
     </Link>
   );
 }
