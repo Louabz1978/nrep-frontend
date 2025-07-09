@@ -109,60 +109,103 @@ export const generalStepSchema = Joi.object({
   propertyStatus: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("حالة العقار"),
+    .label("نوع الحالة"),
   offeredPrice: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("السعر المعروض"),
-  yearBuilt: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("سنة البناء"),
-  totalArea: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المساحة الإجمالية التقريبية"),
-  livingArea: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المساحة التقريبية للمعيشة"),
-  furnished: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("مفروشة"),
+    .label("سعر العرض"),
   bedrooms: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد غرف النوم"),
-  bathroomsWithShower: Joi.number()
+    .label("غرف النوم"),
+  completeBathrooms: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد دورات المياه (مع دش)"),
-  bathroomsWithoutShower: Joi.number()
+    .label("الحمامات الكاملة"),
+  TheApproximateAreaOfTheResidentialZone: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد دورات المياه (بدون دش)"),
-  ceilingFans: Joi.number()
+    .label("المساحة التقريبية للمنطقة السكنية"),
+  TheApproximateAreaOfTheTotalRange: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد مراوح السقف"),
-  elevator: Joi.string().required().messages(VALIDATION_MESSAGES).label("مصعد"),
-  garageSpaces: Joi.number()
+    .label("المساحة التقريبية للنطاق الكلي"),
+  NumberOfCeilingFans: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد مواقف الكراج"),
-  cableAvailable: Joi.string()
+    .label("عدد المراوح السقفية"),
+  GarageSpaces: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الكابل متوفر (التلفزيون/الإنترنت)"),
-
-  // third accordion fields
-  landAreaSource: Joi.any(),
-  landDimensionsSource: Joi.any(),
-  totalAreaSource: Joi.any(),
-  residentialAreaSource: Joi.any(),
-  latitude: Joi.number(),
-  longitude: Joi.number(),
+    .label("مساحات المرائب"),
+  DescriptionOfTheGarage: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف المرآب"),
+  Furniture: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المفروشات"),
+  Elevator: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المصعد"),
+  ParkingLotArea: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("مساحة مصفّات السيارات"),
+  CarParkDescription: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف مصفّ السيارات"),
+  Pets: Joi.string().messages(VALIDATION_MESSAGES).label("الحيوانات الأليفة"),
+  maxPetWeight: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحد الأعلى لوزن الحيوان"),
+  maxPetCount: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحد الأعلى لعدد الحيوانات"),
+  maxPetBreeding: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحد الأعلى لتكاثر الحيوانات"),
+  maxPetTypes: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحد الأعلى لأنواع الحيوانات"),
+  landSize: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("حجم الأرض (بالفدان)"),
+  landBack: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("الجزء الخلفي من الأرض"),
+  landFront: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("الواجهة الأمامية من الأرض"),
+  landLeft: Joi.number().messages(VALIDATION_MESSAGES).label("يسارية الأرض"),
+  landRight: Joi.number().messages(VALIDATION_MESSAGES).label("يمينية الأرض"),
+  backDirection: Joi.object({ value: Joi.string() })
+    .unknown()
+    .messages(VALIDATION_MESSAGES)
+    .label("اتجاه الواجهة الخلفية"),
+  virtualTour1: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رابط الجولة الإفتراضية"),
+  virtualTour2: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رابط الجولة الإفتراضية 2"),
+  ownerName: Joi.string().messages(VALIDATION_MESSAGES).label("اسم المالك"),
+  propertyDescription: Joi.object({ value: Joi.string() })
+    .unknown()
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف المُلكية"),
+  primarySchool: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("المدرسة الإبتدائية"),
+  middleSchool: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("المدرسة الإعدادية"),
+  highSchool: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("المدرسة الثانوية"),
 });
 
 export type GeneralStepType = {
@@ -186,22 +229,39 @@ export type GeneralStepType = {
   projectHomeName: string;
   unitType: string;
   developerName: string;
-
+  CarParkDescription: string;
   // second accordion
   propertyStatus: string;
   offeredPrice: number;
-  yearBuilt: number;
-  totalArea: number;
-  livingArea: number;
-  furnished: string;
   bedrooms: number;
-  bathroomsWithShower: number;
-  bathroomsWithoutShower: number;
-  ceilingFans: number;
-  elevator: string;
-  garageSpaces: number;
-  cableAvailable: string;
-
+  completeBathrooms: number;
+  partialBathrooms: number;
+  TheApproximateAreaOfTheResidentialZone: number;
+  TheApproximateAreaOfTheTotalRange: number;
+  NumberOfCeilingFans: number;
+  GarageSpaces: number;
+  DescriptionOfTheGarage: string;
+  Furniture: string;
+  Elevator: number;
+  ParkingLotArea: number;
+  Pets: string;
+  maxPetWeight: number;
+  maxPetCount: number;
+  maxPetBreeding: number;
+  maxPetTypes: number;
+  landSize: number;
+  landBack: number;
+  landFront: number;
+  landLeft: number;
+  landRight: number;
+  backDirection: string;
+  virtualTour1: string;
+  virtualTour2: string;
+  ownerName: string;
+  propertyDescription: string;
+  primarySchool: string;
+  middleSchool: string;
+  highSchool: string;
   // third accordion
   landAreaSource: string;
   landDimensionsSource: string;
@@ -236,17 +296,37 @@ export const generalStepInitialValues = {
   // second accordion
   propertyStatus: "",
   offeredPrice: "",
+  bedrooms: "",
+  completeBathrooms: "",
+  partialBathrooms: "",
   yearBuilt: "",
   totalArea: "",
   livingArea: "",
   furnished: "",
-  bedrooms: "",
   bathroomsWithShower: "",
   bathroomsWithoutShower: "",
   ceilingFans: "",
   elevator: "",
   garageSpaces: "",
   cableAvailable: "",
+  Pets: "",
+  maxPetWeight: "",
+  maxPetCount: "",
+  maxPetBreeding: "",
+  maxPetTypes: "",
+  landSize: "",
+  landBack: "",
+  landFront: "",
+  landLeft: "",
+  landRight: "",
+  backDirection: "",
+  virtualTour1: "",
+  virtualTour2: "",
+  ownerName: "",
+  propertyDescription: "",
+  primarySchool: "",
+  middleSchool: "",
+  highSchool: "",
 
   // third accordion
   landAreaSource: "",
