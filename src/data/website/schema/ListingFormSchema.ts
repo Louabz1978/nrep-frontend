@@ -28,16 +28,20 @@ export const generalStepSchema = Joi.object({
   district: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المنطقة"),
+    .label("المقاطعة"),
+  propertyId: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم تعريف العقار"),
   geoArea: Joi.object({ value: Joi.string() })
     .unknown()
     .messages(VALIDATION_MESSAGES)
     .label("المنطقة الجغرافية"),
-  province: Joi.object({ value: Joi.string() })
+  state: Joi.object({ value: Joi.string() })
     .unknown()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المقاطعة"),
+    .label("الولاية"),
   zone: Joi.string().required().messages(VALIDATION_MESSAGES).label("النطاق"),
   streetName: Joi.string()
     .required()
@@ -54,7 +58,6 @@ export const generalStepSchema = Joi.object({
   branchName: Joi.string()
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشقة/الفرع"),
-  branchCode: Joi.string().messages(VALIDATION_MESSAGES).label("رمز الفرع"),
   startDirection: Joi.object({ value: Joi.string() })
     .unknown()
     .messages(VALIDATION_MESSAGES)
@@ -71,6 +74,9 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("التطوير"),
+  subDivisionCode: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رمز التقسيم الفرعي"),
   buildingDesign: Joi.object({ value: Joi.string() })
     .unknown()
     .required()
@@ -79,7 +85,13 @@ export const generalStepSchema = Joi.object({
   buildingNumber: Joi.string()
     .messages(VALIDATION_MESSAGES)
     .label("رقم المبنى"),
-  buildingName: Joi.string().messages(VALIDATION_MESSAGES).label("اسم البناء"),
+  buildingCompanyName: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم شركة البناء"),
+  buildingName: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم البناء"),
   totalFloorsInOwnership: Joi.number()
     .messages(VALIDATION_MESSAGES)
     .label("عدد الطوابق الكلي في الملكية"),
@@ -283,27 +295,29 @@ export type GeneralStepType = {
   // first accordion
   city: string;
   district: string;
+  propertyId: string;
   geoArea: string;
-  province: string;
+  state: string;
   zone: string;
   streetName: string;
   streetNumber: string;
   streetType: string;
   branchName: string;
-  branchCode: string;
   startDirection: string;
   endDirection: string;
   postalCode: string;
   development: string;
+  subDivisionCode: string;
   buildingDesign: string;
   buildingNumber: string;
+  buildingCompanyName: string;
   buildingName: string;
-  totalFloorsInOwnership: number | null;
-  totalFloorsInProperty: number | null;
-  propertyFloor: number | null;
-  unitsInBuilding: number | null;
-  unitsInCompound: number | null;
-  yearBuilt: number | null;
+  totalFloorsInOwnership: number | string;
+  totalFloorsInProperty: number | string;
+  propertyFloor: number | string;
+  unitsInBuilding: number | string;
+  unitsInCompound: number | string;
+  yearBuilt: number;
   legalDescription: string;
   section: string;
   municipality: string;
@@ -316,7 +330,7 @@ export type GeneralStepType = {
   // second accordion
   propertyStatus: string;
   offeredPrice: number | string;
-  bedrooms: number | string;
+  bedrooms: string;
   completeBathrooms: number | string;
   partialBathrooms: number | string;
   TheApproximateAreaOfTheResidentialZone: number | string;
@@ -325,7 +339,7 @@ export type GeneralStepType = {
   GarageSpaces: number | string;
   DescriptionOfTheGarage: string;
   Furniture: string;
-  Elevator: number | string;
+  Elevator: string;
   ParkingLotArea: number | string;
   CarParkDescription: string;
   Pets: string;
@@ -361,27 +375,29 @@ export const generalStepInitialValues: GeneralStepType = {
   // first accordion
   city: "",
   district: "",
+  propertyId: "",
   geoArea: "",
-  province: "",
+  state: "",
   zone: "",
   streetName: "",
   streetNumber: "",
   streetType: "",
   branchName: "",
-  branchCode: "",
   startDirection: "",
   endDirection: "",
   postalCode: "",
   development: "",
+  subDivisionCode: "",
   buildingDesign: "",
   buildingNumber: "",
+  buildingCompanyName: "",
   buildingName: "",
-  totalFloorsInOwnership: null,
-  totalFloorsInProperty: null,
-  propertyFloor: null,
-  unitsInBuilding: null,
-  unitsInCompound: null,
-  yearBuilt: null,
+  totalFloorsInOwnership: "",
+  totalFloorsInProperty: "",
+  propertyFloor: "",
+  unitsInBuilding: "",
+  unitsInCompound: "",
+  yearBuilt: "",
   legalDescription: "",
   section: "",
   municipality: "",
