@@ -35,6 +35,7 @@ export const generalStepSchema = Joi.object({
     .label("رقم تعريف العقار"),
   geoArea: Joi.object({ value: Joi.string() })
     .unknown()
+    .required()
     .messages(VALIDATION_MESSAGES)
     .label("المنطقة الجغرافية"),
   state: Joi.object({ value: Joi.string() })
@@ -42,7 +43,7 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الولاية"),
-  zone: Joi.string().required().messages(VALIDATION_MESSAGES).label("النطاق"),
+    Zoningcode: Joi.string().messages(VALIDATION_MESSAGES).label("رمز تقسيم المناطق"),
   streetName: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -58,14 +59,15 @@ export const generalStepSchema = Joi.object({
   branchName: Joi.string()
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشقة/الفرع"),
-  startDirection: Joi.object({ value: Joi.string() })
+  NameOfTheCompoundOwnershipApartments: Joi.object({ value: Joi.string() })
+    .unknown()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المجمع / شقق التملك"),
+  TheDirectionAfterTheStreetName  : Joi.object({ value: Joi.string() })
     .unknown()
     .messages(VALIDATION_MESSAGES)
-    .label("إتجاه البداية"),
-  endDirection: Joi.object({ value: Joi.string() })
-    .unknown()
-    .messages(VALIDATION_MESSAGES)
-    .label("إتجاه النهاية"),
+    .label("الإتجاه بعد اسم الشارع"),
   postalCode: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -89,19 +91,17 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم شركة البناء"),
-  buildingName: Joi.string()
-    .messages(VALIDATION_MESSAGES)
-    .label("اسم البناء"),
+  buildingName: Joi.string().messages(VALIDATION_MESSAGES).label("اسم البناء"),
   totalFloorsInOwnership: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد الطوابق الكلي في الملكية"),
+    .label("الطوابق الكلية في الملكية"),
   totalFloorsInProperty: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد الطوابق الكلي في العقار"),
-  propertyFloor: Joi.number().messages(VALIDATION_MESSAGES).label("رقم الطابق"),
+    .label("الطوابق الكلية في البناء"),
+  propertyFloor: Joi.number().messages(VALIDATION_MESSAGES).label("طابق العقار"),
   unitsInBuilding: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد العقارات في البناء"),
+    .label("عدد الوحدات في المبنى"),
   unitsInCompound: Joi.number()
     .messages(VALIDATION_MESSAGES)
     .label("عدد العقارات في المجمع"),
@@ -122,11 +122,19 @@ export const generalStepSchema = Joi.object({
   block: Joi.string().messages(VALIDATION_MESSAGES).label("الكتلة"),
   landUnit: Joi.string()
     .messages(VALIDATION_MESSAGES)
-    .label("الأرض / الوحدة العقارية"),
+    .label("القطعة / الوحدة العقارية"),
   moreGeneralOptions: Joi.array()
     .items(Joi.object({ value: Joi.string() }).unknown())
     .messages(VALIDATION_MESSAGES)
     .label("خيارات إضافية"),
+  TheDirectionBeforeTheStreetName: Joi.string().label("الإتجاه قبل اسم الشارع"),
+  UnitApartmentNumber: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم الوحدة / الشقة"),
+    Residentialplan: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المخطط السكني"),
 
   // second accordion fields
   propertyStatus: Joi.object({ value: Joi.string() })
@@ -298,13 +306,13 @@ export type GeneralStepType = {
   propertyId: string;
   geoArea: string;
   state: string;
-  zone: string;
+  Zoningcode: string;
   streetName: string;
   streetNumber: string;
   streetType: string;
   branchName: string;
-  startDirection: string;
-  endDirection: string;
+  NameOfTheCompoundOwnershipApartments: string;
+  TheDirectionAfterTheStreetName  : string;
   postalCode: string;
   development: string;
   subDivisionCode: string;
@@ -326,6 +334,9 @@ export type GeneralStepType = {
   block: string;
   moreGeneralOptions: [];
   landUnit: string;
+  TheDirectionBeforeTheStreetName: string;
+  UnitApartmentNumber: string;
+  Residentialplan: string;
 
   // second accordion
   propertyStatus: string;
@@ -378,13 +389,13 @@ export const generalStepInitialValues: GeneralStepType = {
   propertyId: "",
   geoArea: "",
   state: "",
-  zone: "",
+  Zoningcode: "",
   streetName: "",
   streetNumber: "",
   streetType: "",
   branchName: "",
-  startDirection: "",
-  endDirection: "",
+  NameOfTheCompoundOwnershipApartments: "",
+  TheDirectionAfterTheStreetName  : "",
   postalCode: "",
   development: "",
   subDivisionCode: "",
@@ -406,6 +417,9 @@ export const generalStepInitialValues: GeneralStepType = {
   block: "",
   moreGeneralOptions: [],
   landUnit: "",
+  TheDirectionBeforeTheStreetName: "",
+  UnitApartmentNumber: "",
+  Residentialplan: "",
 
   // second accordion
   propertyStatus: "",
