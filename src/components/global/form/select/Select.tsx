@@ -216,7 +216,13 @@ function Select<T extends FieldValues>({
             isDisabled ? "text-placeholder" : " text-primary-fg"
           } transition-all`}
         >
-          {label}
+          <div>
+            {label}
+            {required ? (
+              <span className="text-size24 text-error">{" *"}</span>
+            ) : null}
+          </div>
+
           {toggle ? (
             <Toggle form={form} name={toggle} onChange={() => trigger(name)} />
           ) : null}

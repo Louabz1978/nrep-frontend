@@ -119,7 +119,12 @@ function Input<T extends FieldValues>({
             {/* checkbox presentation */}
             <div className="w-[20px] max-w-[20px] min-w-[20px] h-[20px] max-h-[20px] min-h-[20px] bg-secondary-background rounded-sm right-[2px] peer-checked:bg-secondary-foreground transition-all duration-[0.1s]"></div>
 
-            <div>{label}</div>
+            <div>
+              {label}
+              {required ? (
+                <span className="text-size24 text-error">{" *"}</span>
+              ) : null}
+            </div>
             {element ? element : null}
           </label>
           {getError(errors, name) ? (
@@ -141,6 +146,9 @@ function Input<T extends FieldValues>({
               className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
             >
               {label}
+              {required ? (
+                <span className="text-size24 text-error">{" *"}</span>
+              ) : null}
             </label>
           ) : null}
 
