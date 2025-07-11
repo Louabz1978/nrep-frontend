@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center hover:brightness-[115%] justify-center whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer disabled:!cursor-not-allowed transition-all duration-[0.3s]",
+  "inline-flex items-center gap-[10px] hover:brightness-[115%] justify-center whitespace-nowrap focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer disabled:!cursor-not-allowed transition-all duration-[0.3s]",
   {
     variants: {
       variant: {
@@ -36,10 +36,10 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         login: " rounded-[18px] h-[50px]",
-        icon: "h-9 w-9 flex justify-center items-center !p-0",
+        icon: "!p-0 flex justify-center items-center !size-[35px] rounded-[7px]",
         "icon-circle":
           "h-[32px] w-[32px] flex justify-center items-center rounded-full !p-0",
-        "panel-icon": "h-[36px] w-[36px] flex justifyContent interface !p-0",
+        "panel-icon": "h-[36px] w-[36px] flex justify-center interface !p-0",
       },
       status: {
         default: "",

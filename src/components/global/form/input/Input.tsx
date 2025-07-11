@@ -8,7 +8,7 @@ import {
   type Path,
   type PathValue,
 } from "react-hook-form";
-import { IoInformationCircleOutline } from "react-icons/io5";
+import Info from "../../modal/Info";
 
 interface InputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -242,9 +242,7 @@ function Input<T extends FieldValues>({
               </div>
 
               {/* beside element */}
-              {info ? (
-                <IoInformationCircleOutline className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]" />
-              ) : null}
+              {info ? <Info info={info} /> : null}
             </div>
 
             {/* validation errors  */}

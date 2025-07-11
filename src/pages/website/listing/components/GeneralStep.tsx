@@ -225,10 +225,10 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label="الإتجاه قبل اسم الشارع"
-                choices={cityChoices}
+                choices={geoDirections}
                 showValue="label"
                 keyValue="value"
-                name="city"
+                name="TheDirectionBeforeTheStreetName"
                 placeholder="اختر الإتجاه قبل اسم الشارع"
                 info="اختر الإتجاه قبل اسم الشارع التي يقع فيها العقار"
               />
@@ -256,7 +256,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 choices={cityChoices}
                 keyValue="value"
                 showValue="label"
-                name="endDirection"
+                name="TheDirectionAfterTheStreetName"
                 placeholder="اختر اتجاه النهاية"
                 info="حدد الإتجاه بعد اسم الشارع للعقار"
               />
@@ -264,8 +264,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 form={form}
                 label="رقم الوحدة / الشقة"
                 placeholder="ادخل رقم الوحدة / الشقة"
-                name="branchName"
+                name="UnitApartmentNumber"
                 info="ادخل رقم الوحدة / الشقة الرئيسي للعقار"
+                
               />
               <Select
                 form={form}
@@ -306,20 +307,21 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 name="geoArea"
                 placeholder="اختر المنطقة الجغرافية"
                 info="حدد المنطقة الجغرافية"
+                required
               />
 
               <Input
                 form={form}
                 label="رمز تقسيم المناطق"
                 placeholder="ادخل رمز التقسيم"
-                name="zone"
+                name="Zoningcode"
                 info="true"
               />
               <Input
                 form={form}
                 label="المخطط السكني"
                 placeholder="ادخل المخطط السكني"
-                name="development"
+                name="Residentialplan"
                 info="ادخل المخطط السكني (إن وجد)"
                 required
               />
@@ -330,7 +332,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 choices={geoDirections}
                 showValue="label"
                 keyValue="value"
-                name="startDirection"
+                name="NameOfTheCompoundOwnershipApartments"
                 placeholder="اختر اسم المجمع"
                 info="حدد اسم المجمع"
                 required
