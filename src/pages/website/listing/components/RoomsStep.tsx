@@ -122,6 +122,7 @@ function RoomsStep({ form, setCurrentStep }: RoomsStepProps) {
               );
             })}
 
+            {/* empty conten */}
             {!controlledRooms?.length ? (
               <div className="text-primary-fg bg-tertiary-bg rounded-b-[8px] font-medium text-size20 py-[16px] text-center">
                 لم تتم إضافة أي غرفة
