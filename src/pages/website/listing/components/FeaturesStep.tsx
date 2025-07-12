@@ -25,21 +25,16 @@ interface FeaturesStepProps {
   // form: UseFormReturn<any>;
   form: UseFormReturn<FeaturesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
-  handleSubmitForm: () => void;
 }
 
-function FeaturesStep({
-  form,
-  setCurrentStep,
-  handleSubmitForm,
-}: FeaturesStepProps) {
+function FeaturesStep({ form, setCurrentStep }: FeaturesStepProps) {
   // extract form utils
   const { handleSubmit } = form;
 
   // handle submit form
-  const onSubmit = () => {
+  const onSubmit = (data: FeaturesStepType) => {
     setCurrentStep((prev) => prev + 1);
-    handleSubmitForm?.();
+    console.log(data);
   };
 
   return (
@@ -61,6 +56,7 @@ function FeaturesStep({
             placeholder={"اختر وجود غرفة ضيوف"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -72,6 +68,7 @@ function FeaturesStep({
             placeholder={"مؤمن بالكامل"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -83,6 +80,7 @@ function FeaturesStep({
             placeholder={"ملعب كرة قدم"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -94,6 +92,7 @@ function FeaturesStep({
             placeholder={"غرف نوم موزعة"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -105,6 +104,7 @@ function FeaturesStep({
             placeholder={"موافقة المشتري"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -116,6 +116,7 @@ function FeaturesStep({
             placeholder={"إختر الإطلالة"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -127,6 +128,7 @@ function FeaturesStep({
             placeholder={"إختر معلومات الميناء"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -138,6 +140,7 @@ function FeaturesStep({
             placeholder={"إختر طريقة الحماية من العواصف"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -150,6 +153,7 @@ function FeaturesStep({
             placeholder={"مسبح أرضي"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -162,6 +166,7 @@ function FeaturesStep({
             placeholder={"مسبح أرضي"}
             multiple={true}
             info={"hello"}
+            required
           />
           <Select
             form={form}
@@ -173,6 +178,7 @@ function FeaturesStep({
             placeholder={"إختر الشروط"}
             multiple={true}
             info={"hello"}
+            required
           />
         </div>
         {/* Next Button */}

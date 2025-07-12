@@ -13,7 +13,8 @@ const VALIDATION_MESSAGES: Record<string, string> = {
   "string.uri": "حقل {{#label}} يجب أن يكون رابط صالح.",
   "string.pattern.base": `حقل {{#label}} يجب  أن يطابق النمط المطلوب {{#regex}}.`,
   "string.pattern.name":
-    "حقل {{#label}} يجب أن يحتوي على أحرف وأرقام وشرطات سفلية فقط.",
+    "الحقل {{#label}} يجب أن يطابق النمط التالي: {{#name}}",
+  "string.pattern.invert": "حقل حتوي على أحرف وأرقام وشرطات سفلية فقط.",
   "string.pattern.phone": "حقل {{#label}} يجب أن يكون رقم هاتف صالح.",
   "string.pattern.zip": "حقل {{#label}} يجب أن يكون رقم بريدي صالح.",
 
