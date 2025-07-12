@@ -17,63 +17,72 @@ import FieldsArrayContainer, {
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { roomTypes } from "@/data/website/GeneralData";
+
+// Define props interface for the RoomsStep component
 interface RoomsStepProps {
-  form: UseFormReturn<RoomsStepType>;
-  setCurrentStep: Dispatch<SetStateAction<number>>;
+  form: UseFormReturn<RoomsStepType>; // Form methods from react-hook-form
+  setCurrentStep: Dispatch<SetStateAction<number>>; // Function to update current step
+  handleSubmitForm: () => void; // handle submit all steps
 }
 
-// rooms step component
-function RoomsStep({ form, setCurrentStep }: RoomsStepProps) {
-  // extract form utils
+// Main component for the Rooms step in a multi-step form
+function RoomsStep({ form, setCurrentStep, handleSubmitForm }: RoomsStepProps) {
+  // Extract form submission handler
   const { handleSubmit } = form;
 
-  // rooms fields array
+  // Initialize field array for dynamic rooms management
   const rooms = useFieldArray({
-    name: "rooms",
-    control: form.control,
-    keyName: "id",
+    name: "rooms", // Name of the field array in the form
+    control: form.control, // Form control from react-hook-form
+    keyName: "id", // Custom key name for array items
   });
+
+  // Watch all rooms fields to keep UI in sync
   const controlledRooms = form.watch("rooms");
 
-  // rooms table header titles
+  // Memoized table header titles to prevent unnecessary re-renders
   const RoomsTitles = useMemo(
     () => [
       { name: "نوع الغرفة" },
       { name: "عرض الغرفة" },
       { name: "طول الغرفة" },
-      { name: "", className: "!col-span-1" },
+      { name: "", className: "!col-span-1" }, // Empty header for actions column
     ],
     []
   );
 
-  const onSubmit = () => {
+  // Form submission handler - moves to next step
+  const onSubmit = (data: RoomsStepType) => {
     setCurrentStep((prev) => prev + 1);
+    handleSubmitForm?.();
+    console.log(data);
   };
 
   return (
     <PageContainer className="flex-1 h-full overflow-auto">
+      {/* Form container with submit handler */}
       <form
         id="general_step_form"
         className="flex flex-col p-[48px] gap-[80px] h-full"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {/* header */}
+        {/* Form header */}
         <h3 className="text-primary-fg text-size40 font-bold w-full text-center">
           الغرف والمساحات
         </h3>
 
-        {/* body container */}
+        {/* Main content container */}
         <div className="w-full flex flex-col flex-1 gap-[30px]">
-          {/* fields table */}
+          {/* Fields array table container */}
           <FieldsArrayContainer>
-            {/* header */}
+            {/* Table header row */}
             <FieldsArrayHeaderContainer titles={RoomsTitles} />
 
-            {/* rows */}
+            {/* Dynamic rows for each room */}
             {controlledRooms?.map((_item, index) => {
               return (
                 <FieldsArrayRowContainer key={rooms?.fields?.[index]?.id}>
-                  {/* type */}
+                  {/* Room type select field */}
                   <FieldsArrayRowCell>
                     <Select
                       form={form}
@@ -87,7 +96,7 @@ function RoomsStep({ form, setCurrentStep }: RoomsStepProps) {
                     />
                   </FieldsArrayRowCell>
 
-                  {/* width */}
+                  {/* Room width input field */}
                   <FieldsArrayRowCell>
                     <Input
                       form={form}
@@ -99,7 +108,7 @@ function RoomsStep({ form, setCurrentStep }: RoomsStepProps) {
                     />
                   </FieldsArrayRowCell>
 
-                  {/* length */}
+                  {/* Room length input field */}
                   <FieldsArrayRowCell>
                     <Input
                       form={form}
@@ -111,18 +120,18 @@ function RoomsStep({ form, setCurrentStep }: RoomsStepProps) {
                     />
                   </FieldsArrayRowCell>
 
-                  {/* actions */}
+                  {/* Remove button for this row */}
                   <FieldsArrayRowCell className="!col-span-1">
                     <FieldsArrayRemoveButton
-                      remove={rooms.remove}
-                      index={index}
+                      remove={rooms.remove} // Remove function from useFieldArray
+                      index={index} // Current row index
                     />
                   </FieldsArrayRowCell>
                 </FieldsArrayRowContainer>
               );
             })}
 
-            {/* empty conten */}
+            {/* Empty state message when no rooms added */}
             {!controlledRooms?.length ? (
               <div className="text-primary-fg bg-tertiary-bg rounded-b-[8px] font-medium text-size20 py-[16px] text-center">
                 لم تتم إضافة أي غرفة
@@ -130,16 +139,18 @@ function RoomsStep({ form, setCurrentStep }: RoomsStepProps) {
             ) : null}
           </FieldsArrayContainer>
 
-          {/* add row button */}
+          {/* Button to add new room row */}
           <FieldsArrayAddButton
-            append={rooms.append}
-            initialValues={roomInitailValues}
+            append={rooms.append} // Append function from useFieldArray
+            initialValues={roomInitailValues} // Default values for new room
           />
         </div>
 
-        {/* buttons */}
+        {/* Navigation buttons */}
         <div className="flex justify-between w-full gap-4 px-[107px]">
+          {/* Previous step button */}
           <PreviouseButton setCurrentStep={setCurrentStep} />
+          {/* Next step button (submits the form) */}
           <NextButton id={"general_step_form"} />
         </div>
       </form>

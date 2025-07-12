@@ -235,13 +235,13 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         ) : currentStep == 1 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 2 ? (
-          <FeaturesStep
-            form={featuresStep}
+          <FeaturesStep form={featuresStep} setCurrentStep={setCurrentStep} />
+        ) : currentStep == 3 ? (
+          <RoomsStep
+            form={roomsStep}
             setCurrentStep={setCurrentStep}
             handleSubmitForm={handleSubmitForm}
           />
-        ) : currentStep == 3 ? (
-          <RoomsStep form={roomsStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 4 ? (
           <FinancialStep />
         ) : currentStep == 5 ? (

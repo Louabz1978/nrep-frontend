@@ -81,7 +81,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const [isOpenThird, setIsOpenThird] = useState(false);
 
   const [markerPosition, setMarkerPosition] = useState<[number, number]>([
-    34.7324, 36.7131,
+    34.7324273, 36.7136959,
   ]);
   const [isSatelliteView, setIsSatelliteView] = useState(false);
   const [isManualMode, setIsManualMode] = useState(false);
@@ -90,8 +90,10 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const toggleStateSecond = () => setIsOpenSecond((prev) => !prev);
   const toggleStateThird = () => setIsOpenThird((prev) => !prev);
 
-  const onSubmit = () => {
+  // handle submit form
+  const onSubmit = (data: GeneralStepType) => {
     setCurrentStep((prev) => prev + 1);
+    console.log(data);
   };
 
   // choose the location on the map by clicking on the map
@@ -172,15 +174,12 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   });
 
   const lat = watch("latitude");
-  const long = watch("longitude");
+  const lng = watch("longitude");
   useEffect(() => {
-    const lat = watch("latitude");
-    const lng = watch("longitude");
-
     if (lat && lng && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
       setMarkerPosition([Number(lat), Number(lng)]);
     }
-  }, [watch, lat, long]);
+  }, [watch, lat, lng]);
 
   return (
     <PageContainer className="flex-1 h-full overflow-auto">

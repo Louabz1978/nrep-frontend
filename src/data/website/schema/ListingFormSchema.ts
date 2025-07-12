@@ -4,6 +4,10 @@ import type { Path } from "react-hook-form";
 
 // optionSchema
 export const optionSchema = Joi.object({ value: Joi.string() }).unknown();
+export const urlSchema = Joi.string().regex(
+  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+  { name: "https://any-domain.com" }
+);
 export type TEmpty = null | undefined;
 export type TString = string | null | undefined;
 export type TNumber = number | null | undefined;
@@ -336,11 +340,11 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اتجاه الواجهة الخلفية"),
-  virtualTour1: Joi.string()
+  virtualTour1: urlSchema
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("رابط الجولة الإفتراضية"),
-  virtualTour2: Joi.string()
+  virtualTour2: urlSchema
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("رابط الجولة الإفتراضية 2"),
@@ -587,7 +591,7 @@ const selectElementSchema = Joi.object({
 
 export const featuresStepSchema = Joi.object({
   guestRoom: Joi.array()
-    .required()
+    .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("غرف إضافية"),
   safty: Joi.array()

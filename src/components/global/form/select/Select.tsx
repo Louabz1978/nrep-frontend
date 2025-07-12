@@ -239,7 +239,7 @@ function Select<T extends FieldValues>({
         >
           <div>
             {label}
-            {required ? (
+            {required && !isDisabled ? (
               <span className="text-size24 text-error">{" *"}</span>
             ) : null}
           </div>
