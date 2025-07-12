@@ -1,4 +1,4 @@
-function ErrorComponent({ error }: { error?: any }) {
+function ErrorComponent({ error }: { error?: Error }) {
   console.log(error);
   return (
     <div className="col-span-full flex-1">

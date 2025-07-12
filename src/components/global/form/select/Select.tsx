@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEventHandler,
+  type ReactNode,
+} from "react";
 import ErrorComponent from "../../error/ErrorComponent";
 import Loader from "../../loader/Loader";
 import { FaXmark } from "react-icons/fa6";
@@ -22,24 +28,26 @@ interface SelectProps<T extends FieldValues> {
   name: Path<T>;
   label?: string;
   labelStyle?: string;
-  element?: React.ReactNode;
+  element?: ReactNode;
   disabled?: boolean;
-  choices?: any[];
+  choices?: Array<Record<string, ReactNode> | string>;
   showValue?: string;
   keyValue?: string;
   isLoading?: boolean;
   isError?: boolean;
-  emptyValue?: any;
+  emptyValue?: null | undefined | "";
   addingStyle?: string;
   addingInputStyle?: string;
   addingSelectStyle?: string;
-  addingElement?: (data: { isOpen: boolean }) => React.ReactNode;
-  choiceElement?: (data: { choice: any }) => React.ReactNode;
+  addingElement?: (data: { isOpen: boolean }) => ReactNode;
+  choiceElement?: (data: {
+    choice: Record<string, ReactNode> | string;
+  }) => ReactNode;
   multiple?: boolean;
   preventRemove?: boolean;
-  belowComponent?: () => React.ReactNode;
+  belowComponent?: () => ReactNode;
   formId?: string;
-  query?: any;
+  query?: unknown;
   info?: string | ReactNode;
   toggle?: Path<T>;
   required?: boolean;
@@ -73,7 +81,7 @@ function Select<T extends FieldValues>({
   required,
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
-  const clickRef = useRef<HTMLDivElement>(null);
+  const clickRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => handleClickOutside(clickRef, setIsOpen, null), []);
   const {
     watch,
@@ -85,23 +93,29 @@ function Select<T extends FieldValues>({
   const isDisabled = disabled || (toggle && !watch(toggle));
 
   // handle choice click
-  function handleChoiceClick(e: React.MouseEvent, choice: any, key?: number) {
+  function handleChoiceClick(
+    e: MouseEvent,
+    choice: Record<string, ReactNode> | string,
+    key?: number
+  ) {
     if ((e?.target as HTMLElement)?.id == "prevent-click") return;
     let finalChoice = choice;
-    if (typeof choice == "string") {
-      const [rtlPart, ltrPart] = finalChoice.split(" - ");
-      if (ltrPart) finalChoice = `${ltrPart} - ${rtlPart}`;
+    if (typeof finalChoice == "string") {
+      const [rtlPart, ltrPart] = (finalChoice as string).split(" - ");
+      if (ltrPart) (finalChoice as string) = `${ltrPart} - ${rtlPart}`;
     }
 
     const isChoosen = multiple
       ? keyValue
         ? (watch(name) ?? []).filter(
-            (ele: any) =>
-              ele?.[showValue as string] == finalChoice?.[showValue as string]
+            (ele: Record<string, ReactNode>) =>
+              ele?.[showValue as string] ==
+              (finalChoice as Record<string, ReactNode>)?.[showValue as string]
           )?.length
-        : watch(name)?.includes(finalChoice)
+        : (watch(name) as string)?.includes(finalChoice as string)
       : keyValue
-      ? finalChoice[keyValue] == watch(name)?.[keyValue]
+      ? (finalChoice as Record<string, ReactNode>)[keyValue] ==
+        (watch(name) as Record<string, ReactNode>)?.[keyValue]
       : finalChoice == watch(name);
 
     // remove
@@ -110,31 +124,38 @@ function Select<T extends FieldValues>({
       // if multiple
       if (multiple) {
         if (keyValue) {
-          const index = watch(name).findIndex(
-            (ele: any) => ele[keyValue] == finalChoice[keyValue]
+          const index = (watch(name) as Record<string, ReactNode>[]).findIndex(
+            (ele: Record<string, ReactNode>) =>
+              ele[keyValue] ==
+              (finalChoice as Record<string, ReactNode>)[keyValue]
           );
-          const newValue = [...watch(name)];
+          const newValue = [...(watch(name) ?? [])];
           newValue.splice(index, 1);
           setValue(name, newValue as PathValue<T, Path<T>>);
         } else {
-          const index = watch(name).findIndex((ele: any) => ele == finalChoice);
-          const newValue = [...watch(name)];
+          const index = (watch(name) as string[]).findIndex(
+            (ele: string) => ele == finalChoice
+          );
+          const newValue = [...(watch(name) ?? [])];
           newValue.splice(index, 1);
           setValue(name, newValue as PathValue<T, Path<T>>);
         }
       }
       // single
-      else setValue(name, emptyValue);
+      else setValue(name, emptyValue as PathValue<T, Path<T>>);
     }
     // add
     else {
       // multiple
       if (multiple) {
-        setValue(name, [...watch(name), finalChoice] as PathValue<T, Path<T>>);
+        setValue(name, [...(watch(name) ?? []), finalChoice] as PathValue<
+          T,
+          Path<T>
+        >);
       }
       // single
       else {
-        setValue(name, finalChoice);
+        setValue(name, finalChoice as PathValue<T, Path<T>>);
         setIsOpen(false);
       }
     }
@@ -154,9 +175,9 @@ function Select<T extends FieldValues>({
           block: "nearest",
         });
     }
-  }, [focusedChoose, isOpen]);
+  }, [focusedChoose, isOpen, formId, name]);
   // handle press down and up key press
-  function handleKeyDown(e: React.KeyboardEvent) {
+  const handleKeyDown: KeyboardEventHandler<HTMLButtonElement> = (e) => {
     // transition up and down between the options
     if (e.key == "ArrowDown" && !e.ctrlKey) {
       e.preventDefault();
@@ -181,7 +202,7 @@ function Select<T extends FieldValues>({
       // choose the focused option
       if (focusedChoose !== null && isOpen) {
         handleChoiceClick(
-          e as unknown as React.MouseEvent,
+          e as unknown as MouseEvent,
           choices?.[focusedChoose],
           focusedChoose
         );
@@ -191,7 +212,7 @@ function Select<T extends FieldValues>({
     } else if (e.key == "Tab") {
       setIsOpen(false);
     }
-  }
+  };
 
   // scroll to the end of options section when open the select field options
   const ref = useRef<HTMLDivElement>(null);
@@ -266,53 +287,65 @@ function Select<T extends FieldValues>({
               (isArray(watch(name)) && watch(name).length) ? (
                 !multiple ? (
                   showValue ? (
-                    watch(name)[showValue]
+                    (watch(name) as Record<string, ReactNode>)[showValue]
                   ) : (
-                    watch(name)
+                    (watch(name) as string)
                   )
                 ) : showValue ? (
                   <div className="flex flex-1 overflow-auto items-center gap-[8px]">
-                    {watch(name).map((ele: any, index: number) => {
-                      return (
-                        <div
-                          key={index}
-                          className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
-                        >
-                          {ele[showValue]}
+                    {(watch(name) as Record<string, ReactNode>[]).map(
+                      (ele: Record<string, ReactNode>, index: number) => {
+                        return (
+                          <div
+                            key={index}
+                            className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
+                          >
+                            {ele[showValue]}
 
-                          <FaXmark
-                            className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              if (!isDisabled) handleChoiceClick(e, ele);
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
+                            <FaXmark
+                              className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (!isDisabled)
+                                  handleChoiceClick(
+                                    e as unknown as MouseEvent,
+                                    ele
+                                  );
+                              }}
+                            />
+                          </div>
+                        );
+                      }
+                    )}
                   </div>
                 ) : (
                   <div className="flex flex-1 items-center overflow-auto gap-[8px]">
-                    {watch(name).map((ele: any, index: number) => {
-                      return (
-                        <div
-                          key={index}
-                          className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
-                        >
-                          {ele}
+                    {(watch(name) as string[]).map(
+                      (ele: string, index: number) => {
+                        return (
+                          <div
+                            key={index}
+                            className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
+                          >
+                            {ele}
 
-                          <FaXmark
-                            className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              if (!isDisabled) handleChoiceClick(e, ele);
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
+                            <FaXmark
+                              className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (!isDisabled)
+                                  handleChoiceClick(
+                                    e as unknown as MouseEvent,
+                                    ele
+                                  );
+                              }}
+                            />
+                          </div>
+                        );
+                      }
+                    )}
                   </div>
                 )
               ) : (
@@ -332,7 +365,11 @@ function Select<T extends FieldValues>({
                   id={`dont-close`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (!isDisabled) handleChoiceClick(e, watch(name));
+                    if (!isDisabled)
+                      handleChoiceClick(
+                        e as unknown as MouseEvent,
+                        watch(name)
+                      );
                   }}
                 ></div>
               </span>
@@ -390,53 +427,74 @@ function Select<T extends FieldValues>({
               ) : choices?.length == 0 ? (
                 <EmptyContent />
               ) : (
-                choices?.map((choice: any, key: number) => {
-                  let finalChoice = choice;
-                  if (typeof choice == "string") {
-                    const [rtlPart, ltrPart] = finalChoice.split(" - ");
-                    if (ltrPart) finalChoice = `${ltrPart} - ${rtlPart}`;
+                choices?.map(
+                  (choice: Record<string, ReactNode> | string, key: number) => {
+                    let finalChoice = choice;
+                    if (typeof finalChoice == "string") {
+                      const [rtlPart, ltrPart] = (finalChoice as string).split(
+                        " - "
+                      );
+                      if (ltrPart) finalChoice = `${ltrPart} - ${rtlPart}`;
+                    }
+
+                    const isChoosen = multiple
+                      ? keyValue
+                        ? (watch(name) as Record<string, ReactNode>[]).filter(
+                            (ele: Record<string, ReactNode>) =>
+                              ele[showValue as string] ==
+                              (finalChoice as Record<string, ReactNode>)[
+                                showValue as string
+                              ]
+                          )?.length
+                        : (watch(name) as string[])?.includes(
+                            finalChoice as string
+                          )
+                      : keyValue
+                      ? (finalChoice as Record<string, ReactNode>)[keyValue] ==
+                        watch(name)?.[keyValue]
+                      : finalChoice == watch(name);
+
+                    if (
+                      !searchTerm ||
+                      (!showValue &&
+                        (finalChoice as string)?.includes(searchTerm)) ||
+                      (showValue &&
+                        (
+                          (finalChoice as Record<string, ReactNode>)?.[
+                            showValue
+                          ] as string
+                        )?.includes(searchTerm))
+                    )
+                      return (
+                        <div
+                          key={key}
+                          onClick={(e) => {
+                            if (!isDisabled)
+                              handleChoiceClick(
+                                e as unknown as MouseEvent,
+                                choice,
+                                key
+                              );
+                          }}
+                          className={`py-2 px-3 flex items-center cursor-pointer group relative ${
+                            focusedChoose == key
+                              ? "border-solid border border-primary"
+                              : "border-solid border border-transparent"
+                          } ${
+                            isChoosen
+                              ? "bg-secondary/50 rounded-md text-primary-fg"
+                              : "hover:bg-secondary/20 rounded-md text-primary-fg/80"
+                          } transition-all duration-[0.1s]`}
+                          id={`option_${name}_${key}_${formId}`}
+                        >
+                          {showValue
+                            ? (choice as Record<string, ReactNode>)[showValue]
+                            : (choice as ReactNode)}
+                          {choiceElement({ choice })}
+                        </div>
+                      );
                   }
-
-                  const isChoosen = multiple
-                    ? keyValue
-                      ? watch(name).filter(
-                          (ele: any) =>
-                            ele[showValue as string] ==
-                            finalChoice[showValue as string]
-                        )?.length
-                      : watch(name)?.includes(finalChoice)
-                    : keyValue
-                    ? finalChoice[keyValue] == watch(name)?.[keyValue]
-                    : finalChoice == watch(name);
-
-                  if (
-                    !searchTerm ||
-                    (!showValue && finalChoice?.includes(searchTerm)) ||
-                    (showValue &&
-                      finalChoice?.[showValue]?.includes(searchTerm))
-                  )
-                    return (
-                      <div
-                        key={key}
-                        onClick={(e) => {
-                          if (!isDisabled) handleChoiceClick(e, choice, key);
-                        }}
-                        className={`py-2 px-3 flex items-center cursor-pointer group relative ${
-                          focusedChoose == key
-                            ? "border-solid border border-primary"
-                            : "border-solid border border-transparent"
-                        } ${
-                          isChoosen
-                            ? "bg-secondary/50 rounded-md text-primary-fg"
-                            : "hover:bg-secondary/20 rounded-md text-primary-fg/80"
-                        } transition-all duration-[0.1s]`}
-                        id={`option_${name}_${key}_${formId}`}
-                      >
-                        {showValue ? choice[showValue] : choice}
-                        {choiceElement({ choice })}
-                      </div>
-                    );
-                })
+                )
               )}
             </div>
           </div>
@@ -446,7 +504,7 @@ function Select<T extends FieldValues>({
         {isOpen ? (
           <div
             ref={ref}
-            className="absolute top-[240px] h-[10px] w-[10px]"
+            className="absolute top-[280px] h-[10px] w-[10px]"
           ></div>
         ) : null}
 
@@ -459,7 +517,7 @@ function Select<T extends FieldValues>({
       {/* validation errors  */}
       {getError(errors, name) ? (
         <span className="text-error font-medium text-size16">
-          {getError(errors, name)?.message}
+          {(getError(errors, name) as { message: string })?.message}
         </span>
       ) : null}
       {belowComponent ? belowComponent() : null}

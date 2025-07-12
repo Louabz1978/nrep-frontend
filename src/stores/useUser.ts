@@ -7,13 +7,13 @@ import jsonParse from "@/utils/jsonParse";
 
 const userAtom = atom<User | null>(
   // Initial value from localStorage
-  jsonParse(secureLocalStorage.getItem("USER")) as User | null
+  jsonParse(secureLocalStorage.getItem("USER") as string) as User | null
 );
 
 // Create a derived atom with write capability
 const userWithPersistenceAtom = atom(
   (get) => get(userAtom),
-  (get, set, update: User | null) => {
+  (_get, set, update: User | null) => {
     // Update the atom
     set(userAtom, update);
 

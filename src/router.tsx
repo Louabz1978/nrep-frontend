@@ -1,51 +1,14 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-import jsonParse from "./utils/jsonParse";
-import secureLocalStorage from "react-secure-storage";
-import type { ReactNode } from "react";
-import type { UserType } from "./types/global/user";
+import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
-import TestHome from "./pages/website/TestHome/TestHome";
 import TemplateLayout from "./layouts/template/TemplateLayout";
 import PageContainer from "./components/global/pageContainer/PageContainer";
 import TemplateLogic from "./pages/template/template/TemplateLogic";
 import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
 import ListingLogic from "./pages/website/listing/ListingLogic";
-
-interface PrivateRouteProps {
-  element: ReactNode;
-  role: UserType;
-}
-
-// Prevent user from accessing other user type pages
-const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
-  const isThereToken = secureLocalStorage.getItem("ACCESS_TOKEN");
-  const userType = jsonParse(secureLocalStorage.getItem("USER"))?.data
-    ?.token_type as UserType;
-
-  if (
-    (isThereToken && userType === role) ||
-    role == "allow" ||
-    (!isThereToken && role === undefined)
-  ) {
-    return element;
-  }
-
-  if (!isThereToken) {
-    return <Navigate to="/login" />;
-  }
-
-  switch (userType) {
-    case "admin":
-      return <Navigate to="/admin" />;
-    case "free":
-      return <Navigate to="/" />;
-    default:
-      return <Navigate to="/login" />;
-  }
-};
+import PrivateRoute from "./utils/privateRoute";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -61,17 +24,6 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <>404</>,
-      },
-    ],
-  },
-  // global website pages
-  {
-    path: "/",
-    element: <PrivateRoute element={<WebsiteLayout />} role={"allow"} />,
-    children: [
-      {
-        index: true,
-        element: <TestHome />,
       },
     ],
   },

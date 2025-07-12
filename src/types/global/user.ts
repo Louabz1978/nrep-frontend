@@ -1,5 +1,6 @@
 export interface User {
   userType?: string;
+  access_token?: string;
   permissions?: string[];
 }
 

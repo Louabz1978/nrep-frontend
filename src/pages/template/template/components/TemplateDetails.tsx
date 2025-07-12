@@ -16,7 +16,7 @@ function TemplateDetails({
 }: TemplateDetailsProps) {
   useEffect(() => {
     setCurrentTemplate(id);
-  }, []);
+  }, [setCurrentTemplate, id]);
 
   if (templateDetails?.data?.id != 11)
     return (
@@ -31,7 +31,7 @@ function TemplateDetails({
         return (
           <div key={index} className="flex items-center gap-1">
             <span className="font-bold">{key}:</span>
-            <span>{templateDetails?.data?.[key]}</span>
+            <span>{(templateDetails?.data as any)?.[key]}</span>
           </div>
         );
       })}

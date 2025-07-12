@@ -18,7 +18,7 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { roomTypes } from "@/data/website/GeneralData";
 interface RoomsStepProps {
-  form: UseFormReturn<RoomsStepType, any, RoomsStepType>;
+  form: UseFormReturn<RoomsStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 

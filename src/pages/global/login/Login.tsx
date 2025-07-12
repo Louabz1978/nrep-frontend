@@ -12,11 +12,9 @@ import type { UseMutationResult } from "@tanstack/react-query";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Link } from "react-router-dom";
 
-interface LoginProps {
+interface LoginProps<T> {
   login: UseMutationResult<
-    {
-      user: any;
-    },
+    T,
     Error,
     {
       data: LoginFormType;
@@ -28,7 +26,7 @@ interface LoginProps {
 
 // login page
 // gets: login mutation, handleLogin method
-const Login = ({ login, handleLogin }: LoginProps) => {
+function Login<T>({ login, handleLogin }: LoginProps<T>) {
   // form control methods
   const form = useForm({
     resolver: joiResolver(LOGIN_FORM_SCHEMA),
@@ -122,6 +120,6 @@ const Login = ({ login, handleLogin }: LoginProps) => {
       </div>
     </PageContainer>
   );
-};
+}
 
 export default Login;

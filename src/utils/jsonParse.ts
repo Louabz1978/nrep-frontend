@@ -1,4 +1,6 @@
-export default function jsonParse(string: any) {
+export default function jsonParse(
+  string: string | { [key: string]: unknown }
+): { [key: string]: unknown } {
   let res = string;
 
   try {
@@ -6,7 +8,8 @@ export default function jsonParse(string: any) {
       res = JSON.parse(res);
     }
   } catch (err) {
-    return res;
+    console.log(err);
+    return res as { [key: string]: unknown };
   }
 
   return res;

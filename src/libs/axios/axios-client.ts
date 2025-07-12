@@ -14,7 +14,8 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const token = jsonParse(secureLocalStorage.getItem("ACCESS_TOKEN"))?.data;
+  const token = jsonParse(secureLocalStorage.getItem("ACCESS_TOKEN") as string)
+    ?.data;
   // check if the api call require token and put it in header
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -22,7 +23,8 @@ axiosClient.interceptors.request.use((config) => {
 
   // pass locale to backend
   config.headers["Accept-Language"] =
-    jsonParse(secureLocalStorage.getItem("USER_LOCALE"))?.data ?? "en";
+    jsonParse(secureLocalStorage.getItem("USER_LOCALE") as string)?.data ??
+    "en";
 
   return config;
 });

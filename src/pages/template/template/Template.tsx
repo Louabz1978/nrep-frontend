@@ -49,7 +49,6 @@ function Template({
   setSize,
   templateDetails,
   setCurrentTemplate,
-  currentTemplate,
   deleteTemplate,
   handleDeleteTemplate,
   setFilter,
@@ -61,9 +60,9 @@ function Template({
   const [currentLayout, setCurrentLayout] = useState<boolean>(true);
 
   // current open TemplateDetails
-  const [currentOpenTemplate, setCurrentOpenTemplate] = useState<number | null>(
-    null
-  );
+  const [currentOpenTemplate, setCurrentOpenTemplate] = useState<
+    number | null | boolean
+  >(null);
 
   console.log(templates?.data?.data);
 

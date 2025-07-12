@@ -59,7 +59,7 @@ export default [
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/unbound-method": "off",
       "@typescript-eslint/restrict-template-expressions": "off",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-floating-promises": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-useless-escape": "off",
@@ -67,6 +67,7 @@ export default [
       "@typescript-eslint/nprefer-const": "off",
       "nprefer-const": "off",
       "@typescript-eslint/no-empty-object-type": "off",
+      "@typescript-eslint/no-floating-promises": "off",
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         {

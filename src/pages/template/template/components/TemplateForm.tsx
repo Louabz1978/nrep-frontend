@@ -8,7 +8,6 @@ import { FEATURES, GENDER, LEVELS } from "@/data/global/enums";
 import {
   TEMPLATE_FORM_SCHEMA,
   TEMPLATE_FORM_SCHEMA_INITIAL_VALUES,
-  type TemplateFormType,
 } from "@/data/template/template/templateFormSchema";
 import cleanValues from "@/utils/cleanValues";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -25,7 +24,7 @@ export interface TemplateFormProps {
     editTemplateFunctionProps,
     unknown
   >;
-  data: TemplateFormType & { id?: number };
+  data: any;
 }
 function TemplateForm({
   handleAdd,

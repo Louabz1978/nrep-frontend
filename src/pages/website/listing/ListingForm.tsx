@@ -52,18 +52,21 @@ interface ListingFormProps {
     offices: OfficesStepType;
     remarks: RemarksStepType;
   };
-  listingResources: UseQueryResult<any>;
+  listingResources: UseQueryResult<unknown[]>;
 }
 
 // listing form page, gets: default values for each step in the form
-function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
+function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(0);
 
   // status step form
   const statusStep = useForm({
     resolver: joiResolver(statusStepSchema),
-    defaultValues: cleanValues(statusStepInitialValues, defaultValues?.status),
+    defaultValues: cleanValues<StatusStepType>(
+      statusStepInitialValues,
+      defaultValues?.status
+    ),
     mode: "onChange",
   });
 
@@ -191,7 +194,15 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
         },
       },
     ],
-    []
+    [
+      statusStep,
+      generalStep,
+      featuresStep,
+      roomsStep,
+      financialStep,
+      compensationStep,
+      officesStep,
+    ]
   );
 
   // handle submit all form steps

@@ -1,11 +1,11 @@
 import { type ReactNode } from "react";
 import {
-  type FieldErrors,
   type UseFormReturn,
   type FieldValues,
   type Path,
 } from "react-hook-form";
 import Info from "../../modal/Info";
+import getError from "@/utils/getErrors";
 
 interface TextareaProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -44,17 +44,6 @@ function Textarea<T extends FieldValues>({
     register,
     formState: { errors },
   } = form;
-
-  function getError(errors: FieldErrors | undefined, name: string): any {
-    let res: any = false;
-    let currentErrors: any = errors;
-    const names = name?.split(".");
-    names?.map((subName) => {
-      res = currentErrors?.[subName];
-      currentErrors = currentErrors?.[subName];
-    });
-    return res;
-  }
 
   // helper function to check if field is valid
   function isValid<T extends FieldValues>(form: UseFormReturn<T>): boolean {
@@ -122,7 +111,7 @@ function Textarea<T extends FieldValues>({
           {/* validation errors  */}
           {getError(errors, name) ? (
             <span className="text-error font-medium text-size16">
-              {getError(errors, name)?.message}
+              {(getError(errors, name) as { message: string })?.message}
             </span>
           ) : null}
         </div>
