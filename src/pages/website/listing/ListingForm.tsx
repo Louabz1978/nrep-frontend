@@ -5,14 +5,14 @@ import GeneralStep from "./components/GeneralStep";
 import RoomsStep from "./components/RoomsStep";
 import FeaturesStep from "./components/FeaturesStep";
 import FinancialStep from "./components/FinancialStep";
-import CompensationStep from "./components/CompensationStep";
+import CompensationAndListingOfficesStep from "./components/CompensationandListingOfficesStep";
 import OfficesStep from "./components/OfficesStep";
 import RemarksStep from "./components/RemarksStep";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import {
-  compensationStepInitialValues,
-  compensationStepSchema,
+  compensationAndListingOfficesStepInitialValues,
+  compensationAndListingOfficesStepSchema,
   featuresStepInitialValues,
   featuresStepSchema,
   financialStepInitialValues,
@@ -27,7 +27,7 @@ import {
   roomsStepSchema,
   statusStepInitialValues,
   statusStepSchema,
-  type CompensationStepType,
+  type CompensationAndListingOfficesStepType,
   type FeaturesStepType,
   type FinancialStepType,
   type GeneralStepType,
@@ -48,7 +48,7 @@ interface ListingFormProps {
     rooms: RoomsStepType;
     features: FeaturesStepType;
     financial: FinancialStepType;
-    compensation: CompensationStepType;
+    compensation: CompensationAndListingOfficesStepType;
     offices: OfficesStepType;
     remarks: RemarksStepType;
   };
@@ -58,6 +58,7 @@ interface ListingFormProps {
 // listing form page, gets: default values for each step in the form
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
+
   const [currentStep, setCurrentStep] = useState(0);
 
   // status step form
@@ -107,11 +108,11 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     mode: "onChange",
   });
 
-  // compensation step form
-  const compensationStep = useForm({
-    resolver: joiResolver(compensationStepSchema),
+  // compensation and listing offices step form
+  const compensationAndListingOfficesStep = useForm({
+    resolver: joiResolver(compensationAndListingOfficesStepSchema),
     defaultValues: cleanValues(
-      compensationStepInitialValues,
+      compensationAndListingOfficesStepInitialValues,
       defaultValues?.compensation
     ),
     mode: "onChange",
@@ -173,7 +174,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         },
       },
       {
-        name: "المعلومات العامة",
+        name: "المعلومات المالية",
         onClick: async () => {
           const isValid = await financialStep.trigger();
           if (isValid) setCurrentStep(5);
@@ -182,7 +183,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       {
         name: "الوكيل المسؤول",
         onClick: async () => {
-          const isValid = await compensationStep.trigger();
+          const isValid = await compensationAndListingOfficesStep.trigger();
           if (isValid) setCurrentStep(6);
         },
       },
@@ -200,7 +201,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       featuresStep,
       roomsStep,
       financialStep,
-      compensationStep,
+      compensationAndListingOfficesStep,
       officesStep,
     ]
   );
@@ -213,7 +214,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       ...roomsStep.watch(),
       ...featuresStep.watch(),
       ...financialStep.watch(),
-      ...compensationStep.watch(),
+      ...compensationAndListingOfficesStep.watch(),
       ...officesStep.watch(),
       ...remarksStep.watch(),
     });
@@ -243,9 +244,12 @@ function ListingForm({ defaultValues }: ListingFormProps) {
             handleSubmitForm={handleSubmitForm}
           />
         ) : currentStep == 4 ? (
-          <FinancialStep />
+          <FinancialStep form={financialStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 5 ? (
-          <CompensationStep />
+          <CompensationAndListingOfficesStep
+            form={compensationAndListingOfficesStep}
+            setCurrentStep={setCurrentStep}
+          />
         ) : currentStep == 6 ? (
           <OfficesStep />
         ) : (

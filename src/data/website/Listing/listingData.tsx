@@ -17,3 +17,20 @@ export const StatusOptions = [
     chosenClassName: "!bg-error",
   },
 ];
+export const moreFinancialOptions = [
+  {
+    label: "إلزامية اتحاد المُلّاك",
+    value: "ownersUnionMandatory",
+  },
+];
+
+export const moreRestrictionsOptions = [
+  {
+    label: "إمكانية التأجير بعد تملّك جديد",
+    value: "rentalAllowedAfterNewOwnership",
+  },
+  {
+    label: "وجود حدود على التأجير",
+    value: "rentalLimitationsExist",
+  },
+];
