@@ -1,21 +1,28 @@
 import type { PermissionsType } from "@/stores/useUser";
+import type { IconType } from "react-icons/lib";
+import { MdSettingsInputComponent } from "react-icons/md";
+import { TbListSearch } from "react-icons/tb";
 
-type TabsType = {
+export type TabType = {
   label: string;
   to?: string;
   permission: PermissionsType;
   submenu?: TabsType;
-}[];
+  icon?: IconType;
+};
+type TabsType = TabType[];
 
 export const tabs: TabsType = [
   {
     label: "إدخال",
     to: "/input",
     permission: ["Add Item"],
+    icon: MdSettingsInputComponent,
   },
   {
     label: "قائمتي",
     permission: ["Add Item"],
+    icon: TbListSearch,
     submenu: [
       {
         label: "subTabA",
