@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, type To } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { useUser } from "@/stores/useUser";
 import { TbListSearch } from "react-icons/tb";
@@ -106,7 +106,9 @@ function Navbar() {
       {/* Loop over each tab from tabs data */}
       {tabs.map((tab, index) => {
         // Check if user has permission to see this tab
-        const hasPermission = tab.permission ? checkPermissions(tab.permission) : true;
+        const hasPermission = tab.permission
+          ? checkPermissions(tab.permission)
+          : true;
         if (!hasPermission) return null; // Skip tab if no permission
 
         if (tab.submenu) {
@@ -124,11 +126,15 @@ function Navbar() {
                     setActiveSubTab(null);
                   }
                 }}
-                className={`group flex flex-col items-center px-4 py-2 rounded transition-colors bg-quaternary-bg duration-200 cursor-pointer focus:outline-none ${getTabStyle(tab)} hover:text-primary`}
+                className={`group flex flex-col items-center px-4 py-2 rounded transition-colors bg-quaternary-bg duration-200 cursor-pointer focus:outline-none ${getTabStyle(
+                  tab
+                )} hover:text-primary`}
               >
                 <div className="flex items-center gap-2">
                   <TbListSearch className="w-8 h-8 transition-colors duration-200 group-hover:text-primary" />
-                  <span className="text-2xl transition-colors duration-200 group-hover:text-primary">{tab.label}</span>
+                  <span className="text-2xl transition-colors duration-200 group-hover:text-primary">
+                    {tab.label}
+                  </span>
                   <FiChevronDown
                     className={`w-8 h-8 transition-transform duration-200 group-hover:text-primary ${
                       menuOpen && activeTab === tab.label ? "rotate-180" : ""
@@ -138,7 +144,8 @@ function Navbar() {
                 {/* underline bar below the tab */}
                 <span
                   className={`block h-1 w-full mt-1 rounded-full transition-all duration-200 ${
-                    (menuOpen && activeTab === tab.label) || (menuOpen && tab.to === location.pathname)
+                    (menuOpen && activeTab === tab.label) ||
+                    (menuOpen && tab.to === location.pathname)
                       ? "bg-primary"
                       : "group-hover:bg-primary"
                   }`}
@@ -160,13 +167,16 @@ function Navbar() {
                         <button
                           onClick={() => handleSubMenuToggle(item.label)}
                           className={`group w-full text-right cursor-pointer px-4 py-2 bg-quaternary-bg border-b border-white flex flex-col items-end transition-colors duration-200 focus:outline-none ${
-                            activeSubMenu === item.label || item.to === location.pathname
+                            activeSubMenu === item.label ||
+                            item.to === location.pathname
                               ? "text-primary"
                               : "text-white"
                           } hover:text-primary`}
                         >
                           <div className="flex justify-between items-center gap-2">
-                            <span className="text-[16px] rounded transition-colors duration-200 group-hover:text-primary">{item.label}</span>
+                            <span className="text-[16px] rounded transition-colors duration-200 group-hover:text-primary">
+                              {item.label}
+                            </span>
                             <MdKeyboardArrowDown
                               className={`w-8 h-8 transition-transform duration-200 group-hover:text-primary ${
                                 activeSubMenu === item.label ? "rotate-180" : ""
@@ -186,12 +196,15 @@ function Navbar() {
                                 key={subIdx}
                                 onClick={() => setActiveSubTab(sub.label)}
                                 className={`group w-full text-right text-[12px] px-4 cursor-pointer border-t border-white py-2 transition-colors duration-200 focus:outline-none ${
-                                  activeSubTab === sub.label || sub.to === location.pathname
+                                  activeSubTab === sub.label ||
+                                  sub.to === location.pathname
                                     ? "bg-primary text-white"
                                     : "bg-quaternary-bg text-white"
                                 } hover:bg-primary`}
                               >
-                                <span className="transition-colors duration-200">{sub.label}</span>
+                                <span className="transition-colors duration-200">
+                                  {sub.label}
+                                </span>
                               </button>
                             ))}
                           </div>
@@ -200,15 +213,18 @@ function Navbar() {
                     ) : (
                       // Simple submenu item (link)
                       <Link
-                        to={item.to}
+                        to={item.to as To}
                         onClick={() => setActiveSubTab(item.label)}
                         className={`group w-full text-right px-4 py-2 transition-colors duration-200 rounded-lg focus:outline-none ${
-                          activeSubTab === item.label || item.to === location.pathname
+                          activeSubTab === item.label ||
+                          item.to === location.pathname
                             ? "text-primary"
                             : "text-white"
                         } hover:text-primary`}
                       >
-                        <span className="group-hover:text-primary transition-colors duration-200">{item.label}</span>
+                        <span className="group-hover:text-primary transition-colors duration-200">
+                          {item.label}
+                        </span>
                       </Link>
                     )}
                   </div>
@@ -224,15 +240,21 @@ function Navbar() {
             key={index}
             to={tab.to}
             onClick={() => setActiveTab(tab.label)}
-            className={`group flex flex-col items-center transition-colors text-2xl duration-200 focus:outline-none ${getTabStyle(tab)} hover:text-primary`}
+            className={`group flex flex-col items-center transition-colors text-2xl duration-200 focus:outline-none ${getTabStyle(
+              tab
+            )} hover:text-primary`}
           >
             <div className="flex align-center gap-3">
               <MdSettingsInputComponent className="w-8 h-8 transition-colors duration-200 group-hover:text-primary" />
-              <span className="group-hover:text-primary transition-colors duration-200">{tab.label}</span>
+              <span className="group-hover:text-primary transition-colors duration-200">
+                {tab.label}
+              </span>
             </div>
             <span
               className={`block h-1 w-full mt-1 rounded-full transition-all duration-200 ${
-                activeTab === tab.label || tab.to === location.pathname ? "bg-primary" : "group-hover:bg-primary"
+                activeTab === tab.label || tab.to === location.pathname
+                  ? "bg-primary"
+                  : "group-hover:bg-primary"
               }`}
             ></span>
           </Link>
