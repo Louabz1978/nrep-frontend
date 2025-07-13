@@ -8,7 +8,7 @@ import {
   type Path,
   type PathValue,
 } from "react-hook-form";
-import { IoInformationCircleOutline } from "react-icons/io5";
+import Info from "../../modal/Info";
 
 interface InputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -33,6 +33,7 @@ interface InputProps<T extends FieldValues> {
   info?: string | ReactNode;
   addingValidStyle?: string;
   bottomElement?: string | ReactNode;
+  required?: boolean;
 }
 
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
@@ -60,6 +61,7 @@ function Input<T extends FieldValues>({
   max,
   info,
   bottomElement,
+  required,
 }: InputProps<T>) {
   // to show password
   const [show, setShow] = useState(false);
@@ -117,7 +119,12 @@ function Input<T extends FieldValues>({
             {/* checkbox presentation */}
             <div className="w-[20px] max-w-[20px] min-w-[20px] h-[20px] max-h-[20px] min-h-[20px] bg-secondary-background rounded-sm right-[2px] peer-checked:bg-secondary-foreground transition-all duration-[0.1s]"></div>
 
-            <div>{label}</div>
+            <div>
+              {label}
+              {required ? (
+                <span className="text-size24 text-error">{" *"}</span>
+              ) : null}
+            </div>
             {element ? element : null}
           </label>
           {getError(errors, name) ? (
@@ -139,6 +146,9 @@ function Input<T extends FieldValues>({
               className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
             >
               {label}
+              {required ? (
+                <span className="text-size24 text-error">{" *"}</span>
+              ) : null}
             </label>
           ) : null}
 
@@ -232,9 +242,7 @@ function Input<T extends FieldValues>({
               </div>
 
               {/* beside element */}
-              {info ? (
-                <IoInformationCircleOutline className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]" />
-              ) : null}
+              {info ? <Info info={info} /> : null}
             </div>
 
             {/* validation errors  */}

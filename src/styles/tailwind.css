@@ -133,6 +133,7 @@
   --quaternary-bg: #333333;
   --quinary-bg: #ada7a7;
   --senary-bg: #1c2026; /* Soft graphite */
+  --popup-bg: #14191e;
 
   /* foreground */
   --primary-fg: #333333;
@@ -148,6 +149,7 @@
   --primary-border: #333333;
   --secondary-border: #ada7a7;
   --tertiary-border: #d9d9d9;
+  --quaternary-border: #828282;
 
   /* input */
   --input-bg: #ffffff;
@@ -202,7 +204,6 @@
   --placeholder: #828791; /* Foggy gray */
   --white: #ffffff; /* Pure white */
   --notification-background: #323741; /* Wet concrete */
-  --popup-blur: #14191e; /* Charcoal veil */
 
   /* Shadows (Neutral undertones) */
   --shadow: 0 0.25rem 0.625rem #0f14194d;
@@ -221,7 +222,8 @@
   --tertiary-bg: #ffffff;
   --quaternary-bg: #333333;
   --quinary-bg: #ada7a7;
-  --senary-bg: #1c2026; /* Soft graphite */
+  --senary-bg: #1c2026; 
+  --popup-bg: #14191e;
 
   /* foreground */
   --primary-fg: #333333;
@@ -237,6 +239,7 @@
   --primary-border: #333333;
   --secondary-border: #ada7a7;
   --tertiary-border: #d9d9d9;
+  --quaternary-border: #828282;
 
   /* input */
   --input-bg: #ffffff;
@@ -385,6 +388,7 @@
   --color-quaternary-bg: var(--quaternary-bg);
   --color-quinary-bg: var(--quinary-bg);
   --color-senary-bg: var(--senary-bg);
+  --color-popup-bg: var(--popup-bg);
 
   /* foreground */
   --color-primary-fg: var(--primary-fg);
@@ -400,6 +404,7 @@
   --color-primary-border: var(--primary-border);
   --color-secondary-border: var(--secondary-border);
   --color-tertiary-border: var(--tertiary-border);
+  --color-quaternary-border: var(--quaternary-border);
 
   /* input */
   --color-input-bg: var(--input-bg);

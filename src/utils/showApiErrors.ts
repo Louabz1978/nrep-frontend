@@ -7,18 +7,18 @@ export function showApiErrors(
   console.log({ error });
   try {
     if (error?.code == "ERR_NETWORK" && error?.SHOW_NETWORK_ERROR)
-      return "checkInternet";
+      return "عذراً, حدثت مشكلة في الاتصال";
     else if (error?.code == "ERR_NETWORK") return "serverError";
     else if (error?.code == "ECONNABORTED") return "timeoutError";
     else if (error?.response?.status == 500) {
-      return "serverError";
+      return "حدثت مشكلة في السيرفر";
     } else if (error?.response?.status == 404) {
-      return "404 not found";
+      return "لم يتم العثور على المعلومات";
     } else {
-      return "genericError";
+      return "عذر حدث خطأ ما";
     }
   } catch (err) {
     console.log(err);
-    return "genericError";
+    return "عذراً, حدث خطأ ما";
   }
 }

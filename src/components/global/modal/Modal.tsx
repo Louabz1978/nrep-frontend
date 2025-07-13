@@ -4,8 +4,8 @@ import { type Dispatch, type ReactNode } from "react";
 
 interface ModalProps {
   children: ReactNode;
-  setIsOpen: Dispatch<React.SetStateAction<number | null>>;
-  isOpen: boolean;
+  setIsOpen: Dispatch<React.SetStateAction<number | null | boolean>>;
+  isOpen: boolean | null | number;
   addingStyle?: string;
 }
 
@@ -27,7 +27,7 @@ const Modal = ({
             <motion.div
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
-              className="bg-block-background rounded-[18px] sm:w-max w-[90vw] flex justify-center max-w-[90vw] relative"
+              className="bg-tertiary-bg rounded-[18px] shadow-navbar-shadow sm:w-max w-[90vw] flex justify-center max-w-[90vw] relative"
             >
               {children}
             </motion.div>

@@ -18,7 +18,91 @@ export const statusStepInitialValues = {
 };
 
 // general step -----------------------------------------------------------
-export const generalStepSchema = Joi.object({
+
+export type GeneralStepType = {
+  // first accordion
+  city: string | undefined;
+  district: string;
+  propertyId: string;
+  geoArea: string;
+  state: string;
+  Zoningcode: string;
+  streetName: string;
+  streetNumber: string;
+  streetType: string;
+  branchName: string;
+  NameOfTheCompoundOwnershipApartments: string;
+  TheDirectionAfterTheStreetName: string;
+  postalCode: string;
+  development: string;
+  subDivisionCode: string;
+  buildingDesign: string;
+  buildingNumber: string;
+  buildingCompanyName: string;
+  buildingName: string;
+  totalFloorsInOwnership: number | string;
+  totalFloorsInProperty: number | string;
+  propertyFloor: number | string;
+  unitsInBuilding: number | string;
+  unitsInCompound: number | string;
+  yearBuilt: number | undefined;
+  legalDescription: string;
+  section: string;
+  municipality: string;
+  legalUnit: string;
+  field: string;
+  block: string;
+  moreGeneralOptions: [];
+  landUnit: string;
+  TheDirectionBeforeTheStreetName: string;
+  UnitApartmentNumber: string;
+  Residentialplan: string;
+
+  // second accordion
+  propertyStatus: string;
+  offeredPrice: number | string;
+  bedrooms: string;
+  completeBathrooms: number | string;
+  partialBathrooms: number | string;
+  TheApproximateAreaOfTheResidentialZone: number | string;
+  TheApproximateAreaOfTheTotalRange: number | string;
+  NumberOfCeilingFans: number | string;
+  GarageSpaces: number | string;
+  DescriptionOfTheGarage: string;
+  Furniture: string;
+  Elevator: string;
+  ParkingLotArea: number | string;
+  CarParkDescription: string;
+  Pets: string;
+  maxPetWeight: number | string;
+  maxPetCount: number | string;
+  maxPetBreeding: number | string;
+  maxPetTypes: number | string;
+  landSize: number | string;
+  landBack: number | string;
+  landFront: number | string;
+  landLeft: number | string;
+  landRight: number | string;
+  backDirection: string;
+  virtualTour1: string;
+  virtualTour2: string;
+  ownerName: string;
+  propertyDescription: string;
+  primarySchool: string;
+  middleSchool: string;
+  moreCategoryOptions: [];
+  highSchool: string;
+
+  // third accordion
+  landAreaSource: string | null;
+  landDimensionsSource: string | null;
+  totalAreaSource: string | null;
+  residentialAreaSource: string | null;
+  latitude: number | string;
+  longitude: number | string;
+};
+
+export const generalStepSchema = Joi.object<GeneralStepType>({
   // first accordion fields
   city: Joi.object({ value: Joi.string() })
     .unknown()
@@ -28,17 +112,24 @@ export const generalStepSchema = Joi.object({
   district: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المنطقة"),
-  geoArea: Joi.object({ value: Joi.string() })
-    .unknown()
+    .label("المقاطعة"),
+  propertyId: Joi.string()
+    .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المنطقة الجغرافية"),
-  province: Joi.object({ value: Joi.string() })
+    .label("رقم تعريف العقار"),
+  geoArea: Joi.object({ value: Joi.string() })
     .unknown()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المقاطعة"),
-  zone: Joi.string().required().messages(VALIDATION_MESSAGES).label("النطاق"),
+    .label("المنطقة الجغرافية"),
+  state: Joi.object({ value: Joi.string() })
+    .unknown()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الولاية"),
+  Zoningcode: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رمز تقسيم المناطق"),
   streetName: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -54,15 +145,15 @@ export const generalStepSchema = Joi.object({
   branchName: Joi.string()
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشقة/الفرع"),
-  branchCode: Joi.string().messages(VALIDATION_MESSAGES).label("رمز الفرع"),
-  startDirection: Joi.object({ value: Joi.string() })
+  NameOfTheCompoundOwnershipApartments: Joi.object({ value: Joi.string() })
+    .unknown()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المجمع / شقق التملك"),
+  TheDirectionAfterTheStreetName: Joi.object({ value: Joi.string() })
     .unknown()
     .messages(VALIDATION_MESSAGES)
-    .label("إتجاه البداية"),
-  endDirection: Joi.object({ value: Joi.string() })
-    .unknown()
-    .messages(VALIDATION_MESSAGES)
-    .label("إتجاه النهاية"),
+    .label("الإتجاه بعد اسم الشارع"),
   postalCode: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -71,6 +162,9 @@ export const generalStepSchema = Joi.object({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("التطوير"),
+  subDivisionCode: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رمز التقسيم الفرعي"),
   buildingDesign: Joi.object({ value: Joi.string() })
     .unknown()
     .required()
@@ -79,17 +173,23 @@ export const generalStepSchema = Joi.object({
   buildingNumber: Joi.string()
     .messages(VALIDATION_MESSAGES)
     .label("رقم المبنى"),
+  buildingCompanyName: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم شركة البناء"),
   buildingName: Joi.string().messages(VALIDATION_MESSAGES).label("اسم البناء"),
   totalFloorsInOwnership: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد الطوابق الكلي في الملكية"),
+    .label("الطوابق الكلية في الملكية"),
   totalFloorsInProperty: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد الطوابق الكلي في العقار"),
-  propertyFloor: Joi.number().messages(VALIDATION_MESSAGES).label("رقم الطابق"),
+    .label("الطوابق الكلية في البناء"),
+  propertyFloor: Joi.number()
+    .messages(VALIDATION_MESSAGES)
+    .label("طابق العقار"),
   unitsInBuilding: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد العقارات في البناء"),
+    .label("عدد الوحدات في المبنى"),
   unitsInCompound: Joi.number()
     .messages(VALIDATION_MESSAGES)
     .label("عدد العقارات في المجمع"),
@@ -110,11 +210,19 @@ export const generalStepSchema = Joi.object({
   block: Joi.string().messages(VALIDATION_MESSAGES).label("الكتلة"),
   landUnit: Joi.string()
     .messages(VALIDATION_MESSAGES)
-    .label("الأرض / الوحدة العقارية"),
+    .label("القطعة / الوحدة العقارية"),
   moreGeneralOptions: Joi.array()
     .items(Joi.object({ value: Joi.string() }).unknown())
     .messages(VALIDATION_MESSAGES)
     .label("خيارات إضافية"),
+  TheDirectionBeforeTheStreetName: Joi.string().label("الإتجاه قبل اسم الشارع"),
+  UnitApartmentNumber: Joi.string()
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم الوحدة / الشقة"),
+  Residentialplan: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المخطط السكني"),
 
   // second accordion fields
   propertyStatus: Joi.object({ value: Joi.string() })
@@ -279,109 +387,33 @@ export const generalStepSchema = Joi.object({
     .label("خط الطول"),
 });
 
-export type GeneralStepType = {
-  // first accordion
-  city: string;
-  district: string;
-  geoArea: string;
-  province: string;
-  zone: string;
-  streetName: string;
-  streetNumber: string;
-  streetType: string;
-  branchName: string;
-  branchCode: string;
-  startDirection: string;
-  endDirection: string;
-  postalCode: string;
-  development: string;
-  buildingDesign: string;
-  buildingNumber: string;
-  buildingName: string;
-  totalFloorsInOwnership: number | null;
-  totalFloorsInProperty: number | null;
-  propertyFloor: number | null;
-  unitsInBuilding: number | null;
-  unitsInCompound: number | null;
-  yearBuilt: number | null;
-  legalDescription: string;
-  section: string;
-  municipality: string;
-  legalUnit: string;
-  field: string;
-  block: string;
-  moreGeneralOptions: [];
-  landUnit: string;
-
-  // second accordion
-  propertyStatus: string;
-  offeredPrice: number | string;
-  bedrooms: number | string;
-  completeBathrooms: number | string;
-  partialBathrooms: number | string;
-  TheApproximateAreaOfTheResidentialZone: number | string;
-  TheApproximateAreaOfTheTotalRange: number | string;
-  NumberOfCeilingFans: number | string;
-  GarageSpaces: number | string;
-  DescriptionOfTheGarage: string;
-  Furniture: string;
-  Elevator: number | string;
-  ParkingLotArea: number | string;
-  CarParkDescription: string;
-  Pets: string;
-  maxPetWeight: number | string;
-  maxPetCount: number | string;
-  maxPetBreeding: number | string;
-  maxPetTypes: number | string;
-  landSize: number | string;
-  landBack: number | string;
-  landFront: number | string;
-  landLeft: number | string;
-  landRight: number | string;
-  backDirection: string;
-  virtualTour1: string;
-  virtualTour2: string;
-  ownerName: string;
-  propertyDescription: string;
-  primarySchool: string;
-  middleSchool: string;
-  moreCategoryOptions: [];
-  highSchool: string;
-
-  // third accordion
-  landAreaSource: string | null;
-  landDimensionsSource: string | null;
-  totalAreaSource: string | null;
-  residentialAreaSource: string | null;
-  latitude: number | string;
-  longitude: number | string;
-};
-
 export const generalStepInitialValues: GeneralStepType = {
   // first accordion
-  city: "",
+  city: undefined,
   district: "",
+  propertyId: "",
   geoArea: "",
-  province: "",
-  zone: "",
+  state: "",
+  Zoningcode: "",
   streetName: "",
   streetNumber: "",
   streetType: "",
   branchName: "",
-  branchCode: "",
-  startDirection: "",
-  endDirection: "",
+  NameOfTheCompoundOwnershipApartments: "",
+  TheDirectionAfterTheStreetName: "",
   postalCode: "",
   development: "",
+  subDivisionCode: "",
   buildingDesign: "",
   buildingNumber: "",
+  buildingCompanyName: "",
   buildingName: "",
-  totalFloorsInOwnership: null,
-  totalFloorsInProperty: null,
-  propertyFloor: null,
-  unitsInBuilding: null,
-  unitsInCompound: null,
-  yearBuilt: null,
+  totalFloorsInOwnership: "",
+  totalFloorsInProperty: "",
+  propertyFloor: "",
+  unitsInBuilding: "",
+  unitsInCompound: "",
+  yearBuilt: undefined,
   legalDescription: "",
   section: "",
   municipality: "",
@@ -390,6 +422,9 @@ export const generalStepInitialValues: GeneralStepType = {
   block: "",
   moreGeneralOptions: [],
   landUnit: "",
+  TheDirectionBeforeTheStreetName: "",
+  UnitApartmentNumber: "",
+  Residentialplan: "",
 
   // second accordion
   propertyStatus: "",
@@ -437,7 +472,7 @@ export const generalStepInitialValues: GeneralStepType = {
 
 // sections fields list
 const allGeneralKeys = Object.keys(generalStepInitialValues);
-const firstSectionEndIndex = allGeneralKeys.indexOf("landUnit") + 1;
+const firstSectionEndIndex = allGeneralKeys.indexOf("Residentialplan") + 1;
 const secondSectionEndIndex = allGeneralKeys.indexOf("highSchool") + 1;
 
 export const firstSectionFields = allGeneralKeys.slice(
@@ -453,11 +488,44 @@ export const thirdSectionFields = allGeneralKeys.slice(
 ) as Path<GeneralStepType>[];
 
 // rooms step -----------------------------------------------------------
-export const roomsStepSchema = Joi.object({});
 
-export type RoomsStepType = {};
+export type RoomsStepType = {
+  rooms: {
+    type: { value: string } | undefined;
+    width: number | undefined;
+    length: number | undefined;
+  }[];
+};
 
-export const roomsStepInitialValues = {};
+export const roomsStepSchema = Joi.object<RoomsStepType>({
+  rooms: Joi.array().items(
+    Joi.object({
+      type: Joi.object({ value: Joi.string() })
+        .unknown()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("نوع الغرفة"),
+      width: Joi.number()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("عرض الغرفة"),
+      length: Joi.number()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("طول الغرفة"),
+    })
+  ),
+});
+
+export const roomInitailValues = {
+  type: undefined,
+  width: undefined,
+  length: undefined,
+};
+
+export const roomsStepInitialValues: RoomsStepType = {
+  rooms: [roomInitailValues],
+};
 
 // features step -----------------------------------------------------------
 

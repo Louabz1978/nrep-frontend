@@ -5,7 +5,7 @@ import {
   type FieldValues,
   type Path,
 } from "react-hook-form";
-import { IoInformationCircleOutline } from "react-icons/io5";
+import Info from "../../modal/Info";
 
 interface TextareaProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -21,6 +21,7 @@ interface TextareaProps<T extends FieldValues> {
   onBlur?: () => void;
   info?: string | ReactNode;
   addingValidStyle?: string;
+  required?: boolean;
 }
 
 function Textarea<T extends FieldValues>({
@@ -37,6 +38,7 @@ function Textarea<T extends FieldValues>({
   onFocus = () => {},
   onBlur = () => {},
   info,
+  required,
 }: TextareaProps<T>) {
   const {
     register,
@@ -74,7 +76,12 @@ function Textarea<T extends FieldValues>({
             htmlFor={name}
             className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
           >
-            {label}
+            <div>
+              {label}
+              {required ? (
+                <span className="text-size24 text-error">{" *"}</span>
+              ) : null}
+            </div>
           </label>
         ) : null}
 
@@ -109,9 +116,7 @@ function Textarea<T extends FieldValues>({
             </div>
 
             {/* beside element */}
-            {info ? (
-              <IoInformationCircleOutline className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]" />
-            ) : null}
+            {info ? <Info info={info} /> : null}
           </div>
 
           {/* validation errors  */}

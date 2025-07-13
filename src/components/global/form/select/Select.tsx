@@ -13,8 +13,8 @@ import {
 } from "react-hook-form";
 import getError, { isValid } from "@/utils/getErrors";
 import { FaAngleDown } from "react-icons/fa6";
-import { IoInformationCircleOutline } from "react-icons/io5";
 import Toggle from "../toggle/Toggle";
+import Info from "../../modal/Info";
 
 interface SelectProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -42,6 +42,7 @@ interface SelectProps<T extends FieldValues> {
   query?: any;
   info?: string | ReactNode;
   toggle?: Path<T>;
+  required?: boolean;
 }
 
 function Select<T extends FieldValues>({
@@ -69,6 +70,7 @@ function Select<T extends FieldValues>({
   formId, // query
   info,
   toggle,
+  required,
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const clickRef = useRef<HTMLDivElement>(null);
@@ -214,7 +216,13 @@ function Select<T extends FieldValues>({
             isDisabled ? "text-placeholder" : " text-primary-fg"
           } transition-all`}
         >
-          {label}
+          <div>
+            {label}
+            {required ? (
+              <span className="text-size24 text-error">{" *"}</span>
+            ) : null}
+          </div>
+
           {toggle ? (
             <Toggle form={form} name={toggle} onChange={() => trigger(name)} />
           ) : null}
@@ -356,8 +364,8 @@ function Select<T extends FieldValues>({
               <input
                 type="text"
                 id={`select_${name}_search_${formId}`}
-                autoFocus={true}
-                className="w-full outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-2 px-3 border-solid border border-border text-primary-fg/90 rounded-[3px]"
+                // autoFocus={true}
+                className="w-full text-size16 outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-2 px-3 border-solid border border-border text-primary-fg/90 rounded-[3px]"
                 placeholder="بحث..."
                 value={searchTerm}
                 onChange={(e) => {
@@ -374,7 +382,7 @@ function Select<T extends FieldValues>({
               />
             </div>
 
-            <div className="h-full overflow-auto flex flex-col gap-[8px]">
+            <div className="h-full overflow-auto  text-size16 flex flex-col gap-[8px]">
               {isError ? (
                 <ErrorComponent />
               ) : isLoading ? (
@@ -446,9 +454,7 @@ function Select<T extends FieldValues>({
         {addingElement({ isOpen })}
 
         {/* beside element */}
-        {info ? (
-          <IoInformationCircleOutline className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]" />
-        ) : null}
+        {info ? <Info info={info} /> : null}
       </div>
       {/* validation errors  */}
       {getError(errors, name) ? (

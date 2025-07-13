@@ -198,202 +198,235 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
               <FormSectionHeader>معلومات المنطقة</FormSectionHeader>
-              <Select
-                form={form}
-                label="المدينة"
-                choices={cityChoices}
-                showValue="label"
-                keyValue="value"
-                name="city"
-                placeholder="اختر المدينة"
-                info="اختر المدينة التي يقع فيها العقار"
-              />
               <Input
-                form={form}
-                label="المنطقة"
-                placeholder="مثال: حي الغوطة"
-                name="district"
-                info="ادخل اسم المنطقة أو الحي"
-              />
-              <Select
-                form={form}
-                label="المنطقة الجغرافية"
-                choices={cityChoices}
-                keyValue="value"
-                showValue="label"
-                name="geoArea"
-                placeholder="اختر المنطقة الجغرافية"
-                info="حدد المنطقة الجغرافية للعقار"
-              />
-              <Select
                 form={form}
                 label="المقاطعة"
-                choices={cityChoices}
-                showValue="label"
-                keyValue="value"
-                name="province"
-                placeholder="اختر المقاطعة"
-                info="اختر المقاطعة التي يتبع لها العقار"
+                placeholder="ادخل اسم المقاطعة"
+                name="district"
+                info="ادخل اسم المقاطعة "
+                required
               />
               <Input
                 form={form}
-                label="النطاق"
-                placeholder="مثال: النطاق الشرقي"
-                name="zone"
-                info="ادخل نطاق العقار (اختياري)"
-              />
-
-              <Input
-                form={form}
-                label="اسم الشارع"
-                placeholder="شارع الدبلان"
-                name="streetName"
-                info="ادخل اسم الشارع الرئيسي للعقار"
+                label="رقم تعريف العقار "
+                placeholder="أدخل رقم تعريف العقار"
+                name="propertyId"
+                info="رقم تعريف العقار "
+                required
               />
               <Input
                 form={form}
                 label="رقم الشارع"
-                placeholder="1234"
+                placeholder="ادخل رقم الشارع"
                 name="streetNumber"
-                info="ادخل رقم الشارع إن وجد"
+                info="ادخل رقم الشارع"
+                required
+              />
+              <Select
+                form={form}
+                label="الإتجاه قبل اسم الشارع"
+                choices={geoDirections}
+                showValue="label"
+                keyValue="value"
+                name="TheDirectionBeforeTheStreetName"
+                placeholder="اختر الإتجاه قبل اسم الشارع"
+                info="اختر الإتجاه قبل اسم الشارع التي يقع فيها العقار"
+              />
+              <Input
+                form={form}
+                label="اسم الشارع"
+                placeholder="ادخل اسم الشارع"
+                name="streetName"
+                info="ادخل اسم الشارع"
+                required
               />
               <Select
                 form={form}
                 label="نوع الشارع"
-                choices={streetTypes}
-                showValue="label"
+                choices={cityChoices}
                 keyValue="value"
+                showValue="label"
                 name="streetType"
-                placeholder="طريق عام"
-                info="حدد نوع الشارع"
-              />
-
-              <Input
-                form={form}
-                label="اسم الشقة/الفرع"
-                placeholder="مثال: شقة 2 أو فرع ب"
-                name="branchName"
-                info="ادخل اسم الشقة أو الفرع (إن وجد)"
-              />
-              <Input
-                form={form}
-                label="رمز الفرع"
-                placeholder="مثال: ب"
-                name="branchCode"
-                info="ادخل رمز الفرع (إن وجد)"
-              />
-
-              <Select
-                form={form}
-                label="اتجاه البداية"
-                choices={geoDirections}
-                showValue="label"
-                keyValue="value"
-                name="startDirection"
-                placeholder="شمال"
-                info="حدد اتجاه بداية العقار"
+                placeholder="اختر نوع الشارع"
+                info="حدد نوع الشارع للعقار"
               />
               <Select
                 form={form}
-                label="اتجاه النهاية"
-                choices={geoDirections}
-                showValue="label"
+                label="الإتجاه بعد اسم الشارع"
+                choices={cityChoices}
                 keyValue="value"
-                name="endDirection"
-                placeholder="جنوب"
-                info="حدد اتجاه نهاية العقار"
+                showValue="label"
+                name="TheDirectionAfterTheStreetName"
+                placeholder="اختر اتجاه النهاية"
+                info="حدد الإتجاه بعد اسم الشارع للعقار"
               />
-
+              <Input
+                form={form}
+                label="رقم الوحدة / الشقة"
+                placeholder="ادخل رقم الوحدة / الشقة"
+                name="UnitApartmentNumber"
+                info="ادخل رقم الوحدة / الشقة الرئيسي للعقار"
+                
+              />
+              <Select
+                form={form}
+                label="المدينة"
+                choices={cityChoices}
+                keyValue="value"
+                showValue="label"
+                name="city"
+                placeholder="اختر المدينة"
+                info="حدد المدينة للعقار"
+                required
+              />
+              <Select
+                form={form}
+                label="الولاية"
+                choices={cityChoices}
+                keyValue="value"
+                showValue="label"
+                name="state"
+                placeholder="اختر الولاية"
+                info="حدد الولاية للعقار"
+                required
+              />
               <Input
                 form={form}
                 label="الرمز البريدي"
-                placeholder="33914"
+                placeholder="ادخل الرمز البريدي"
                 name="postalCode"
                 info="ادخل الرمز البريدي للعنوان"
+                required
+              />
+              <Select
+                form={form}
+                label="المنطقة الجغرافية"
+                choices={streetTypes}
+                showValue="label"
+                keyValue="value"
+                name="geoArea"
+                placeholder="اختر المنطقة الجغرافية"
+                info="حدد المنطقة الجغرافية"
+                required
               />
 
               <Input
                 form={form}
-                label="التطوير"
-                placeholder="مثال: تطوير خاص"
-                name="development"
-                info="ادخل اسم أو نوع التطوير (إن وجد)"
+                label="رمز تقسيم المناطق"
+                placeholder="ادخل رمز التقسيم"
+                name="Zoningcode"
+                info="true"
+              />
+              <Input
+                form={form}
+                label="المخطط السكني"
+                placeholder="ادخل المخطط السكني"
+                name="Residentialplan"
+                info="ادخل المخطط السكني (إن وجد)"
+                required
+              />
+
+              <Select
+                form={form}
+                label="اسم المجمع / شقق التملك"
+                choices={geoDirections}
+                showValue="label"
+                keyValue="value"
+                name="NameOfTheCompoundOwnershipApartments"
+                placeholder="اختر اسم المجمع"
+                info="حدد اسم المجمع"
+                required
+              />
+              <Input
+                form={form}
+                label="رمز التقسيم الفرعي"
+                placeholder="ادخل رمز التقسيم"
+                name="subDivisionCode"
+                info="ادخل اسم أو نوع رمز التقسيم الفرعي (إن وجد)"
               />
 
               <FormSectionHeader>معلومات البناء</FormSectionHeader>
 
               <Select
                 form={form}
-                label="نوع تصميم المبنى"
-                placeholder="مثال: فيلا، عمارة، شقة"
+                label="تصميم المبنى"
+                placeholder="اختر تصميم البناء"
                 name="buildingDesign"
                 choices={cityChoices}
                 keyValue="value"
                 showValue="label"
-                info="حدد نوع تصميم المبنى"
+                info="حدد تصميم المبنى"
+                required
+              />
+              <Input
+                form={form}
+                label="اسم شركة البناء"
+                placeholder="ادخل اسم الشركة"
+                name="buildingCompanyName"
+                info="ادخل اسم شركة البناء"
+                required
               />
               <Input
                 form={form}
                 label="رقم البناء"
-                placeholder="مثال: 47"
+                placeholder="ادخل رقم البناء"
                 name="buildingNumber"
                 info="ادخل رقم البناء"
               />
               <Input
                 form={form}
-                label="اسم البناء"
-                placeholder="مثال: برج الشام"
-                name="buildingName"
-                info="ادخل اسم البناء (إن وجد)"
-              />
-              <Input
-                form={form}
-                label="عدد الطوابق الكلي في الملكية"
-                placeholder="مثال: 10"
+                label="الطوابق الكلية في الملكية"
+                placeholder="ادخل عدد الطوابق الكلية في الملكية"
                 name="totalFloorsInOwnership"
                 type="number"
-                info="ادخل عدد الطوابق الكلي في الملكية"
+                info="ادخل الطوابق الكلية في الملكية (إن وجد)"
+                required
               />
               <Input
                 form={form}
-                label="عدد الطوابق الكلي في العقار"
-                placeholder="مثال: 5"
+                label="الطوابق الكلية في البناء"
+                placeholder="ادخل عدد الطوابق الكلية في البناء"
                 name="totalFloorsInProperty"
                 type="number"
-                info="ادخل عدد الطوابق الكلي في العقار"
+                info="ادخل الطوابق الكلية في البناء"
+                required
               />
               <Input
                 form={form}
-                label="رقم الطابق"
-                placeholder="مثال: 2"
+                label="طابق العقار"
+                placeholder="ادخل رقم طابق العقار"
                 name="propertyFloor"
                 type="number"
-                info="ادخل رقم الطابق الذي يقع فيه العقار"
+                info="ادخل طابق العقار"
+                required
               />
               <Input
                 form={form}
-                label="عدد العقارات في البناء"
-                placeholder="مثال: 20"
+                label="عدد الوحدات في المبنى"
+                placeholder="ادخل عدد الوحدات في البناء"
                 name="unitsInBuilding"
                 type="number"
-                info="ادخل عدد العقارات في البناء"
+                info="ادخل عدد الوحدات في المبنى الذي يقع فيه العقار"
+                required
               />
               <Input
                 form={form}
-                label="عدد العقارات في المجمع"
-                placeholder="مثال: 100"
+                label="عدد الوحدات في المجمع السكني"
+                placeholder="ادخل عدد الوحدات في المجمع"
                 name="unitsInCompound"
                 type="number"
-                info="ادخل عدد العقارات في المجمع (إن وجد)"
+                info="ادخل عدد الوحدات في المجمع السكني"
+                required
               />
               <Input
                 form={form}
                 label="سنة البناء"
-                placeholder="مثال: 2010"
+                placeholder="ادخل سنة البناء"
                 name="yearBuilt"
                 type="number"
-                info="ادخل سنة بناء العقار"
+                info="ادخل سنة البناء (إن وجد)"
               />
+
               <FormSectionHeader>المعلومات القانونية</FormSectionHeader>
 
               {/* الوصف القانوني */}
@@ -422,13 +455,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                label="الوحدة القانونية"
-                placeholder=""
-                name="legalUnit"
-                info="ادخل الوحدة القانونية"
-              />
-              <Input
-                form={form}
                 label="المجال"
                 placeholder=""
                 name="field"
@@ -436,17 +462,25 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                label="الكتلة"
+                label="الوحدة القانونية"
                 placeholder=""
-                name="block"
-                info="ادخل الكتلة"
+                name="legalUnit"
+                info="ادخل الوحدة القانونية"
+                required
               />
               <Input
                 form={form}
-                label="الأرض / الوحدة العقارية"
-                placeholder=""
+                label="الكتلة السكنية"
+                placeholder="ادخل الكتلة"
+                name="block"
+                info="ادخل الكتلة السكنية"
+              />
+              <Input
+                form={form}
+                label="القطعة / الوحدة العقارية"
+                placeholder="ادخل القطعة / الوحدة العقارية"
                 name="landUnit"
-                info="ادخل رقم الأرض أو الوحدة العقارية"
+                info="ادخل رقم الوحدة العقارية"
               />
 
               <FormSectionHeader>خيارات إضافية</FormSectionHeader>
@@ -498,6 +532,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر نوع الحالة"}
                 info={"معلومات عن الحالة"}
+                required
               />
               <Input
                 form={form}
@@ -507,6 +542,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل سعر العرض"
                 info={"سعر العقار"}
+                required
               />
               <Select
                 form={form}
@@ -517,6 +553,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر عدد غرف النوم"}
                 info={"اختر عدد غرف النوم"}
+                required
               />
               <Input
                 form={form}
@@ -526,6 +563,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل عدد الحمامات الكاملة"
                 info={" عدد الحمامات الكاملة"}
+                required
               />
               <Input
                 form={form}
@@ -535,6 +573,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل عدد الحمامات الجزئية"
                 info={"عدد الحمامات الجزئية"}
+                required
               />
               <Input
                 form={form}
@@ -544,6 +583,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل المساحة التقريبية لنطاق السكني"
                 info={"ادخل المساحة التقريبية لنطاق السكني"}
+                required
               />
               <Input
                 form={form}
@@ -553,6 +593,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل المساحة التقريبية للنطاق الكلي"
                 info={"المساحة التقريبية للنطاق الكلي"}
+                required
               />
               <Input
                 form={form}
@@ -571,6 +612,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل مساحات المرآب"
                 info={"مساحات المرائب"}
+                required
               />
               <Select
                 form={form}
@@ -581,6 +623,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر وصف المرآب"}
                 info={"وصف المرآب"}
+                required
               />
               <Select
                 form={form}
@@ -591,6 +634,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر المفروشات"}
                 info={"المفروشات"}
+                required
               />
               <Select
                 form={form}
@@ -601,6 +645,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر للمصعد"}
                 info={"المصعد"}
+                required
               />
               <Input
                 form={form}
@@ -610,6 +655,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل مساحة مصفّات السيارات"
                 info={"مساحة مصفّات السيارات "}
+                required
               />
               <Select
                 form={form}
@@ -620,15 +666,8 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر وصف مصّف السيارات"}
                 info={"وصف مصفّ السيارات"}
+                required
               />
-              {/* <Input
-                form={form}
-                name="cableAvailable"
-                label="الكابل متوفر (التلفزيون/الإنترنت)"
-                labelStyle="font-bold"
-                placeholder="لا يوجد"
-                info={"hello"}
-              /> */}
               <FormSectionHeader>الحيوانات الأليفة</FormSectionHeader>
               <Select
                 form={form}
@@ -639,6 +678,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر عدد الحيوانات الأليفة"}
                 info={"الحيوانات الأليفة"}
+                required
               />
               <Input
                 form={form}
@@ -685,6 +725,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل حجم الأرض (بالفدان)"
                 info={"حجم الأرض (بالفدان)"}
+                required
               />
               <Input
                 form={form}
@@ -694,6 +735,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل الجزء الخلفي من الأرض "
                 info={"الجزء الخلفي من الأرض"}
+                required
               />
               <Input
                 form={form}
@@ -703,6 +745,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل الواجهة الأمامية من الأرض"
                 info={"الواجهة الأمامية من الأرض"}
+                required
               />
               <Input
                 form={form}
@@ -712,6 +755,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل يسارية الأرض"
                 info={"يسارية الأرض"}
+                required
               />
               <Input
                 form={form}
@@ -721,6 +765,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="ادخل يمينية الأرض"
                 info={"يمينية الأرض "}
+                required
               />
               <Select
                 form={form}
@@ -731,6 +776,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر اتجاه الواجهة الخلفية"}
                 info={"اتجاه الواجهة الخلفية"}
+                required
               />
               <Input
                 form={form}
@@ -758,6 +804,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 labelStyle="font-bold"
                 placeholder="اختر اسم المالك"
                 info={"اسم المالك"}
+                required
               />
               <Select
                 form={form}
@@ -768,6 +815,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 keyValue="value"
                 placeholder={"اختر عدد وصف المُلكية"}
                 info={"وصف المُلكية"}
+                required
               />
               <Input
                 form={form}

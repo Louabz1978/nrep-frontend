@@ -58,7 +58,8 @@ interface ListingFormProps {
 // listing form page, gets: default values for each step in the form
 function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
   // current step
-  const [currentStep, setCurrentStep] = useState(2);
+
+  const [currentStep, setCurrentStep] = useState(3);
 
   // status step form
   const statusStep = useForm({
@@ -230,7 +231,7 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
             handleSubmitForm={handleSubmitForm}
           />
         ) : currentStep == 3 ? (
-          <RoomsStep />
+          <RoomsStep form={roomsStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 4 ? (
           <FinancialStep />
         ) : currentStep == 5 ? (

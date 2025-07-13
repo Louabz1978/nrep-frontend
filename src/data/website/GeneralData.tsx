@@ -8,6 +8,16 @@ export const cityChoices = [
   { value: "hama", label: "حماة" },
 ];
 
+// Array for select options (room types)
+export const roomTypes = [
+  { value: "bedroom", label: "غرفة نوم" },
+  { value: "bathroom", label: "حمام" },
+  { value: "livingroom", label: "غرفة معيشة" },
+  { value: "kitchen", label: "مطبخ" },
+  { value: "room", label: "غرفة ضيوف" },
+  { value: "other", label: "أخرى" },
+];
+
 // Array for select options (cityChoices)
 export const yesNo = [
   { value: "yes", label: "نعم" },
@@ -16,16 +26,16 @@ export const yesNo = [
 // Array for select options (status)
 export const StatusType = [
   { value: "active", label: "نشط" },
-  { value: "not active", label: "غير نشط" }
-]
+  { value: "not active", label: "غير نشط" },
+];
 // Array for select options (cityChoices)
 export const bedrooms = [
   { value: "one", label: "غرفة" },
   { value: "two", label: "غرفتان" },
   { value: "three", label: "ثلاث غرف" },
   { value: "four", label: "اربع غرف" },
-  { value: "more of four", label: "اكثر من اربع غرف" }
-]
+  { value: "more of four", label: "اكثر من اربع غرف" },
+];
 // Array for measurement sources
 export const measurementSources = [
   { value: "official_document", label: "مستند رسمي" },
