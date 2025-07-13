@@ -1,4 +1,3 @@
-import axiosClient from "@/libs/axios/axios-client";
 import waitSeconds from "@/utils/waitSeconds";
 
 export interface deleteTemplateFunctionProps {

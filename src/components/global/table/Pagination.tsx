@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useState,
   type ButtonHTMLAttributes,
@@ -12,7 +13,7 @@ import {
 } from "react-icons/fa6";
 
 interface PaginationProps {
-  data: any[] | undefined;
+  data: unknown[] | undefined;
   isFetching: boolean;
   paginationData?: {
     last_page: number;
@@ -66,9 +67,12 @@ function Pagination({
     }
   }, [page, paginationData]);
 
-  const rerunDataFunc = async (pageNumber: number) => {
-    setPage(pageNumber);
-  };
+  const rerunDataFunc = useCallback(
+    async (pageNumber: number) => {
+      setPage(pageNumber);
+    },
+    [setPage]
+  );
 
   const { firstPage, prevPage, nextPage, currentPage, lastPage } = pagination;
 
@@ -76,7 +80,7 @@ function Pagination({
     if (data && data?.length == 0 && prevPage >= firstPage && !isFetching) {
       rerunDataFunc(prevPage);
     }
-  }, [data?.length]);
+  }, [data?.length, data, firstPage, isFetching, prevPage, rerunDataFunc]);
 
   return (
     <div className="relative p-4 flex gap-4 items-center justify-center bg-block-background text-primary-foreground border-t border-solid border-border ">

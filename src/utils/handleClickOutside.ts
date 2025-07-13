@@ -3,7 +3,7 @@ import { type RefObject } from "react";
 // function that used to catch clicking out of component to close it
 // the first parameter is reference to that component .. second is method to close it .. third is id of component that i want to prevent close component on click on it
 const handleClickOutside = (
-  ref: RefObject<HTMLElement> | null | any,
+  ref: RefObject<HTMLElement | null>,
   setIsOpen: (isOpen: boolean) => void,
   prevent?: string | null
 ) => {

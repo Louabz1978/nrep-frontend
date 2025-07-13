@@ -7,7 +7,7 @@ import type ADMIN_PERMISSIONS from "@/data/admin/permissoins";
 
 interface Action {
   title: string;
-  onClick: () => any;
+  onClick: () => void;
   permissions?: (
     | keyof typeof WEBSITE_PERMISSIONS
     | keyof typeof ADMIN_PERMISSIONS
@@ -37,7 +37,7 @@ function Actions({
   useEffect(
     () =>
       handleClickOutside(ref, setIsOpen, `close-options-${pageName}-${index}`),
-    []
+    [index, pageName]
   );
 
   return (

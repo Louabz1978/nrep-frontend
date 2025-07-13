@@ -1,4 +1,3 @@
-import axiosClient from "@/libs/axios/axios-client";
 import type { Gender } from "./getTemplates";
 import waitSeconds from "@/utils/waitSeconds";
 
@@ -24,7 +23,7 @@ export interface TemplateDetailsType {
 // returns: templates data list of this page
 async function getTemplateDetails({
   queryKey,
-}: getTemplateDetailsProps): Promise<TemplateDetailsType> {
+}: getTemplateDetailsProps): Promise<any> {
   // const res = await axiosClient.get(`/center/templates/${queryKey?.[1]}`);
 
   // return res?.data?.data;

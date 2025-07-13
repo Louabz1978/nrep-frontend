@@ -7,7 +7,9 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import {
   firstSectionFields,
+  firstSectionRequiredFields,
   secondSectionFields,
+  secondSectionRequiredFields,
   thirdSectionFields,
   type GeneralStepType,
 } from "@/data/website/schema/ListingFormSchema";
@@ -46,7 +48,7 @@ import { Button } from "@/components/global/form/button/Button";
 import { GUESTROOM } from "@/data/global/select";
 
 interface GeneralStepProps {
-  form: UseFormReturn<GeneralStepType, any, GeneralStepType>;
+  form: UseFormReturn<GeneralStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 // handle the map click event
@@ -79,7 +81,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const [isOpenThird, setIsOpenThird] = useState(false);
 
   const [markerPosition, setMarkerPosition] = useState<[number, number]>([
-    34.7324, 36.7131,
+    34.7324273, 36.7136959,
   ]);
   const [isSatelliteView, setIsSatelliteView] = useState(false);
   const [isManualMode, setIsManualMode] = useState(false);
@@ -88,8 +90,10 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const toggleStateSecond = () => setIsOpenSecond((prev) => !prev);
   const toggleStateThird = () => setIsOpenThird((prev) => !prev);
 
-  const onSubmit = () => {
+  // handle submit form
+  const onSubmit = (data: GeneralStepType) => {
     setCurrentStep((prev) => prev + 1);
+    console.log(data);
   };
 
   // choose the location on the map by clicking on the map
@@ -169,14 +173,13 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
     shadowAnchor: [12, 41],
   });
 
+  const lat = watch("latitude");
+  const lng = watch("longitude");
   useEffect(() => {
-    const lat = watch("latitude");
-    const lng = watch("longitude");
-
     if (lat && lng && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
       setMarkerPosition([Number(lat), Number(lng)]);
     }
-  }, [watch("latitude"), watch("longitude")]);
+  }, [watch, lat, lng]);
 
   return (
     <PageContainer className="flex-1 h-full overflow-auto">
@@ -193,7 +196,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             icon={FaRegListAlt}
             isOpen={isOpenFirst}
             accordionFields={firstSectionFields}
-            requiredFields={firstSectionFields}
+            requiredFields={firstSectionRequiredFields}
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
@@ -228,7 +231,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 choices={geoDirections}
                 showValue="label"
                 keyValue="value"
-                name="TheDirectionBeforeTheStreetName"
+                name="theDirectionBeforeTheStreetName"
                 placeholder="اختر الإتجاه قبل اسم الشارع"
                 info="اختر الإتجاه قبل اسم الشارع التي يقع فيها العقار"
               />
@@ -256,17 +259,17 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 choices={cityChoices}
                 keyValue="value"
                 showValue="label"
-                name="TheDirectionAfterTheStreetName"
+                name="theDirectionAfterTheStreetName"
                 placeholder="اختر اتجاه النهاية"
                 info="حدد الإتجاه بعد اسم الشارع للعقار"
               />
               <Input
                 form={form}
+                type="number"
                 label="رقم الوحدة / الشقة"
                 placeholder="ادخل رقم الوحدة / الشقة"
-                name="UnitApartmentNumber"
+                name="unitApartmentNumber"
                 info="ادخل رقم الوحدة / الشقة الرئيسي للعقار"
-                
               />
               <Select
                 form={form}
@@ -314,14 +317,14 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 form={form}
                 label="رمز تقسيم المناطق"
                 placeholder="ادخل رمز التقسيم"
-                name="Zoningcode"
+                name="zoningcode"
                 info="true"
               />
               <Input
                 form={form}
                 label="المخطط السكني"
                 placeholder="ادخل المخطط السكني"
-                name="Residentialplan"
+                name="residentialplan"
                 info="ادخل المخطط السكني (إن وجد)"
                 required
               />
@@ -332,7 +335,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                 choices={geoDirections}
                 showValue="label"
                 keyValue="value"
-                name="NameOfTheCompoundOwnershipApartments"
+                name="nameOfTheCompoundOwnershipApartments"
                 placeholder="اختر اسم المجمع"
                 info="حدد اسم المجمع"
                 required
@@ -518,7 +521,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             icon={TbBuildingCommunity}
             isOpen={isOpenSecond}
             accordionFields={secondSectionFields}
-            requiredFields={secondSectionFields}
+            requiredFields={secondSectionRequiredFields}
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
@@ -577,7 +580,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                name="TheApproximateAreaOfTheResidentialZone"
+                name="theApproximateAreaOfTheResidentialZone"
                 type="number"
                 label="المساحة التقريبية لنطاق السكني"
                 labelStyle="font-bold"
@@ -587,7 +590,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                name="TheApproximateAreaOfTheTotalRange"
+                name="theApproximateAreaOfTheTotalRange"
                 type="number"
                 label="المساحة التقريبية للنطاق الكلي"
                 labelStyle="font-bold"
@@ -597,7 +600,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                name="NumberOfCeilingFans"
+                name="numberOfCeilingFans"
                 type="number"
                 label="عدد المراوح السقفية "
                 labelStyle="font-bold"
@@ -606,7 +609,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                name="GarageSpaces"
+                name="garageSpaces"
                 type="number"
                 label="مساحات المرائب"
                 labelStyle="font-bold"
@@ -617,7 +620,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"وصف المرآب"}
-                name={"DescriptionOfTheGarage"}
+                name={"descriptionOfTheGarage"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -628,7 +631,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"المفروشات"}
-                name={"Furniture"}
+                name={"furniture"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -639,7 +642,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"المصعد"}
-                name={"Elevator"}
+                name={"elevator"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -649,7 +652,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               />
               <Input
                 form={form}
-                name="ParkingLotArea"
+                name="parkingLotArea"
                 type="number"
                 label="مساحة مصفّات السيارات"
                 labelStyle="font-bold"
@@ -660,7 +663,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"وصف مصفّ السيارات"}
-                name={"CarParkDescription"}
+                name={"carParkDescription"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"
@@ -672,7 +675,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Select
                 form={form}
                 label={"الحيوانات الأليفة"}
-                name={"Pets"}
+                name={"pets"}
                 choices={bedrooms}
                 showValue="label"
                 keyValue="value"

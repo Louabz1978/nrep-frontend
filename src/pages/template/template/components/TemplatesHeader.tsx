@@ -1,6 +1,6 @@
 import { useEffect, type Dispatch } from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import TEMPLATES_FILTER_SCHEMA, {
   TEMPLATES_FILTER_SCHEMA_INITIAL,
 } from "@/data/template/template/templateFilterSchema";
@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 interface TemplateHeaderProps {
   currentLayout: boolean;
-  setCurrentLayout: Dispatch<boolean>;
+  setCurrentLayout: Dispatch<any>;
   setFilter: any;
 }
 
@@ -44,7 +44,7 @@ function TemplatesHeader({
     return () => {
       subscription.unsubscribe();
     };
-  }, [watch]);
+  }, [watch, setFilter]);
 
   return (
     <div className="flex flex-col gap-1 p-2 border-b border-border">

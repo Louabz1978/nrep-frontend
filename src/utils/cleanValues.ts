@@ -1,16 +1,19 @@
-function cleanValues<T>(keys = {}, obj: T): T {
-  let finalObj = {};
-  finalObj = {};
-  Object.keys(keys).map((key) => {
+function cleanValues<T extends Record<string, unknown>>(keys: T, obj: T): T {
+  const finalObj: Partial<T> = {};
+
+  (Object.keys(keys) as Array<keyof T>).forEach((key) => {
+    const value = obj[key];
     if (
-      obj?.[key] ||
-      obj?.[key] === 0 ||
-      obj?.[key] === "0" ||
-      obj?.[key] === false
-    )
-      finalObj[key] = obj?.[key];
+      (value !== undefined && value !== null && value !== "") || // empty string
+      value === 0 ||
+      value === "0" ||
+      value === false
+    ) {
+      finalObj[key] = value;
+    }
   });
-  return finalObj;
+
+  return finalObj as T;
 }
 
 export default cleanValues;

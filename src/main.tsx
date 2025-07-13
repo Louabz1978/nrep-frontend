@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")!).render(
         <AnimatePresence mode="wait">
           <RouterProvider router={router} />
         </AnimatePresence>
-        {/* <ReactQueryDevtools /> */}
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </AppInitializer>
   </Provider>

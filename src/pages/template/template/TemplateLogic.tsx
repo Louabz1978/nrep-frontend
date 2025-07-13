@@ -1,6 +1,6 @@
 import useTemplatesQuery from "@/hooks/template/template/useTemplatesQuery";
 import Template from "./Template";
-import { Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useUser } from "@/stores/useUser";
 import TemplateForm from "./components/TemplateForm";
 import useTemplatesMutation from "@/hooks/template/template/useTemplateMutation";
@@ -10,7 +10,7 @@ import Loader from "@/components/global/loader/Loader";
 
 function TemplateLogic() {
   // current template id
-  const templateId = useParams()["*"]?.split("/")?.at(-1);
+  const templateId = 11;
 
   // check permissions methods
   const { checkPermissions } = useUser();
@@ -43,7 +43,7 @@ function TemplateLogic() {
   // set current template if exists
   useEffect(() => {
     setCurrentTemplate(templateId);
-  }, [templateId]);
+  }, [templateId, setCurrentTemplate]);
 
   return (
     <Routes>

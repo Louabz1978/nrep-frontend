@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import type { AxiosError } from "axios";
 
 // handle error messages returned from backend, gets: error response, returns: errors messages notifications
 export function showApiErrors(

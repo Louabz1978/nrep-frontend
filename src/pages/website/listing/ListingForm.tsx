@@ -52,19 +52,24 @@ interface ListingFormProps {
     offices: OfficesStepType;
     remarks: RemarksStepType;
   };
-  listingResources: UseQueryResult<any>;
+  listingResources: UseQueryResult<unknown[]>;
 }
 
 // listing form page, gets: default values for each step in the form
-function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
+function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
 
+
   const [currentStep, setCurrentStep] = useState(3);
+
 
   // status step form
   const statusStep = useForm({
     resolver: joiResolver(statusStepSchema),
-    defaultValues: cleanValues(statusStepInitialValues, defaultValues?.status),
+    defaultValues: cleanValues<StatusStepType>(
+      statusStepInitialValues,
+      defaultValues?.status
+    ),
     mode: "onChange",
   });
 
@@ -192,7 +197,15 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
         },
       },
     ],
-    []
+    [
+      statusStep,
+      generalStep,
+      featuresStep,
+      roomsStep,
+      financialStep,
+      compensationStep,
+      officesStep,
+    ]
   );
 
   // handle submit all form steps
@@ -225,13 +238,13 @@ function ListingForm({ defaultValues, listingResources }: ListingFormProps) {
         ) : currentStep == 1 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 2 ? (
-          <FeaturesStep
-            form={featuresStep}
+          <FeaturesStep form={featuresStep} setCurrentStep={setCurrentStep} />
+        ) : currentStep == 3 ? (
+          <RoomsStep
+            form={roomsStep}
             setCurrentStep={setCurrentStep}
             handleSubmitForm={handleSubmitForm}
           />
-        ) : currentStep == 3 ? (
-          <RoomsStep form={roomsStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 4 ? (
           <FinancialStep />
         ) : currentStep == 5 ? (

@@ -18,7 +18,7 @@ function useLoginMutation() {
   // login mutation
   const login = useMutation({
     mutationFn: loginFunction,
-    onSuccess: ({ user }) => {
+    onSuccess: async ({ user }) => {
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
       secureLocalStorage.setItem("USER", { data: user });
       setUser(user);

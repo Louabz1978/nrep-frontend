@@ -1,14 +1,10 @@
 import getRowShow from "./getRowShow";
 
-interface SortableData {
-  [key: string]: any;
-}
-
 const sortedData = (
-  data: SortableData[] | undefined,
+  data: Record<string, string>[] | undefined,
   sortedField: string | null | string[],
   sortOrder: "asc" | "desc" | "" = "asc"
-): SortableData[] | undefined => {
+): Record<string, string>[] | undefined => {
   try {
     if (sortedField) {
       return data?.slice().sort((a, b) => {
@@ -26,7 +22,9 @@ const sortedData = (
         // Perform sorting based on data type
         switch (dataType) {
           case "number": {
-            return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+            return sortOrder === "asc"
+              ? (aValue as number) - (bValue as number)
+              : (bValue as number) - (aValue as number);
           }
 
           case "boolean": {

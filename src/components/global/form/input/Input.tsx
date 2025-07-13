@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 import {
-  type FieldErrors,
   type UseFormTrigger,
   type UseFormReturn,
   type FieldValues,
@@ -9,6 +8,7 @@ import {
   type PathValue,
 } from "react-hook-form";
 import Info from "../../modal/Info";
+import getError, { isValid } from "@/utils/getErrors";
 
 interface InputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -26,7 +26,7 @@ interface InputProps<T extends FieldValues> {
   numberRegex?: RegExp;
   onClick?: () => void;
   onFocus?: () => void;
-  onChange?: (data: { trigger: UseFormTrigger<any> }) => void;
+  onChange?: (data: { trigger: UseFormTrigger<T> }) => void;
   onBlur?: () => void;
   min?: number;
   max?: number;
@@ -73,24 +73,6 @@ function Input<T extends FieldValues>({
     trigger,
   } = form;
 
-  function getError(errors: FieldErrors | undefined, name: string): any {
-    let res: any = false;
-    let currentErrors: any = errors;
-    const names = name?.split(".");
-    names?.map((subName) => {
-      res = currentErrors?.[subName];
-      currentErrors = currentErrors?.[subName];
-    });
-    return res;
-  }
-
-  // helper function to check if field is valid
-  function isValid<T extends FieldValues>(form: UseFormReturn<T>): boolean {
-    const { formState } = form;
-
-    return !!(formState.dirtyFields as Record<Path<T>, boolean>);
-  }
-
   return (
     <>
       {/* checkbox input with its style */}
@@ -112,7 +94,7 @@ function Input<T extends FieldValues>({
                   (e?.target?.checked ? true : false) as PathValue<T, Path<T>>
                 );
                 trigger?.(name);
-                onChange({ trigger } as { trigger: UseFormTrigger<any> });
+                onChange({ trigger } as { trigger: UseFormTrigger<T> });
               }}
               checked={watch?.(name) ? true : false}
             />
@@ -129,7 +111,7 @@ function Input<T extends FieldValues>({
           </label>
           {getError(errors, name) ? (
             <span className="text-error text-size14">
-              {getError(errors, name)?.message}
+              {(getError(errors, name) as { message: string })?.message}
             </span>
           ) : null}
         </div>
@@ -248,7 +230,7 @@ function Input<T extends FieldValues>({
             {/* validation errors  */}
             {getError(errors, name) ? (
               <span className="text-error font-medium text-size16">
-                {getError(errors, name)?.message}
+                {(getError(errors, name) as { message: string })?.message}
               </span>
             ) : null}
 

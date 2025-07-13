@@ -4,7 +4,7 @@ import getListingsResources from "@/api/website/listings/getListingsResources";
 
 function useListingQuery() {
   // get listing resources
-  const listingResources = useQuery({
+  const listingResources = useQuery<unknown[]>({
     queryKey: [QUERY_KEYS?.listings?.resources],
     queryFn: getListingsResources,
     retry: false,

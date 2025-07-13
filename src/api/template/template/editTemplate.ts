@@ -1,5 +1,4 @@
 import type { TemplateFormType } from "@/data/template/template/templateFormSchema";
-import axiosClient from "@/libs/axios/axios-client";
 import waitSeconds from "@/utils/waitSeconds";
 
 export interface editTemplateFunctionProps {
