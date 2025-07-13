@@ -703,12 +703,12 @@ export type FinancialStepType = {};
 
 export const financialStepInitialValues = {};
 
-// compensation step -----------------------------------------------------------
-export const compensationStepSchema = Joi.object({});
+// compensation and listing offices step -----------------------------------------------------------
+export const compensationAndListingOfficesStepSchema = Joi.object({});
 
-export type CompensationStepType = {};
+export type CompensationAndListingOfficesStepType = {};
 
-export const compensationStepInitialValues = {};
+export const compensationAndListingOfficesStepInitialValues = {};
 
 // offices step -----------------------------------------------------------
 export const officesStepSchema = Joi.object({});
