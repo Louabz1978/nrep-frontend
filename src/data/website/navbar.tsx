@@ -30,17 +30,17 @@ export const tabs: TabsType = [
         submenu: [
           {
             label: "subtab1",
-            to: "",
+            to: "one",
             permission: [],
           },
           {
             label: "subtab2",
-            to: "",
+            to: "two",
             permission: [],
           },
           {
             label: "subtab3",
-            to: "",
+            to: "three",
             permission: [],
           },
         ],
@@ -51,17 +51,17 @@ export const tabs: TabsType = [
         submenu: [
           {
             label: "subtab4",
-            to: "",
+            to: "four",
             permission: [],
           },
           {
             label: "subtab5",
-            to: "",
+            to: "five",
             permission: [],
           },
           {
             label: "subtab6",
-            to: "",
+            to: "six",
             permission: [],
           },
         ],
@@ -72,17 +72,17 @@ export const tabs: TabsType = [
         submenu: [
           {
             label: "subtab7",
-            to: "",
+            to: "seven",
             permission: [],
           },
           {
             label: "subtab8",
-            to: "",
+            to: "eight",
             permission: [],
           },
           {
             label: "subtab9",
-            to: "",
+            to: "nine",
             permission: [],
           },
         ],

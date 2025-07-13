@@ -126,9 +126,7 @@ function Navbar() {
             </div>
             <span
               className={`block h-1 w-full mt-1 rounded-full transition-all duration-200 ${
-                activeTab === tab.label || tab.to === location.pathname
-                  ? "bg-primary"
-                  : "group-hover:bg-secondary"
+                isCurrentPath(tab) ? "bg-primary" : "group-hover:bg-secondary"
               }`}
             ></span>
           </Link>

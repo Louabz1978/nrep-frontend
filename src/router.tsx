@@ -46,6 +46,42 @@ const router = createBrowserRouter([
         path: "listing/*",
         element: <ListingLogic />,
       },
+      {
+        path: "one",
+        element: <>one</>,
+      },
+      {
+        path: "two",
+        element: <>two</>,
+      },
+      {
+        path: "three",
+        element: <>three</>,
+      },
+      {
+        path: "four",
+        element: <>four</>,
+      },
+      {
+        path: "five",
+        element: <>five</>,
+      },
+      {
+        path: "six",
+        element: <>six</>,
+      },
+      {
+        path: "seven",
+        element: <>seven</>,
+      },
+      {
+        path: "eight",
+        element: <>eight</>,
+      },
+      {
+        path: "nine",
+        element: <>nine</>,
+      },
     ],
   },
   // specific pages that require the user without token
