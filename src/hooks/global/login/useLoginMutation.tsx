@@ -3,7 +3,7 @@ import MESSAGES from "@/data/global/messages";
 import type { LoginFormType } from "@/data/global/LoginFormSchema";
 import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate, type To } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/stores/useUser";
@@ -22,7 +22,7 @@ function useLoginMutation() {
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
       secureLocalStorage.setItem("USER", { data: user });
       setUser(user);
-      navigate(-1 as To, { replace: true });
+      navigate("/", { replace: true });
     },
   });
 
