@@ -3,7 +3,7 @@ import { useUser } from "@/stores/useUser";
 import { Route, Routes } from "react-router-dom";
 import ListingForm from "./ListingForm";
 import {
-  compensationStepInitialValues,
+  compensationAndListingOfficesStepInitialValues,
   featuresStepInitialValues,
   financialStepInitialValues,
   generalStepInitialValues,
@@ -35,7 +35,7 @@ function ListingLogic() {
                 rooms: roomsStepInitialValues,
                 features: featuresStepInitialValues,
                 financial: financialStepInitialValues,
-                compensation: compensationStepInitialValues,
+                compensation: compensationAndListingOfficesStepInitialValues,
                 offices: officesStepInitialValues,
                 remarks: remarksStepInitialValues,
               }}

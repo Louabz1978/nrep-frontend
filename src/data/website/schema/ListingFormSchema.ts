@@ -697,11 +697,243 @@ export const featuresStepInitialValues = {
 };
 
 // financial step -----------------------------------------------------------
-export const financialStepSchema = Joi.object({});
 
-export type FinancialStepType = {};
+export type FinancialStepType = {
+  totalTaxBill: TNumber;
+  taxYear: TString;
+  taxAreaType: TOption;
+  taxDescription: TOption;
+  hoaDescription: TOption;
+  hoaPhone: TNumber;
+  mainHoaFee: TNumber;
+  mainHoaFeeFrequency: TOption;
+  hoaFee: TNumber;
+  hoaFeeFrequency: TOption;
+  mandatoryClubFee: TNumber;
+  mandatoryClubFeeFrequency: TOption;
+  apartmentFee: TNumber;
+  apartmentFeeFrequency: TOption;
+  recreationalRentalFee: TNumber;
+  recreationalRentalFeeFrequency: TOption;
+  specialAssessmentFee: TNumber;
+  specialAssessmentFeeFrequency: TOption;
+  otherFee: TNumber;
+  otherFeeFrequency: TOption;
+  mandatoryClubFeeOnce: TNumber;
+  landLeaseFeeOnce: TNumber;
+  recreationalRentalFeeOnce: TNumber;
+  otherFeeOnce: TNumber;
+  specialAssessmentFeeOnce: TNumber;
+  transferFee: TNumber;
+  applicationFee: TNumber;
+  annualFoodBeverageMinimum: TString;
+  numberOfLeasesPerYear: TNumber;
+  minimumLeaseDays: TNumber;
+  landLeaseFee: TNumber;
+  landLeaseFeeFrequency: TNumber;
+  subjectToFIRPTA: TString;
+  subjectToLease: TString;
+  leaseDescription: TString;
+  leaseExpirationDate: TString;
+  moreFinancialOptions: TOption[];
+  moreRestrictionsOptions: TOption[];
+};
 
-export const financialStepInitialValues = {};
+export const financialStepSchema = Joi.object<FinancialStepType>({
+  totalTaxBill: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("إجمالي الفاتورة الضريبية"),
+  taxYear: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("السنة الضريبية"),
+  taxAreaType: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("نوع منطقة الضرائب"),
+  taxDescription: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف الضريبة"),
+  hoaDescription: optionSchema
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف اتحاد الملاك"),
+  hoaPhone: Joi.number()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("هاتف اتحاد الملاك"),
+  mainHoaFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الرسوم الرئيسية لاتحاد الملاك"),
+  mainHoaFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار الرسوم الرئيسية لاتحاد الملاك"),
+  hoaFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم اتحاد الملاك (HOA)"),
+  hoaFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار رسوم اتحاد الملاك"),
+  mandatoryClubFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم النادي الإلزامية"),
+  mandatoryClubFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار رسوم النادي الإلزامية"),
+  apartmentFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم الشقة"),
+  apartmentFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار رسوم الشقة"),
+  recreationalRentalFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم الإيجار الترفيهي"),
+  recreationalRentalFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار رسوم الإيجار الترفيهي"),
+  specialAssessmentFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم التقييم الخاص"),
+  specialAssessmentFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار رسوم التقييم الخاص"),
+  otherFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم أخرى"),
+  otherFeeFrequency: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار الرسوم الأخرى"),
+  mandatoryClubFeeOnce: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم النادي الإلزامي لمرة واحدة"),
+  landLeaseFeeOnce: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم تأجير الأرض لمرة واحدة"),
+  recreationalRentalFeeOnce: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم التأجير الترفيهي لمرة واحدة"),
+  otherFeeOnce: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم أخرى لمرة واحدة"),
+  specialAssessmentFeeOnce: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم التقييم الخاص لمرة واحدة"),
+  transferFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم التحويل"),
+  applicationFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم التقديم"),
+  annualFoodBeverageMinimum: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحد الأدنى السنوي للطعام والمشروبات"),
+  numberOfLeasesPerYear: Joi.number()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("عدد عقود الإيجار في السنة"),
+  minimumLeaseDays: Joi.number()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("الحد الأدنى لأيام الإيجار"),
+  landLeaseFee: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("رسوم تأجير الأرض"),
+  landLeaseFeeFrequency: Joi.number()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("تكرار رسوم تأجير الأرض"),
+  subjectToFIRPTA: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("خاضع لقانون FIRPTA"),
+  subjectToLease: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("خاضع لعقد إيجار"),
+  leaseDescription: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف عقد الإيجار"),
+  leaseExpirationDate: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("تاريخ انتهاء عقد الإيجار"),
+  moreFinancialOptions: Joi.array()
+    .items(optionSchema)
+    .messages(VALIDATION_MESSAGES)
+    .label("مواصفات أخرى للرسوم المالية"),
+  moreRestrictionsOptions: Joi.array()
+    .items(optionSchema)
+    .messages(VALIDATION_MESSAGES)
+    .label("قيود أخرى"),
+});
+
+export const financialStepInitialValues: FinancialStepType = {
+  totalTaxBill: null,
+  taxYear: null,
+  taxAreaType: null,
+  taxDescription: null,
+  hoaDescription: null,
+  hoaPhone: null,
+  mainHoaFee: null,
+  mainHoaFeeFrequency: null,
+  hoaFee: null,
+  hoaFeeFrequency: null,
+  mandatoryClubFee: null,
+  mandatoryClubFeeFrequency: null,
+  apartmentFee: null,
+  apartmentFeeFrequency: null,
+  recreationalRentalFee: null,
+  recreationalRentalFeeFrequency: null,
+  specialAssessmentFee: null,
+  specialAssessmentFeeFrequency: null,
+  otherFee: null,
+  otherFeeFrequency: null,
+  mandatoryClubFeeOnce: null,
+  landLeaseFeeOnce: null,
+  recreationalRentalFeeOnce: null,
+  otherFeeOnce: null,
+  specialAssessmentFeeOnce: null,
+  transferFee: null,
+  applicationFee: null,
+  annualFoodBeverageMinimum: null,
+  numberOfLeasesPerYear: null,
+  minimumLeaseDays: null,
+  landLeaseFee: null,
+  landLeaseFeeFrequency: null,
+  subjectToFIRPTA: null,
+  subjectToLease: null,
+  leaseDescription: null,
+  leaseExpirationDate: null,
+  moreFinancialOptions: [],
+  moreRestrictionsOptions: [],
+};
 
 // compensation and listing offices step -----------------------------------------------------------
 export const compensationAndListingOfficesStepSchema = Joi.object({});

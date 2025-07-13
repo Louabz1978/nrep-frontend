@@ -58,7 +58,8 @@ interface ListingFormProps {
 // listing form page, gets: default values for each step in the form
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
-  const [currentStep, setCurrentStep] = useState(0);
+
+  const [currentStep, setCurrentStep] = useState(4);
 
   // status step form
   const statusStep = useForm({
@@ -173,7 +174,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         },
       },
       {
-        name: "المعلومات العامة",
+        name: "المعلومات المالية",
         onClick: async () => {
           const isValid = await financialStep.trigger();
           if (isValid) setCurrentStep(5);
@@ -243,7 +244,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
             handleSubmitForm={handleSubmitForm}
           />
         ) : currentStep == 4 ? (
-          <FinancialStep />
+          <FinancialStep form={financialStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 5 ? (
           <CompensationAndListingOfficesStep
             form={compensationAndListingOfficesStep}
