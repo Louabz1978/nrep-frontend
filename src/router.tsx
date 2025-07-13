@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Link } from "react-router-dom";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
@@ -34,7 +34,9 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <>private route in website</>,
+        element: (
+          <Link to={"/template/main"}>Click here to see the template</Link>
+        ),
       },
       {
         path: "input",
