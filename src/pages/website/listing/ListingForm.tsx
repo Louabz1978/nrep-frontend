@@ -60,7 +60,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
 
 
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(4);
 
 
   // status step form
@@ -109,6 +109,8 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     ),
     mode: "onChange",
   });
+
+  console.log(financialStepSchema)
 
   // compensation step form
   const compensationStep = useForm({
@@ -176,7 +178,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         },
       },
       {
-        name: "المعلومات العامة",
+        name: "المعلومات المالية",
         onClick: async () => {
           const isValid = await financialStep.trigger();
           if (isValid) setCurrentStep(5);
@@ -246,7 +248,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
             handleSubmitForm={handleSubmitForm}
           />
         ) : currentStep == 4 ? (
-          <FinancialStep />
+          <FinancialStep form={financialStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 5 ? (
           <CompensationStep />
         ) : currentStep == 6 ? (
