@@ -1,5 +1,5 @@
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
-import Joi, { boolean } from "joi";
+import Joi from "joi";
 import type { Path } from "react-hook-form";
 
 // optionSchema
@@ -1067,7 +1067,8 @@ export const compensationAndListingOfficesStepInitialValues: CompensationAndList
     TheSellerBeingContactedToArrangeThePresentation: false,
     ThereASignOnThePropertyThatContainsContactInformationForTheSeller: false,
     WillTheRealEstateAgentProvidePostContractServices: false,
-    WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation:false,
+    WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation:
+      false,
     marketingAgentName: null,
     marketingAgentTitle: null,
     marketingAgentPhone: null,
