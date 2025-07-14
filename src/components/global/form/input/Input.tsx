@@ -9,6 +9,7 @@ import {
 } from "react-hook-form";
 import Info from "../../modal/Info";
 import getError, { isValid } from "@/utils/getErrors";
+import Toggle from "../toggle/Toggle"; // <-- add Toggle import
 
 interface InputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -34,6 +35,7 @@ interface InputProps<T extends FieldValues> {
   addingValidStyle?: string;
   bottomElement?: string | ReactNode;
   required?: boolean;
+  toggle?: Path<T>;
 }
 
 // gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
@@ -62,6 +64,7 @@ function Input<T extends FieldValues>({
   info,
   bottomElement,
   required,
+  toggle,
 }: InputProps<T>) {
   // to show password
   const [show, setShow] = useState(false);
@@ -72,6 +75,21 @@ function Input<T extends FieldValues>({
     formState: { errors },
     trigger,
   } = form;
+
+  // Compute isDisabled so that it updates when toggle changes
+  const toggleValue = toggle ? watch(toggle) : undefined;
+  const isDisabled = disabled || (toggle && !toggleValue);
+
+  // Handler to update toggle and force re-render
+  const handleToggleChange = () => {
+    // If toggle is provided, flip its value
+    if (toggle) {
+      setValue(toggle, !toggleValue as PathValue<T, Path<T>>);
+      trigger?.(toggle);
+    }
+    // Also trigger the main input for validation
+    trigger?.(name);
+  };
 
   return (
     <>
@@ -87,7 +105,7 @@ function Input<T extends FieldValues>({
               className="peer hidden"
               id={name}
               {...(register ? register(name) : {})}
-              disabled={disabled}
+              disabled={isDisabled}
               onChange={(e) => {
                 setValue(
                   name,
@@ -101,10 +119,20 @@ function Input<T extends FieldValues>({
             {/* checkbox presentation */}
             <div className="w-[20px] max-w-[20px] min-w-[20px] h-[20px] max-h-[20px] min-h-[20px] bg-secondary-background rounded-sm right-[2px] peer-checked:bg-secondary-foreground transition-all duration-[0.1s]"></div>
 
-            <div>
+            <div className="flex items-center gap-2">
               {label}
               {required ? (
                 <span className="text-size24 text-error">{" *"}</span>
+              ) : null}
+              {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
+              {toggle ? (
+                <Toggle
+                  form={form}
+                  name={toggle}
+                  label=""
+                  onChange={handleToggleChange}
+                  checked={!!toggleValue}
+                />
               ) : null}
             </div>
             {element ? element : null}
@@ -127,10 +155,22 @@ function Input<T extends FieldValues>({
               htmlFor={name}
               className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
             >
-              {label}
-              {required ? (
-                <span className="text-size24 text-error">{" *"}</span>
-              ) : null}
+              <span className="flex items-center gap-2">
+                {label}
+                {required ? (
+                  <span className="text-size24 text-error">{" *"}</span>
+                ) : null}
+                {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
+                {toggle ? (
+                  <Toggle
+                    form={form}
+                    name={toggle}
+                    label=""
+                    onChange={handleToggleChange}
+                    checked={!!toggleValue}
+                  />
+                ) : null}
+              </span>
             </label>
           ) : null}
 
@@ -147,8 +187,12 @@ function Input<T extends FieldValues>({
                     placeholder={placeholder}
                     id={name}
                     {...(register ? register(name) : {})}
-                    disabled={disabled}
-                    className={`flex-1 h-[40px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    disabled={isDisabled}
+                    className={`flex-1 h-[40px] text-[16.36px] ${
+                      isDisabled
+                        ? "bg-secondary-background"
+                        : "bg-input-bg"
+                    } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
                         : `${
@@ -187,8 +231,12 @@ function Input<T extends FieldValues>({
                     placeholder={placeholder}
                     id={name}
                     {...(register ? register(name) : {})}
-                    disabled={disabled}
-                    className={`flex-1 h-[40px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    disabled={isDisabled}
+                    className={`flex-1 h-[40px] text-[16.36px] ${
+                      isDisabled
+                        ? "bg-secondary-background"
+                        : "bg-input-bg"
+                    } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
                         : `${
