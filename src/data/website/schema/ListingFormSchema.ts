@@ -1,5 +1,5 @@
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
-import Joi from "joi";
+import Joi, { boolean } from "joi";
 import type { Path } from "react-hook-form";
 
 // optionSchema
@@ -936,11 +936,144 @@ export const financialStepInitialValues: FinancialStepType = {
 };
 
 // compensation and listing offices step -----------------------------------------------------------
-export const compensationAndListingOfficesStepSchema = Joi.object({});
+export type CompensationAndListingOfficesStepType = {
+  individualAgentCommission: TNumber;
+  cooperativeBrokerCommission: TNumber;
+  nonCommissionedAmount: TNumber;
+  agentCommission: TNumber;
+  commissionDescription: TOption;
+  commissionAmount: TNumber;
+  ProbableShortSale: TNumber;
+  internetSites: TOption;
+  listingInstructions: TOption;
+  listingDate: TString;
+  listingPhone: TString;
+  expirationDate: TString;
+  TypeInsertion: TOption;
+  TheSellerBeingContactedToArrangeThePresentation: boolean;
+  ThereASignOnThePropertyThatContainsContactInformationForTheSeller: boolean;
+  WillTheRealEstateAgentProvidePostContractServices: boolean;
+  WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation: boolean;
+  marketingAgentName: TString;
+  marketingAgentTitle: TString;
+  marketingAgentPhone: TNumber;
+  marketingAgentEmail: TString;
+  additionalOptions: TOption[];
+};
 
-export type CompensationAndListingOfficesStepType = {};
+export const compensationAndListingOfficesStepSchema =
+  Joi.object<CompensationAndListingOfficesStepType>({
+    individualAgentCommission: Joi.number()
+      .required()
+      .messages(VALIDATION_MESSAGES)
+      .label("عمولة الوكيل الفردي (%)"),
+    cooperativeBrokerCommission: Joi.number()
+      .required()
+      .messages(VALIDATION_MESSAGES)
+      .label("عمولة السمسار المتعاون (%)"),
+    agentCommission: Joi.number()
+      .required()
+      .messages(VALIDATION_MESSAGES)
+      .label("عمولة غير الممثل (%)"),
+    commissionAmount: Joi.number()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("مبلغ المكافأة (%)"),
+    commissionDescription: optionSchema
+      .allow(null)
+      .messages(VALIDATION_MESSAGES)
+      .label("وصف المكافأة"),
+    ProbableShortSale: Joi.number()
+      .required()
+      .messages(VALIDATION_MESSAGES)
+      .label("احتمال البيع المختصر ($/%)"),
+    internetSites: optionSchema
+      .allow(null)
+      .messages(VALIDATION_MESSAGES)
+      .label("مواقع الانترنت"),
+    listingInstructions: optionSchema
+      .allow(null)
+      .messages(VALIDATION_MESSAGES)
+      .label("تعليمات العرض"),
+    listingDate: Joi.string()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("تاريخ الإدراج"),
+    listingPhone: Joi.string()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("هاتف موعد العرض"),
+    expirationDate: Joi.string()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("تاريخ الانتهاء"),
+    TypeInsertion: optionSchema
+      .allow(null)
+      .messages(VALIDATION_MESSAGES)
+      .label("نوع الإخراج"),
+    TheSellerBeingContactedToArrangeThePresentation: Joi.boolean()
+      .messages(VALIDATION_MESSAGES)
+      .label("هل يتم الاتصال بالبائع لترتيب العرض؟"),
+    ThereASignOnThePropertyThatContainsContactInformationForTheSeller:
+      Joi.boolean()
+        .messages(VALIDATION_MESSAGES)
+        .label("هل يوجد لافتة على العقار تحتوي على معلومات اتصال بالبائع؟"),
+    WillTheRealEstateAgentProvidePostContractServices: Joi.boolean()
+      .required()
+      .messages(VALIDATION_MESSAGES)
+      .label("هل سيقوم وسيط العقارات بأداء خدمات ما بعد العقد؟"),
+    WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation:
+      Joi.boolean()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("هل سيكون وسيط العقارات متاحًا أثناء تقديم العقود والتفاوض؟"),
+    marketingAgentName: Joi.string()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("اسم وكيل التسوية"),
+    marketingAgentTitle: Joi.string()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("عنوان وكيل التسوية"),
+    marketingAgentPhone: Joi.number()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("رقم هاتف وكيل التسوية"),
+    marketingAgentEmail: Joi.string()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("البريد الإلكتروني لوكيل التسوية"),
+    additionalOptions: Joi.array()
+      .items(optionSchema)
+      .messages(VALIDATION_MESSAGES)
+      .label("خيارات إضافية"),
+  });
 
-export const compensationAndListingOfficesStepInitialValues = {};
+export const compensationAndListingOfficesStepInitialValues: CompensationAndListingOfficesStepType =
+  {
+    individualAgentCommission: null,
+    cooperativeBrokerCommission: null,
+    nonCommissionedAmount: null,
+    agentCommission: null,
+    commissionDescription: null,
+    commissionAmount: null,
+    ProbableShortSale: null,
+    internetSites: null,
+    listingInstructions: null,
+    listingDate: null,
+    listingPhone: null,
+    expirationDate: null,
+    TypeInsertion: null,
+    TheSellerBeingContactedToArrangeThePresentation: false,
+    ThereASignOnThePropertyThatContainsContactInformationForTheSeller: false,
+    WillTheRealEstateAgentProvidePostContractServices: false,
+    WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation:false,
+    marketingAgentName: null,
+    marketingAgentTitle: null,
+    marketingAgentPhone: null,
+    marketingAgentEmail: null,
+    additionalOptions: [],
+  };
 
 // offices step -----------------------------------------------------------
 export const officesStepSchema = Joi.object({});
