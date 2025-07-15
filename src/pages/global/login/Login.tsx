@@ -42,7 +42,7 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
   return (
     <PageContainer>
       <div
-        className={`w-full h-full flex-1 overflow-auto relative z-0 flex items-center justify-end bg-contain bg-top-right bg-no-repeat`}
+        className={`w-full h-full flex-1 overflow-auto relative z-0 flex items-center justify-end bg-right bg-cover`}
         style={{ backgroundImage: `url(${loginBg})` }}
       >
         {/* overlay */}

@@ -131,7 +131,6 @@ function Input<T extends FieldValues>({
                   name={toggle}
                   label=""
                   onChange={handleToggleChange}
-                  checked={!!toggleValue}
                 />
               ) : null}
             </div>
@@ -167,7 +166,6 @@ function Input<T extends FieldValues>({
                     name={toggle}
                     label=""
                     onChange={handleToggleChange}
-                    checked={!!toggleValue}
                   />
                 ) : null}
               </span>
@@ -189,9 +187,7 @@ function Input<T extends FieldValues>({
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
                     className={`flex-1 h-[40px] text-[16.36px] ${
-                      isDisabled
-                        ? "bg-secondary-background"
-                        : "bg-input-bg"
+                      isDisabled ? "bg-secondary-background" : "bg-input-bg"
                     } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
@@ -233,9 +229,7 @@ function Input<T extends FieldValues>({
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
                     className={`flex-1 h-[40px] text-[16.36px] ${
-                      isDisabled
-                        ? "bg-secondary-background"
-                        : "bg-input-bg"
+                      isDisabled ? "bg-secondary-background" : "bg-input-bg"
                     } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"

@@ -944,6 +944,7 @@ export type CompensationAndListingOfficesStepType = {
   commissionDescription: TOption;
   commissionAmount: TNumber;
   ProbableShortSale: TNumber;
+  hasProbableShortSale: boolean;
   internetSites: TOption;
   listingInstructions: TOption;
   listingDate: TString;
@@ -983,10 +984,20 @@ export const compensationAndListingOfficesStepSchema =
       .allow(null)
       .messages(VALIDATION_MESSAGES)
       .label("وصف المكافأة"),
-    ProbableShortSale: Joi.number()
-      .required()
-      .messages(VALIDATION_MESSAGES)
-      .label("احتمال البيع المختصر ($/%)"),
+
+    hasProbableShortSale: Joi.boolean(),
+    ProbableShortSale: Joi.when("hasProbableShortSale", {
+      is: true,
+      then: Joi.number()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("احتمال البيع المختصر ($/%)"),
+      otherwise: Joi.number()
+        .allow(null, "")
+        .messages(VALIDATION_MESSAGES)
+        .label("احتمال البيع المختصر ($/%)"),
+    }),
+
     internetSites: optionSchema
       .allow(null)
       .messages(VALIDATION_MESSAGES)
@@ -1057,6 +1068,7 @@ export const compensationAndListingOfficesStepInitialValues: CompensationAndList
     agentCommission: null,
     commissionDescription: null,
     commissionAmount: null,
+    hasProbableShortSale: false,
     ProbableShortSale: null,
     internetSites: null,
     listingInstructions: null,

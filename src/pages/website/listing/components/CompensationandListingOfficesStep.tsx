@@ -84,7 +84,7 @@ function CompensationAndListingOfficesStep({
             label="احتمال البيع المختصر (%/$)"
             name="ProbableShortSale"
             type="number"
-            toggle="ProbableShortSale"
+            toggle="hasProbableShortSale"
             addingStyle="flex-1"
             info="يتم تعبئته تلقائيًا في حال البيع المختصر"
           />
