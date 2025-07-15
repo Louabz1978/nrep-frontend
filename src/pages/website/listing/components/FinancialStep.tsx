@@ -28,7 +28,7 @@ function FinancialStep({ form, setCurrentStep }: FinancialStepProps) {
   return (
     <PageContainer className="flex-1 h-full overflow-auto">
       <form
-        id="general_step_form"
+        id="Finanical_step_form"
         className="mb-10"
         onSubmit={handleSubmit(onSubmit)}
       >
