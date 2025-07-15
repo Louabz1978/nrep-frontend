@@ -9,6 +9,43 @@ export const GENDERS = [
   },
 ];
 
+export const additionOptions1 = [
+  {
+    value: "listed_online",
+    label: "العقار معروض على الإنترنت"
+  },
+  {
+    value: "variable_commission",
+    label: "عمولة بنسبة متغيرة"
+  },
+  {
+    value: "bank_reserved",
+    label: "العقار محجوز من البنك"
+  },
+  {
+    value: "joint_agency",
+    label: "وكالة مشتركة"
+  },
+  {
+    value: "address_displayed_online",
+    label: "يتم عرض العنوان على الإنترنت"
+  },
+  {
+    value: "automated_market_value",
+    label: " عرض القيمة السوقية الآلية"
+  },
+];
+export const additionOptions2 = [
+  {
+    value: "requires_appointment",
+    label: "هل يتطلب موعد للعرض؟"
+  },
+  {
+    value: "targeted_marketing",
+    label: "التسويق المستهدف"
+  },
+];
+
 export const GUESTROOM = [
   {
     value: "living_room",
@@ -324,6 +361,3 @@ export const STORMPROTECTION = [
     label: "طرق حماية أخرى",
   },
 ];
-
-
-
