@@ -5,4 +5,11 @@ export interface User {
 }
 
 // user types
-export type UserType = "admin" | "free" | "allow" | undefined;
+export type UserType =
+  | "mustUnauth"
+  | "admin"
+  | "free"
+  | "allow"
+  | "realtor"
+  | "bearer"
+  | undefined;

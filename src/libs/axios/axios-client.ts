@@ -38,7 +38,6 @@ axiosClient.interceptors.response.use(
     // navigate to login page if the token is expired
     if (typeof window != "undefined" && error?.response?.status === 401) {
       window.location.replace(`${window.location.origin}/login`);
-      // or refresh token
     }
     let err = error;
     // handle general errors messages

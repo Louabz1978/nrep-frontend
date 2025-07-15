@@ -30,7 +30,7 @@ const router = createBrowserRouter([
   // private website pages
   {
     path: "/",
-    element: <PrivateRoute element={<WebsiteLayout />} role={"allow"} />,
+    element: <PrivateRoute element={<WebsiteLayout />} role={"bearer"} />,
     children: [
       {
         index: true,
@@ -87,7 +87,7 @@ const router = createBrowserRouter([
   // specific pages that require the user without token
   {
     path: "/",
-    element: <PrivateRoute element={<GlobalLayout />} role={"allow"} />,
+    element: <PrivateRoute element={<GlobalLayout />} role={"mustUnauth"} />,
     children: [
       {
         path: "login",
@@ -95,7 +95,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // templage
+  // template
   {
     path: "/template",
     element: <PrivateRoute element={<TemplateLayout />} role={"allow"} />,

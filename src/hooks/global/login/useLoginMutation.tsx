@@ -22,7 +22,7 @@ function useLoginMutation() {
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
       secureLocalStorage.setItem("USER", { data: user });
       setUser(user);
-      navigate("/", { replace: true });
+      navigate("/");
     },
   });
 
