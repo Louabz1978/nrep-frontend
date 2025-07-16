@@ -24,7 +24,6 @@ function CompensationAndListingOfficesStep({
   const { handleSubmit } = form;
 
   const onSubmit = (data: CompensationAndListingOfficesStepType) => {
-    setCurrentStep((prev) => prev + 1);
     handleSubmitForm();
     console.log(data);
   };
