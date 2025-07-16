@@ -33,6 +33,7 @@ export const statusStepInitialValues: StatusStepType = {
 export type GeneralStepType = {
   // first accordion
   city: TOption;
+  status: ListingStatusType;
   district: TString;
   propertyId: TString;
   geoArea: TString;
@@ -55,6 +56,7 @@ export type GeneralStepType = {
   unitsInCompound: TNumber;
   yearBuilt: TNumber;
   legalDescription: TString;
+  generalDescription: TString;
   section: TString;
   municipality: TString;
   legalUnit: TString;
@@ -113,6 +115,7 @@ export type GeneralStepType = {
 export const generalStepSchema = Joi.object<GeneralStepType>({
   // first accordion fields
   city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
+  status: Joi.string(),
   district: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -198,6 +201,10 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("الوصف القانوني"),
+  generalDescription: Joi.string()
+    .allow(null, "")
+    .messages(VALIDATION_MESSAGES)
+    .label("معلومات إضافية عن العقار"),
   section: Joi.string()
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
@@ -403,6 +410,7 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
 export const generalStepInitialValues: GeneralStepType = {
   // first accordion
   city: null,
+  status: "active",
   district: null,
   propertyId: null,
   geoArea: null,
@@ -425,6 +433,7 @@ export const generalStepInitialValues: GeneralStepType = {
   unitsInCompound: null,
   yearBuilt: null,
   legalDescription: null,
+  generalDescription: null,
   section: null,
   municipality: null,
   legalUnit: null,
@@ -589,7 +598,28 @@ const selectElementSchema = Joi.object({
   value: Joi.string(),
 }).unknown();
 
-export const featuresStepSchema = Joi.object({
+export type FeaturesStepType = {
+  rooms: {
+    type: { value: string } | undefined;
+    width: number | undefined;
+    length: number | undefined;
+  }[];
+  guestRoom: TOption[];
+  safty: TOption[];
+  hasPrivatePool: boolean;
+  privatePool: TOption[];
+  hasJaccuzi: boolean;
+  jaccuzi: TOption[];
+  facilities: TOption[];
+  bedroomDetailes: TOption[];
+  approvalInfo: TOption[];
+  view: TOption[];
+  stormProtiction: TOption[];
+  portInfo: TOption[];
+  terms: TOption[];
+};
+
+export const featuresStepSchema = Joi.object<FeaturesStepType>({
   guestRoom: Joi.array()
     .min(1)
     .messages(VALIDATION_MESSAGES)
@@ -657,28 +687,25 @@ export const featuresStepSchema = Joi.object({
     .min(1)
     .messages(VALIDATION_MESSAGES)
     .label("الشروط"),
+
+  rooms: Joi.array().items(
+    Joi.object({
+      type: Joi.object({ value: Joi.string() })
+        .unknown()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("نوع الغرفة"),
+      width: Joi.number()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("عرض الغرفة"),
+      length: Joi.number()
+        .required()
+        .messages(VALIDATION_MESSAGES)
+        .label("طول الغرفة"),
+    })
+  ),
 });
-
-type SelectElement = {
-  label: string;
-  value: string;
-};
-
-export type FeaturesStepType = {
-  guestRoom: SelectElement[];
-  safty: SelectElement[];
-  hasPrivatePool: boolean;
-  privatePool: SelectElement[];
-  hasJaccuzi: boolean;
-  jaccuzi: SelectElement[];
-  facilities: SelectElement[];
-  bedroomDetailes: SelectElement[];
-  approvalInfo: SelectElement[];
-  view: SelectElement[];
-  stormProtiction: SelectElement[];
-  portInfo: SelectElement[];
-  terms: SelectElement[];
-};
 
 export const featuresStepInitialValues = {
   guestRoom: [],
@@ -694,6 +721,7 @@ export const featuresStepInitialValues = {
   stormProtiction: [],
   portInfo: [],
   terms: [],
+  rooms: [roomInitailValues],
 };
 
 // financial step -----------------------------------------------------------

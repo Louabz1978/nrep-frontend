@@ -13,16 +13,19 @@ import { cityChoices } from "@/data/website/GeneralData";
 interface CompensationAndListingOfficesStepProps {
   form: UseFormReturn<CompensationAndListingOfficesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  handleSubmitForm: () => void;
 }
 
 function CompensationAndListingOfficesStep({
   form,
   setCurrentStep,
+  handleSubmitForm,
 }: CompensationAndListingOfficesStepProps) {
   const { handleSubmit } = form;
 
   const onSubmit = (data: CompensationAndListingOfficesStepType) => {
     setCurrentStep((prev) => prev + 1);
+    handleSubmitForm();
     console.log(data);
   };
 

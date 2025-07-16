@@ -9,6 +9,7 @@ import { IoInformationCircleOutline } from "react-icons/io5";
  */
 interface InfoProps {
   info: string | ReactNode;
+  className?: string;
 }
 
 /**
@@ -24,7 +25,7 @@ interface InfoProps {
  * - Responsive sizing
  * - Smooth transitions
  */
-function Info({ info }: InfoProps) {
+function Info({ info, className }: InfoProps) {
   // State to control modal visibility
   const [isOpenInof, setIsOpenInfo] = useState<boolean | null | number>(false);
 
@@ -33,7 +34,7 @@ function Info({ info }: InfoProps) {
       {/* Information icon trigger */}
       <IoInformationCircleOutline
         onClick={() => setIsOpenInfo(true)}
-        className="cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px]"
+        className={`cursor-pointer text-primary-fg self-end size-[24px] min-w-[24px] ${className}`}
         aria-label="Show information"
       />
 
@@ -50,7 +51,9 @@ function Info({ info }: InfoProps) {
           </div>
 
           {/* Scrollable content area */}
-          <div className="px-[20px] text-size24 overflow-y-auto">{info}</div>
+          <div className="px-[20px] overflow-y-auto font-normal text-size24 text-start whitespace-pre-wrap break-words">
+            {info}
+          </div>
         </div>
       </Modal>
     </Fragment>

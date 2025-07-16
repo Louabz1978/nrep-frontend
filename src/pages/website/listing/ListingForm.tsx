@@ -1,13 +1,9 @@
 import Stepper from "@/components/global/stepper/Stepper";
 import { useMemo, useState } from "react";
-import StatusStep from "./components/StatusStep";
 import GeneralStep from "./components/GeneralStep";
-import RoomsStep from "./components/RoomsStep";
 import FeaturesStep from "./components/FeaturesStep";
 import FinancialStep from "./components/FinancialStep";
 import CompensationAndListingOfficesStep from "./components/CompensationandListingOfficesStep";
-import OfficesStep from "./components/OfficesStep";
-import RemarksStep from "./components/RemarksStep";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import {
@@ -19,14 +15,6 @@ import {
   financialStepSchema,
   generalStepInitialValues,
   generalStepSchema,
-  officesStepInitialValues,
-  officesStepSchema,
-  remarksStepInitialValues,
-  remarksStepSchema,
-  roomsStepInitialValues,
-  roomsStepSchema,
-  statusStepInitialValues,
-  statusStepSchema,
   type CompensationAndListingOfficesStepType,
   type FeaturesStepType,
   type FinancialStepType,
@@ -59,17 +47,7 @@ interface ListingFormProps {
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
 
-  const [currentStep, setCurrentStep] = useState(5);
-
-  // status step form
-  const statusStep = useForm({
-    resolver: joiResolver(statusStepSchema),
-    defaultValues: cleanValues<StatusStepType>(
-      statusStepInitialValues,
-      defaultValues?.status
-    ),
-    mode: "onChange",
-  });
+  const [currentStep, setCurrentStep] = useState(2);
 
   // general step form
   const generalStep = useForm({
@@ -78,13 +56,6 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       generalStepInitialValues,
       defaultValues?.general
     ),
-    mode: "onChange",
-  });
-
-  // rooms step form
-  const roomsStep = useForm({
-    resolver: joiResolver(roomsStepSchema),
-    defaultValues: cleanValues(roomsStepInitialValues, defaultValues?.rooms),
     mode: "onChange",
   });
 
@@ -118,105 +89,50 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     mode: "onChange",
   });
 
-  // offices step form
-  const officesStep = useForm({
-    resolver: joiResolver(officesStepSchema),
-    defaultValues: cleanValues(
-      officesStepInitialValues,
-      defaultValues?.offices
-    ),
-    mode: "onChange",
-  });
-
-  // remarks step form
-  const remarksStep = useForm({
-    resolver: joiResolver(remarksStepSchema),
-    defaultValues: cleanValues(
-      remarksStepInitialValues,
-      defaultValues?.remarks
-    ),
-    mode: "onChange",
-  });
-
   // steps
   const Steps: StepType[] = useMemo(
     () => [
       {
-        name: "الحالة",
+        name: "معلومات عامة",
         onClick: async () => null,
       },
       {
-        name: "معلومات عامة",
-        onClick: async () => {
-          const isValid = await statusStep.trigger();
-          if (isValid) setCurrentStep(1);
-        },
-      },
-      {
-        name: "الميزات",
+        name: "الغرف والميزات",
         onClick: async () => {
           const isValid = await generalStep.trigger();
-          if (isValid) setCurrentStep(2);
-        },
-      },
-      {
-        name: "الغرف و المساحات",
-        onClick: async () => {
-          const isValid = await featuresStep.trigger();
-          if (isValid) setCurrentStep(3);
+          if (isValid) setCurrentStep(1);
         },
       },
       {
         name: "العمولة",
         onClick: async () => {
-          const isValid = await roomsStep.trigger();
-          if (isValid) setCurrentStep(4);
-        },
-      },
-      {
-        name: "المعلومات المالية",
-        onClick: async () => {
-          const isValid = await financialStep.trigger();
-          if (isValid) setCurrentStep(5);
+          const isValid = await featuresStep.trigger();
+          if (isValid) setCurrentStep(2);
         },
       },
       {
         name: "الوكيل المسؤول",
         onClick: async () => {
           const isValid = await compensationAndListingOfficesStep.trigger();
-          if (isValid) setCurrentStep(6);
-        },
-      },
-      {
-        name: "ملاحظات",
-        onClick: async () => {
-          const isValid = await officesStep.trigger();
-          if (isValid) setCurrentStep(7);
+          if (isValid) setCurrentStep(3);
         },
       },
     ],
     [
-      statusStep,
       generalStep,
       featuresStep,
-      roomsStep,
       financialStep,
       compensationAndListingOfficesStep,
-      officesStep,
     ]
   );
 
   // handle submit all form steps
   const handleSubmitForm = () => {
     console.log({
-      ...statusStep.watch(),
       ...generalStep.watch(),
-      ...roomsStep.watch(),
       ...featuresStep.watch(),
       ...financialStep.watch(),
       ...compensationAndListingOfficesStep.watch(),
-      ...officesStep.watch(),
-      ...remarksStep.watch(),
     });
   };
 
@@ -232,28 +148,17 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       {/* form steps area */}
       <div className="flex-1 h-full overflow-auto">
         {currentStep == 0 ? (
-          <StatusStep form={statusStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 1 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 2 ? (
+        ) : currentStep == 1 ? (
           <FeaturesStep form={featuresStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 3 ? (
-          <RoomsStep
-            form={roomsStep}
-            setCurrentStep={setCurrentStep}
-            handleSubmitForm={handleSubmitForm}
-          />
-        ) : currentStep == 4 ? (
+        ) : currentStep == 2 ? (
           <FinancialStep form={financialStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 5 ? (
+        ) : (
           <CompensationAndListingOfficesStep
             form={compensationAndListingOfficesStep}
             setCurrentStep={setCurrentStep}
+            handleSubmitForm={handleSubmitForm}
           />
-        ) : currentStep == 6 ? (
-          <OfficesStep />
-        ) : (
-          <RemarksStep />
         )}
       </div>
     </PageContainer>

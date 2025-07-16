@@ -46,6 +46,12 @@ import AccordionSubmit, {
 import Textarea from "@/components/global/form/textarea/Textarea";
 import { Button } from "@/components/global/form/button/Button";
 import { GUESTROOM } from "@/data/global/select";
+import Radio from "@/components/global/form/radio/Radio";
+import {
+  StatusOptions,
+  StatusParagraph,
+} from "@/data/website/Listing/listingData";
+import Info from "@/components/global/modal/Info";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -200,6 +206,18 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
           >
             <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
+              <div className="flex flex-col items-center w-full gap-[16px] col-span-full">
+                <FormSectionHeader className="flex items-center gap-[8px] justify-center">
+                  حالة العقار:{" "}
+                  <Info info={StatusParagraph} className="mb-[10px]" />
+                </FormSectionHeader>
+
+                {/* toggle active status button */}
+                <div className="flex gap-[15px]">
+                  <Radio form={form} name="status" options={StatusOptions} />
+                </div>
+              </div>
+
               <FormSectionHeader>معلومات المنطقة</FormSectionHeader>
               <Input
                 form={form}
@@ -436,7 +454,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
               <Textarea
                 form={form}
                 label="الوصف القانوني :"
-                placeholder="النص هنا"
+                placeholder="الوصف القانوني"
                 name="legalDescription"
                 info="الوصف القانوني للعقار"
                 addingStyle="col-span-full"
@@ -861,6 +879,15 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
                   info={"hello"}
                 />
               </div>
+
+              <Textarea
+                form={form}
+                label="معلومات إضافية عن العقار :"
+                placeholder="معلومات إضافية عن العقار"
+                name="generalDescription"
+                info="معلومات إضافية عن العقار"
+                addingStyle="col-span-full"
+              />
 
               <AccordionButtonsContainer>
                 <AccordionSubmit<GeneralStepType>

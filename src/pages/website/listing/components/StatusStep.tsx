@@ -3,7 +3,7 @@ import Radio from "@/components/global/form/radio/Radio";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import {
   StatusOptions,
-  StatusParagraphs,
+  // StatusParagraph,
 } from "@/data/website/Listing/listingData";
 import type { StatusStepType } from "@/data/website/schema/ListingFormSchema";
 import type { Dispatch, SetStateAction } from "react";
@@ -35,7 +35,7 @@ function StatusStep({ form, setCurrentStep }: StatusStepProps) {
         </h2>
 
         {/*paragraph*/}
-        <div className="w-full text-primary-fg pr-[32px] flex flex-col gap-[16px]">
+        {/* <div className="w-full text-primary-fg pr-[32px] flex flex-col gap-[16px]">
           {StatusParagraphs?.map((item, index) => {
             return (
               <p key={index} className="text-size28">
@@ -43,7 +43,7 @@ function StatusStep({ form, setCurrentStep }: StatusStepProps) {
               </p>
             );
           })}
-        </div>
+        </div> */}
 
         {/* status */}
         <div className="flex flex-col items-center w-full gap-[16px]">

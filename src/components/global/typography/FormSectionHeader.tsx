@@ -3,13 +3,18 @@ import type { ReactNode } from "react";
 interface FormSectionHeaderProps {
   children: ReactNode;
   textSize?: string;
+  className?: string;
 }
-function FormSectionHeader({ children, textSize }: FormSectionHeaderProps) {
+function FormSectionHeader({
+  children,
+  textSize,
+  className,
+}: FormSectionHeaderProps) {
   return (
     <h3
       className={`font-bold ${
         textSize ? textSize : "text-size40"
-      } text-primary-fg mb-[16px] mt-[40px] col-span-full w-full text-center`}
+      } text-primary-fg mb-[16px] mt-[40px] col-span-full w-full text-center ${className}`}
     >
       {children}
     </h3>

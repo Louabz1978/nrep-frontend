@@ -9,6 +9,7 @@ import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
 import ListingLogic from "./pages/website/listing/ListingLogic";
 import PrivateRoute from "./utils/privateRoute";
+import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "listing/*",
         element: <ListingLogic />,
+      },
+      {
+        path: "color",
+        element: <ColorPaletteEditor />,
       },
       {
         path: "one",
