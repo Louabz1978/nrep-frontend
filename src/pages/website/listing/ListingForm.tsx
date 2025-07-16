@@ -127,6 +127,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
   );
 
   console.log("");
+  console.log("hello world");
   // handle submit all form steps
   const handleSubmitForm = () => {
     console.log({
