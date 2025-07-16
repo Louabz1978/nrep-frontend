@@ -9,25 +9,31 @@ import type { CompensationAndListingOfficesStepType } from "@/data/website/schem
 import type { Dispatch, SetStateAction } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { cityChoices } from "@/data/website/GeneralData";
+import { additionOptions1, additionOptions2 } from "@/data/global/select";
 
+// Props interface for the CompensationAndListingOfficesStep component
 interface CompensationAndListingOfficesStepProps {
   form: UseFormReturn<CompensationAndListingOfficesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   handleSubmitForm: () => void;
 }
 
+// Main component for the Compensation and Listing Offices step
 function CompensationAndListingOfficesStep({
   form,
   setCurrentStep,
   handleSubmitForm,
 }: CompensationAndListingOfficesStepProps) {
+  // Destructure handleSubmit from the form object for form submission handling
   const { handleSubmit } = form;
 
+  // Function to handle form submission
   const onSubmit = (data: CompensationAndListingOfficesStepType) => {
     handleSubmitForm();
     console.log(data);
   };
 
+  // Render the page container and form
   return (
     <PageContainer className="h-full overflow-auto ">
       <form
@@ -206,7 +212,7 @@ function CompensationAndListingOfficesStep({
               keyValue="value"
               showValue="label"
               name={"additionalOptions"}
-              choices={cityChoices}
+              choices={additionOptions1}
               placeholder={"اختر مواصفات أخرى للرسوم المالية"}
               multiple={true}
               addingStyle="!w-[60%]"
@@ -221,7 +227,7 @@ function CompensationAndListingOfficesStep({
               name={"additionalOptions"}
               placeholder={"اختر مواصفات أخرى للرسوم المالية"}
               multiple={true}
-              choices={cityChoices}
+              choices={additionOptions2}
               addingStyle="!w-[60%]"
               info="اختر خيارات إضافية متعلقة بالرسوم المالية"
             />
