@@ -38,8 +38,8 @@ const VALIDATION_MESSAGES: Record<string, string> = {
 
   // Array Validation Messages
   "array.base": "حقل {{#label}} يجب أن يكون قائمة.",
-  "array.min": "طول القائمة في حقل {{#label}} يجب ألا يقل عن {{#limit}} عنصر.",
-  "array.max": "طول القائمة في حقل {{#label}} يجب ألا يزيد عن {{#limit}} عنصر.",
+  "array.min": "الحقل {{#label}} يجب أن يحتوي على {{#limit}} عنصر على الأقل.",
+  "array.max": "الحقل {{#label}} يجب ألا يتجاوز {{#limit}} عناصر.",
   "array.unique": "عناصر القائمة في حقل {{#label}} يجب أن تكون فريدة.",
 
   // Object Validation Messages

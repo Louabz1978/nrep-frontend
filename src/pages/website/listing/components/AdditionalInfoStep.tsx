@@ -6,7 +6,7 @@ import Select from "@/components/global/form/select/Select";
 import { type AdditionalInfoStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
-import { additionOptions, NUMBERS,  WATERLINE } from "@/data/global/select";
+import { additionOptions, NUMBERS, WATERLINE } from "@/data/global/select";
 
 interface AdditionalInfoStepProps {
   form: UseFormReturn<AdditionalInfoStepType>;
@@ -40,7 +40,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
             <Select
               form={form}
               label={"شرفة"}
-              toggle={"balcony"}
+              toggle={"hasBalcony"}
               keyValue="value"
               showValue="label"
               choices={NUMBERS}
@@ -52,7 +52,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
             <Select
               form={form}
               label={"مراوح"}
-              toggle={"fans"}
+              toggle={"hasFans"}
               keyValue="value"
               showValue="label"
               choices={NUMBERS}
@@ -73,7 +73,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
             />
           </div>
           <div className=" grid gap-y-[35px] mt-8">
-          <Select
+            <Select
               form={form}
               keyValue="value"
               showValue="label"

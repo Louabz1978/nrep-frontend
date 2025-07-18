@@ -1,19 +1,13 @@
+import {
+  optionSchema,
+  type TNumber,
+  type TOption,
+  type TString,
+} from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
-// optionSchema
-export const optionSchema = Joi.object({ value: Joi.string() }).unknown();
-export const urlSchema = Joi.string().regex(
-  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
-  { name: "https://any-domain.com" }
-);
-export type TEmpty = null | undefined;
-export type TString = string | null | undefined;
-export type TNumber = number | null | undefined;
-export type TOption = { value: string; [key: string]: unknown } | TEmpty;
-
 // general step -----------------------------------------------------------
-
 export type GeneralStepType = {
   buildingNumber: TNumber;
   streetName: TString;
@@ -117,23 +111,36 @@ export const generalStepInitialValues: GeneralStepType = {
 };
 
 // additional info step -----------------------------------------------------------
-
 export type AdditionalInfoStepType = {
+  hasBalcony: boolean;
   balcony: TNumber;
+  hasFans: boolean;
   fans: TNumber;
   waterLine: TString;
   additionalOptions: TOption[];
 };
 
 export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
-  balcony: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("شرفة"),
-  fans: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("مراوح"),
+  hasBalcony: Joi.boolean(),
+  balcony: Joi.when("hasBalcony", {
+    is: true,
+    then: Joi.number().required().messages(VALIDATION_MESSAGES).label("شرفة"),
+    otherwise: Joi.number()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("شرفة"),
+  }),
+
+  hasFans: Joi.boolean(),
+  fans: Joi.when("hasBalcony", {
+    is: true,
+    then: Joi.number().required().messages(VALIDATION_MESSAGES).label("مراوح"),
+    otherwise: Joi.number()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("مراوح"),
+  }),
+
   waterLine: optionSchema
     .allow(null)
     .messages(VALIDATION_MESSAGES)
@@ -145,12 +152,15 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
 });
 
 export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
+  hasBalcony: false,
   balcony: null,
+  hasFans: false,
   fans: null,
   waterLine: null,
   additionalOptions: [],
 };
 
+// location step --------------------------------------------------------------------
 export type LocationStepType = {
   landAreaSource: TString;
   landDimensionsSource: TString;
@@ -196,8 +206,61 @@ export const LocationStepInitialValues: LocationStepType = {
   longitude: null,
 };
 
-export type PropertyImagesStepType = {};
+// property images step --------------------------------------------------------------
+export type PropertyImagesStepType = {
+  images: [];
+};
 
-export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({});
+export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
+  // Image validation
+  images: Joi.array()
+    .items(
+      Joi.object({
+        path: Joi.any()
+          .required()
+          .custom((value, helpers) => {
+            // Existing validation logic for files
+            if (value instanceof File || value instanceof Blob) {
+              if (value.size < 256 * 1024) {
+                console.log(value.size, 256 * 1024);
+                return helpers.error("file.minSize", { limit: "256KB" });
+              }
+              if (value.size > 1024 * 1024) {
+                return helpers.error("file.maxSize", { limit: "1MB" });
+              }
+              if (!value.type.startsWith("image/")) {
+                return helpers.error("file.invalidType");
+              }
+            } else if (typeof value === "string" && !value) {
+              return helpers.error("any.required");
+            }
+            return value;
+          })
+          .messages(VALIDATION_MESSAGES),
+        mode: Joi.string().valid("edit", "delete").optional(),
+      }).unknown()
+    )
+    .custom((value, helpers) => {
+      // Filter out deleted images before counting
+      const activeImages = value?.filter((img: any) => img.mode !== "delete");
 
-export const PropertyImagesStepInitialValues: PropertyImagesStepType = {}
+      // Validate minimum count
+      if (activeImages?.length < 1) {
+        return helpers.error("array.min", { limit: 1 });
+      }
+
+      // Validate maximum count
+      if (activeImages?.length > 5) {
+        return helpers.error("array.max", { limit: 5 });
+      }
+
+      return value;
+    })
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الصور"),
+});
+
+export const PropertyImagesStepInitialValues: PropertyImagesStepType = {
+  images: [],
+};
