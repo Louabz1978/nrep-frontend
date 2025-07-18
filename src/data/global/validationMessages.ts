@@ -46,11 +46,10 @@ const VALIDATION_MESSAGES: Record<string, string> = {
   "object.base": "حقل {{#label}} يجب أن لا يكون فارغا.",
   "object.unknown": "حقل {{#label}} يحتوي على خصائص غير صالحة.",
 
-  // from hour and to hour custom validation
-  "any.twoAtLeast": "يجب أن يكون فرق الوقت على الأقل ساعتين.",
-  "any.fromLaterThanTo": "ساعة الإغلاق أقل من ساعة الافتتاح.",
-  "any.startTimeLaterThanEnd": "ساعة النهاية يجب أن تكون بعد ساعة البداية.",
-  "any.fromSameTo": "ساعة الإغلاق تساوي ساعة الافتتاح.",
+  // custom messages
+  "file.minSize": "حجم الصورة يجب أن يكون على الأقل {{#limit}}",
+  "file.maxSize": "حجم الصورة يجب أن لا يتجاوز {{#limit}}",
+  "file.invalidType": "يجب أن يكون الملف صورة",
 };
 
 export default VALIDATION_MESSAGES;

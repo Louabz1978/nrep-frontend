@@ -8,7 +8,7 @@ import type {
 interface ToggleProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   name: Path<T>;
-  label: string;
+  label?: string;
   onChange?: () => void;
 }
 
