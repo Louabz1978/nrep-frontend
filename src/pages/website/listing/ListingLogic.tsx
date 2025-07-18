@@ -3,14 +3,10 @@ import { useUser } from "@/stores/useUser";
 import { Route, Routes } from "react-router-dom";
 import ListingForm from "./ListingForm";
 import {
-  compensationAndListingOfficesStepInitialValues,
-  featuresStepInitialValues,
-  financialStepInitialValues,
+  additionalInfoStepInitialValues,
   generalStepInitialValues,
-  officesStepInitialValues,
-  remarksStepInitialValues,
-  roomsStepInitialValues,
-  statusStepInitialValues,
+  LocationStepInitialValues,
+  PropertyImagesStepInitialValues,
 } from "@/data/website/schema/ListingFormSchema";
 import useListingQuery from "@/hooks/website/listing/useListingQuery";
 
@@ -30,14 +26,10 @@ function ListingLogic() {
           checkPermissions([]) ? (
             <ListingForm
               defaultValues={{
-                status: statusStepInitialValues,
                 general: generalStepInitialValues,
-                rooms: roomsStepInitialValues,
-                features: featuresStepInitialValues,
-                financial: financialStepInitialValues,
-                compensation: compensationAndListingOfficesStepInitialValues,
-                offices: officesStepInitialValues,
-                remarks: remarksStepInitialValues,
+                additionalInfo: additionalInfoStepInitialValues,
+                location:LocationStepInitialValues,
+                propertyImages : PropertyImagesStepInitialValues
               }}
               listingResources={listingResources}
             />

@@ -1,44 +1,36 @@
 import Stepper from "@/components/global/stepper/Stepper";
 import { useMemo, useState } from "react";
 import GeneralStep from "./components/GeneralStep";
-import FeaturesStep from "./components/FeaturesStep";
-import FinancialStep from "./components/FinancialStep";
-import CompensationAndListingOfficesStep from "./components/CompensationandListingOfficesStep";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import {
-  compensationAndListingOfficesStepInitialValues,
-  compensationAndListingOfficesStepSchema,
-  featuresStepInitialValues,
-  featuresStepSchema,
-  financialStepInitialValues,
-  financialStepSchema,
+  additionalInfoStepInitialValues,
+  additionalInfoStepSchema,
   generalStepInitialValues,
   generalStepSchema,
-  type CompensationAndListingOfficesStepType,
-  type FeaturesStepType,
-  type FinancialStepType,
+  LocationStepInitialValues,
+  LocationStepSchema,
+  PropertyImagesStepInitialValues,
+  propertyImagesStepSchema,
+  type AdditionalInfoStepType,
   type GeneralStepType,
-  type OfficesStepType,
-  type RemarksStepType,
-  type RoomsStepType,
-  type StatusStepType,
+  type LocationStepType,
+  type PropertyImagesStepType,
 } from "@/data/website/schema/ListingFormSchema";
 import cleanValues from "@/utils/cleanValues";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { type StepType } from "@/components/global/stepper/Stepper";
+import AdditionalInfoStep from "./components/AdditionalInfoStep";
+import LocationStep from "./components/LocationStep";
+import PropertyImagesStep from "./components/PropertyImagesStep";
 
 interface ListingFormProps {
   defaultValues: {
-    status: StatusStepType;
     general: GeneralStepType;
-    rooms: RoomsStepType;
-    features: FeaturesStepType;
-    financial: FinancialStepType;
-    compensation: CompensationAndListingOfficesStepType;
-    offices: OfficesStepType;
-    remarks: RemarksStepType;
+    additionalInfo: AdditionalInfoStepType;
+    location: LocationStepType;
+    propertyImages: PropertyImagesStepType
   };
   listingResources: UseQueryResult<unknown[]>;
 }
@@ -47,7 +39,7 @@ interface ListingFormProps {
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(2);
 
   // general step form
   const generalStep = useForm({
@@ -58,33 +50,27 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     ),
     mode: "onChange",
   });
-
-  // features step form
-  const featuresStep = useForm({
-    resolver: joiResolver(featuresStepSchema),
+  const additionalInfoStep = useForm({
+    resolver: joiResolver(additionalInfoStepSchema),
     defaultValues: cleanValues(
-      featuresStepInitialValues,
-      defaultValues?.features
+      additionalInfoStepInitialValues,
+      defaultValues?.additionalInfo
     ),
     mode: "onChange",
   });
-
-  // financial step form
-  const financialStep = useForm({
-    resolver: joiResolver(financialStepSchema),
+  const locationStep = useForm({
+    resolver: joiResolver(LocationStepSchema),
     defaultValues: cleanValues(
-      financialStepInitialValues,
-      defaultValues?.financial
+      LocationStepInitialValues,
+      defaultValues?.location
     ),
     mode: "onChange",
   });
-
-  // compensation and listing offices step form
-  const compensationAndListingOfficesStep = useForm({
-    resolver: joiResolver(compensationAndListingOfficesStepSchema),
+  const propertyImagesStep = useForm({
+    resolver: joiResolver(propertyImagesStepSchema),
     defaultValues: cleanValues(
-      compensationAndListingOfficesStepInitialValues,
-      defaultValues?.compensation
+      PropertyImagesStepInitialValues,
+      defaultValues?.propertyImages
     ),
     mode: "onChange",
   });
@@ -97,33 +83,28 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         onClick: async () => null,
       },
       {
-        name: "الغرف والميزات",
+        name: "معلومات إضافية",
         onClick: async () => {
-          const isValid = await generalStep.trigger();
+          const isValid = await additionalInfoStep.trigger();
           if (isValid) setCurrentStep(1);
         },
       },
       {
-        name: "العمولة",
+        name: "معلومات الموقع",
         onClick: async () => {
-          const isValid = await featuresStep.trigger();
+          const isValid = await locationStep.trigger();
           if (isValid) setCurrentStep(2);
         },
       },
       {
-        name: "الوكيل المسؤول",
+        name: "صور العقار",
         onClick: async () => {
-          const isValid = await compensationAndListingOfficesStep.trigger();
+          const isValid = await locationStep.trigger();
           if (isValid) setCurrentStep(3);
         },
       },
     ],
-    [
-      generalStep,
-      featuresStep,
-      financialStep,
-      compensationAndListingOfficesStep,
-    ]
+    [generalStep, additionalInfoStep , locationStep , propertyImagesStep]
   );
 
   console.log("");
@@ -131,9 +112,9 @@ function ListingForm({ defaultValues }: ListingFormProps) {
   const handleSubmitForm = () => {
     console.log({
       ...generalStep.watch(),
-      ...featuresStep.watch(),
-      ...financialStep.watch(),
-      ...compensationAndListingOfficesStep.watch(),
+      ...additionalInfoStep.watch(),
+      ...locationStep.watch(),
+      ...propertyImagesStep.watch(),
     });
   };
 
@@ -150,17 +131,14 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       <div className="flex-1 h-full overflow-auto">
         {currentStep == 0 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 1 ? (
-          <FeaturesStep form={featuresStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 2 ? (
-          <FinancialStep form={financialStep} setCurrentStep={setCurrentStep} />
-        ) : (
-          <CompensationAndListingOfficesStep
-            form={compensationAndListingOfficesStep}
+        ) :  currentStep == 1 ?(
+          <AdditionalInfoStep
+            form={additionalInfoStep}
             setCurrentStep={setCurrentStep}
-            handleSubmitForm={handleSubmitForm}
           />
-        )}
+        ) : currentStep == 2 ? (
+          <LocationStep form={locationStep} setCurrentStep={setCurrentStep} />
+        ) : (<PropertyImagesStep form={propertyImagesStep} setCurrentStep={setCurrentStep} />)}
       </div>
     </PageContainer>
   );

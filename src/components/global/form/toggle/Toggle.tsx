@@ -4,12 +4,14 @@ import type {
   PathValue,
   UseFormReturn,
 } from "react-hook-form";
+import Info from "../../modal/Info";
 
 interface ToggleProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   name: Path<T>;
   label?: string;
   onChange?: () => void;
+  info?: string | React.ReactNode;
 }
 
 function Toggle<T extends FieldValues>({
@@ -17,9 +19,12 @@ function Toggle<T extends FieldValues>({
   name,
   label,
   onChange,
+  info,
 }: ToggleProps<T>) {
   return (
-    <label className="flex items-center gap-4 cursor-pointer select-none">
+    <label className="flex items-center justify-between gap-4 cursor-pointer select-none flex-row">
+      <span className="text-base">{label}</span>
+      <div className="flex items-center gap-5">
       <div
         onClick={(e) => {
           e.preventDefault();
@@ -41,7 +46,8 @@ function Toggle<T extends FieldValues>({
           } transition-all duration-[0.3s] `}
         ></div>
       </div>
-      <span className="text-base">{label}</span>
+      <div>{info ? <Info info={info} /> : null}</div>
+      </div>
     </label>
   );
 }
