@@ -1,4 +1,4 @@
-import { FaArrowCircleRight } from "react-icons/fa";
+import { FaArrowCircleLeft} from "react-icons/fa";
 import { Button } from "./Button";
 import type { Dispatch, SetStateAction } from "react";
 interface PreviouseButtonProps {
@@ -17,8 +17,8 @@ const PreviouseButton = ({
         setCurrentStep((prev) => prev - 1);
       }}
     >
-      <FaArrowCircleRight />
       {title}
+      <FaArrowCircleLeft />
     </Button>
   );
 };

@@ -9,7 +9,7 @@ import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import { cityChoices, STATUS } from "@/data/global/select";
+import { cityChoices, PROPERTYTYPE, STATUS } from "@/data/global/select";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -108,7 +108,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="نوع العقار"
             placeholder="اختر نوع العقار"
-            choices={cityChoices}
+            choices={PROPERTYTYPE}
             keyValue="value"
             showValue="label"
             name="propertyType"
@@ -154,19 +154,19 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
-            label="عمولة عميل البائع ($)"
-            placeholder="أدخل عمولة عميل البائع"
+            label="عمولة وكيل البائع ($)"
+            placeholder="أدخل عمولة وكيل البائع"
             name="sellerCommission"
-            info="يرجى إدخال قيمة عمولة عميل البائع بالدولار"
+            info="يرجى إدخال قيمة عمولة وكيل البائع بالدولار"
             required
           />
           <Input
             form={form}
             type="number"
-            label="عمولة عميل المشتري ($)"
-            placeholder="أدخل عمولة عميل المشتري"
+            label="عمولة وكيل المشتري ($)"
+            placeholder="أدخل عمولة وكيل المشتري"
             name="buyerCommission"
-            info="يرجى إدخال قيمة عمولة عميل المشتري بالدولار"
+            info="يرجى إدخال قيمة عمولة وكيل المشتري بالدولار"
             required
           />
           <Input
@@ -176,24 +176,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             placeholder="أدخل سنة البناء"
             name="buildYear"
             info="يرجى إدخال سنة بناء العقار"
-            required
-          />
-          <Input
-            form={form}
-            type="number"
-            label="خطوط العرض للعقار"
-            placeholder="أدخل إحداثيات خطوط العرض"
-            name="latitude"
-            info="يرجى إدخال إحداثيات خطوط العرض لموقع العقار"
-            required
-          />
-          <Input
-            form={form}
-            type="number"
-            label="خطوط الطول للعقار"
-            placeholder="أدخل إحداثيات خطوط الطول"
-            name="longitude"
-            info="يرجى إدخال إحداثيات خطوط الطول لموقع العقار"
             required
           />
           <Select
@@ -209,7 +191,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           />
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
-          <PreviouseButton setCurrentStep={setCurrentStep} />
           <NextButton id={"general_step_form"} />
         </div>
       </form>

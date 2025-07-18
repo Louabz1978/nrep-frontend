@@ -248,25 +248,11 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
               placeholder={"اختر المصدر"}
               info={"معلومات عن مصدر القياس"}
             />
-            <Select
-              form={form}
-              label={"مصدر القياسات (المساحة الكلية)"}
-              name={"totalAreaSource"}
-              placeholder={"اختر المصدر"}
-              info={"معلومات عن مصدر القياس"}
-            />
-            <Select
-              form={form}
-              label={"مصدر القياسات (المساحة السكنية)"}
-              name={"residentialAreaSource"}
-              placeholder={"اختر المصدر"}
-              info={"معلومات عن مصدر القياس"}
-            />
           </div>
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
-          <PreviouseButton setCurrentStep={setCurrentStep} />
           <NextButton id={"general_step_form"} />
+          <PreviouseButton setCurrentStep={setCurrentStep} />
         </div>
       </form>
     </PageContainer>

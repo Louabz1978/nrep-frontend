@@ -39,13 +39,13 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
           <div className=" grid md:grid-cols-1 gap-y-[35px] ">
             <Select
               form={form}
-              label={"شرفة"}
+              label={"عدد الشرفات"}
               toggle={"balcony"}
               keyValue="value"
               showValue="label"
               choices={NUMBERS}
               name={"balcony"}
-              placeholder={"شرفة"}
+              placeholder={"عدد الشرفات"}
               info={"يرجى تحديد عدد الشرفات الموجودة في العقار"}
               required
             />
@@ -87,8 +87,8 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
           </div>
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
-          <PreviouseButton setCurrentStep={setCurrentStep} />
           <NextButton id={"general_step_form"} />
+          <PreviouseButton setCurrentStep={setCurrentStep} />
         </div>
       </form>
     </PageContainer>
