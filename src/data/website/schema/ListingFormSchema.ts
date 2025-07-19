@@ -11,7 +11,7 @@ import Joi from "joi";
 export type GeneralStepType = {
   buildingNumber: TNumber;
   streetName: TString;
-  floor: TString;
+  floor: TNumber;
   apartmentNumber: TNumber;
   governorate: TOption;
   city: TOption;
@@ -36,7 +36,7 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشارع"),
-  floor: Joi.string().required().messages(VALIDATION_MESSAGES).label("الطابق"),
+  floor: Joi.number().required().messages(VALIDATION_MESSAGES).label("الطابق"),
   apartmentNumber: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -46,7 +46,10 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
   city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
-  district: optionSchema.required().messages(VALIDATION_MESSAGES).label("الحي"),
+  district: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الحي/المنطقة"),
   propertyType: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -120,7 +123,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
   }),
 
   hasFans: Joi.boolean(),
-  fans: Joi.when("hasBalcony", {
+  fans: Joi.when("hasFans", {
     is: true,
     then: Joi.number().required().messages(VALIDATION_MESSAGES).label("مراوح"),
     otherwise: Joi.number()

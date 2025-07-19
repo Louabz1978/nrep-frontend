@@ -11,30 +11,30 @@ interface StepperProps {
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
 
-// Stepper component receives the setCurrentStep, currentStep and steps as props
-const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
+// Stepper component receives currentStep and steps as props
+const Stepper = ({ currentStep, steps }: StepperProps) => {
   return (
     <div className="flex items-center justify-center p-4 w-full " dir="ltr">
       {/* LTR support */}
-      <div className="flex overflow-hidden w-full py-[30px] px-[200px]">
+      <div className="flex overflow-hidden w-full py-[30px] 2xl:px-[200px] xl:px-[150px] lg:px-[100px] md:px-[50px] px-0">
         {steps.map((step, index) => {
           // Determine step state
           const isActive = index === currentStep;
           const isCompleted = index < currentStep;
           // Color classes
           const base = isActive
-            ? "bg-primary text-white"
+            ? "bg-primary text-inverse-fg"
             : isCompleted
-            ? "bg-primary text-white"
-            : "bg-secondary text-white";
+            ? "bg-primary text-inverse-fg"
+            : "bg-secondary text-inverse-fg";
           // Only allow going back to previous steps, not forward
           // Prevent clicking on the first step if already on the first step
-          const isClickable = index < currentStep && !(currentStep === 0 && index === 0);
+          const isClickable = index <= currentStep + 1;
           // Arrow shape using clip-path (LTR)
           return (
             <div
               key={step.name}
-              className={`relative flex-1 flex items-center justify-center font-bold text-lg h-16 ${
+              className={`relative flex-1 flex items-center justify-center font-bold md:text-size18 text-size14 px-[8px] h-16 ${
                 isClickable ? "cursor-pointer" : "cursor-default"
               } transition-colors duration-200 ${base} `}
               style={{
@@ -53,7 +53,7 @@ const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
               onClick={() => {
                 // Prevent going back from first step to itself
                 if (isClickable) {
-                  setCurrentStep(index);
+                  step?.onClick?.();
                 }
               }}
             >

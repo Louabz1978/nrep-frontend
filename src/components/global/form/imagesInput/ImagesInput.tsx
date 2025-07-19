@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { FaCirclePlus, FaTrash } from "react-icons/fa6";
+import { FaRegImage, FaTrash } from "react-icons/fa6";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdEdit } from "react-icons/md";
 import { FcCancel } from "react-icons/fc";
@@ -166,7 +166,7 @@ function ImagesInput<T extends FieldValues>({
           <div>
             {label}
             {required && !isDisabled ? (
-              <span className="text-size24 text-error">{" *"}</span>
+              <span className="text-size22 text-error">{" *"}</span>
             ) : null}
           </div>
 
@@ -178,7 +178,7 @@ function ImagesInput<T extends FieldValues>({
 
       {/* Main container for image previews and add button */}
       <div
-        className={`grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px] ${imagesContainerClassName}`}
+        className={`grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px] ${imagesContainerClassName}`}
       >
         {/* Map through existing files to display previews */}
         {currentFiles?.map((item: ImageFile, i: number) => (
@@ -200,7 +200,7 @@ function ImagesInput<T extends FieldValues>({
 
               {/* File preview container */}
               <div
-                className="flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[6px] overflow-hidden shrink-0 cursor-pointer relative"
+                className="flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer relative"
                 onMouseEnter={() => setShowOptions(i)}
                 onMouseLeave={() => setShowOptions(false)}
               >
@@ -224,7 +224,7 @@ function ImagesInput<T extends FieldValues>({
                       animate={{ translate: 0 }}
                       exit={{ translate: "0 100%" }}
                       transition={{ ease: "linear", duration: 0.3 }}
-                      className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-[6px] cursor-auto text-size20 font-bold"
+                      className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-[10px] cursor-auto text-size20 font-bold"
                     >
                       {/* Edit button (only shown if editable) */}
                       {editable && (
@@ -233,7 +233,7 @@ function ImagesInput<T extends FieldValues>({
                           htmlFor={`${name}__added_image_${i}`}
                           className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-[5px] rounded-full cursor-pointer"
                         >
-                          <MdEdit className="shadow-shadow size-[20px]" />
+                          <MdEdit className="shadow-shadow size-[24px]" />
                         </label>
                       )}
 
@@ -246,7 +246,7 @@ function ImagesInput<T extends FieldValues>({
                             await handleDeleteMultiFile(item.id);
                           }}
                         >
-                          <FaTrash className="shadow-shadow size-[20px]" />
+                          <FaTrash className="shadow-shadow size-[24px]" />
                         </span>
                       )}
 
@@ -262,7 +262,7 @@ function ImagesInput<T extends FieldValues>({
                           window.open(fileUrl);
                         }}
                       >
-                        <BiSolidFolderOpen className="shadow-shadow size-[20px]" />
+                        <BiSolidFolderOpen className="shadow-shadow size-[24px]" />
                       </span>
                     </motion.div>
                   )}
@@ -305,17 +305,20 @@ function ImagesInput<T extends FieldValues>({
               {/* Visible add button that triggers the file input */}
               <label
                 htmlFor={`${name}__adding_mode`}
-                className={`flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[6px] overflow-hidden shrink-0 cursor-pointer ${className} text-primary-fg/50 text-size44 bg-tertiary-bg/10`}
+                className={`flex flex-col gap-[20px] justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${className} text-primary-fg/50 bg-tertiary-bg`}
               >
-                <FaCirclePlus />
+                <FaRegImage className="size-[100px]" />
+                <span className="text-size22 font-medium">
+                  إدخال صور العقار
+                </span>
               </label>
             </>
           ) : (
             // Show disabled state if not addable
             <div
-              className={`flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[6px] overflow-hidden shrink-0 cursor-pointer ${className} text-primary-fg/50 text-size44 bg-tertiary-bg/10`}
+              className={`flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${className} text-primary-fg/50 text-size44 bg-tertiary-bg`}
             >
-              <FcCancel title="ليست لديك صلاحية" />
+              <FcCancel title="ليست لديك صلاحية" className="" />
             </div>
           ))}
       </div>

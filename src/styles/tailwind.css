@@ -115,6 +115,7 @@
   --primary-shadow: 0px 3.63px 3.63px 0px #00000080;
   --navbar-shadow: 0px 4px 4px 0px #00000040;
   --accordion-shadow: 0px 5px 4px 0px #00000087;
+  --shadow-xs: 0px 1px 2px 0px #010d120d;
 }
 
 /* Dark mode */
@@ -163,6 +164,7 @@
   --primary-shadow: 0px 3.63px 3.63px 0px #00000080;
   --navbar-shadow: 0px 4px 4px 0px #00000040;
   --accordion-shadow: 0px 5px 4px 0px #00000087;
+  --shadow-xs: 0px 1px 2px 0px #010d120d;
 }
 
 @theme {
@@ -273,6 +275,7 @@
   --color-primary-overlay: var(--primary-overlay);
 
   /* shadows */
+  --shadow-xs: var(--shadow-xs);
   --shadow-primary-shadow: var(--primary-shadow);
   --shadow-navbar-shadow: var(--navbar-shadow);
   --shadow-accordion-shadow: var(--accordion-shadow);

@@ -1,7 +1,7 @@
 import type { PermissionsType } from "@/stores/useUser";
 import type { IconType } from "react-icons/lib";
-import { MdSettingsInputComponent } from "react-icons/md";
-import { TbListSearch } from "react-icons/tb";
+import { BsBuildingFillAdd } from "react-icons/bs";
+import { FaList } from "react-icons/fa6";
 
 export type TabType = {
   label: string;
@@ -17,33 +17,17 @@ export const tabs: TabsType = [
     label: "إدخال",
     to: "/input",
     permission: ["Add Item"],
-    icon: MdSettingsInputComponent,
+    icon: BsBuildingFillAdd,
   },
   {
     label: "قائمتي",
     permission: ["Add Item"],
-    icon: TbListSearch,
+    icon: FaList,
     submenu: [
       {
         label: "subTabA",
         permission: [],
-        submenu: [
-          {
-            label: "subtab1",
-            to: "one",
-            permission: [],
-          },
-          {
-            label: "subtab2",
-            to: "two",
-            permission: [],
-          },
-          {
-            label: "subtab3",
-            to: "three",
-            permission: [],
-          },
-        ],
+        to: "one",
       },
       {
         label: "subTabB",

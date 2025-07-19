@@ -6,6 +6,7 @@ import type { PropertyImagesStepType } from "@/data/website/schema/ListingFormSc
 import type { SetStateAction } from "jotai";
 import type { Dispatch } from "react";
 import type { UseFormReturn } from "react-hook-form";
+import { PiPaperPlaneRightFill } from "react-icons/pi";
 
 interface PropertyImagesStepProps {
   form: UseFormReturn<PropertyImagesStepType>;
@@ -39,7 +40,11 @@ const PropertyImagesStep = ({
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
           <PreviouseButton setCurrentStep={setCurrentStep} />
-          <NextButton title="إرسال" id={"images_step_form"} />
+          <NextButton
+            title="إرسال"
+            id={"images_step_form"}
+            icon={<PiPaperPlaneRightFill className="rotate-180" />}
+          />
         </div>
       </form>
     </PageContainer>
