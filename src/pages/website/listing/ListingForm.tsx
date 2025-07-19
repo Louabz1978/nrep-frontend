@@ -80,19 +80,21 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     () => [
       {
         name: "معلومات عامة",
-        onClick: async () => null,
+        onClick: async () => {
+          setCurrentStep(0);
+        },
       },
       {
         name: "معلومات إضافية",
         onClick: async () => {
-          const isValid = await additionalInfoStep.trigger();
+          const isValid = await generalStep.trigger();
           if (isValid) setCurrentStep(1);
         },
       },
       {
         name: "معلومات الموقع",
         onClick: async () => {
-          const isValid = await locationStep.trigger();
+          const isValid = await additionalInfoStep.trigger();
           if (isValid) setCurrentStep(2);
         },
       },
@@ -104,7 +106,9 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         },
       },
     ],
+
     [generalStep, additionalInfoStep, locationStep, propertyImagesStep]
+
   );
 
   console.log("");
@@ -128,7 +132,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       />
 
       {/* form steps area */}
-      <div className="flex-1 h-full overflow-auto">
+      <div className="flex-1 ">
         {currentStep == 0 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
         ) : currentStep == 1 ? (
@@ -142,6 +146,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
           <PropertyImagesStep
             form={propertyImagesStep}
             setCurrentStep={setCurrentStep}
+            handleSubmitForm={handleSubmitForm}
           />
         )}
       </div>

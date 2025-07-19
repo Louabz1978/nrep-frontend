@@ -193,11 +193,15 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
               </div>
             </div>
             <div className="flex items-center justify-center flex-row w-full p-[10px] gap-[23px]">
-              <Button variant={"semi-round"} style={{width:"310px"}} onClick={getUserLocation}>
+              <Button
+                variant={"semi-round"}
+                style={{ width: "310px" }}
+                onClick={getUserLocation}
+              >
                 الحصول على خطوط الطول/العرض من العنوان
               </Button>
               <Button
-              style={{width:"310px"}}
+                style={{ width: "310px" }}
                 variant={"semi-round-outline"}
                 onClick={toggleSatelliteView}
               >
@@ -205,15 +209,18 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
                   ? "عرض الخريطة العادية"
                   : "عرض الخريطة برؤية Google street"}
               </Button>
-              <Button  style={{width:"310px"}}  variant={"semi-round"} onClick={toggleManualMode}>
+              <Button
+                style={{ width: "310px" }}
+                variant={"semi-round"}
+                onClick={toggleManualMode}
+              >
                 {isManualMode ? "تعطيل التحديد اليدوي" : "تفعيل التحديد اليدوي"}
               </Button>
-
             </div>
           </div>
 
           {/* Second row: Inputs, 2 per row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[40px] gap-y-[24px]">
+          <div className="grid  lg:grid-cols-3 md:grid-cols-2 gap-x-[40px] gap-y-[24px]">
             <Input
               form={form}
               label={"خط العرض (Latitude)"}
@@ -251,8 +258,8 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
           </div>
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
-          <NextButton id={"general_step_form"} />
           <PreviouseButton setCurrentStep={setCurrentStep} />
+          <NextButton id={"general_step_form"} />
         </div>
       </form>
     </PageContainer>

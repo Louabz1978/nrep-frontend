@@ -5,9 +5,6 @@ import type { UseFormReturn } from "react-hook-form";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
-
-import PreviouseButton from "@/components/global/form/button/PreviouseButton";
-
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import { cityChoices, PROPERTYTYPE, STATUS } from "@/data/global/select";
 
@@ -18,20 +15,23 @@ interface GeneralStepProps {
 
 // general step component
 function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
+  // extract form utils
+  const { handleSubmit } = form;
 
-    // extract form utils
-    const { handleSubmit } = form;
-
-    // handle submit form
-  const onSubmit = (data: GeneralStepType) =>{
+  // handle submit form
+  const onSubmit = (data: GeneralStepType) => {
     setCurrentStep((prev) => prev + 1);
     console.log(data);
   };
 
   return (
     <PageContainer className="h-full overflow-auto ">
-      <form id="features_step_form" className="mb-10 flex flex-col gap-[80px]" onSubmit={handleSubmit(onSubmit)} >
-        <div className="p-[48px] pt-[24px] grid md:grid-cols-3 gap-x-[48px] gap-y-[24px]">
+      <form
+        id="features_step_form"
+        className="mb-10 flex flex-col gap-[80px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="p-[48px] pt-[24px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[48px] gap-y-[24px]">
           <FormSectionHeader textSize="text-size40">
             المعلومات العامة
           </FormSectionHeader>
@@ -55,7 +55,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           />
           <Input
             form={form}
-            type="text"
+            type="number"
             label="الطابق"
             placeholder="أدخل رقم الطابق"
             name="floor"
@@ -93,13 +93,10 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             info="يرجى اختيار المدينة التي يقع فيها العقار"
             required
           />
-          <Select
+          <Input
             form={form}
             label="الحي/المنطقة"
             placeholder="اختر الحي أو المنطقة"
-            choices={cityChoices}
-            keyValue="value"
-            showValue="label"
             name="district"
             info="يرجى اختيار الحي أو المنطقة التي يقع فيها العقار"
             required
@@ -127,6 +124,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
+            numberRegex={/^\d*$/}
             label="عدد غرف النوم"
             placeholder="أدخل عدد غرف النوم"
             name="bedrooms"
@@ -190,7 +188,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             required
           />
         </div>
-        <div className="flex justify-between w-full gap-4 px-[107px]">
+        <div className="flex justify-end w-full gap-4 px-[107px]">
           <NextButton id={"general_step_form"} />
         </div>
       </form>

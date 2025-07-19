@@ -9,7 +9,7 @@ import Info from "../../modal/Info";
 interface ToggleProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   name: Path<T>;
-  label: string;
+  label?: string;
   onChange?: () => void;
   info?: string | React.ReactNode;
 }

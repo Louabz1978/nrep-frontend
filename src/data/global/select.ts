@@ -24,47 +24,45 @@ export const YESNO = [
 
 // Array for select options (cityChoices)
 export const cityChoices = [
-  { value: "damascus", label: "دمشق" },
-  { value: "homs", label: "حمص" },
-  { value: "aleppo", label: "حلب" },
-  { value: "latakia", label: "اللاذقية" },
-  { value: "daraa", label: "درعا" },
-  { value: "hama", label: "حماة" },
+  { value: "Homs", label: "حمص" },
+  { value: "Damascus", label: "دمشق" },
+  { value: "Aleppo", label: "حلب" },
+  { value: "Hama", label: "حماة" },
 ];
 
 export const PROPERTYTYPE = [
   {
     value: "apartment",
-    label: "شقة"
+    label: "شقة",
   },
   {
     value: "villa",
-    label: "فيلا"
+    label: "فيلا",
   },
   {
     value: "farm",
-    label: "مزرعة"
+    label: "مزرعة",
   },
   {
     value: "shop",
-    label: "محل تجاري"
+    label: "محل تجاري",
   },
   {
     value: "land",
-    label: "ارض"
+    label: "ارض",
   },
   {
     value: "building",
-    label: "بناء"
+    label: "بناء",
   },
-]
+];
 
 // Array for select options (Status)
 export const STATUS = [
-  { value: "active", label: "نشط" },
-  { value: "pending", label: " قيد البيع" },
-  { value: "closed", label: "مباع" },
-  { value: "out", label: "غير معروض" },
+  { value: "Active", label: "نشط" },
+  { value: "Pending", label: " قيد البيع" },
+  { value: "Closed", label: "مباع" },
+  { value: "Out Of Market", label: "غير معروض" },
 ];
 
 // Water supply source options (e.g., for property listings)

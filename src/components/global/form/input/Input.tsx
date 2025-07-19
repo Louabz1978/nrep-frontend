@@ -54,7 +54,7 @@ function Input<T extends FieldValues>({
   addingInputStyle = "",
   customInput,
   step = 1,
-  numberRegex = /^\d*$/,
+  numberRegex = /^\d*\.?\d*$/,
   onClick = () => {},
   onFocus = () => {},
   onChange = () => {},
@@ -78,7 +78,7 @@ function Input<T extends FieldValues>({
 
   // Compute isDisabled so that it updates when toggle changes
   const toggleValue = toggle ? watch(toggle) : undefined;
-  const isDisabled = disabled || (toggle && !toggleValue);
+  const isDisabled = disabled || (toggle && !watch(toggle));
 
   // Handler to update toggle and force re-render
   const handleToggleChange = () => {
@@ -121,8 +121,8 @@ function Input<T extends FieldValues>({
 
             <div className="flex items-center gap-2">
               {label}
-              {required ? (
-                <span className="text-size24 text-error">{" *"}</span>
+              {required && !isDisabled ? (
+                <span className="text-size22 text-error">{" *"}</span>
               ) : null}
               {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
               {toggle ? (
@@ -156,8 +156,8 @@ function Input<T extends FieldValues>({
             >
               <span className="flex items-center gap-2">
                 {label}
-                {required ? (
-                  <span className="text-size24 text-error">{" *"}</span>
+                {required && !isDisabled ? (
+                  <span className="text-size22 text-error">{" *"}</span>
                 ) : null}
                 {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
                 {toggle ? (

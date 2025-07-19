@@ -142,9 +142,9 @@ export const ColorPaletteEditor = () => {
               <Button
                 variant="outline"
                 className="px-[30px]"
-                onClick={() => {
+                onClick={async () => {
                   const colorsJson = JSON.stringify(palette, null, 2);
-                  navigator.clipboard.writeText(colorsJson);
+                  await navigator?.clipboard?.writeText(colorsJson);
                   toast.info("تم نسخ الألوان إلى الحافظة");
                 }}
               >

@@ -68,7 +68,7 @@ function Textarea<T extends FieldValues>({
             <div>
               {label}
               {required ? (
-                <span className="text-size24 text-error">{" *"}</span>
+                <span className="text-size22 text-error">{" *"}</span>
               ) : null}
             </div>
           </label>
