@@ -14,74 +14,55 @@ interface StepperProps {
 // Stepper component receives the setCurrentStep, currentStep and steps as props
 const Stepper = ({ currentStep, steps, setCurrentStep }: StepperProps) => {
   return (
-    // Make the sidebar scrollable and cover all steps
-    <div className="w-[304px] border-l border-gray-200 p-4 bg-quaternary-bg h-full  flex flex-col">
-      <div className="flex flex-col gap-[40px] p-3 flex-1 overflow-y-auto">
-        {/* Map through each step to render step indicators and labels */}
+    <div className="flex items-center justify-center p-4 w-full " dir="ltr">
+      {/* LTR support */}
+      <div className="flex overflow-hidden w-full py-[30px] px-[200px]">
         {steps.map((step, index) => {
-          // Determine if the step is active
+          // Determine step state
           const isActive = index === currentStep;
-          // Determine if the step is completed
           const isCompleted = index < currentStep;
+          // Color classes
+          const base = isActive
+            ? "bg-primary text-white"
+            : isCompleted
+            ? "bg-primary text-white"
+            : "bg-secondary text-white";
+          // Only allow going back to previous steps, not forward
+          // Prevent clicking on the first step if already on the first step
+          const isClickable = index < currentStep && !(currentStep === 0 && index === 0);
+          // Arrow shape using clip-path (LTR)
           return (
-            // Each step container
             <div
-              key={step?.name + index}
-              className="flex group flex-col group relative"
+              key={step.name}
+              className={`relative flex-1 flex items-center justify-center font-bold text-lg h-16 ${
+                isClickable ? "cursor-pointer" : "cursor-default"
+              } transition-colors duration-200 ${base} `}
+              style={{
+                clipPath:
+                  index === 0
+                    ? steps.length === 1
+                      ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)" // single step
+                      : "polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%)" // left arrow for first step, more angle
+                    : index === steps.length - 1
+                    ? "polygon(0 0, 93% 0, 100% 0, 100% 100%, 94% 100%, 0 100%, 6% 50%)" // final step: arrow on left, flat on right, more angle
+                    : "polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%, 6% 50%)", // middle steps, more angle
+                zIndex: steps.length - index,
+                borderRadius: "8px",
+                opacity: isClickable || isActive ? 1 : 0.7,
+              }}
+              onClick={() => {
+                // Prevent going back from first step to itself
+                if (isClickable) {
+                  setCurrentStep(index);
+                }
+              }}
             >
-              <div className="flex gap-[12px] items-center">
-                {/* Step circle indicator, clickable to travel to the step */}
-                <div className="!w-[32px] min-w-[32px] h-max flex justify-center items-center">
-                  <div
-                    onClick={() =>
-                      index <= currentStep
-                        ? setCurrentStep(index)
-                        : index == currentStep + 1
-                        ? step?.onClick?.()
-                        : null
-                    }
-                    className={`aspect-square flex p-[6px] relative z-[2] cursor-pointer rounded-full border transition-all duration-[0.3s] ${
-                      isActive
-                        ? "border-secondary text-quaternary-fg w-full bg-quaternary-bg"
-                        : isCompleted
-                        ? "bg-primary border-primary text-quaternary-fg w-[16px]"
-                        : "bg-quaternary-fg text-quaternary-fg w-[16px]"
-                    }`}
-                  >
-                    {isActive ? (
-                      <div className="size-full bg-secondary rounded-full" />
-                    ) : null}
-                  </div>
-                </div>
-
-                {/* Step label, clickable to travel to the step */}
-                <span
-                  onClick={() =>
-                    index <= currentStep
-                      ? setCurrentStep(index)
-                      : index == currentStep + 1
-                      ? step?.onClick?.()
-                      : null
-                  }
-                  className={`cursor-pointer text-size18 leading-[16px] text-base ${
-                    isActive
-                      ? "text-secondary font-bold"
-                      : isCompleted
-                      ? "text-primary"
-                      : "text-quaternary-fg"
-                  }`}
-                >
-                  {step?.name}
-                </span>
-              </div>
-              {/* Render the vertical line between steps except for the last step */}
-              <div className="absolute group-last:hidden w-[32px] z-0 right-0 top-0 h-[calc(100%_+_40px)] flex justify-center">
-                <div
-                  className={`group-last:hidden w-[1px] ${
-                    isCompleted ? "bg-primary" : "bg-quaternary-fg"
-                  } h-full transition-all duration-[0.3s]`}
-                />
-              </div>
+              <span
+                className="w-full text-center select-none"
+                style={{ direction: "ltr" }}
+              >
+                {step.name}
+              </span>
             </div>
           );
         })}

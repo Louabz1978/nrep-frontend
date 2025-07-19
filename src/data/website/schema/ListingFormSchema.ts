@@ -24,8 +24,6 @@ export type GeneralStepType = {
   sellerCommission: TNumber;
   buyerCommission: TNumber;
   buildYear: TNumber;
-  latitude: TNumber;
-  longitude: TNumber;
   status: TOption;
 };
 
@@ -69,23 +67,15 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
   sellerCommission: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عمولة البائع"),
+    .label("عمولة وكيل البائع"),
   buyerCommission: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عمولة المشتري"),
+    .label("عمولة وكيل المشتري"),
   buildYear: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("سنة البناء"),
-  latitude: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("خط العرض"),
-  longitude: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("خط الطول"),
   status: optionSchema.required().messages(VALIDATION_MESSAGES).label("الحالة"),
 });
 
@@ -105,8 +95,6 @@ export const generalStepInitialValues: GeneralStepType = {
   sellerCommission: null,
   buyerCommission: null,
   buildYear: null,
-  latitude: null,
-  longitude: null,
   status: null,
 };
 
@@ -164,8 +152,6 @@ export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
 export type LocationStepType = {
   landAreaSource: TString;
   landDimensionsSource: TString;
-  totalAreaSource: TString;
-  residentialAreaSource: TString;
   latitude: TNumber;
   longitude: TNumber;
 };
@@ -179,14 +165,6 @@ export const LocationStepSchema = Joi.object<LocationStepType>({
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("مصدر القياسات (أبعاد الأرض)"),
-  totalAreaSource: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("مصدر القياسات (المساحة الكلية)"),
-  residentialAreaSource: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("مصدر القياسات (المساحة السكنية)"),
   latitude: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -200,8 +178,6 @@ export const LocationStepSchema = Joi.object<LocationStepType>({
 export const LocationStepInitialValues: LocationStepType = {
   landAreaSource: null,
   landDimensionsSource: null,
-  totalAreaSource: null,
-  residentialAreaSource: null,
   latitude: null,
   longitude: null,
 };

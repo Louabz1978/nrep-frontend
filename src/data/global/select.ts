@@ -32,6 +32,33 @@ export const cityChoices = [
   { value: "hama", label: "حماة" },
 ];
 
+export const PROPERTYTYPE = [
+  {
+    value: "apartment",
+    label: "شقة"
+  },
+  {
+    value: "villa",
+    label: "فيلا"
+  },
+  {
+    value: "farm",
+    label: "مزرعة"
+  },
+  {
+    value: "shop",
+    label: "محل تجاري"
+  },
+  {
+    value: "land",
+    label: "ارض"
+  },
+  {
+    value: "building",
+    label: "بناء"
+  },
+]
+
 // Array for select options (Status)
 export const STATUS = [
   { value: "active", label: "نشط" },
@@ -60,7 +87,7 @@ export const WATERLINE = [
 export const additionOptions = [
   {
     value: "elevator",
-    label: "المصعد",
+    label: "مصعد",
   },
   {
     value: "ac",
@@ -68,7 +95,7 @@ export const additionOptions = [
   },
   {
     value: "parking",
-    label: "مكان لصف الآلية",
+    label: "مكان مخصص لركن الألية",
   },
   {
     value: "garden",
@@ -90,10 +117,6 @@ export const additionOptions = [
 
 // Number options for select inputs (e.g., number of rooms, bathrooms, etc.)
 export const NUMBERS = [
-  {
-    value: 0,
-    label: "0",
-  },
   {
     value: 1,
     label: "1",
