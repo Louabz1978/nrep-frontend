@@ -30,7 +30,7 @@ interface ListingFormProps {
     general: GeneralStepType;
     additionalInfo: AdditionalInfoStepType;
     location: LocationStepType;
-    propertyImages: PropertyImagesStepType
+    propertyImages: PropertyImagesStepType;
   };
   listingResources: UseQueryResult<unknown[]>;
 }
@@ -39,7 +39,7 @@ interface ListingFormProps {
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(2);
 
   // general step form
   const generalStep = useForm({
@@ -104,7 +104,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         },
       },
     ],
-    [generalStep, additionalInfoStep , locationStep , propertyImagesStep]
+    [generalStep, additionalInfoStep, locationStep, propertyImagesStep]
   );
 
   console.log("");
@@ -131,14 +131,19 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       <div className="flex-1 h-full overflow-auto">
         {currentStep == 0 ? (
           <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
-        ) :  currentStep == 1 ?(
+        ) : currentStep == 1 ? (
           <AdditionalInfoStep
             form={additionalInfoStep}
             setCurrentStep={setCurrentStep}
           />
         ) : currentStep == 2 ? (
           <LocationStep form={locationStep} setCurrentStep={setCurrentStep} />
-        ) : (<PropertyImagesStep form={propertyImagesStep} setCurrentStep={setCurrentStep} />)}
+        ) : (
+          <PropertyImagesStep
+            form={propertyImagesStep}
+            setCurrentStep={setCurrentStep}
+          />
+        )}
       </div>
     </PageContainer>
   );
