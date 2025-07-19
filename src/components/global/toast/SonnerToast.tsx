@@ -8,7 +8,7 @@ function SonnerToast() {
     <Toaster
       position={"top-right"}
       dir="rtl"
-      className="translate-x-0 translate-none z-[1250]"
+      className="translate-x-0 translate-none z-[30]"
       icons={{
         success: <FaCircleCheck className="!size-[24.5px] !text-success" />,
         error: <FaCircleXmark className="!size-[24.5px] !text-error" />,

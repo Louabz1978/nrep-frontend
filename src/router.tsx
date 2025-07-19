@@ -10,6 +10,7 @@ import InputLogic from "./pages/website/Input/InputLogic";
 import ListingLogic from "./pages/website/listing/ListingLogic";
 import PrivateRoute from "./utils/privateRoute";
 import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
+import TestTable from "./pages/website/testTable/TestTable";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
         element: (
           <Link to={"/template/main"}>Click here to see the template</Link>
         ),
+      },
+      {
+        path: "test-table",
+        element: <TestTable />,
       },
       {
         path: "input",
