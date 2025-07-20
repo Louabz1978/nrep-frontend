@@ -10,6 +10,7 @@ import "@/styles/global/index.css";
 import { AnimatePresence } from "framer-motion";
 import { ColorPaletteProvider } from "./providers/ColorPaletteProvider";
 import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
+import NuqsProvider from "./providers/NuqsProvider";
 
 // build query client that every useQuery and useMutation use it
 const queryClient = new QueryClient();
@@ -17,17 +18,18 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <Provider>
     <ColorPaletteProvider>
-      <AppInitializer>
-        <QueryClientProvider client={queryClient}>
-          <SonnerToast />
-          <AnimatePresence mode="wait">
-            <RouterProvider router={router} />
-
-            <ColorPaletteEditor />
-          </AnimatePresence>
-          <ReactQueryDevtools />
-        </QueryClientProvider>
-      </AppInitializer>
+      <NuqsProvider>
+        <AppInitializer>
+          <QueryClientProvider client={queryClient}>
+            <SonnerToast />
+            <AnimatePresence mode="wait">
+              <RouterProvider router={router} />
+              <ColorPaletteEditor />
+            </AnimatePresence>
+            <ReactQueryDevtools />
+          </QueryClientProvider>
+        </AppInitializer>
+      </NuqsProvider>
     </ColorPaletteProvider>
   </Provider>
 );

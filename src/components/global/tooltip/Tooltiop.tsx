@@ -82,14 +82,14 @@ function TooltipContent({
           "data-[side=right]:slide-in-from-left-2",
           "data-[side=top]:slide-in-from-bottom-2",
           // Layout styles
-          "z-[1200] w-fit origin-(--radix-tooltip-content-transform-origin)",
+          "z-[30] w-fit origin-(--radix-tooltip-content-transform-origin)",
           "rounded-[8px] px-3 py-1.5 text-balance",
           className
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="bg-quaternary-bg fill-quaternary-bg z-[1200] size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+        <TooltipPrimitive.Arrow className="bg-quaternary-bg fill-quaternary-bg z-[30] size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );

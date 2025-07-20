@@ -39,7 +39,7 @@ interface ListingFormProps {
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
 
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(3);
 
   // general step form
   const generalStep = useForm({

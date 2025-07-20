@@ -3,12 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 // import { useUser } from "@/stores/useUser";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { LuChevronDown } from "react-icons/lu";
-
 import {
   PopoverTrigger,
   Popover,
   PopoverContent,
-} from "@radix-ui/react-popover";
+} from "@/components/global/ui/popover";
 
 function Navbar() {
   // const { checkPermissions } = useUser();
@@ -92,7 +91,7 @@ function Navbar() {
               <PopoverContent
                 side="left"
                 align="start"
-                className="w-56 ml-1 !bg-quaternary-bg rounded-[8px]"
+                className="w-56 ml-1 !bg-quaternary-bg !p-0 rounded-[8px]"
                 sideOffset={5}
               >
                 <div className="space-y-1">
@@ -194,7 +193,7 @@ function Navbar() {
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-64 mt-0 !bg-quaternary-bg rounded-[8px]"
+                  className="w-64 mt-0 !bg-quaternary-bg !p-0 rounded-[8px]"
                   sideOffset={8}
                 >
                   <div className="space-y-1">{renderSubMenu(tab.submenu)}</div>

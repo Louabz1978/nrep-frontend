@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, useCallback } from "react";
 import { FaRegImage, FaTrash } from "react-icons/fa6";
 import { AnimatePresence, motion } from "framer-motion";
 import { MdEdit } from "react-icons/md";
@@ -15,41 +15,32 @@ import type {
 } from "react-hook-form";
 import Toggle from "../toggle/Toggle";
 
-/**
- * Represents an image file with its metadata
- */
 interface ImageFile {
-  id: number; // Unique identifier for the file
-  path: string | File; // Can be either a File object or a path string
-  mode?: "edit" | "delete"; // Optional flag for file state
+  id: number;
+  path: string | File;
+  mode?: "edit" | "delete";
 }
 
-/**
- * Props for the ImagesInput component
- */
 interface ImagesInputProps<T extends FieldValues> {
-  form: UseFormReturn<T>; // form control methods
-  name: Path<T>; // Form field name
-  addable?: boolean; // Whether new files can be added
-  editable?: boolean; // Whether existing files can be edited
-  deletable?: boolean; // Whether existing files can be deleted
-  acceptTypes?: string; // Accepted file types (e.g., "image/*")
-  className?: string; // Additional CSS for add button
-  containerClassName?: string; // Additional CSS for container
-  imagesContainerClassName?: string; // Addition CSS for images container
-  label?: string; // Label text
-  customErrorStyle?: string; // Custom CSS for error messages
-  max?: number; // Maximum number of allowed files
-  disabled?: boolean; // disabled flag
-  info?: string | ReactNode; // info content
-  toggle?: Path<T>; // toggle field name
-  required?: boolean; // required flag to show red star
-  labelStyle?: string; // label className
+  form: UseFormReturn<T>;
+  name: Path<T>;
+  addable?: boolean;
+  editable?: boolean;
+  deletable?: boolean;
+  acceptTypes?: string;
+  className?: string;
+  containerClassName?: string;
+  imagesContainerClassName?: string;
+  label?: string;
+  customErrorStyle?: string;
+  max?: number;
+  disabled?: boolean;
+  info?: string | ReactNode;
+  toggle?: Path<T>;
+  required?: boolean;
+  labelStyle?: string;
 }
 
-/**
- * A reusable multi-image input component with preview, edit, and delete functionality
- */
 function ImagesInput<T extends FieldValues>({
   form,
   name,
@@ -63,12 +54,10 @@ function ImagesInput<T extends FieldValues>({
   max,
   className,
   disabled,
-  // info,
   toggle,
   required,
   labelStyle,
 }: ImagesInputProps<T>) {
-  //   Extract methods from form control methods
   const {
     watch,
     setValue,
@@ -76,45 +65,40 @@ function ImagesInput<T extends FieldValues>({
     formState: { errors },
   } = form;
 
-  // State for generating unique IDs for new files
   const [customFileId, setCustomFileId] = useState(-1);
-
-  // is disabled
+  const [isDragging, setIsDragging] = useState(false);
   const isDisabled = disabled || (toggle && !watch(toggle));
-
-  // Tracks which file's options are being shown on hover
   const [showOptions, setShowOptions] = useState<number | false>(false);
 
-  /**
-   * Handles adding multiple files to the form state
-   * @param e The file input change event
-   */
-  const handleAddMultiFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let initFiles = watch(name) as (
-      | { id: number; path: File }
-      | PathValue<T, Path<T>>[number]
-    )[];
-    let newId = customFileId - 1;
+  const handleAddFiles = useCallback(
+    async (files: FileList | File[]) => {
+      let initFiles = watch(name) as (
+        | { id: number; path: File }
+        | PathValue<T, Path<T>>[number]
+      )[];
+      let newId = customFileId - 1;
 
-    if (e.target.files) {
       await Promise.all(
-        Array.from(e.target.files).map((file) => {
+        Array.from(files).map((file) => {
           initFiles = [...initFiles, { id: newId, path: file }];
           newId -= 1;
         })
       );
-    }
 
-    setValue(name, initFiles as PathValue<T, Path<T>>);
-    setCustomFileId((prev) => prev - 1);
-    trigger(name);
+      setValue(name, initFiles as PathValue<T, Path<T>>);
+      setCustomFileId((prev) => prev - files.length);
+      trigger(name);
+    },
+    [watch, name, setValue, trigger, customFileId]
+  );
+
+  const handleAddMultiFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      await handleAddFiles(e.target.files);
+      e.target.value = "";
+    }
   };
 
-  /**
-   * Handles editing an existing file
-   * @param e The file input change event
-   * @param fileId The ID of the file being edited
-   */
   const handleEditMultiFile = async (
     e: React.ChangeEvent<HTMLInputElement>,
     fileId: number
@@ -132,10 +116,6 @@ function ImagesInput<T extends FieldValues>({
     trigger(name);
   };
 
-  /**
-   * Handles marking a file for deletion (soft delete)
-   * @param fileId The ID of the file to delete
-   */
   const handleDeleteMultiFile = async (fileId: number) => {
     const initFiles = watch(name).map((file: ImageFile) => {
       if (file.id !== fileId) return file;
@@ -146,16 +126,43 @@ function ImagesInput<T extends FieldValues>({
     trigger(name);
   };
 
-  // Filter out deleted files for display
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    if (isDisabled || !addable) return;
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      await handleAddFiles(files);
+    }
+  };
+
   const currentFiles = watch(name)?.filter(
     (item: { mode: "delete" | "edit" }) => item.mode !== "delete"
   );
-  // Check if more files can be added
   const canAddMore = !max || currentFiles?.length < max;
 
   return (
     <div className={`${containerClassName}`}>
-      {/* Field label */}
       {label ? (
         <label
           htmlFor={name}
@@ -176,15 +183,16 @@ function ImagesInput<T extends FieldValues>({
         </label>
       ) : null}
 
-      {/* Main container for image previews and add button */}
       <div
         className={`grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px] ${imagesContainerClassName}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
-        {/* Map through existing files to display previews */}
         {currentFiles?.map((item: ImageFile, i: number) => (
-          <div className="flex flex-col">
-            <div key={i} className="w-full h-[300px] rounded-full">
-              {/* Hidden file input for editing */}
+          <div className="flex flex-col" key={item.id}>
+            <div className="w-full h-[300px] rounded-full">
               <input
                 type="file"
                 id={`${name}__added_image_${i}`}
@@ -198,13 +206,11 @@ function ImagesInput<T extends FieldValues>({
                 className="hidden"
               />
 
-              {/* File preview container */}
               <div
                 className="flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer relative"
                 onMouseEnter={() => setShowOptions(i)}
                 onMouseLeave={() => setShowOptions(false)}
               >
-                {/* The actual image preview */}
                 <div className="w-full h-[300px]">
                   <img
                     src={
@@ -213,10 +219,10 @@ function ImagesInput<T extends FieldValues>({
                         : `${process.env.BACKEND_BASE_URL}/images/${item.path}`
                     }
                     className="size-full object-cover"
+                    alt={`Preview ${i + 1}`}
                   />
                 </div>
 
-                {/* Animated options that appear on hover */}
                 <AnimatePresence>
                   {showOptions === i && (
                     <motion.div
@@ -226,7 +232,6 @@ function ImagesInput<T extends FieldValues>({
                       transition={{ ease: "linear", duration: 0.3 }}
                       className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-[10px] cursor-auto text-size20 font-bold"
                     >
-                      {/* Edit button (only shown if editable) */}
                       {editable && (
                         <label
                           title="تعديل"
@@ -237,7 +242,6 @@ function ImagesInput<T extends FieldValues>({
                         </label>
                       )}
 
-                      {/* Delete button (only shown if deletable) */}
                       {deletable && (
                         <span
                           title="حذف"
@@ -250,7 +254,6 @@ function ImagesInput<T extends FieldValues>({
                         </span>
                       )}
 
-                      {/* Open file button */}
                       <span
                         className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-[5px] rounded-full cursor-pointer"
                         title="عرض"
@@ -270,7 +273,6 @@ function ImagesInput<T extends FieldValues>({
               </div>
             </div>
 
-            {/* Display error message under each image */}
             {getError(errors, `${name}.${i}.path` as Path<T>) ? (
               <span className="text-error font-medium text-size16">
                 {
@@ -285,45 +287,55 @@ function ImagesInput<T extends FieldValues>({
           </div>
         ))}
 
-        {/* Add new file button (only shown if canAddMore is true) */}
         {canAddMore &&
           (addable ? (
             <>
-              {/* Hidden file input for adding new files */}
               <input
                 type="file"
                 id={`${name}__adding_mode`}
                 multiple={true}
-                onChange={async (e) => {
-                  e.preventDefault();
-                  await handleAddMultiFile(e);
-                  e.target.value = "";
-                }}
+                onChange={handleAddMultiFile}
                 className="hidden"
                 accept={acceptTypes}
               />
-              {/* Visible add button that triggers the file input */}
               <label
                 htmlFor={`${name}__adding_mode`}
-                className={`flex flex-col gap-[20px] justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${className} text-primary-fg/50 bg-tertiary-bg`}
+                className={`relative flex flex-col gap-[20px] justify-center items-center w-full h-[300px] border-2 border-dashed ${
+                  isDragging ? "border-primary-fg" : "border-border"
+                } rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${
+                  className || ""
+                } text-primary-fg/50 bg-tertiary-bg transition-colors`}
               >
-                <FaRegImage className="size-[100px]" />
-                <span className="text-size22 font-medium">
-                  إدخال صور العقار
-                </span>
+                {isDragging ? (
+                  <div className="absolute inset-0 bg-primary-overlay/50 flex items-center justify-center">
+                    <span className="text-size22 font-medium">
+                      اسقط الصور هنا
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <FaRegImage className="size-[100px]" />
+                    <span className="text-size22 font-medium">
+                      إدخال صور العقار
+                    </span>
+                    <span className="text-size16 text-placeholder">
+                      أو اسحب وأسقط الصور هنا
+                    </span>
+                  </>
+                )}
               </label>
             </>
           ) : (
-            // Show disabled state if not addable
             <div
-              className={`flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${className} text-primary-fg/50 text-size44 bg-tertiary-bg`}
+              className={`flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${
+                className || ""
+              } text-primary-fg/50 text-size44 bg-tertiary-bg`}
             >
               <FcCancel title="ليست لديك صلاحية" className="" />
             </div>
           ))}
       </div>
 
-      {/* Error message display */}
       {getError(errors, name) ? (
         <span className="text-error font-medium text-size16">
           {(getError(errors, name) as { message: string })?.message}
