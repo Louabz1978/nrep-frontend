@@ -40,7 +40,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="number"
             label="رقم البناء"
             placeholder="أدخل رقم البناء"
-            name="buildingNumber"
+            name="building_num"
             info="يرجى إدخال رقم البناء كما هو موضح في العنوان الرسمي"
             required
           />
@@ -49,7 +49,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="text"
             label="اسم الشارع"
             placeholder="أدخل اسم الشارع"
-            name="streetName"
+            name="street"
             info="يرجى إدخال اسم الشارع الذي يقع فيه العقار"
             required
           />
@@ -67,7 +67,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="number"
             label="رقم الشقة"
             placeholder="أدخل رقم الشقة"
-            name="apartmentNumber"
+            name="apt"
             info="يرجى إدخال رقم الشقة إذا كان العقار شقة"
             required
           />
@@ -78,7 +78,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             choices={cityChoices}
             keyValue="value"
             showValue="label"
-            name="governorate"
+            name="county"
             info="يرجى اختيار المحافظة التي يقع فيها العقار"
             required
           />
@@ -108,7 +108,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             choices={PROPERTYTYPE}
             keyValue="value"
             showValue="label"
-            name="propertyType"
+            name="property_type"
             info="يرجى اختيار نوع العقار (شقة، فيلا، أرض، ...)"
             required
           />
@@ -117,7 +117,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="number"
             label="مساحة العقار (م²)"
             placeholder="أدخل مساحة العقار"
-            name="propertyArea"
+            name="area_space"
             info="يرجى إدخال المساحة الكلية للعقار بالمتر المربع"
             required
           />
@@ -154,7 +154,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="number"
             label="عمولة وكيل البائع ($)"
             placeholder="أدخل عمولة وكيل البائع"
-            name="sellerCommission"
+            name="property_realtor_commission"
             info="يرجى إدخال قيمة عمولة وكيل البائع بالدولار"
             required
           />
@@ -163,7 +163,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="number"
             label="عمولة وكيل المشتري ($)"
             placeholder="أدخل عمولة وكيل المشتري"
-            name="buyerCommission"
+            name="buyer_realtor_commission"
             info="يرجى إدخال قيمة عمولة وكيل المشتري بالدولار"
             required
           />
@@ -172,7 +172,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             type="number"
             label="سنة البناء"
             placeholder="أدخل سنة البناء"
-            name="buildYear"
+            name="year_built"
             info="يرجى إدخال سنة بناء العقار"
             required
           />

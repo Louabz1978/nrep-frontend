@@ -6,7 +6,7 @@ import Select from "@/components/global/form/select/Select";
 import { type AdditionalInfoStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
-import { additionOptions, WATERLINE } from "@/data/global/select";
+import { WATERLINE } from "@/data/global/select";
 import Input from "@/components/global/form/input/Input";
 
 interface AdditionalInfoStepProps {
@@ -65,17 +65,64 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
             name={"waterLine"}
             info="يرجى اختيار نوع خط المياه الواصل للعقار (رئيسي، خزان، بئر)"
           />
-          <Select
-            form={form}
-            keyValue="value"
-            showValue="label"
-            label="الخيارات إضافية"
-            name={"additionalOptions"}
-            placeholder={"اختر مواصفات أخرى للعقار"}
-            multiple={true}
-            choices={additionOptions}
-            info="اختر من الخيارات الإضافية المتوفرة مثل المصعد، مكيف، حديقة، جاكوزي، طاقة شمسية، مسبح وغيرها"
-          />
+
+          {/* Additional Options Section */}
+          <div className="lg:col-span-3 md:col-span-2 padding-[20]">
+            <p className="text-[24px] font-normal">
+              الخيارات الاضافية
+            </p>
+            <div className="flex flex-row flex-wrap items-center gap-6 mt-4">
+              <Input
+                form={form}
+                type="tags"
+                label="مصعد"
+                name="elevator"
+                info="هل يتوفر مصعد في العقار؟"
+              />
+              <Input
+                form={form}
+                type="tags"
+                label="مكيف"
+                name="ac"
+                info="هل يتوفر مكيف في العقار؟"
+              />
+              <Input
+                form={form}
+                type="tags"
+                label="مكان مخصص لركن الآلية"
+                name="parking"
+                info="هل يتوفر مكان مخصص لركن السيارة؟"
+              />
+              <Input
+                form={form}
+                type="tags"
+                label="حديقة"
+                name="garden"
+                info="هل يتوفر حديقة في العقار؟"
+              />
+              <Input
+                form={form}
+                type="tags"
+                label="جاكوزي"
+                name="jacuzzi"
+                info="هل يتوفر جاكوزي في العقار؟"
+              />
+              <Input
+                form={form}
+                type="tags"
+                label="طاقة شمسية"
+                name="solar"
+                info="هل يتوفر نظام طاقة شمسية؟"
+              />
+              <Input
+                form={form}
+                type="tags"
+                label="مسبح"
+                name="pool"
+                info="هل يتوفر مسبح في العقار؟"
+              />
+            </div>
+          </div>
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
           <PreviouseButton setCurrentStep={setCurrentStep} />
