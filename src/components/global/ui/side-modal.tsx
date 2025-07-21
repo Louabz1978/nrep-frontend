@@ -120,13 +120,13 @@ export function SideModal({
       direction={side}
     >
       <DrawerContent
-        className={`w-full ${sizeClasses[size]} rounded-none h-[calc(100%-64px)] !shadow-modal !border-0 flex flex-col bg-tertiary-bg text-primary-fg`}
+        className={`w-full ${sizeClasses[size]} rounded-none h-[calc(100%)] shadow-2xl !border-0 flex flex-col bg-tertiary-bg text-primary-fg`}
         style={{
           transform: transformValue,
           transition: "transform 0.3s ease-out",
           zIndex: 10 + modalIndex,
           pointerEvents: "all",
-          marginTop: "64px",
+          // marginTop: "64px",
         }}
         onInteractOutside={(e) => {
           if (!shouldCloseOnOverlayClick || !isTopModal) {
@@ -156,7 +156,7 @@ export function SideModal({
           <div className={`${!description ? "hidden" : "block"}`}>
             {description}
           </div>
-          <DrawerClose className="group absolute top-[16px] start-[-13px] rounded-full bg-tertiary-bg border border-solid border-border p-[2px] focus:outline-none">
+          <DrawerClose className="group cursor-pointer absolute top-[16px] start-[-13px] rounded-full bg-tertiary-bg border border-solid border-border p-[2px] focus:outline-none">
             <X className="size-[20px] text-secondary-fg group-hover:text-primary-fg transition-colors duration-[0.3s]" />
           </DrawerClose>
         </DrawerHeader>

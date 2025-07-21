@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import { Button } from "../form/button/Button";
 import { Input } from "../ui/input";
 import MultipleSelection from "@/components/global/ui/multiple-selection";
 import {
@@ -52,7 +52,6 @@ export default function ColumnSearch({
 }: ColumnSearchProps) {
   const [allowedFilters, setAllowedFilters] = state;
   const shouldShowFilter = allowedFilters.includes(id);
-  const [isClicked, setIsClicked] = useState(false);
 
   const removeFilter = () => {
     setAllowedFilters((pre) => pre.filter((f) => f != id));
@@ -96,11 +95,6 @@ export default function ColumnSearch({
   const handleClear = () => {
     setQ(null);
     setInputValue(null);
-  };
-
-  // Handle button click
-  const handleButtonClick = () => {
-    setIsClicked(!isClicked);
   };
 
   // Render the input node based on the type
@@ -188,13 +182,13 @@ export default function ColumnSearch({
         <Button
           variant="table-filter"
           className={cn(
-            "w-[100px] h-[36px] bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
-            (hasValue || isClicked) ? "bg-primary text-white" : ""
+            "min-w-[100px] h-full px-[5px] py-[2px] bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+            hasValue ? "bg-primary text-white" : ""
           )}
-          onClick={handleButtonClick}
         >
           {title}
           {renderStateLabel()}
+
           {/* Show clear icon on hover if no value is set */}
           {!hasValue ? (
             <span
@@ -204,13 +198,14 @@ export default function ColumnSearch({
               <X strokeWidth={1.3} className="size-3 text-white" />
             </span>
           ) : null}
+
           {/* Show clear button if value is set */}
           {hasValue ? (
             <span
               onClick={handleClear}
-              className="border-s border-primary flex items-center px-2 justify-center ms-2 h-8 cursor-pointer"
+              className="border-s border-white h-full flex items-center ps-[5px] justify-center ms-2 cursor-pointer"
             >
-              <X strokeWidth={1.3} className="size-4 text-primary" />
+              <X strokeWidth={1.3} className="size-4 text-white" />
             </span>
           ) : null}
         </Button>

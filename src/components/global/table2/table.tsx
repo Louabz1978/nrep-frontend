@@ -27,7 +27,7 @@ import {
   useState,
 } from "react";
 import { SideModal } from "../ui/side-modal";
-import { Button } from "../ui/button";
+import { Button } from "../form/button/Button";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -109,7 +109,7 @@ export function DataTable<TData, TValue, TRow>({
   return (
     <div className="space-y-4 p-6 ">
       <div className="flex justify-between items-start">
-        <div className="flex gap-[24px] mb-[40px] flex-wrap">
+        <div className="flex gap-[24px] flex-wrap">
           <TableSearch prefix={prefix} wrapperClassName="w-fit min-w-[200px]" />
           {filters && filters.length > 0 ? (
             <Fragment>
@@ -182,7 +182,7 @@ export function DataTable<TData, TValue, TRow>({
             />
           </Button>
         )}
-        <ScrollArea className="rounded-md  border-primary-border w-full whitespace-nowrap">
+        <ScrollArea className="rounded-md border border-secondary w-full whitespace-nowrap">
           <Table
             style={{
               minWidth: miw,
@@ -214,18 +214,18 @@ export function DataTable<TData, TValue, TRow>({
                                 <ChevronUp
                                   size={14}
                                   className={cn(
-                                    "text-white",
+                                    "text-primary-fg",
                                     header.column.getIsSorted() === "asc"
-                                      ? "text-white opacity-100"
+                                      ? "text-primary-fg opacity-100"
                                       : "opacity-50"
                                   )}
                                 />
                                 <ChevronDown
                                   size={14}
                                   className={cn(
-                                    "text-white -mt-1",
+                                    "text-primary-fg -mt-1",
                                     header.column.getIsSorted() === "desc"
-                                      ? "text-white opacity-100"
+                                      ? "text-primary-fg opacity-100"
                                       : "opacity-50"
                                   )}
                                 />
@@ -270,14 +270,13 @@ export function DataTable<TData, TValue, TRow>({
                           (row?.original as { id: string })?.id
                       )
                         ? "bg-primary-bg"
-                        : "bg-tertiary-bg",
-                      "border-t border-l border-primary"
+                        : "bg-tertiary-bg"
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell 
+                      <TableCell
                         key={cell.id}
-                        className="border-t border-l border-secondary max-w-[150px]"
+                        className="border-t border-l last:border-l-0 border-secondary max-w-[150px]"
                       >
                         {(cell.getValue() !== undefined &&
                           cell.getValue() !== null &&

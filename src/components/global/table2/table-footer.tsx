@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import { Button } from "../form/button/Button";
 import { useModal } from "@/hooks/global/use-modal";
 import { type UseMutationResult } from "@tanstack/react-query";
 import { type Row } from "@tanstack/react-table";
@@ -14,7 +14,7 @@ interface TableFooterProps<T> {
 }
 function TableFooter<T>({
   selectedRows,
-  deleteMutation,
+  // deleteMutation,
   handleDelete,
   setSelectedRows,
   idsKey,
@@ -44,7 +44,7 @@ function TableFooter<T>({
         {/* delete */}
         <Button
           variant={"destructive"}
-          loading={deleteMutation?.isPending}
+          // loading={deleteMutation?.isPending}
           onClick={() => {
             const ids = selectedRows?.map((item) => item?.original?.id);
             handleDelete(

@@ -6,7 +6,7 @@ import {
 } from "@/components/global/ui/pagination";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState, type ReactNode } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../form/button/Button";
 
 export interface DynamicPaginationProps {
   totalPageCount: number | undefined;
@@ -39,7 +39,7 @@ export function DynamicPagination({
               onClick={() => {
                 setPage(i).catch(console.error);
               }}
-              variant={page === i ? "default" : "link"}
+              variant={page === i ? "pagination-current" : "link"}
             >
               {i}
             </Button>
@@ -50,10 +50,11 @@ export function DynamicPagination({
       items.push(
         <PaginationItem key={1}>
           <Button
+            size={"icon"}
             onClick={() => {
               setPage(1).catch(console.error);
             }}
-            variant={page === 1 ? "default" : "link"}
+            variant={page === 1 ? "pagination-current" : "link"}
           >
             1
           </Button>
@@ -79,7 +80,7 @@ export function DynamicPagination({
               onClick={() => {
                 setPage(i).catch(console.error);
               }}
-              variant={page === i ? "default" : "link"}
+              variant={page === i ? "pagination-current" : "link"}
             >
               {i}
             </Button>
@@ -98,10 +99,11 @@ export function DynamicPagination({
       items.push(
         <PaginationItem key={currentTotal}>
           <Button
+            size={"icon"}
             onClick={() => {
               setPage(currentTotal).catch(console.error);
             }}
-            variant={page === currentTotal ? "default" : "link"}
+            variant={page === currentTotal ? "pagination-current" : "link"}
           >
             {currentTotal}
           </Button>
@@ -122,7 +124,7 @@ export function DynamicPagination({
                 setPage(Math.max(page - 1, 1)).catch(console.error);
               }}
               tabIndex={page === 1 ? -1 : undefined}
-              variant={"outline"}
+              variant={"pagination"}
               disabled={page === 1}
             >
               {"السابق"}
@@ -136,7 +138,7 @@ export function DynamicPagination({
                 setPage(Math.min(page + 1, currentTotal)).catch(console.error);
               }}
               tabIndex={page === currentTotal ? -1 : undefined}
-              variant={"outline"}
+              variant={"pagination"}
               disabled={page === currentTotal}
             >
               {"التالي"}

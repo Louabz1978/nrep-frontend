@@ -9,26 +9,33 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "h-[40px] gap-[25px] py-[7.5px] px-[18.5px] rounded-full !text-inverse-fg bg-primary text-size24",
+          "h-[40px] gap-[25px] py-[7.5px] px-[18.5px] rounded !text-inverse-fg bg-primary text-size24",
         "semi-round":
           "h-[45px] gap-[25px] py-[7.5px] px-[18.5px] rounded-[15.71px] !text-inverse-fg bg-primary text-size16",
         destructive:
           "font-medium !text-13p py-9p px-16p bg-destructive text-destructive-foreground hover:bg-destructive-hover rounded-xs border border-solid border-destructive hover:border-destructive-hover",
         outline:
-          "h-[40px] border-[3.16px] border-primary rounded-[23.55px] !text-primary bg-transparent text-size24",
+          "h-[40px] border-[3.16px] border-primary rounded px-[6px] !text-primary bg-transparent text-size24",
         "semi-round-outline":
           "h-[45px] border-[2.1px] border-primary rounded-[15.71px] !text-primary bg-transparent text-size16",
         secondary:
           "font-medium !text-13p py-9p px-16p bg-secondary text-secondary-foreground hover:bg-secondary-hover rounded-xs border border-solid border-secondary hover:border-secondary-hover",
         ghost:
           "font-medium !text-13p py-9p px-16p bg-transparent text-accent-hover hover:text-white hover:bg-accent-hover rounded-xs border border-solid border-transparent hover:border-accent-hover",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "font-medium !text-[13px] py-[9px] px-[16px] bg-transparent text-primary hover:bg-transparent rounded-xs border border-solid border-transparent hover:border-transparent",
+
         "ghost-light":
           "font-medium !text-13p py-9p px-16p bg-transparent text-foreground-secondary hover:bg-background-hover rounded-xs",
         panel:
           "font-medium !text-13p py-9p px-16p bg-top-panel-button text-top-panel-button-foreground hover:brightness-95 rounded-[7px]",
         radio:
           "w-[180px] h-[40px] rounded-full py-[13px] px-[30px] bg-quinary-bg text-inverse-fg",
+        "table-filter":
+          "min-w-[100px] h-full px-[5px] py-[2px] bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+        pagination:
+          "font-medium !text-[13px] h-[40px] py-[9px] px-[16px] bg-transparent text-primary hover:text-primary-fg rounded-[7px] border border-solid border-primary ",
+        "pagination-current":
+          "font-medium !text-[13px] py-[9px] px-[16px] bg-primary text-inverse-fg hover:bg-primary rounded-xs border border-solid border-primary hover:border-primary",
       },
 
       size: {
@@ -70,10 +77,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-        onClick={(e) => {
-          if (props.onClick) e.preventDefault();
-          props.onClick?.(e);
-        }}
+        // onClick={
+        //   props.onClick
+        //     ? (e) => {
+        //         if (props.onClick) e.preventDefault();
+        //         props.onClick?.(e);
+        //       }
+        //     : undefined
+        // }
       />
     );
   }

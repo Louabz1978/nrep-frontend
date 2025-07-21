@@ -1,5 +1,5 @@
 import { Settings } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../form/button/Button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip/Tooltiop";
 import { useModal } from "@/hooks/global/use-modal";
 type Props = { id: string };
