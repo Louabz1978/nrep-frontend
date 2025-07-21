@@ -38,8 +38,7 @@ interface ListingFormProps {
 // listing form page, gets: default values for each step in the form
 function ListingForm({ defaultValues }: ListingFormProps) {
   // current step
-
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(0);
 
   // general step form
   const generalStep = useForm({
@@ -106,10 +105,10 @@ function ListingForm({ defaultValues }: ListingFormProps) {
         },
       },
     ],
-    [generalStep, additionalInfoStep, locationStep]
+
+    [generalStep, additionalInfoStep, locationStep, propertyImagesStep]
   );
 
-  console.log("");
   // handle submit all form steps
   const handleSubmitForm = () => {
     console.log({
