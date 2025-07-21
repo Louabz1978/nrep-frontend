@@ -93,22 +93,4 @@ export const dummyData: TaskRow[] = [
     followers: [],
     collaborators: ["josolek966"],
   },
-  {
-    id: "9",
-    name: "test2 (updated 9)",
-    stage: "تم الإنجاز",
-    owner: { name: "Wasal", username: "w" },
-    assignedTo: [],
-    followers: [],
-    collaborators: [],
-  },
-  {
-    id: "10",
-    name: "test sdfsdf",
-    stage: "تحتاج إلى موافقة",
-    owner: { name: "Wasal", username: "w" },
-    assignedTo: [],
-    followers: [],
-    collaborators: [],
-  },
 ];
