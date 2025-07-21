@@ -9,15 +9,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "h-[40px] gap-[25px] py-[7.5px] px-[18.5px] rounded !text-inverse-fg bg-primary text-size24",
+          "h-5xl gap-2xl py-md px-lg rounded !text-inverse-fg bg-primary text-size18",
         "semi-round":
-          "h-[45px] gap-[25px] py-[7.5px] px-[18.5px] rounded-[15.71px] !text-inverse-fg bg-primary text-size16",
+          "!h-[40px] py-md px-lg rounded-2xl !text-inverse-fg bg-primary text-size16",
+        "semi-round-outline":
+          "!h-[40px] py-md px-lg hover:!bg-primary hover:!text-inverse-fg border-2 border-primary rounded-2xl !text-primary bg-transparent text-size16",
         destructive:
           "font-medium !text-13p py-9p px-16p bg-destructive text-destructive-foreground hover:bg-destructive-hover rounded-xs border border-solid border-destructive hover:border-destructive-hover",
         outline:
-          "h-[40px] border-[3.16px] border-primary rounded px-[6px] !text-primary bg-transparent text-size24",
-        "semi-round-outline":
-          "h-[45px] border-[2.1px] border-primary rounded-[15.71px] !text-primary bg-transparent text-size16",
+          "h-5xl border-[3px] border-primary rounded px-sm !text-primary hover:!text-inverse-fg hover:!bg-primary bg-transparent text-size18",
         secondary:
           "font-medium !text-13p py-9p px-16p bg-secondary text-secondary-foreground hover:bg-secondary-hover rounded-xs border border-solid border-secondary hover:border-secondary-hover",
         ghost:

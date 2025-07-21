@@ -3,14 +3,14 @@ import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
 import TemplateLayout from "./layouts/template/TemplateLayout";
-import PageContainer from "./components/global/pageContainer/PageContainer";
+import AnimateContainer from "./components/global/pageContainer/AnimateContainer";
 import TemplateLogic from "./pages/template/template/TemplateLogic";
 import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
-import ListingLogic from "./pages/website/listing/ListingLogic";
 import PrivateRoute from "./utils/privateRoute";
 import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 import TestTable from "./pages/website/testTable/TestTable";
+import AddListingLogic from "./pages/website/listing/AddListingLogic";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -49,8 +49,8 @@ const router = createBrowserRouter([
         element: <InputLogic />,
       },
       {
-        path: "listing/*",
-        element: <ListingLogic />,
+        path: "listing/add",
+        element: <AddListingLogic />,
       },
       {
         path: "color",
@@ -112,7 +112,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <PageContainer>home</PageContainer>,
+        element: <AnimateContainer>home</AnimateContainer>,
       },
       {
         path: "main/*",

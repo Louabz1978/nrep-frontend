@@ -1,4 +1,4 @@
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import NextButton from "@/components/global/form/button/NextButton";
 import { type Dispatch, type SetStateAction } from "react";
 import type { UseFormReturn } from "react-hook-form";
@@ -25,16 +25,14 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   };
 
   return (
-    <PageContainer className="h-full overflow-auto ">
+    <AnimateContainer>
       <form
-        id="features_step_form"
-        className="mb-10 flex flex-col gap-[80px]"
+        id="general_step_form"
+        className="flex flex-col gap-6xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="p-[48px] pt-[24px] grid lg:grid-cols-3 md:grid-cols-2 gap-x-[48px] gap-y-[24px]">
-          <FormSectionHeader textSize="text-size40">
-            المعلومات العامة
-          </FormSectionHeader>
+        <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-x-5xl gap-y-3xl">
+          <FormSectionHeader>المعلومات العامة</FormSectionHeader>
           <Input
             form={form}
             type="number"
@@ -188,11 +186,13 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             required
           />
         </div>
-        <div className="flex justify-end w-full gap-4 px-[107px]">
+
+        {/* buttons container */}
+        <div className="flex justify-end w-full gap-xl">
           <NextButton id={"general_step_form"} />
         </div>
       </form>
-    </PageContainer>
+    </AnimateContainer>
   );
 }
 

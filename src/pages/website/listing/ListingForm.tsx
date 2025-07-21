@@ -18,12 +18,13 @@ import {
   type PropertyImagesStepType,
 } from "@/data/website/schema/ListingFormSchema";
 import cleanValues from "@/utils/cleanValues";
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { type StepType } from "@/components/global/stepper/Stepper";
 import AdditionalInfoStep from "./components/AdditionalInfoStep";
 import LocationStep from "./components/LocationStep";
 import PropertyImagesStep from "./components/PropertyImagesStep";
+import PageContainer from "@/components/global/pageContainer/PageContainer";
 
 interface ListingFormProps {
   defaultValues: {
@@ -120,34 +121,36 @@ function ListingForm({ defaultValues }: ListingFormProps) {
   };
 
   return (
-    <PageContainer>
-      {/* stepper */}
-      <Stepper
-        steps={Steps}
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-      />
+    <AnimateContainer>
+      <PageContainer className="gap-5xl">
+        {/* stepper */}
+        <Stepper
+          steps={Steps}
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+        />
 
-      {/* form steps area */}
-      <div className="flex-1 ">
-        {currentStep == 0 ? (
-          <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
-        ) : currentStep == 1 ? (
-          <AdditionalInfoStep
-            form={additionalInfoStep}
-            setCurrentStep={setCurrentStep}
-          />
-        ) : currentStep == 2 ? (
-          <LocationStep form={locationStep} setCurrentStep={setCurrentStep} />
-        ) : (
-          <PropertyImagesStep
-            form={propertyImagesStep}
-            setCurrentStep={setCurrentStep}
-            handleSubmitForm={handleSubmitForm}
-          />
-        )}
-      </div>
-    </PageContainer>
+        {/* form steps area */}
+        <div className="flex-1 flex flex-col">
+          {currentStep == 0 ? (
+            <GeneralStep form={generalStep} setCurrentStep={setCurrentStep} />
+          ) : currentStep == 1 ? (
+            <AdditionalInfoStep
+              form={additionalInfoStep}
+              setCurrentStep={setCurrentStep}
+            />
+          ) : currentStep == 2 ? (
+            <LocationStep form={locationStep} setCurrentStep={setCurrentStep} />
+          ) : (
+            <PropertyImagesStep
+              form={propertyImagesStep}
+              setCurrentStep={setCurrentStep}
+              handleSubmitForm={handleSubmitForm}
+            />
+          )}
+        </div>
+      </PageContainer>
+    </AnimateContainer>
   );
 }
 

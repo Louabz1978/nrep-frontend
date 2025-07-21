@@ -40,9 +40,9 @@ function Info({ info, className }: InfoProps) {
 
       {/* Modal dialog */}
       <Modal isOpen={isOpenInof} setIsOpen={setIsOpenInfo}>
-        <div className="w-[40vw] min-h-[40svh] max-h-[80svh] flex flex-col gap-[20px]">
+        <div className="md:min-w-[40vw] w-full min-h-[40svh] max-h-[80svh] flex flex-col gap-lg">
           {/* Modal header with close button */}
-          <div className="py-[10px] px-[20px] flex justify-end border-b border-border">
+          <div className="py-lg px-4xl flex justify-end border-b border-border">
             <FaXmark
               onClick={() => setIsOpenInfo(false)}
               className="text-primary-icon cursor-pointer hover:text-primary-fg transition-all duration-[0.3s]"
@@ -51,7 +51,7 @@ function Info({ info, className }: InfoProps) {
           </div>
 
           {/* Scrollable content area */}
-          <div className="px-[20px] overflow-y-auto font-normal text-size24 text-start whitespace-pre-wrap break-words">
+          <div className="px-4xl overflow-y-auto font-normal text-size18 text-start whitespace-pre-wrap break-words">
             {info}
           </div>
         </div>

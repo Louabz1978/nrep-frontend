@@ -55,10 +55,10 @@ function Input<T extends FieldValues>({
   customInput,
   step = 1,
   numberRegex = /^\d*\.?\d*$/,
-  onClick = () => { },
-  onFocus = () => { },
-  onChange = () => { },
-  onBlur = () => { },
+  onClick = () => {},
+  onFocus = () => {},
+  onChange = () => {},
+  onBlur = () => {},
   min,
   max,
   info,
@@ -142,8 +142,8 @@ function Input<T extends FieldValues>({
             </span>
           ) : null}
         </div>
-      // checkbox input with its style 
-      ) : type == "tags" ? (
+      ) : // checkbox input with its style
+      type == "tags" ? (
         <div className={`flex flex-col ${addingStyle}`}>
           <label
             htmlFor={name}
@@ -166,7 +166,7 @@ function Input<T extends FieldValues>({
               checked={watch?.(name) ? true : false}
             />
 
-            <div className="px-6 py-4 bg-transparent rounded-md border border-[#ADA7A7] peer-checked:bg-primary/10 peer-checked:border-primary transition-colors duration-150 min-w-[200px] text-center select-none flex items-center justify-center text-gray-400 peer-checked:text-primary text-[16px] h-[40px]">
+            <div className="px-3xl py-xl bg-transparent rounded-md border border-secondary-border peer-checked:bg-primary/10 peer-checked:border-primary transition-colors duration-150 w-[200px] text-center select-none flex items-center justify-center text-secondary-border peer-checked:text-primary text-size14 h-[40px]">
               {label}
             </div>
             {element ? element : null}
@@ -180,26 +180,27 @@ function Input<T extends FieldValues>({
       ) : (
         // other normal inputs
         <div
-          className={`flex flex-col w-full gap-[4px] ${addingStyle}`}
+          className={`flex flex-col w-full gap-xs ${addingStyle}`}
           onClick={onClick}
         >
           {/* input label  */}
           {label ? (
             <label
               htmlFor={name}
-              className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
+              className={`text-size18 font-medium text-primary-fg cursor-pointer ${labelStyle} ${
+                isDisabled ? "text-placeholder" : " text-primary-fg"
+              } transition-all`}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-sm">
                 {label}
                 {required && !isDisabled ? (
-                  <span className="text-size22 text-error">{" *"}</span>
+                  <span className="text-size18 text-error">{" *"}</span>
                 ) : null}
                 {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
                 {toggle ? (
                   <Toggle
                     form={form}
                     name={toggle}
-                    label=""
                     onChange={handleToggleChange}
                   />
                 ) : null}
@@ -207,13 +208,13 @@ function Input<T extends FieldValues>({
             </label>
           ) : null}
 
-          <div className="w-full flex flex-col gap-[4px]">
+          <div className="w-full flex flex-col gap-xs">
             {/* input container to link icon to its position */}
-            <div className="relative flex items-center gap-[15px]">
+            <div className="relative flex items-center gap-lg">
               <div className="relative flex-1 flex items-center overflow-hidden">
                 {/* input with react hook form register control  */}
                 {type == "custom" ? (
-                  <div className="custom-input">{customInput}</div>
+                  customInput
                 ) : type == "number" ? (
                   <input
                     type={"number"}
@@ -221,17 +222,21 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
-                    className={`flex-1 h-[40px] text-[16.36px] ${isDisabled ? "bg-secondary-background" : "bg-input-bg"
-                      } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${getError(errors, name)
+                    className={`flex-1 h-5xl text-size16 ${
+                      isDisabled ? "bg-secondary-background" : "bg-input-bg"
+                    } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                      getError(errors, name)
                         ? "border-error"
-                        : `${isValid(form)
-                          ? "focus-visible:border-success"
-                          : "focus-visible:border-secondary"
-                        } hover:border-secondary ${addingValidStyle
-                          ? addingValidStyle
-                          : "border-secondary-border"
-                        }`
-                      } ${addingInputStyle}`}
+                        : `${
+                            isValid(form)
+                              ? "focus-visible:border-success"
+                              : "focus-visible:border-secondary"
+                          } hover:border-secondary ${
+                            addingValidStyle
+                              ? addingValidStyle
+                              : "border-secondary-border"
+                          }`
+                    } ${addingInputStyle}`}
                     onChange={(e) => {
                       if (
                         numberRegex.test(e.target.value) &&
@@ -259,18 +264,23 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
-                    className={`flex-1 h-[40px] text-[16.36px] ${isDisabled ? "bg-secondary-background" : "bg-input-bg"
-                      } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${getError(errors, name)
+                    className={`flex-1 h-5xl text-size16 ${
+                      isDisabled ? "bg-secondary-background" : "bg-input-bg"
+                    } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                      getError(errors, name)
                         ? "border-error"
-                        : `${isValid(form)
-                          ? "focus-visible:border-success"
-                          : "focus-visible:border-secondary"
-                        } hover:border-secondary ${addingValidStyle
-                          ? addingValidStyle
-                          : "border-secondary-border"
-                        }`
-                      } ${type == "password" ? "!pl-[56px]" : ""
-                      } ${addingInputStyle}`}
+                        : `${
+                            isValid(form)
+                              ? "focus-visible:border-success"
+                              : "focus-visible:border-secondary"
+                          } hover:border-secondary ${
+                            addingValidStyle
+                              ? addingValidStyle
+                              : "border-secondary-border"
+                          }`
+                    } ${
+                      type == "password" ? "!pl-[56px]" : ""
+                    } ${addingInputStyle}`}
                     // border-gold-background focus:ring-gold-background rounded-lg
                     step={step}
                     onFocus={onFocus}
@@ -297,7 +307,7 @@ function Input<T extends FieldValues>({
 
             {/* validation errors  */}
             {getError(errors, name) ? (
-              <span className="text-error font-medium text-size16">
+              <span className="text-error font-medium text-size14">
                 {(getError(errors, name) as { message: string })?.message}
               </span>
             ) : null}

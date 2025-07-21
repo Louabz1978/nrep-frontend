@@ -9,7 +9,7 @@ import LOGIN_FORM_SCHEMA, {
   type LoginFormType,
 } from "@/data/global/LoginFormSchema";
 import type { UseMutationResult } from "@tanstack/react-query";
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import { Link } from "react-router-dom";
 
 interface LoginProps<T> {
@@ -40,9 +40,9 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
   };
 
   return (
-    <PageContainer>
+    <AnimateContainer>
       <div
-        className={`w-full h-full flex-1 overflow-auto relative z-0 flex items-center justify-end bg-right bg-cover`}
+        className={`w-full h-full flex-1 overflow-auto md:px-8xl px-container-padding-mobile py-3xl relative z-0 flex items-center justify-end bg-right bg-cover`}
         style={{ backgroundImage: `url(${loginBg})` }}
       >
         {/* overlay */}
@@ -52,17 +52,14 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
         <form
           id="login_form"
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-tertiary-bg rounded-[21px] w-[827px] flex flex-col items-center gap-[91px] px-[67px] py-[48px] shadow-primary-shadow ml-[80px]"
+          className="md:bg-tertiary-bg bg-tertiary-bg/80 max-md:backdrop-blur-[15px] rounded-3xl w-[680px] max-w-full max-h-full overflow-auto flex flex-col items-center gap-6xl md:px-5xl px-3xl py-3xl shadow-primary-shadow"
         >
           {/* top section */}
-          <div className="w-full flex flex-col gap-[90px]">
+          <div className="w-full flex flex-col gap-6xl">
             {/* logo */}
             <div className="flex flex-col items-center gap-[15px]">
               {/* logo image */}
-              <Link
-                to={"/"}
-                className="size-[68px] rounded-[18.7px] overflow-hidden"
-              >
+              <Link to={"/"} className="size-[68px] rounded-xl overflow-hidden">
                 <img src={logo} alt="NREP" className="size-full object-cover" />
               </Link>
 
@@ -73,15 +70,15 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
             </div>
 
             {/* form area */}
-            <div className="w-full flex flex-col gap-[24px]">
+            <div className="w-full flex flex-col gap-3xl">
               {/* username */}
               <Input
                 form={form}
                 name="username"
                 label="البريد الإلكتروني أو اسم المستخدم:"
                 placeholder="البريد الإلكتروني"
-                labelStyle="!font-bold !text-size24"
-                addingInputStyle="!h-[52.35px] !rounded-[12.27px]"
+                labelStyle="!font-bold !text-size18"
+                addingInputStyle="!h-6xl !rounded-lg"
                 addingValidStyle={"border-primary-border"}
               />
 
@@ -92,13 +89,13 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
                 type="password"
                 label="كلمة السر :"
                 placeholder="كلمة السر"
-                labelStyle="!font-bold !text-size24"
-                addingInputStyle="!h-[52.35px] !rounded-[12.27px]"
+                labelStyle="!font-bold !text-size18"
+                addingInputStyle="!h-6xl !rounded-lg"
                 addingValidStyle={"border-primary-border"}
                 bottomElement={
                   <Link
                     to={"/forgot-password"}
-                    className="px-[3.27px] text-size16 text-primary font-bold border-b-[0.82px] border-primary w-max leading-[16px] mt-[12px]"
+                    className="px-xs text-size16 text-primary font-bold border-b border-primary w-max mt-sm"
                   >
                     هل نسيت كلمة السر؟
                   </Link>
@@ -108,7 +105,7 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
           </div>
 
           {/* buttons section */}
-          <div className="w-[250px] flex flex-col gap-[16px]">
+          <div className="w-[250px] flex flex-col gap-xl">
             <Button disabled={login?.isPending} type="submit">
               تسجيل الدخول
             </Button>
@@ -118,7 +115,7 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
           </div>
         </form>
       </div>
-    </PageContainer>
+    </AnimateContainer>
   );
 }
 

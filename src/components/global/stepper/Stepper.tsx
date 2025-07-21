@@ -14,9 +14,9 @@ interface StepperProps {
 // Stepper component receives currentStep and steps as props
 const Stepper = ({ currentStep, steps }: StepperProps) => {
   return (
-    <div className="flex items-center justify-center p-4 w-full ">
+    <div className="flex items-center justify-center w-full ">
       {/* LTR support */}
-      <div className="flex overflow-hidden w-full py-[30px] 2xl:px-[200px] xl:px-[150px] lg:px-[100px] md:px-[50px] px-0">
+      <div className="flex overflow-hidden w-full 2xl:px-[200px] xl:px-[150px] lg:px-[100px] md:px-[50px] px-0">
         {steps.map((step, index) => {
           // Determine step state
           const isActive = index === currentStep;
@@ -34,9 +34,9 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
           return (
             <div
               key={step.name}
-              className={`relative flex-1 flex items-center justify-center font-bold md:text-size18 text-size14 px-[8px] h-16 ${
+              className={`relative flex-1 flex items-center justify-center font-bold md:text-size18 text-size14 px-md h-7xl ${
                 isClickable ? "cursor-pointer" : "cursor-default"
-              } transition-colors duration-200 ${base} `}
+              } transition-colors rounded-lg duration-[0.3s] ${base} `}
               style={{
                 clipPath:
                   index === 0
@@ -47,7 +47,6 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
                     ? "polygon(0 0, 100% 0, 93% 50%, 100% 100%, 0 100%, 0 0)" // final step: arrow on right, flat on left, more angle (RTL)
                     : "polygon(0 50%, 7% 0, 100% 0, 93% 50%, 100% 100%, 7% 100%)", // middle steps, arrow on both sides
                 zIndex: steps.length - index,
-                borderRadius: "8px",
                 opacity: isClickable || isActive ? 1 : 0.7,
               }}
               onClick={() => {
@@ -57,9 +56,7 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
                 }
               }}
             >
-              <span
-                className="w-full text-center select-none"
-              >
+              <span className="w-full text-center select-none">
                 {step.name}
               </span>
             </div>

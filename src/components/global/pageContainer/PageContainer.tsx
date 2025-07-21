@@ -1,35 +1,26 @@
-import type ADMIN_PERMISSIONS from "@/data/admin/permissoins";
-import type WEBSITE_PERMISSIONS from "@/data/website/permissions";
-import { useUser } from "@/stores/useUser";
-import { motion } from "framer-motion";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface PageContainerProps {
   children: ReactNode;
   className?: string;
-  permissions?: (
-    | keyof typeof WEBSITE_PERMISSIONS
-    | keyof typeof ADMIN_PERMISSIONS
-  )[];
+  containerClassName?: string;
 }
 
 function PageContainer({
   children,
-  className = "",
-  permissions,
+  className,
+  containerClassName,
 }: PageContainerProps) {
-  const { checkPermissions } = useUser();
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`flex flex-col flex-1 overflow-auto ${className}`}
+    <div
+      className={`flex-1 w-full flex flex-col items-center ${containerClassName}`}
     >
-      {checkPermissions(permissions) ? children : <>not allowed</>}
-    </motion.div>
+      <div
+        className={`w-full max-w-container-max-width-desktop flex-1 flex flex-col ${className}`}
+      >
+        {children}
+      </div>
+    </div>
   );
 }
 

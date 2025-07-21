@@ -3,7 +3,7 @@ import type { editTemplateFunctionProps } from "@/api/template/template/editTemp
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import { FEATURES, GENDER, LEVELS } from "@/data/global/enums";
 import {
   TEMPLATE_FORM_SCHEMA,
@@ -46,7 +46,7 @@ function TemplateForm({
   }
 
   return (
-    <PageContainer>
+    <AnimateContainer>
       <form
         id="add_template_form"
         className="flex flex-col flex-1 w-full bg-white rounded-2xl p-[20px]"
@@ -133,7 +133,7 @@ function TemplateForm({
           </Button>
         </div>
       </form>
-    </PageContainer>
+    </AnimateContainer>
   );
 }
 
