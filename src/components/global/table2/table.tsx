@@ -107,9 +107,9 @@ export function DataTable<TData, TValue, TRow>({
   );
 
   return (
-    <div className="space-y-4 p-6">
+    <div className="space-y-4 p-6 ">
       <div className="flex justify-between items-start">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-[24px] mb-[40px] flex-wrap">
           <TableSearch prefix={prefix} wrapperClassName="w-fit min-w-[200px]" />
           {filters && filters.length > 0 ? (
             <Fragment>
@@ -182,7 +182,7 @@ export function DataTable<TData, TValue, TRow>({
             />
           </Button>
         )}
-        <ScrollArea className="rounded-md border border-primary-border w-full whitespace-nowrap">
+        <ScrollArea className="rounded-md  border-primary-border w-full whitespace-nowrap">
           <Table
             style={{
               minWidth: miw,
@@ -191,14 +191,14 @@ export function DataTable<TData, TValue, TRow>({
           >
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="bg-secondary-bg">
+                <TableRow key={headerGroup.id} className="bg-secondary">
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead key={header.id}>
                         {header.isPlaceholder ? null : (
                           <div
                             className={cn(
-                              "flex items-center gap-2",
+                              "flex items-center gap-2 font-bold ",
                               header.column.getCanSort()
                                 ? "cursor-pointer select-none text-primary-fg hover:text-primary-fg"
                                 : "text-secondary-fg"
@@ -214,19 +214,19 @@ export function DataTable<TData, TValue, TRow>({
                                 <ChevronUp
                                   size={14}
                                   className={cn(
-                                    "text-primary-fg",
+                                    "text-white",
                                     header.column.getIsSorted() === "asc"
-                                      ? "text-primary-fg opacity-100"
-                                      : "opacity-30"
+                                      ? "text-white opacity-100"
+                                      : "opacity-50"
                                   )}
                                 />
                                 <ChevronDown
                                   size={14}
                                   className={cn(
-                                    "text-primary-fg -mt-1",
+                                    "text-white -mt-1",
                                     header.column.getIsSorted() === "desc"
-                                      ? "text-primary-fg opacity-100"
-                                      : "opacity-30"
+                                      ? "text-white opacity-100"
+                                      : "opacity-50"
                                   )}
                                 />
                               </span>
@@ -270,11 +270,15 @@ export function DataTable<TData, TValue, TRow>({
                           (row?.original as { id: string })?.id
                       )
                         ? "bg-primary-bg"
-                        : "bg-tertiary-bg"
+                        : "bg-tertiary-bg",
+                      "border-t border-l border-primary"
                     )}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell 
+                        key={cell.id}
+                        className="border-t border-l border-secondary max-w-[150px]"
+                      >
                         {(cell.getValue() !== undefined &&
                           cell.getValue() !== null &&
                           cell.getValue() !== "") ||

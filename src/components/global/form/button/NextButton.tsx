@@ -12,9 +12,9 @@ const NextButton = ({
   icon = <FaArrowCircleLeft />,
 }: NextButtonProps) => {
   return (
-    <Button type="submit" className="!h-[45px]" id={id}>
-      {title}
-      {icon}
+    <Button type="submit" className="!h-[40px] w-[200px] rounded px-6 py-4 gap-2.5 flex items-center justify-between cursor-pointer" id={id}>
+      <span className="flex-1">{title}</span>
+      <span className="w-[30px] h-[30px] flex justify-center items-center">{icon}</span>
     </Button>
   );
 };

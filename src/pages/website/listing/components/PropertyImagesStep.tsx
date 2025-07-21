@@ -32,11 +32,15 @@ const PropertyImagesStep = ({
     <PageContainer className="h-full overflow-auto ">
       <form
         id="images_step_form"
-        className="mb-10 flex flex-col gap-[80px]"
+        className="mb-10 flex flex-col "
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="p-[40px]">
           <ImagesInput form={form} name={"images"} />
+        </div>
+        <div className="flex justify-center items-center flex-col mb-[80px] text-error font-normal">
+          <p>ملاحظة : الحد الأعلى لرفع صور العقار في هذه النافذة 4 صور , لإضافة المزيد الرجاء زيارة صفحة العقار الخاصة .</p>
+          <p>ملاحظة : الحد الأدنى لحجم الصورة 200KB , و الحد الأعلى 5MB .</p>
         </div>
         <div className="flex justify-between w-full gap-4 px-[107px]">
           <PreviouseButton setCurrentStep={setCurrentStep} />

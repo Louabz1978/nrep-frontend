@@ -4,7 +4,7 @@ import { DataTable } from "@/components/global/table2/table";
 
 function TestTable() {
   return (
-    <div>
+    <div className="max-w-[1192px] m-auto mt-[40px]">
       <DataTable
         prefix="home"
         columns={columns}

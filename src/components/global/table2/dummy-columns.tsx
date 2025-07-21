@@ -34,7 +34,7 @@ export const columns: ColumnDef<TaskRow>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        className="ms-2"
+        className="ms-2 text-white cursor-pointer"
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -45,7 +45,7 @@ export const columns: ColumnDef<TaskRow>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
-        className="ms-2"
+        className="ms-2 text-white w-[24px] h-[24px] rounded-[5px] bg-primary cursor-pointer"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
@@ -66,7 +66,7 @@ export const columns: ColumnDef<TaskRow>[] = [
     cell: ({ row }) => {
       const stage = row.original.stage;
 
-      return <Badge variant="default">{stage}</Badge>;
+      return <Badge className="text-white">{stage}</Badge>;
     },
   },
   {

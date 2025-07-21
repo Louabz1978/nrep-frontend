@@ -52,6 +52,8 @@ export default function ColumnSearch({
 }: ColumnSearchProps) {
   const [allowedFilters, setAllowedFilters] = state;
   const shouldShowFilter = allowedFilters.includes(id);
+  const [isClicked, setIsClicked] = useState(false);
+
   const removeFilter = () => {
     setAllowedFilters((pre) => pre.filter((f) => f != id));
   };
@@ -94,6 +96,11 @@ export default function ColumnSearch({
   const handleClear = () => {
     setQ(null);
     setInputValue(null);
+  };
+
+  // Handle button click
+  const handleButtonClick = () => {
+    setIsClicked(!isClicked);
   };
 
   // Render the input node based on the type
@@ -181,9 +188,10 @@ export default function ColumnSearch({
         <Button
           variant="table-filter"
           className={cn(
-            "rounded-xs px-4 group relative",
-            hasValue ? "border border-primary text-primary pe-0" : ""
+            "w-[100px] h-[36px] bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+            (hasValue || isClicked) ? "bg-primary text-white" : ""
           )}
+          onClick={handleButtonClick}
         >
           {title}
           {renderStateLabel()}
