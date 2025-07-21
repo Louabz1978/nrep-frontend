@@ -55,10 +55,10 @@ function Input<T extends FieldValues>({
   customInput,
   step = 1,
   numberRegex = /^\d*\.?\d*$/,
-  onClick = () => {},
-  onFocus = () => {},
-  onChange = () => {},
-  onBlur = () => {},
+  onClick = () => { },
+  onFocus = () => { },
+  onChange = () => { },
+  onBlur = () => { },
   min,
   max,
   info,
@@ -142,6 +142,41 @@ function Input<T extends FieldValues>({
             </span>
           ) : null}
         </div>
+      // checkbox input with its style 
+      ) : type == "tags" ? (
+        <div className={`flex flex-col ${addingStyle}`}>
+          <label
+            htmlFor={name}
+            className={`flex items-center gap-2 cursor-pointer ${addingInputStyle}`}
+          >
+            <input
+              type="checkbox"
+              className="peer hidden"
+              id={name}
+              {...(register ? register(name) : {})}
+              disabled={isDisabled}
+              onChange={(e) => {
+                setValue(
+                  name,
+                  (e?.target?.checked ? true : false) as PathValue<T, Path<T>>
+                );
+                trigger?.(name);
+                onChange({ trigger } as { trigger: UseFormTrigger<T> });
+              }}
+              checked={watch?.(name) ? true : false}
+            />
+
+            <div className="px-6 py-4 bg-transparent rounded-md border border-[#ADA7A7] peer-checked:bg-primary/10 peer-checked:border-primary transition-colors duration-150 min-w-[200px] text-center select-none flex items-center justify-center text-gray-400 peer-checked:text-primary text-[16px] h-[40px]">
+              {label}
+            </div>
+            {element ? element : null}
+          </label>
+          {getError(errors, name) ? (
+            <span className="text-error text-size14">
+              {(getError(errors, name) as { message: string })?.message}
+            </span>
+          ) : null}
+        </div>
       ) : (
         // other normal inputs
         <div
@@ -186,21 +221,17 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
-                    className={`flex-1 h-[40px] text-[16.36px] ${
-                      isDisabled ? "bg-secondary-background" : "bg-input-bg"
-                    } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
-                      getError(errors, name)
+                    className={`flex-1 h-[40px] text-[16.36px] ${isDisabled ? "bg-secondary-background" : "bg-input-bg"
+                      } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${getError(errors, name)
                         ? "border-error"
-                        : `${
-                            isValid(form)
-                              ? "focus-visible:border-success"
-                              : "focus-visible:border-secondary"
-                          } hover:border-secondary ${
-                            addingValidStyle
-                              ? addingValidStyle
-                              : "border-secondary-border"
-                          }`
-                    } ${addingInputStyle}`}
+                        : `${isValid(form)
+                          ? "focus-visible:border-success"
+                          : "focus-visible:border-secondary"
+                        } hover:border-secondary ${addingValidStyle
+                          ? addingValidStyle
+                          : "border-secondary-border"
+                        }`
+                      } ${addingInputStyle}`}
                     onChange={(e) => {
                       if (
                         numberRegex.test(e.target.value) &&
@@ -228,23 +259,18 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
-                    className={`flex-1 h-[40px] text-[16.36px] ${
-                      isDisabled ? "bg-secondary-background" : "bg-input-bg"
-                    } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
-                      getError(errors, name)
+                    className={`flex-1 h-[40px] text-[16.36px] ${isDisabled ? "bg-secondary-background" : "bg-input-bg"
+                      } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${getError(errors, name)
                         ? "border-error"
-                        : `${
-                            isValid(form)
-                              ? "focus-visible:border-success"
-                              : "focus-visible:border-secondary"
-                          } hover:border-secondary ${
-                            addingValidStyle
-                              ? addingValidStyle
-                              : "border-secondary-border"
-                          }`
-                    } ${
-                      type == "password" ? "!pl-[56px]" : ""
-                    } ${addingInputStyle}`}
+                        : `${isValid(form)
+                          ? "focus-visible:border-success"
+                          : "focus-visible:border-secondary"
+                        } hover:border-secondary ${addingValidStyle
+                          ? addingValidStyle
+                          : "border-secondary-border"
+                        }`
+                      } ${type == "password" ? "!pl-[56px]" : ""
+                      } ${addingInputStyle}`}
                     // border-gold-background focus:ring-gold-background rounded-lg
                     step={step}
                     onFocus={onFocus}

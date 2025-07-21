@@ -9,39 +9,39 @@ import Joi from "joi";
 
 // general step -----------------------------------------------------------
 export type GeneralStepType = {
-  buildingNumber: TNumber;
-  streetName: TString;
+  building_num: TNumber;
+  street: TString;
   floor: TNumber;
-  apartmentNumber: TNumber;
-  governorate: TOption;
+  apt: TNumber;
+  county: TOption;
   city: TOption;
-  district: TOption;
-  propertyType: TOption;
-  propertyArea: TNumber;
+  district: TString;
+  property_type: TOption;
+  area_space: TNumber;
   bedrooms: TNumber;
   bathrooms: TNumber;
   price: TNumber;
-  sellerCommission: TNumber;
-  buyerCommission: TNumber;
-  buildYear: TNumber;
+  property_realtor_commission: TNumber;
+  buyer_realtor_commission: TNumber;
+  year_built: TNumber;
   status: TOption;
 };
 
 export const generalStepSchema = Joi.object<GeneralStepType>({
-  buildingNumber: Joi.number()
+  building_num: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("رقم المبنى"),
-  streetName: Joi.string()
+  street: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشارع"),
   floor: Joi.number().required().messages(VALIDATION_MESSAGES).label("الطابق"),
-  apartmentNumber: Joi.number()
+  apt: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("رقم الشقة"),
-  governorate: optionSchema
+  county: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
@@ -50,11 +50,11 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الحي/المنطقة"),
-  propertyType: optionSchema
+  property_type: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("نوع العقار"),
-  propertyArea: Joi.number()
+  area_space: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("مساحة العقار"),
@@ -67,15 +67,15 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .messages(VALIDATION_MESSAGES)
     .label("عدد دورات المياه"),
   price: Joi.number().required().messages(VALIDATION_MESSAGES).label("السعر"),
-  sellerCommission: Joi.number()
+  property_realtor_commission: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("عمولة وكيل البائع"),
-  buyerCommission: Joi.number()
+  buyer_realtor_commission: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("عمولة وكيل المشتري"),
-  buildYear: Joi.number()
+  year_built: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("سنة البناء"),
@@ -83,21 +83,21 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
 });
 
 export const generalStepInitialValues: GeneralStepType = {
-  buildingNumber: null,
-  streetName: null,
+  building_num: null,
+  street: null,
   floor: null,
-  apartmentNumber: null,
-  governorate: null,
+  apt: null,
+  county: null,
   city: null,
   district: null,
-  propertyType: null,
-  propertyArea: null,
+  property_type: null,
+  area_space: null,
   bedrooms: null,
   bathrooms: null,
   price: null,
-  sellerCommission: null,
-  buyerCommission: null,
-  buildYear: null,
+  property_realtor_commission: null,
+  buyer_realtor_commission: null,
+  year_built: null,
   status: null,
 };
 
@@ -108,7 +108,14 @@ export type AdditionalInfoStepType = {
   hasFans: boolean;
   fans: TNumber;
   waterLine: TString;
-  additionalOptions: TOption[];
+  // Individual boolean fields for additional options
+  elevator: boolean;
+  ac: boolean;
+  parking: boolean;
+  garden: boolean;
+  jacuzzi: boolean;
+  solar: boolean;
+  pool: boolean;
 };
 
 export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
@@ -136,10 +143,15 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
     .allow(null)
     .messages(VALIDATION_MESSAGES)
     .label("خط المياه الواصل للعقار"),
-  additionalOptions: Joi.array()
-    .items(optionSchema)
-    .messages(VALIDATION_MESSAGES)
-    .label("جاكوزي"),
+  
+  // Additional options as boolean fields
+  elevator: Joi.boolean().default(false),
+  ac: Joi.boolean().default(false),
+  parking: Joi.boolean().default(false),
+  garden: Joi.boolean().default(false),
+  jacuzzi: Joi.boolean().default(false),
+  solar: Joi.boolean().default(false),
+  pool: Joi.boolean().default(false),
 });
 
 export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
@@ -148,7 +160,14 @@ export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
   hasFans: false,
   fans: null,
   waterLine: null,
-  additionalOptions: [],
+  // Additional options initial values
+  elevator: false,
+  ac: false,
+  parking: false,
+  garden: false,
+  jacuzzi: false,
+  solar: false,
+  pool: false,
 };
 
 // location step --------------------------------------------------------------------

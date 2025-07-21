@@ -14,7 +14,7 @@ interface StepperProps {
 // Stepper component receives currentStep and steps as props
 const Stepper = ({ currentStep, steps }: StepperProps) => {
   return (
-    <div className="flex items-center justify-center p-4 w-full " dir="ltr">
+    <div className="flex items-center justify-center p-4 w-full ">
       {/* LTR support */}
       <div className="flex overflow-hidden w-full py-[30px] 2xl:px-[200px] xl:px-[150px] lg:px-[100px] md:px-[50px] px-0">
         {steps.map((step, index) => {
@@ -42,10 +42,10 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
                   index === 0
                     ? steps.length === 1
                       ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)" // single step
-                      : "polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%)" // left arrow for first step, more angle
+                      : "polygon(7% 0, 100% 0, 100% 100%, 7% 100%, 0 50%)" // right arrow for first step, more angle (RTL)
                     : index === steps.length - 1
-                    ? "polygon(0 0, 93% 0, 100% 0, 100% 100%, 94% 100%, 0 100%, 6% 50%)" // final step: arrow on left, flat on right, more angle
-                    : "polygon(0 0, 93% 0, 100% 50%, 93% 100%, 0 100%, 6% 50%)", // middle steps, more angle
+                    ? "polygon(0 0, 100% 0, 93% 50%, 100% 100%, 0 100%, 0 0)" // final step: arrow on right, flat on left, more angle (RTL)
+                    : "polygon(0 50%, 7% 0, 100% 0, 93% 50%, 100% 100%, 7% 100%)", // middle steps, arrow on both sides
                 zIndex: steps.length - index,
                 borderRadius: "8px",
                 opacity: isClickable || isActive ? 1 : 0.7,
@@ -59,7 +59,6 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
             >
               <span
                 className="w-full text-center select-none"
-                style={{ direction: "ltr" }}
               >
                 {step.name}
               </span>
