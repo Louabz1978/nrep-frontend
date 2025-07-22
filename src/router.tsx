@@ -2,9 +2,6 @@ import { createBrowserRouter, Link } from "react-router-dom";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
-import TemplateLayout from "./layouts/template/TemplateLayout";
-import AnimateContainer from "./components/global/pageContainer/AnimateContainer";
-import TemplateLogic from "./pages/template/template/TemplateLogic";
 import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
 import PrivateRoute from "./utils/privateRoute";
@@ -36,9 +33,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <Link to={"/template/main"}>Click here to see the template</Link>
-        ),
+        element: <Link to={"/test-table"}>Click here to see table</Link>,
       },
       {
         path: "test-table",
@@ -102,25 +97,6 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginLogic />,
-      },
-    ],
-  },
-  // template
-  {
-    path: "/template",
-    element: <PrivateRoute element={<TemplateLayout />} role={"allow"} />,
-    children: [
-      {
-        path: "",
-        element: <AnimateContainer>home</AnimateContainer>,
-      },
-      {
-        path: "main/*",
-        element: <TemplateLogic />,
-      },
-      {
-        path: "*",
-        element: <>404</>,
       },
     ],
   },
