@@ -162,18 +162,18 @@ function ImagesInput<T extends FieldValues>({
   const canAddMore = !max || currentFiles?.length < max;
 
   return (
-    <div className={`${containerClassName}`}>
+    <div className={`flex flex-col gap-xs ${containerClassName}`}>
       {label ? (
         <label
           htmlFor={name}
-          className={`text-size22 flex items-center gap-[16px] font-medium cursor-pointer ${labelStyle} ${
+          className={`text-size18 flex items-center gap-xl font-medium cursor-pointer ${labelStyle} ${
             isDisabled ? "text-placeholder" : " text-primary-fg"
           } transition-all`}
         >
           <div>
             {label}
             {required && !isDisabled ? (
-              <span className="text-size22 text-error">{" *"}</span>
+              <span className="text-size18 text-error">{" *"}</span>
             ) : null}
           </div>
 
@@ -184,15 +184,15 @@ function ImagesInput<T extends FieldValues>({
       ) : null}
 
       <div
-        className={`grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px] ${imagesContainerClassName}`}
+        className={`grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4xl ${imagesContainerClassName}`}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
         {currentFiles?.map((item: ImageFile, i: number) => (
-          <div className="flex flex-col" key={item.id}>
-            <div className="w-full h-[300px] rounded-full">
+          <div className="flex flex-col gap-xs" key={item.id}>
+            <div className="w-full h-[280px] rounded-full">
               <input
                 type="file"
                 id={`${name}__added_image_${i}`}
@@ -207,11 +207,11 @@ function ImagesInput<T extends FieldValues>({
               />
 
               <div
-                className="flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer relative"
+                className="flex justify-center items-center w-full h-[280px] border border-solid border-border rounded-xl overflow-hidden shrink-0 cursor-pointer relative"
                 onMouseEnter={() => setShowOptions(i)}
                 onMouseLeave={() => setShowOptions(false)}
               >
-                <div className="w-full h-[300px]">
+                <div className="w-full h-[280px]">
                   <img
                     src={
                       typeof item.path === "object"
@@ -230,32 +230,32 @@ function ImagesInput<T extends FieldValues>({
                       animate={{ translate: 0 }}
                       exit={{ translate: "0 100%" }}
                       transition={{ ease: "linear", duration: 0.3 }}
-                      className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-[10px] cursor-auto text-size20 font-bold"
+                      className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-xl cursor-auto text-size20 font-bold"
                     >
                       {editable && (
                         <label
                           title="تعديل"
                           htmlFor={`${name}__added_image_${i}`}
-                          className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-[5px] rounded-full cursor-pointer"
+                          className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
                         >
-                          <MdEdit className="shadow-shadow size-[24px]" />
+                          <MdEdit className="shadow-shadow size-[20px]" />
                         </label>
                       )}
 
                       {deletable && (
                         <span
                           title="حذف"
-                          className="text-error shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-[5px] rounded-full cursor-pointer"
+                          className="text-error shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
                           onMouseDown={async () => {
                             await handleDeleteMultiFile(item.id);
                           }}
                         >
-                          <FaTrash className="shadow-shadow size-[24px]" />
+                          <FaTrash className="shadow-shadow size-[20px]" />
                         </span>
                       )}
 
                       <span
-                        className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-[5px] rounded-full cursor-pointer"
+                        className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
                         title="عرض"
                         onMouseDown={async () => {
                           const fileUrl =
@@ -265,7 +265,7 @@ function ImagesInput<T extends FieldValues>({
                           window.open(fileUrl);
                         }}
                       >
-                        <BiSolidFolderOpen className="shadow-shadow size-[24px]" />
+                        <BiSolidFolderOpen className="shadow-shadow size-[20px]" />
                       </span>
                     </motion.div>
                   )}
@@ -274,7 +274,7 @@ function ImagesInput<T extends FieldValues>({
             </div>
 
             {getError(errors, `${name}.${i}.path` as Path<T>) ? (
-              <span className="text-error font-medium text-size16">
+              <span className="text-error font-medium text-size14">
                 {
                   (
                     getError(errors, `${name}.${i}.path` as Path<T>) as {
@@ -300,23 +300,23 @@ function ImagesInput<T extends FieldValues>({
               />
               <label
                 htmlFor={`${name}__adding_mode`}
-                className={`relative flex flex-col gap-[20px] justify-center items-center w-full h-[300px] border-2 border-dashed ${
+                className={`relative flex flex-col gap-lg justify-center items-center w-full h-[280px] border-2 border-dashed ${
                   isDragging ? "border-primary-fg" : "border-border"
-                } rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${
+                } rounded-xl overflow-hidden shrink-0 cursor-pointer ${
                   className || ""
                 } text-primary-fg/50 bg-tertiary-bg transition-colors`}
               >
                 {isDragging ? (
                   <div className="absolute inset-0 bg-primary-overlay/50 flex items-center justify-center">
-                    <span className="text-size22 font-medium">
-                      اسقط الصور هنا
+                    <span className="text-size18 font-medium">
+                      أسقط الصور هنا
                     </span>
                   </div>
                 ) : (
                   <>
                     <FaRegImage className="size-[100px]" />
-                    <span className="text-size22 font-medium">
-                      إدخال صور العقار
+                    <span className="text-size18 font-medium">
+                      أدخال صور العقار
                     </span>
                     <span className="text-size16 text-placeholder">
                       أو اسحب وأسقط الصور هنا
@@ -327,17 +327,17 @@ function ImagesInput<T extends FieldValues>({
             </>
           ) : (
             <div
-              className={`flex justify-center items-center w-full h-[300px] border border-solid border-border rounded-[10px] overflow-hidden shrink-0 cursor-pointer ${
+              className={`flex justify-center items-center w-full h-[280px] border border-solid border-border rounded-xl overflow-hidden shrink-0 cursor-pointer ${
                 className || ""
               } text-primary-fg/50 text-size44 bg-tertiary-bg`}
             >
-              <FcCancel title="ليست لديك صلاحية" className="" />
+              <FcCancel title="ليست لديك صلاحية" />
             </div>
           ))}
       </div>
 
       {getError(errors, name) ? (
-        <span className="text-error font-medium text-size16">
+        <span className="text-error font-medium text-size14">
           {(getError(errors, name) as { message: string })?.message}
         </span>
       ) : null}

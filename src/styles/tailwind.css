@@ -89,6 +89,7 @@
   --secondary-fg: #000000;
   --quaternary-fg: #ffffff;
   --inverse-fg: #ffffff;
+  --header-fg: #333333;
 
   /* status*/
   --success: #34c759;
@@ -138,6 +139,7 @@
   --secondary-fg: #000000;
   --quaternary-fg: #ffffff;
   --inverse-fg: #ffffff;
+  --header-fg: #333333;
 
   /* status*/
   --success: #34c759;
@@ -252,6 +254,7 @@
   --color-secondary-fg: var(--secondary-fg);
   --color-quaternary-fg: var(--quaternary-fg);
   --color-inverse-fg: var(--inverse-fg);
+  --color-header-fg: var(--header-fg);
 
   /* status*/
   --color-success: var(--success);
@@ -279,6 +282,28 @@
   --shadow-primary-shadow: var(--primary-shadow);
   --shadow-navbar-shadow: var(--navbar-shadow);
   --shadow-accordion-shadow: var(--accordion-shadow);
+
+
+  /* spaces */
+  --spacing-xxs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 6px;
+  --spacing-md: 8px;
+  --spacing-lg: 12px;
+  --spacing-xl: 16px;
+  --spacing-2xl: 20px;
+  --spacing-3xl: 24px;
+  --spacing-4xl: 32px;
+  --spacing-5xl: 40px;
+  --spacing-6xl: 48px;
+  --spacing-7xl: 64px;
+  --spacing-8xl: 80px;
+  --spacing-9xl: 96px;
+  --spacing-10xl: 112px;
+  --spacing-11xl: 160px;
+  --spacing-container-max-width-desktop: 1280px;
+  --spacing-container-padding-mobile: 16px;
+  --spacing-container-padding-desktop: 32px;
 }
 
 @layer components {

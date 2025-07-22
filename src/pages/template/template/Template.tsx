@@ -1,6 +1,6 @@
 import type { TemplateType } from "@/api/template/template/getTemplates";
 import Actions from "@/components/global/actions/Actions";
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import RefetchLoader from "@/components/global/refetchLoader/RefetchLoader";
 import Table from "@/components/global/table/Table";
 import { type TemplatesFilterType } from "@/hooks/template/template/useTemplatesQuery";
@@ -144,7 +144,7 @@ function Template({
   ];
 
   return (
-    <PageContainer permissions={[]}>
+    <AnimateContainer permissions={[]}>
       {/* header */}
       <TemplatesHeader
         setFilter={setFilter}
@@ -191,7 +191,7 @@ function Template({
           setCurrentTemplate={setCurrentTemplate}
         />
       </Modal>
-    </PageContainer>
+    </AnimateContainer>
   );
 }
 

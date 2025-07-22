@@ -10,21 +10,23 @@ function SonnerToast() {
       dir="rtl"
       className="translate-x-0 translate-none z-[30]"
       icons={{
-        success: <FaCircleCheck className="!size-[24.5px] !text-success" />,
-        error: <FaCircleXmark className="!size-[24.5px] !text-error" />,
+        success: <FaCircleCheck className="!size-[22px] !text-success" />,
+        error: <FaCircleXmark className="!size-[22px] !text-error" />,
         loading: (
-          <PiSpinner className="!size-[24.5px] animate-spin !text-primary" />
+          <PiSpinner className="!size-[22px] animate-spin !text-primary" />
         ),
-        close: <LuX className="!size-[24.5px] !text-icon" />,
+        close: (
+          <LuX className="!size-[16px] !text-primary-icon hover:!text-primary-fg transition-all duration-[0.2s]" />
+        ),
       }}
       toastOptions={{
         closeButton: true,
         classNames: {
           toast:
-            "flex items-center !w-[449px] justify-between !gap-[10px] !py-[32px] !border-0 !px-[24px] rounded-[8px] !border-b-[5px] !h-auto",
+            "flex items-center !bg-tertiary-bg sm:!w-[400px] !w-[calc(100vw_-_28px)] justify-between !gap-md !py-xl !border-0 !px-2xl rounded-lg !border-b-[5px] !h-auto",
           content:
-            "flex-1 order-2 gap-3 text-size24 !text-primary-fg font-bold",
-          icon: "order-1 !size-[24.5px] !min-w-[24.5px]",
+            "flex-1 order-2 gap-3 text-size18 !text-primary-fg !font-medium",
+          icon: "order-1 !size-[22px] !min-w-[22px]",
           success:
             "hover:!opacity-90 !transition-all !duration-[0.3s] !border-success",
           error:

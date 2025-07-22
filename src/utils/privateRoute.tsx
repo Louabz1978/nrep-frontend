@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import secureLocalStorage from "react-secure-storage";
 import jsonParse from "./jsonParse";
 import { Navigate } from "react-router-dom";
-import NotFound from "@/components/global/notFound/NotFound";
+// import NotFound from "@/components/global/notFound/NotFound";
 
 interface PrivateRouteProps {
   element: ReactNode;
@@ -36,7 +36,7 @@ const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
   }
 
   // user logged in but navigate to another role page
-  if (isThereToken && userType !== role) return <NotFound />;
+  // if (isThereToken && userType !== role) return <NotFound />;
 
   // user is not logged in try to navigate to a page that require login
   if (!isThereToken && role && role !== "mustUnauth") {

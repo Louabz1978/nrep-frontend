@@ -18,7 +18,7 @@ import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import NextButton from "@/components/global/form/button/NextButton";
 
@@ -146,123 +146,141 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
   }, [watch, lat, lng]);
 
   return (
-    <PageContainer className="h-full overflow-auto ">
+    <AnimateContainer>
       <form
-        id="features_step_form"
-        className="mb-10 flex flex-col gap-[40px]"
+        id="location_step_form"
+        className="flex flex-col flex-1 gap-6xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="p-[40px] pt-[24px] flex flex-col gap-[40px]">
-          <FormSectionHeader textSize="text-size40">
-            معلومات الموقع
-          </FormSectionHeader>
+        {/* inputs */}
+        <div className="flex-1">
+          <div className="flex flex-col gap-3xl">
+            <FormSectionHeader>معلومات الموقع</FormSectionHeader>
 
-          <div>
-            <div className="w-full flex justify-center items-center mb-10">
-              <div className="w-[980px] h-[480px] flex items-center justify-center">
-                <MapContainer
-                  center={markerPosition}
-                  zoom={10}
-                  className="w-full h-full"
-                  scrollWheelZoom={true}
-                  attributionControl={false}
-                  zoomControl={true}
+            {/* map */}
+            <div className="flex flex-col lg:gap-5xl gap-2xl lg:px-[150px] px-0">
+              {/* map view */}
+              <div className="w-full flex justify-center items-center">
+                <div className="w-full h-[480px] flex items-center justify-center">
+                  <MapContainer
+                    center={markerPosition}
+                    zoom={10}
+                    className="w-full h-full"
+                    scrollWheelZoom={true}
+                    attributionControl={false}
+                    zoomControl={true}
+                  >
+                    <TileLayer
+                      attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url={
+                        isSatelliteView
+                          ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                          : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      }
+                    />
+                    <Marker position={markerPosition} icon={regularMarkerIcon}>
+                      <Popup>
+                        الموقع المحدد
+                        <br />
+                        خط العرض: {markerPosition[0].toFixed(6)}
+                        <br />
+                        خط الطول: {markerPosition[1].toFixed(6)}
+                      </Popup>
+                    </Marker>
+                    <MapClickHandler
+                      onMapClick={handleMapClick}
+                      isManualMode={isManualMode}
+                    />
+                  </MapContainer>
+                </div>
+              </div>
+
+              {/* buttons */}
+              <div className="flex justify-center lg:flex-row flex-col w-full lg:gap-2xl gap-lg">
+                <Button
+                  variant={"semi-round"}
+                  className="lg:flex-1 max-lg:w-full"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    getUserLocation();
+                  }}
                 >
-                  <TileLayer
-                    attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url={
-                      isSatelliteView
-                        ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                        : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    }
-                  />
-                  <Marker position={markerPosition} icon={regularMarkerIcon}>
-                    <Popup>
-                      الموقع المحدد
-                      <br />
-                      خط العرض: {markerPosition[0].toFixed(6)}
-                      <br />
-                      خط الطول: {markerPosition[1].toFixed(6)}
-                    </Popup>
-                  </Marker>
-                  <MapClickHandler
-                    onMapClick={handleMapClick}
-                    isManualMode={isManualMode}
-                  />
-                </MapContainer>
+                  الحصول على خطوط الطول/العرض من العنوان
+                </Button>
+                <Button
+                  className="lg:flex-1 max-lg:w-full"
+                  variant={"semi-round-outline"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleSatelliteView();
+                  }}
+                >
+                  {isSatelliteView
+                    ? "عرض الخريطة العادية"
+                    : "عرض الخريطة برؤية Google street"}
+                </Button>
+                <Button
+                  className="lg:flex-1 max-lg:w-full"
+                  variant={"semi-round"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleManualMode();
+                  }}
+                >
+                  {isManualMode
+                    ? "تعطيل التحديد اليدوي"
+                    : "تفعيل التحديد اليدوي"}
+                </Button>
               </div>
             </div>
-            <div className="flex items-center justify-center flex-row w-full p-[10px] gap-[23px]">
-              <Button
-                variant={"semi-round"}
-                style={{ width: "310px" }}
-                onClick={getUserLocation}
-              >
-                الحصول على خطوط الطول/العرض من العنوان
-              </Button>
-              <Button
-                style={{ width: "310px" }}
-                variant={"semi-round-outline"}
-                onClick={toggleSatelliteView}
-              >
-                {isSatelliteView
-                  ? "عرض الخريطة العادية"
-                  : "عرض الخريطة برؤية Google street"}
-              </Button>
-              <Button
-                style={{ width: "310px" }}
-                variant={"semi-round"}
-                onClick={toggleManualMode}
-              >
-                {isManualMode ? "تعطيل التحديد اليدوي" : "تفعيل التحديد اليدوي"}
-              </Button>
+
+            {/* Second row: Inputs, 2 per row */}
+            <div className="mt-xl grid xl:grid-cols-3 md:grid-cols-2 gap-x-5xl gap-y-3xl">
+              <Input
+                form={form}
+                label={"خط العرض (Latitude)"}
+                placeholder={"34.7324"}
+                name={"latitude"}
+                type={"number"}
+                numberRegex={/^\d*\.?\d*$/}
+                onChange={handleLatitudeChange}
+                info={"أدخل خط العرض أو انقر على الخريطة"}
+              />
+              <Input
+                form={form}
+                label={"خط الطول (Longitude)"}
+                placeholder={"36.7131"}
+                name={"longitude"}
+                type={"number"}
+                numberRegex={/^\d*\.?\d*$/}
+                onChange={handleLongitudeChange}
+                info={"أدخل خط الطول أو انقر على الخريطة"}
+              />
+              <Select
+                form={form}
+                label={"مصدر القياسات (مساحة الأرض)"}
+                name={"landAreaSource"}
+                placeholder={"اختر المصدر"}
+                info={"معلومات عن مصدر القياس"}
+              />
+              <Select
+                form={form}
+                label={"مصدر القياسات (أبعاد الأرض)"}
+                name={"landDimensionsSource"}
+                placeholder={"اختر المصدر"}
+                info={"معلومات عن مصدر القياس"}
+              />
             </div>
           </div>
-
-          {/* Second row: Inputs, 2 per row */}
-          <div className="grid  lg:grid-cols-3 md:grid-cols-2 gap-x-[40px] gap-y-[24px]">
-            <Input
-              form={form}
-              label={"خط العرض (Latitude)"}
-              placeholder={"34.7324"}
-              name={"latitude"}
-              type={"number"}
-              numberRegex={/^\d*\.?\d*$/}
-              onChange={handleLatitudeChange}
-              info={"أدخل خط العرض أو انقر على الخريطة"}
-            />
-            <Input
-              form={form}
-              label={"خط الطول (Longitude)"}
-              placeholder={"36.7131"}
-              name={"longitude"}
-              type={"number"}
-              numberRegex={/^\d*\.?\d*$/}
-              onChange={handleLongitudeChange}
-              info={"أدخل خط الطول أو انقر على الخريطة"}
-            />
-            <Select
-              form={form}
-              label={"مصدر القياسات (مساحة الأرض)"}
-              name={"landAreaSource"}
-              placeholder={"اختر المصدر"}
-              info={"معلومات عن مصدر القياس"}
-            />
-            <Select
-              form={form}
-              label={"مصدر القياسات (أبعاد الأرض)"}
-              name={"landDimensionsSource"}
-              placeholder={"اختر المصدر"}
-              info={"معلومات عن مصدر القياس"}
-            />
-          </div>
         </div>
-        <div className="flex justify-between w-full gap-4 px-[107px]">
+
+        {/* buttons */}
+        <div className="flex justify-between w-full gap-xl">
           <PreviouseButton setCurrentStep={setCurrentStep} />
-          <NextButton id={"general_step_form"} />
+          <NextButton id={"location_step_form"} />
         </div>
       </form>
-    </PageContainer>
+    </AnimateContainer>
   );
 }
 

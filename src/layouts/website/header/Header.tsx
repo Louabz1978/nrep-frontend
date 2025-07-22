@@ -5,6 +5,10 @@ import logo from "@/assets/images/logo.svg";
 import { useUser } from "@/stores/useUser";
 import { useState } from "react";
 import { LuLogIn, LuSearch } from "react-icons/lu";
+import { Popover, PopoverContent } from "@/components/global/ui/popover";
+import { PopoverTrigger } from "@radix-ui/react-popover";
+import { PiSignOut, PiUser } from "react-icons/pi";
+import useLogoutMutation from "@/hooks/global/logout/useLogoutMutation";
 
 function Header() {
   // user info
@@ -12,21 +16,46 @@ function Header() {
   // search value
   const [search, setSearch] = useState("");
 
+  // logout mutations
+  const { handleLogout, logout } = useLogoutMutation();
+
   return (
     // header container
-    <header className="w-full bg-quaternary-bg h-[89px] border-b border-secondary-border flex items-center justify-between px-[32px] py-[11px]">
+    <header className="w-full bg-quaternary-bg h-7xl border-b border-secondary-border flex items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
       {/* right area */}
-      <div className="flex items-center gap-[32px] text-quaternary-fg">
+      <div className="flex items-center gap-xl text-quaternary-fg">
         {/* icons */}
-        <div className="flex items-center gap-[16px]">
+        <div className="flex items-center gap-lg">
           {/* login / user info */}
-          <Link to="/login" aria-label="Profile">
-            {user?.access_token ? (
-              <CgProfile className="h-[32px] w-[32px] cursor-pointer" />
-            ) : (
-              <LuLogIn className="h-[32px] w-[32px] cursor-pointer" />
-            )}
-          </Link>
+          {user?.access_token ? (
+            <Popover>
+              <PopoverTrigger>
+                <CgProfile className="size-[24px] cursor-pointer" />
+              </PopoverTrigger>
+              <PopoverContent
+                align="start"
+                className="bg-tertiary-bg mt-md p-0 border-none shadow-2xl flex flex-col"
+              >
+                <div className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary">
+                  <span>الملف الشخصي</span>
+                  <PiUser />
+                </div>
+                <div
+                  onClick={() => {
+                    if (!logout?.isPending) handleLogout();
+                  }}
+                  className="py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary"
+                >
+                  <span>تسجيل الخروج</span>
+                  <PiSignOut />
+                </div>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Link to="/login" aria-label="Profile">
+              <LuLogIn className="size-[24px] cursor-pointer" />
+            </Link>
+          )}
 
           {/* notifications */}
           <Link
@@ -34,30 +63,27 @@ function Header() {
             aria-label="Notifications"
             className="relative"
           >
-            <AiOutlineBell className="h-8 w-9 text-white cursor-pointer" />
-            <span className="absolute -top-[2px] right-[1px] w-[14px] h-[14px] bg-error rounded-full"></span>
+            <AiOutlineBell className="size-[24px] text-inverse-fg cursor-pointer" />
+            <span className="absolute -top-xxs right-[1px] size-[7px] bg-error rounded-full"></span>
           </Link>
         </div>
 
         {/* search input */}
-        <div className="relative">
-          <label htmlFor="search" className="sr-only">
-            البحث
-          </label>
+        <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
             id="search"
             name="search"
             value={search}
             onChange={(e) => setSearch(e?.target?.value)}
-            placeholder="البحث"
-            className="h-[32px] w-[352px] bg-tertiary-bg text-size16 placeholder:text-placeholder-secondary rounded-full px-[16px] py-[7px] pl-[30px] text-primary-foreground focus:outline-none"
+            placeholder="بحث..."
+            className="h-[28px] w-full text-primary-fg bg-tertiary-bg text-size16 placeholder:text-size16 placeholder:text-placeholder-secondary rounded-full px-xl py-sm pl-4xl text-primary-foreground focus:outline-none"
           />
 
           {/* search icon */}
           <LuSearch
             className={`${
               search ? "hidden" : "block"
-            } h-[18px] pointer-events-none absolute right-[60px] top-[50%] -translate-y-[50%] w-[18px] text-primary-icon group-hover:text-primary-fg transition-all`}
+            } h-xl pointer-events-none absolute right-7xl top-[50%] -translate-y-[50%] w-xl text-primary-icon group-hover:text-primary-fg transition-all`}
           />
 
           {/* clear icon */}
@@ -67,16 +93,13 @@ function Header() {
             }`}
             onClick={() => setSearch("")}
           >
-            <AiOutlineClose className="h-[12px] w-[12px] text-primary-icon group-hover:text-primary-fg transition-all" />
+            <AiOutlineClose className="size-[12px] text-primary-icon group-hover:text-primary-fg transition-all" />
           </span>
         </div>
       </div>
 
       {/* logo */}
-      <Link
-        to="/"
-        className="w-[63px] h-[63px] rounded-[20.63px] overflow-hidden"
-      >
+      <Link to="/" className="size-6xl rounded-xl overflow-hidden">
         <img src={logo} alt="NREP" className="size-full object-cover" />
       </Link>
     </header>
