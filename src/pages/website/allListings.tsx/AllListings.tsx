@@ -16,7 +16,7 @@ function AllListings() {
           prefix={TABLE_PREFIXES.allListings}
           columns={[]}
           filters={[]}
-          data={allListings as Listing[]}
+          data={(allListings ?? []) as Listing[]}
           query={allListingsQuery}
           totalPageCount={totalPages}
         />
