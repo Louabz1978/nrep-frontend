@@ -3,7 +3,7 @@ function ErrorComponent({ error }: { error?: Error }) {
   return (
     <div className="col-span-full flex-1">
       <div className="w-full h-full flex justify-center items-center text-red-400">
-        An error happend
+        عذراً, حدث خطأ ما
       </div>
     </div>
   );

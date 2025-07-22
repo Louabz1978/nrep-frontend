@@ -5,9 +5,10 @@ import GlobalLayout from "./layouts/global/GlobalLayout";
 import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
 import PrivateRoute from "./utils/privateRoute";
-import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 import TestTable from "./pages/website/testTable/TestTable";
-import AddListingLogic from "./pages/website/listing/AddListingLogic";
+import AddListingIndex from "./pages/website/listingForm/AddListingIndex";
+import EditListingIndex from "./pages/website/listingForm/EditListingIndex";
+import AllListings from "./pages/website/allListings.tsx/AllListings";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -44,48 +45,16 @@ const router = createBrowserRouter([
         element: <InputLogic />,
       },
       {
+        path: "listing/all-listings",
+        element: <AllListings />,
+      },
+      {
         path: "listing/add",
-        element: <AddListingLogic />,
+        element: <AddListingIndex />,
       },
       {
-        path: "color",
-        element: <ColorPaletteEditor />,
-      },
-      {
-        path: "one",
-        element: <>one</>,
-      },
-      {
-        path: "two",
-        element: <>two</>,
-      },
-      {
-        path: "three",
-        element: <>three</>,
-      },
-      {
-        path: "four",
-        element: <>four</>,
-      },
-      {
-        path: "five",
-        element: <>five</>,
-      },
-      {
-        path: "six",
-        element: <>six</>,
-      },
-      {
-        path: "seven",
-        element: <>seven</>,
-      },
-      {
-        path: "eight",
-        element: <>eight</>,
-      },
-      {
-        path: "nine",
-        element: <>nine</>,
+        path: "listing/edit/:id",
+        element: <EditListingIndex />,
       },
     ],
   },

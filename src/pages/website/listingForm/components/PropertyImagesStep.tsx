@@ -13,12 +13,14 @@ interface PropertyImagesStepProps {
   form: UseFormReturn<PropertyImagesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   handleSubmitForm: () => void;
+  disabled: boolean;
 }
 
 const PropertyImagesStep = ({
   form,
   setCurrentStep,
   handleSubmitForm,
+  disabled,
 }: PropertyImagesStepProps) => {
   // extract form utils
   const { handleSubmit } = form;
@@ -61,6 +63,7 @@ const PropertyImagesStep = ({
             title="إرسال"
             id={"images_step_form"}
             icon={<PiPaperPlaneRightFill className="rotate-180" />}
+            disabled={disabled}
           />
         </div>
       </form>

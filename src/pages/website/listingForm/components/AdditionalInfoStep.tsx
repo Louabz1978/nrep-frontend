@@ -40,6 +40,8 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
             <Input
               form={form}
               label={"عدد الشرفات"}
+              numberRegex={/^\d*$/}
+              type="number"
               toggle={"hasBalcony"}
               name={"balcony"}
               placeholder={"عدد الشرفات"}
@@ -49,6 +51,8 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
             <Input
               form={form}
               label={"مراوح"}
+              numberRegex={/^\d*$/}
+              type="number"
               toggle={"hasFans"}
               name={"fans"}
               placeholder={"مراوح"}

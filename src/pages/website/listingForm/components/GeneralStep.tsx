@@ -37,6 +37,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             type="number"
             label="رقم البناء"
+            numberRegex={/^\d*$/}
             placeholder="أدخل رقم البناء"
             name="building_num"
             info="يرجى إدخال رقم البناء كما هو موضح في العنوان الرسمي"
@@ -55,6 +56,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             type="number"
             label="الطابق"
+            numberRegex={/^\d*$/}
             placeholder="أدخل رقم الطابق"
             name="floor"
             info="يرجى إدخال رقم الطابق الذي يقع فيه العقار"
@@ -63,6 +65,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
+            numberRegex={/^\d*$/}
             label="رقم الشقة"
             placeholder="أدخل رقم الشقة"
             name="apt"
@@ -168,6 +171,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
+            numberRegex={/^\d*$/}
             label="سنة البناء"
             placeholder="أدخل سنة البناء"
             name="year_built"

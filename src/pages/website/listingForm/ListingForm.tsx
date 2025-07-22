@@ -19,12 +19,13 @@ import {
 } from "@/data/website/schema/ListingFormSchema";
 import cleanValues from "@/utils/cleanValues";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
-import type { UseQueryResult } from "@tanstack/react-query";
 import { type StepType } from "@/components/global/stepper/Stepper";
 import AdditionalInfoStep from "./components/AdditionalInfoStep";
 import LocationStep from "./components/LocationStep";
 import PropertyImagesStep from "./components/PropertyImagesStep";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
+import { useAddListings } from "@/hooks/website/listing/useAddListing";
+import { useEditListings } from "@/hooks/website/listing/useEditListing";
 
 interface ListingFormProps {
   defaultValues: {
@@ -33,11 +34,11 @@ interface ListingFormProps {
     location: LocationStepType;
     propertyImages: PropertyImagesStepType;
   };
-  listingResources: UseQueryResult<unknown[]>;
+  id?: number;
 }
 
 // listing form page, gets: default values for each step in the form
-function ListingForm({ defaultValues }: ListingFormProps) {
+function ListingForm({ defaultValues, id }: ListingFormProps) {
   // current step
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -110,14 +111,31 @@ function ListingForm({ defaultValues }: ListingFormProps) {
     [generalStep, additionalInfoStep, locationStep]
   );
 
+  // listing form mutations
+  const { addListing, handleAddListing } = useAddListings();
+  const { editListing, handleEditListing } = useEditListings();
+
   // handle submit all form steps
   const handleSubmitForm = () => {
-    console.log({
-      ...generalStep.watch(),
-      ...additionalInfoStep.watch(),
-      ...locationStep.watch(),
-      ...propertyImagesStep.watch(),
-    });
+    // edit
+    if (id)
+      handleEditListing(
+        {
+          ...generalStep.watch(),
+          ...additionalInfoStep.watch(),
+          ...locationStep.watch(),
+          ...propertyImagesStep.watch(),
+        },
+        id
+      ).catch(console.error);
+    // add
+    else
+      handleAddListing({
+        ...generalStep.watch(),
+        ...additionalInfoStep.watch(),
+        ...locationStep.watch(),
+        ...propertyImagesStep.watch(),
+      }).catch(console.error);
   };
 
   return (
@@ -146,6 +164,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
               form={propertyImagesStep}
               setCurrentStep={setCurrentStep}
               handleSubmitForm={handleSubmitForm}
+              disabled={id ? editListing?.isPending : addListing?.isPending}
             />
           )}
         </div>

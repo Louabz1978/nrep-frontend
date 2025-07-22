@@ -37,10 +37,7 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشارع"),
   floor: Joi.number().required().messages(VALIDATION_MESSAGES).label("الطابق"),
-  apt: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رقم الشقة"),
+  apt: Joi.number().required().messages(VALIDATION_MESSAGES).label("رقم الشقة"),
   county: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -143,7 +140,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
     .allow(null)
     .messages(VALIDATION_MESSAGES)
     .label("خط المياه الواصل للعقار"),
-  
+
   // Additional options as boolean fields
   elevator: Joi.boolean().default(false),
   ac: Joi.boolean().default(false),
@@ -176,7 +173,7 @@ export type LocationStepType = {
   landDimensionsSource: TString;
   latitude: TNumber;
   longitude: TNumber;
-  address: TString; 
+  address: TString;
 };
 
 export const LocationStepSchema = Joi.object<LocationStepType>({
@@ -199,7 +196,7 @@ export const LocationStepSchema = Joi.object<LocationStepType>({
   address: Joi.string()
     .allow("")
     .messages(VALIDATION_MESSAGES)
-    .label("العنوان"), 
+    .label("العنوان"),
 });
 
 export const LocationStepInitialValues: LocationStepType = {
@@ -207,7 +204,7 @@ export const LocationStepInitialValues: LocationStepType = {
   landDimensionsSource: null,
   latitude: null,
   longitude: null,
-  address: null
+  address: null,
 };
 
 // property images step --------------------------------------------------------------
@@ -268,3 +265,9 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
 export const PropertyImagesStepInitialValues: PropertyImagesStepType = {
   images: [],
 };
+
+// listing form type
+export type ListingFormType = GeneralStepType &
+  AdditionalInfoStepType &
+  LocationStepType &
+  PropertyImagesStepType;
