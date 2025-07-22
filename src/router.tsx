@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
@@ -9,6 +9,7 @@ import TestTable from "./pages/website/testTable/TestTable";
 import AddListingIndex from "./pages/website/listingForm/AddListingIndex";
 import EditListingIndex from "./pages/website/listingForm/EditListingIndex";
 import AllListings from "./pages/website/allListings.tsx/AllListings";
+import Home from "./pages/website/home/Home";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Link to={"/test-table"}>Click here to see table</Link>,
+        element: <Home />,
       },
       {
         path: "test-table",
