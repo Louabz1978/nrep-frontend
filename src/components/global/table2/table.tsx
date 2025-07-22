@@ -66,7 +66,7 @@ export function DataTable<TData, TValue, TRow>({
   data,
   miw = 1200,
   filters,
-  removeCollapseButton,
+  removeCollapseButton = true,
   onRowClick,
   selectedRows,
   setCheckedRows,
@@ -169,7 +169,7 @@ export function DataTable<TData, TValue, TRow>({
             onClick={toggle}
             size={"icon"}
             className={
-              "rounded-full size-8 absolute left-1/2 top-0 -translate-x-1/2 z-[1] -translate-y-1/2"
+              "rounded-full !size-[30px] absolute left-1/2 top-0 -translate-x-1/2 z-[1] -translate-y-1/2"
             }
             variant={"panel"}
           >
