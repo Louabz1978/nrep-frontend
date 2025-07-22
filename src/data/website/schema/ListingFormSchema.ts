@@ -176,6 +176,7 @@ export type LocationStepType = {
   landDimensionsSource: TString;
   latitude: TNumber;
   longitude: TNumber;
+  address: TString; 
 };
 
 export const LocationStepSchema = Joi.object<LocationStepType>({
@@ -195,6 +196,10 @@ export const LocationStepSchema = Joi.object<LocationStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("خط الطول"),
+  address: Joi.string()
+    .allow("")
+    .messages(VALIDATION_MESSAGES)
+    .label("العنوان"), 
 });
 
 export const LocationStepInitialValues: LocationStepType = {
@@ -202,6 +207,7 @@ export const LocationStepInitialValues: LocationStepType = {
   landDimensionsSource: null,
   latitude: null,
   longitude: null,
+  address: null
 };
 
 // property images step --------------------------------------------------------------
