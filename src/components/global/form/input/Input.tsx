@@ -54,7 +54,7 @@ function Input<T extends FieldValues>({
   addingInputStyle = "",
   customInput,
   step = 1,
-  numberRegex = /^\d*$/,
+  numberRegex = /^\d*\.?\d*$/,
   onClick = () => {},
   onFocus = () => {},
   onChange = () => {},
@@ -78,7 +78,7 @@ function Input<T extends FieldValues>({
 
   // Compute isDisabled so that it updates when toggle changes
   const toggleValue = toggle ? watch(toggle) : undefined;
-  const isDisabled = disabled || (toggle && !toggleValue);
+  const isDisabled = disabled || (toggle && !watch(toggle));
 
   // Handler to update toggle and force re-render
   const handleToggleChange = () => {
@@ -121,8 +121,8 @@ function Input<T extends FieldValues>({
 
             <div className="flex items-center gap-2">
               {label}
-              {required ? (
-                <span className="text-size24 text-error">{" *"}</span>
+              {required && !isDisabled ? (
+                <span className="text-size22 text-error">{" *"}</span>
               ) : null}
               {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
               {toggle ? (
@@ -142,29 +142,65 @@ function Input<T extends FieldValues>({
             </span>
           ) : null}
         </div>
+      ) : // checkbox input with its style
+      type == "tags" ? (
+        <div className={`flex flex-col ${addingStyle}`}>
+          <label
+            htmlFor={name}
+            className={`flex items-center gap-2 cursor-pointer ${addingInputStyle}`}
+          >
+            <input
+              type="checkbox"
+              className="peer hidden"
+              id={name}
+              {...(register ? register(name) : {})}
+              disabled={isDisabled}
+              onChange={(e) => {
+                setValue(
+                  name,
+                  (e?.target?.checked ? true : false) as PathValue<T, Path<T>>
+                );
+                trigger?.(name);
+                onChange({ trigger } as { trigger: UseFormTrigger<T> });
+              }}
+              checked={watch?.(name) ? true : false}
+            />
+
+            <div className="px-3xl py-xl bg-transparent rounded-md border border-secondary-border peer-checked:bg-primary/10 peer-checked:border-primary transition-colors duration-150 w-[200px] text-center select-none flex items-center justify-center text-secondary-border peer-checked:text-primary text-size14 h-[40px]">
+              {label}
+            </div>
+            {element ? element : null}
+          </label>
+          {getError(errors, name) ? (
+            <span className="text-error text-size14">
+              {(getError(errors, name) as { message: string })?.message}
+            </span>
+          ) : null}
+        </div>
       ) : (
         // other normal inputs
         <div
-          className={`flex flex-col w-full gap-[4px] ${addingStyle}`}
+          className={`flex flex-col w-full gap-xs ${addingStyle}`}
           onClick={onClick}
         >
           {/* input label  */}
           {label ? (
             <label
               htmlFor={name}
-              className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
+              className={`text-size18 font-medium text-primary-fg cursor-pointer ${labelStyle} ${
+                isDisabled ? "text-placeholder" : " text-primary-fg"
+              } transition-all`}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-sm">
                 {label}
-                {required ? (
-                  <span className="text-size24 text-error">{" *"}</span>
+                {required && !isDisabled ? (
+                  <span className="text-size18 text-error">{" *"}</span>
                 ) : null}
                 {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
                 {toggle ? (
                   <Toggle
                     form={form}
                     name={toggle}
-                    label=""
                     onChange={handleToggleChange}
                   />
                 ) : null}
@@ -172,13 +208,13 @@ function Input<T extends FieldValues>({
             </label>
           ) : null}
 
-          <div className="w-full flex flex-col gap-[4px]">
+          <div className="w-full flex flex-col gap-xs">
             {/* input container to link icon to its position */}
-            <div className="relative flex items-center gap-[15px]">
+            <div className="relative flex items-center gap-lg">
               <div className="relative flex-1 flex items-center overflow-hidden">
                 {/* input with react hook form register control  */}
                 {type == "custom" ? (
-                  <div className="custom-input">{customInput}</div>
+                  customInput
                 ) : type == "number" ? (
                   <input
                     type={"number"}
@@ -186,9 +222,9 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
-                    className={`flex-1 h-[40px] text-[16.36px] ${
+                    className={`flex-1 h-5xl text-size16 ${
                       isDisabled ? "bg-secondary-background" : "bg-input-bg"
-                    } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
                         : `${
@@ -228,9 +264,9 @@ function Input<T extends FieldValues>({
                     id={name}
                     {...(register ? register(name) : {})}
                     disabled={isDisabled}
-                    className={`flex-1 h-[40px] text-[16.36px] ${
+                    className={`flex-1 h-5xl text-size16 ${
                       isDisabled ? "bg-secondary-background" : "bg-input-bg"
-                    } p-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                    } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                       getError(errors, name)
                         ? "border-error"
                         : `${
@@ -271,7 +307,7 @@ function Input<T extends FieldValues>({
 
             {/* validation errors  */}
             {getError(errors, name) ? (
-              <span className="text-error font-medium text-size16">
+              <span className="text-error font-medium text-size14">
                 {(getError(errors, name) as { message: string })?.message}
               </span>
             ) : null}

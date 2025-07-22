@@ -6,6 +6,7 @@ export interface StatusManagerProps {
   Loader: FC;
   loaderInSlider?: boolean;
   loaderCount?: number;
-  query: UseQueryResult;
+  query?: UseQueryResult;
   isEmpty?: boolean;
+  emptyContent?: ReactNode;
 }

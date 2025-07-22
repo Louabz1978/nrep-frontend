@@ -20,7 +20,7 @@ export const ColorPaletteEditor = () => {
         value
       );
     });
-  }, []);
+  }, [palette]);
 
   const handleReset = () => {
     setPalette(defaultColorPalette);
@@ -40,7 +40,7 @@ export const ColorPaletteEditor = () => {
       {/* Floating palette button */}
       <div
         onClick={() => setOpenPalette((prev) => !prev)}
-        className="fixed flex cursor-pointer justify-center items-center bottom-[30px] left-[30px] size-[50px] rounded-full border border-primary-border bg-primary text-inverse-fg"
+        className="fixed z-[10000] flex cursor-pointer justify-center items-center bottom-[30px] left-[30px] size-[50px] rounded-full border border-primary-border bg-primary text-inverse-fg"
         aria-label="فتح محرر الألوان"
       >
         <PiPaletteBold size={24} />
@@ -49,7 +49,7 @@ export const ColorPaletteEditor = () => {
       {/* Color editor panel */}
       {openPalette && (
         <div
-          className="container fixed bottom-[100px] left-[30px] h-[70svh] w-[30vw] min-w-[300px] overflow-auto bg-tertiary-bg shadow-lg border border-primary-border rounded-2xl p-8"
+          className="container fixed z-[10000] bottom-[100px] left-[30px] h-[70svh] w-[30vw] min-w-[300px] overflow-auto bg-tertiary-bg shadow-lg border border-primary-border rounded-2xl p-8"
           dir="rtl"
         >
           <div className="flex flex-col gap-6">
@@ -96,7 +96,9 @@ export const ColorPaletteEditor = () => {
                 <h3 className="font-medium mb-4 text-lg">ألوان النصوص</h3>
                 <ColorInput label="النص الأساسي" variable="primaryFg" />
                 <ColorInput label="النص الثانوي" variable="secondaryFg" />
+                <ColorInput label="النص الرابع" variable="quaternaryFg" />
                 <ColorInput label="النص المعكوس" variable="inverseFg" />
+                <ColorInput label="العناوين الرئيسية" variable="headerFg" />
               </div>
 
               {/* Status Colors */}
@@ -142,9 +144,9 @@ export const ColorPaletteEditor = () => {
               <Button
                 variant="outline"
                 className="px-[30px]"
-                onClick={() => {
+                onClick={async () => {
                   const colorsJson = JSON.stringify(palette, null, 2);
-                  navigator.clipboard.writeText(colorsJson);
+                  await navigator?.clipboard?.writeText(colorsJson);
                   toast.info("تم نسخ الألوان إلى الحافظة");
                 }}
               >

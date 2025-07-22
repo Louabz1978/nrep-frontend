@@ -15,13 +15,13 @@ function InputPageButton({ to, icon: Icon, title }: InputPageButtonProps) {
   return (
     <Link
       to={to}
-      className="group flex hover:bg-primary px-[10px] py-[8px] gap-[25px] justify-center flex-1 text-2xl text-inverse-fg rounded-full bg-quaternary-bg transition-colors duration-300 focus:outline-none cursor-pointer"
+      className="group flex items-center hover:bg-primary px-lg py-md gap-2xl justify-center flex-1 text-size20 text-inverse-fg rounded-full bg-quaternary-bg transition-colors duration-[0.3s]] focus:outline-none cursor-pointer"
     >
       {/* title */}
       <span>{title}</span>
 
       {/* icon */}
-      <span className="bg-inverse-fg text-primary w-8 h-8 flex items-center justify-center rounded-2xl">
+      <span className="bg-inverse-fg text-primary size-[28px] flex items-center justify-center rounded-full">
         <Icon />
       </span>
     </Link>

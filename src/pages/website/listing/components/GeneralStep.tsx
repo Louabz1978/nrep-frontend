@@ -1,100 +1,22 @@
-import PageContainer from "@/components/global/pageContainer/PageContainer";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import NextButton from "@/components/global/form/button/NextButton";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import Accrodion from "@/components/global/accrodion/Accrodion";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
-import {
-  firstSectionFields,
-  firstSectionRequiredFields,
-  secondSectionFields,
-  secondSectionRequiredFields,
-  thirdSectionFields,
-  type GeneralStepType,
-} from "@/data/website/schema/ListingFormSchema";
-import {
-  cityChoices,
-  measurementSources,
-  streetTypes,
-  geoDirections,
-  StatusType,
-  bedrooms,
-} from "@/data/website/GeneralData";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import { useEffect } from "react";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import PreviouseButton from "@/components/global/form/button/PreviouseButton";
-import { FaRegListAlt } from "react-icons/fa";
-import { TbBuildingCommunity } from "react-icons/tb";
-import { FaMapLocationDot } from "react-icons/fa6";
+import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import AccordionSubmit, {
-  AccordionButtonsContainer,
-  AccordionCancel,
-} from "@/components/global/form/button/AccordionSubmit";
-import Textarea from "@/components/global/form/textarea/Textarea";
-import { Button } from "@/components/global/form/button/Button";
-import { GUESTROOM } from "@/data/global/select";
-import Radio from "@/components/global/form/radio/Radio";
-import {
-  StatusOptions,
-  StatusParagraph,
-} from "@/data/website/Listing/listingData";
-import Info from "@/components/global/modal/Info";
+import { cityChoices, PROPERTYTYPE, STATUS } from "@/data/global/select";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }
-// handle the map click event
-function MapClickHandler({
-  onMapClick,
-  isManualMode,
-}: {
-  onMapClick: (lat: number, lng: number) => void;
-  isManualMode: boolean;
-}) {
-  useMapEvents({
-    click: ({ latlng }) => {
-      // if the manual mode is disabled, don't do anything
-      if (!isManualMode) return;
-      // if the manual mode is enabled, call the onMapClick function
-      onMapClick(latlng.lat, latlng.lng);
-    },
-  });
-  return null;
-}
 
 // general step component
 function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // extract form utils
-  const { handleSubmit, watch, setValue, trigger } = form;
-
-  // State for each accordion section
-  const [isOpenFirst, setIsOpenFirst] = useState(true);
-  const [isOpenSecond, setIsOpenSecond] = useState(false);
-  const [isOpenThird, setIsOpenThird] = useState(false);
-
-  const [markerPosition, setMarkerPosition] = useState<[number, number]>([
-    34.7324273, 36.7136959,
-  ]);
-  const [isSatelliteView, setIsSatelliteView] = useState(false);
-  const [isManualMode, setIsManualMode] = useState(false);
-
-  const toggleStateFirst = () => setIsOpenFirst((prev) => !prev);
-  const toggleStateSecond = () => setIsOpenSecond((prev) => !prev);
-  const toggleStateThird = () => setIsOpenThird((prev) => !prev);
+  const { handleSubmit } = form;
 
   // handle submit form
   const onSubmit = (data: GeneralStepType) => {
@@ -102,961 +24,175 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
     console.log(data);
   };
 
-  // choose the location on the map by clicking on the map
-  const handleMapClick = (lat: number, lng: number) => {
-    setMarkerPosition([lat, lng]);
-    setValue("latitude", lat);
-    setValue("longitude", lng);
-
-    void trigger(["latitude", "longitude"]);
-  };
-  // change the latitude when the user edits on the input field
-  const handleLatitudeChange = () => {
-    const lat = watch("latitude");
-    if (lat && !isNaN(Number(lat))) {
-      setMarkerPosition([Number(lat), markerPosition[1]]);
-    }
-  };
-
-  // change the longitude when the user edits on the input field
-  const handleLongitudeChange = () => {
-    const lng = watch("longitude");
-    if (lng && !isNaN(Number(lng))) {
-      setMarkerPosition([markerPosition[0], Number(lng)]);
-    }
-  };
-
-  // get the user location by clicking on the button
-  const getUserLocation = () => {
-    // check if the browser supports geolocation
-    if (navigator.geolocation) {
-      // get the user location
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setMarkerPosition([latitude, longitude]);
-          setValue("latitude", latitude);
-          setValue("longitude", longitude);
-          void trigger(["latitude", "longitude"]);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-        }
-      );
-    }
-  };
-
-  // toggle the manual mode by clicking on the button
-  const toggleManualMode = () => {
-    setIsManualMode((prev) => !prev);
-  };
-
-  // toggle the satellite view by clicking on the button
-  const toggleSatelliteView = () => {
-    setIsSatelliteView(!isSatelliteView);
-  };
-
-  // fix the leaflet icon for the marker
-  useEffect(() => {
-    // @ts-expect-error - Leaflet icon fix for Vite/React
-    delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: markerIcon2x,
-      iconUrl: markerIcon,
-      shadowUrl: markerShadow,
-    });
-  }, []);
-
-  // create the regular marker icon
-  const regularMarkerIcon = new L.Icon({
-    iconUrl: markerIcon,
-    iconRetinaUrl: markerIcon2x,
-    shadowUrl: markerShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [0, -41],
-    shadowSize: [41, 41],
-    shadowAnchor: [12, 41],
-  });
-
-  const lat = watch("latitude");
-  const lng = watch("longitude");
-  useEffect(() => {
-    if (lat && lng && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
-      setMarkerPosition([Number(lat), Number(lng)]);
-    }
-  }, [watch, lat, lng]);
-
   return (
-    <PageContainer className="flex-1 h-full overflow-auto">
+    <AnimateContainer>
       <form
         id="general_step_form"
-        className="flex flex-col p-[48px] gap-[80px]"
+        className="flex flex-col gap-6xl"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {/* accordions container */}
-        <div className="w-full flex flex-col gap-[48px] flex-1">
-          <Accrodion
-            onClick={toggleStateFirst}
-            title="معلومات عامة عن العقار"
-            icon={FaRegListAlt}
-            isOpen={isOpenFirst}
-            accordionFields={firstSectionFields}
-            requiredFields={firstSectionRequiredFields}
+        <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-x-5xl gap-y-3xl">
+          <FormSectionHeader>المعلومات العامة</FormSectionHeader>
+          <Input
             form={form}
-          >
-            <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
-              <div className="flex flex-col items-center w-full gap-[16px] col-span-full">
-                <FormSectionHeader className="flex items-center gap-[8px] justify-center">
-                  حالة العقار:{" "}
-                  <Info info={StatusParagraph} className="mb-[10px]" />
-                </FormSectionHeader>
-
-                {/* toggle active status button */}
-                <div className="flex gap-[15px]">
-                  <Radio form={form} name="status" options={StatusOptions} />
-                </div>
-              </div>
-
-              <FormSectionHeader>معلومات المنطقة</FormSectionHeader>
-              <Input
-                form={form}
-                label="المقاطعة"
-                placeholder="ادخل اسم المقاطعة"
-                name="district"
-                info="ادخل اسم المقاطعة "
-                required
-              />
-              <Input
-                form={form}
-                label="رقم تعريف العقار "
-                placeholder="أدخل رقم تعريف العقار"
-                name="propertyId"
-                info="رقم تعريف العقار "
-                required
-              />
-              <Input
-                form={form}
-                label="رقم الشارع"
-                placeholder="ادخل رقم الشارع"
-                name="streetNumber"
-                info="ادخل رقم الشارع"
-                required
-              />
-              <Select
-                form={form}
-                label="الإتجاه قبل اسم الشارع"
-                choices={geoDirections}
-                showValue="label"
-                keyValue="value"
-                name="theDirectionBeforeTheStreetName"
-                placeholder="اختر الإتجاه قبل اسم الشارع"
-                info="اختر الإتجاه قبل اسم الشارع التي يقع فيها العقار"
-              />
-              <Input
-                form={form}
-                label="اسم الشارع"
-                placeholder="ادخل اسم الشارع"
-                name="streetName"
-                info="ادخل اسم الشارع"
-                required
-              />
-              <Select
-                form={form}
-                label="نوع الشارع"
-                choices={cityChoices}
-                keyValue="value"
-                showValue="label"
-                name="streetType"
-                placeholder="اختر نوع الشارع"
-                info="حدد نوع الشارع للعقار"
-              />
-              <Select
-                form={form}
-                label="الإتجاه بعد اسم الشارع"
-                choices={cityChoices}
-                keyValue="value"
-                showValue="label"
-                name="theDirectionAfterTheStreetName"
-                placeholder="اختر اتجاه النهاية"
-                info="حدد الإتجاه بعد اسم الشارع للعقار"
-              />
-              <Input
-                form={form}
-                type="number"
-                label="رقم الوحدة / الشقة"
-                placeholder="ادخل رقم الوحدة / الشقة"
-                name="unitApartmentNumber"
-                info="ادخل رقم الوحدة / الشقة الرئيسي للعقار"
-              />
-              <Select
-                form={form}
-                label="المدينة"
-                choices={cityChoices}
-                keyValue="value"
-                showValue="label"
-                name="city"
-                placeholder="اختر المدينة"
-                info="حدد المدينة للعقار"
-                required
-              />
-              <Select
-                form={form}
-                label="الولاية"
-                choices={cityChoices}
-                keyValue="value"
-                showValue="label"
-                name="state"
-                placeholder="اختر الولاية"
-                info="حدد الولاية للعقار"
-                required
-              />
-              <Input
-                form={form}
-                label="الرمز البريدي"
-                placeholder="ادخل الرمز البريدي"
-                name="postalCode"
-                info="ادخل الرمز البريدي للعنوان"
-                required
-              />
-              <Select
-                form={form}
-                label="المنطقة الجغرافية"
-                choices={streetTypes}
-                showValue="label"
-                keyValue="value"
-                name="geoArea"
-                placeholder="اختر المنطقة الجغرافية"
-                info="حدد المنطقة الجغرافية"
-                required
-              />
-
-              <Input
-                form={form}
-                label="رمز تقسيم المناطق"
-                placeholder="ادخل رمز التقسيم"
-                name="zoningcode"
-                info="true"
-              />
-              <Input
-                form={form}
-                label="المخطط السكني"
-                placeholder="ادخل المخطط السكني"
-                name="residentialplan"
-                info="ادخل المخطط السكني (إن وجد)"
-                required
-              />
-
-              <Select
-                form={form}
-                label="اسم المجمع / شقق التملك"
-                choices={geoDirections}
-                showValue="label"
-                keyValue="value"
-                name="nameOfTheCompoundOwnershipApartments"
-                placeholder="اختر اسم المجمع"
-                info="حدد اسم المجمع"
-                required
-              />
-              <Input
-                form={form}
-                label="رمز التقسيم الفرعي"
-                placeholder="ادخل رمز التقسيم"
-                name="subDivisionCode"
-                info="ادخل اسم أو نوع رمز التقسيم الفرعي (إن وجد)"
-              />
-
-              <FormSectionHeader>معلومات البناء</FormSectionHeader>
-
-              <Select
-                form={form}
-                label="تصميم المبنى"
-                placeholder="اختر تصميم البناء"
-                name="buildingDesign"
-                choices={cityChoices}
-                keyValue="value"
-                showValue="label"
-                info="حدد تصميم المبنى"
-                required
-              />
-              <Input
-                form={form}
-                label="اسم شركة البناء"
-                placeholder="ادخل اسم الشركة"
-                name="buildingCompanyName"
-                info="ادخل اسم شركة البناء"
-                required
-              />
-              <Input
-                form={form}
-                label="رقم البناء"
-                placeholder="ادخل رقم البناء"
-                name="buildingNumber"
-                info="ادخل رقم البناء"
-              />
-              <Input
-                form={form}
-                label="الطوابق الكلية في الملكية"
-                placeholder="ادخل عدد الطوابق الكلية في الملكية"
-                name="totalFloorsInOwnership"
-                type="number"
-                info="ادخل الطوابق الكلية في الملكية (إن وجد)"
-                required
-              />
-              <Input
-                form={form}
-                label="الطوابق الكلية في البناء"
-                placeholder="ادخل عدد الطوابق الكلية في البناء"
-                name="totalFloorsInProperty"
-                type="number"
-                info="ادخل الطوابق الكلية في البناء"
-                required
-              />
-              <Input
-                form={form}
-                label="طابق العقار"
-                placeholder="ادخل رقم طابق العقار"
-                name="propertyFloor"
-                type="number"
-                info="ادخل طابق العقار"
-                required
-              />
-              <Input
-                form={form}
-                label="عدد الوحدات في المبنى"
-                placeholder="ادخل عدد الوحدات في البناء"
-                name="unitsInBuilding"
-                type="number"
-                info="ادخل عدد الوحدات في المبنى الذي يقع فيه العقار"
-                required
-              />
-              <Input
-                form={form}
-                label="عدد الوحدات في المجمع السكني"
-                placeholder="ادخل عدد الوحدات في المجمع"
-                name="unitsInCompound"
-                type="number"
-                info="ادخل عدد الوحدات في المجمع السكني"
-                required
-              />
-              <Input
-                form={form}
-                label="سنة البناء"
-                placeholder="ادخل سنة البناء"
-                name="yearBuilt"
-                type="number"
-                info="ادخل سنة البناء (إن وجد)"
-              />
-
-              <FormSectionHeader>المعلومات القانونية</FormSectionHeader>
-
-              {/* الوصف القانوني */}
-              <Textarea
-                form={form}
-                label="الوصف القانوني :"
-                placeholder="الوصف القانوني"
-                name="legalDescription"
-                info="الوصف القانوني للعقار"
-                addingStyle="col-span-full"
-              />
-
-              <Input
-                form={form}
-                label="القسم"
-                placeholder=""
-                name="section"
-                info="ادخل رقم القسم"
-              />
-              <Input
-                form={form}
-                label="البلدية"
-                placeholder=""
-                name="municipality"
-                info="ادخل اسم البلدية"
-              />
-              <Input
-                form={form}
-                label="المجال"
-                placeholder=""
-                name="field"
-                info="ادخل المجال"
-              />
-              <Input
-                form={form}
-                label="الوحدة القانونية"
-                placeholder=""
-                name="legalUnit"
-                info="ادخل الوحدة القانونية"
-                required
-              />
-              <Input
-                form={form}
-                label="الكتلة السكنية"
-                placeholder="ادخل الكتلة"
-                name="block"
-                info="ادخل الكتلة السكنية"
-              />
-              <Input
-                form={form}
-                label="القطعة / الوحدة العقارية"
-                placeholder="ادخل القطعة / الوحدة العقارية"
-                name="landUnit"
-                info="ادخل رقم الوحدة العقارية"
-              />
-
-              <FormSectionHeader>خيارات إضافية</FormSectionHeader>
-              <div className="col-span-full flex justify-center">
-                <Select
-                  form={form}
-                  keyValue="value"
-                  showValue="label"
-                  choices={GUESTROOM}
-                  name={"moreGeneralOptions"}
-                  placeholder={"اختر مواصفات إضافية للعقار"}
-                  multiple={true}
-                  addingStyle="!w-[60%]"
-                  info={"hello"}
-                />
-              </div>
-
-              <AccordionButtonsContainer>
-                <AccordionSubmit<GeneralStepType>
-                  trigger={trigger}
-                  onValid={() => {
-                    setIsOpenFirst(false);
-                    setIsOpenSecond(true);
-                  }}
-                  validationArray={firstSectionFields}
-                />
-                <AccordionCancel setIsOpen={setIsOpenFirst} />
-              </AccordionButtonsContainer>
-            </div>
-          </Accrodion>
-
-          <Accrodion
-            onClick={toggleStateSecond}
-            title="فئة العقار : سكني"
-            icon={TbBuildingCommunity}
-            isOpen={isOpenSecond}
-            accordionFields={secondSectionFields}
-            requiredFields={secondSectionRequiredFields}
+            type="number"
+            label="رقم البناء"
+            placeholder="أدخل رقم البناء"
+            name="building_num"
+            info="يرجى إدخال رقم البناء كما هو موضح في العنوان الرسمي"
+            required
+          />
+          <Input
             form={form}
-          >
-            <div className="p-[40px] pt-[24px] grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
-              <FormSectionHeader>معلومات الغرف</FormSectionHeader>
-              <Select
-                form={form}
-                label={"نوع الحالة"}
-                name={"propertyStatus"}
-                choices={StatusType}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر نوع الحالة"}
-                info={"معلومات عن الحالة"}
-                required
-              />
-              <Input
-                form={form}
-                name="offeredPrice"
-                type="number"
-                label="سعر العرض"
-                labelStyle="font-bold"
-                placeholder="ادخل سعر العرض"
-                info={"سعر العقار"}
-                required
-              />
-              <Select
-                form={form}
-                label={"غرف النوم"}
-                name={"bedrooms"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر عدد غرف النوم"}
-                info={"اختر عدد غرف النوم"}
-                required
-              />
-              <Input
-                form={form}
-                name="completeBathrooms"
-                type="number"
-                label="الحمامات الكاملة"
-                labelStyle="font-bold"
-                placeholder="ادخل عدد الحمامات الكاملة"
-                info={" عدد الحمامات الكاملة"}
-                required
-              />
-              <Input
-                form={form}
-                name="partialBathrooms"
-                type="number"
-                label="الحمامات الجزئية "
-                labelStyle="font-bold"
-                placeholder="ادخل عدد الحمامات الجزئية"
-                info={"عدد الحمامات الجزئية"}
-                required
-              />
-              <Input
-                form={form}
-                name="theApproximateAreaOfTheResidentialZone"
-                type="number"
-                label="المساحة التقريبية لنطاق السكني"
-                labelStyle="font-bold"
-                placeholder="ادخل المساحة التقريبية لنطاق السكني"
-                info={"ادخل المساحة التقريبية لنطاق السكني"}
-                required
-              />
-              <Input
-                form={form}
-                name="theApproximateAreaOfTheTotalRange"
-                type="number"
-                label="المساحة التقريبية للنطاق الكلي"
-                labelStyle="font-bold"
-                placeholder="ادخل المساحة التقريبية للنطاق الكلي"
-                info={"المساحة التقريبية للنطاق الكلي"}
-                required
-              />
-              <Input
-                form={form}
-                name="numberOfCeilingFans"
-                type="number"
-                label="عدد المراوح السقفية "
-                labelStyle="font-bold"
-                placeholder="ادخل عدد المراوح السقفية"
-                info={"عدد المراوح السقفية"}
-              />
-              <Input
-                form={form}
-                name="garageSpaces"
-                type="number"
-                label="مساحات المرائب"
-                labelStyle="font-bold"
-                placeholder="ادخل مساحات المرآب"
-                info={"مساحات المرائب"}
-                required
-              />
-              <Select
-                form={form}
-                label={"وصف المرآب"}
-                name={"descriptionOfTheGarage"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر وصف المرآب"}
-                info={"وصف المرآب"}
-                required
-              />
-              <Select
-                form={form}
-                label={"المفروشات"}
-                name={"furniture"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر المفروشات"}
-                info={"المفروشات"}
-                required
-              />
-              <Select
-                form={form}
-                label={"المصعد"}
-                name={"elevator"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر للمصعد"}
-                info={"المصعد"}
-                required
-              />
-              <Input
-                form={form}
-                name="parkingLotArea"
-                type="number"
-                label="مساحة مصفّات السيارات"
-                labelStyle="font-bold"
-                placeholder="ادخل مساحة مصفّات السيارات"
-                info={"مساحة مصفّات السيارات "}
-                required
-              />
-              <Select
-                form={form}
-                label={"وصف مصفّ السيارات"}
-                name={"carParkDescription"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر وصف مصّف السيارات"}
-                info={"وصف مصفّ السيارات"}
-                required
-              />
-              <FormSectionHeader>الحيوانات الأليفة</FormSectionHeader>
-              <Select
-                form={form}
-                label={"الحيوانات الأليفة"}
-                name={"pets"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر عدد الحيوانات الأليفة"}
-                info={"الحيوانات الأليفة"}
-                required
-              />
-              <Input
-                form={form}
-                name="maxPetWeight"
-                type="number"
-                label="الحد الأعلى لوزن الحيوان "
-                labelStyle="font-bold"
-                placeholder="ادخل الحد الأعلى لوزن الحيوان"
-                info={"الحد الأعلى لوزن الحيوان "}
-              />
-              <Input
-                form={form}
-                name="maxPetCount"
-                type="number"
-                label="الحد الأعلى لعدد الحيوانات"
-                labelStyle="font-bold"
-                placeholder="ادخل الحدالأعلى للحيوانات"
-                info={"الحد الأعلى لعدد الحيوانات"}
-              />
-              <Input
-                form={form}
-                name="maxPetBreeding"
-                type="number"
-                label="الحد الأعلى لتكاثر الحيوانات"
-                labelStyle="font-bold"
-                placeholder="ادخل الحد الأعلى لتكاثر الحيوانات"
-                info={"الحد الأعلى لتكاثر الحيوانات"}
-              />
-              <Input
-                form={form}
-                name="maxPetTypes"
-                type="number"
-                label="الحد الأعلى لأنواع الحيوانات"
-                labelStyle="font-bold"
-                placeholder="ادخل الحد الأعلى لأنواع الحيوانات"
-                info={"الحد الأعلى لأنواع الحيوانات"}
-              />
-              <FormSectionHeader>معلومات الأرض</FormSectionHeader>
-              <Input
-                form={form}
-                name="landSize"
-                type="number"
-                label="حجم الأرض (بالفدان)"
-                labelStyle="font-bold"
-                placeholder="ادخل حجم الأرض (بالفدان)"
-                info={"حجم الأرض (بالفدان)"}
-                required
-              />
-              <Input
-                form={form}
-                name="landBack"
-                type="number"
-                label="الجزء الخلفي من الأرض"
-                labelStyle="font-bold"
-                placeholder="ادخل الجزء الخلفي من الأرض "
-                info={"الجزء الخلفي من الأرض"}
-                required
-              />
-              <Input
-                form={form}
-                name="landFront"
-                type="number"
-                label="الواجهة الأمامية من الأرض"
-                labelStyle="font-bold"
-                placeholder="ادخل الواجهة الأمامية من الأرض"
-                info={"الواجهة الأمامية من الأرض"}
-                required
-              />
-              <Input
-                form={form}
-                name="landLeft"
-                type="number"
-                label="يسارية الأرض"
-                labelStyle="font-bold"
-                placeholder="ادخل يسارية الأرض"
-                info={"يسارية الأرض"}
-                required
-              />
-              <Input
-                form={form}
-                name="landRight"
-                type="number"
-                label="يمينية الأرض"
-                labelStyle="font-bold"
-                placeholder="ادخل يمينية الأرض"
-                info={"يمينية الأرض "}
-                required
-              />
-              <Select
-                form={form}
-                label={"اتجاه الواجهة الخلفية"}
-                name={"backDirection"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر اتجاه الواجهة الخلفية"}
-                info={"اتجاه الواجهة الخلفية"}
-                required
-              />
-              <Input
-                form={form}
-                name="virtualTour1"
-                type="text"
-                label="رابط الجولة الإفتراضية"
-                labelStyle="font-bold"
-                placeholder="ادخل رابط الجولة الأفتراضية"
-                info={"رابط الجولة الإفتراضية"}
-              />
-              <Input
-                form={form}
-                name="virtualTour2"
-                type="text"
-                label="رابط الجولة الإفتراضية 2"
-                labelStyle="font-bold"
-                placeholder="ادخل رابط الجولة الإفتراضية 2"
-                info={"رابط الجولة الإفتراضية 2"}
-              />
-              <Input
-                form={form}
-                name="ownerName"
-                type="text"
-                label="اسم المالك"
-                labelStyle="font-bold"
-                placeholder="اختر اسم المالك"
-                info={"اسم المالك"}
-                required
-              />
-              <Select
-                form={form}
-                label={"وصف المُلكية"}
-                name={"propertyDescription"}
-                choices={bedrooms}
-                showValue="label"
-                keyValue="value"
-                placeholder={"اختر عدد وصف المُلكية"}
-                info={"وصف المُلكية"}
-                required
-              />
-              <Input
-                form={form}
-                name="primarySchool"
-                type="text"
-                label="المدرسة الإبتدائية"
-                labelStyle="font-bold"
-                placeholder="ادخل المدرسة الإبتدائية"
-                info={"المدرسة الإبتدائية"}
-              />
-              <Input
-                form={form}
-                name="middleSchool"
-                type="text"
-                label="المدرسة الإعدادية"
-                labelStyle="font-bold"
-                placeholder="ادخل المدرسة الإعدادية"
-                info={"المدرسة الإعدادية"}
-              />
-              <Input
-                form={form}
-                name="highSchool"
-                type="text"
-                label="المدرسة الثانوية"
-                labelStyle="font-bold"
-                placeholder="ادخل المدرسة الثانوية"
-                info={"المدرسة الثانوية"}
-              />
-              <FormSectionHeader>خيارات إضافية</FormSectionHeader>
-              <div className="col-span-full flex justify-center">
-                <Select
-                  form={form}
-                  keyValue="value"
-                  showValue="label"
-                  choices={GUESTROOM}
-                  name={"moreCategoryOptions"}
-                  placeholder={"اختر مواصفات إضافية للعقار"}
-                  multiple={true}
-                  addingStyle="!w-[60%]"
-                  info={"hello"}
-                />
-              </div>
-
-              <Textarea
-                form={form}
-                label="معلومات إضافية عن العقار :"
-                placeholder="معلومات إضافية عن العقار"
-                name="generalDescription"
-                info="معلومات إضافية عن العقار"
-                addingStyle="col-span-full"
-              />
-
-              <AccordionButtonsContainer>
-                <AccordionSubmit<GeneralStepType>
-                  trigger={trigger}
-                  onValid={() => {
-                    setIsOpenSecond(false);
-                    setIsOpenThird(true);
-                  }}
-                  validationArray={secondSectionFields}
-                />
-                <AccordionCancel setIsOpen={setIsOpenSecond} />
-              </AccordionButtonsContainer>
-            </div>
-          </Accrodion>
-
-          <Accrodion
-            onClick={toggleStateThird}
-            title="المعلومات الجغرافية و المستندات"
-            icon={FaMapLocationDot}
-            isOpen={isOpenThird}
-            accordionFields={thirdSectionFields}
-            requiredFields={["latitude", "longitude"]}
+            type="text"
+            label="اسم الشارع"
+            placeholder="أدخل اسم الشارع"
+            name="street"
+            info="يرجى إدخال اسم الشارع الذي يقع فيه العقار"
+            required
+          />
+          <Input
             form={form}
-          >
-            <div className="p-[48px] flex flex-col gap-[32px]">
-              {/* map */}
-              <div className="flex gap-[22px] px-[52px] justify-center items-center">
-                {/* map view */}
-                <div className="w-[55%] rounded-[15px] h-[470px] overflow-hidden relative">
-                  <MapContainer
-                    center={markerPosition}
-                    zoom={10}
-                    className="w-full h-full"
-                    scrollWheelZoom={true}
-                    attributionControl={false}
-                    zoomControl={true}
-                  >
-                    <TileLayer
-                      attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url={
-                        isSatelliteView
-                          ? "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-                          : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      }
-                    />
-                    <Marker position={markerPosition} icon={regularMarkerIcon}>
-                      <Popup>
-                        الموقع المحدد
-                        <br />
-                        خط العرض: {markerPosition[0].toFixed(6)}
-                        <br />
-                        خط الطول: {markerPosition[1].toFixed(6)}
-                      </Popup>
-                    </Marker>
-                    <MapClickHandler
-                      onMapClick={handleMapClick}
-                      isManualMode={isManualMode}
-                    />
-                  </MapContainer>
-                </div>
-
-                {/* map control */}
-                <div className="flex flex-col w-[45%] p-[10px] gap-[23px]">
-                  <Button variant={"semi-round"} onClick={getUserLocation}>
-                    الحصول على خطوط الطول/العرض من العنوان
-                  </Button>
-                  <Button variant={"semi-round"} onClick={toggleManualMode}>
-                    {isManualMode
-                      ? "تعطيل التحديد اليدوي"
-                      : "تفعيل التحديد اليدوي"}
-                  </Button>
-                  <Button
-                    variant={"semi-round-outline"}
-                    onClick={toggleSatelliteView}
-                  >
-                    {isSatelliteView
-                      ? "عرض الخريطة العادية"
-                      : "عرض الخريطة برؤية Google street"}
-                  </Button>
-                </div>
-              </div>
-
-              {/* inputs */}
-              <div className="grid md:grid-cols-2 gap-x-[160px] gap-y-[24px]">
-                <Input
-                  form={form}
-                  label={"خط العرض (Latitude)"}
-                  placeholder={"34.7324"}
-                  name={"latitude"}
-                  type={"number"}
-                  numberRegex={/^\d*\.?\d*$/}
-                  onChange={handleLatitudeChange}
-                  info={"أدخل خط العرض أو انقر على الخريطة"}
-                />
-                <Input
-                  form={form}
-                  label={"خط الطول (Longitude)"}
-                  placeholder={"36.7131"}
-                  name={"longitude"}
-                  type={"number"}
-                  numberRegex={/^\d*\.?\d*$/}
-                  onChange={handleLongitudeChange}
-                  info={"أدخل خط الطول أو انقر على الخريطة"}
-                />
-
-                <Select
-                  form={form}
-                  label={"مصدر القياسات (مساحة الأرض)"}
-                  name={"landAreaSource"}
-                  choices={measurementSources}
-                  showValue="label"
-                  keyValue="value"
-                  placeholder={"اختر المصدر"}
-                  info={"معلومات عن مصدر القياس"}
-                />
-                <Select
-                  form={form}
-                  label={"مصدر القياسات (أبعاد الأرض)"}
-                  name={"landDimensionsSource"}
-                  choices={measurementSources}
-                  showValue="label"
-                  keyValue="value"
-                  placeholder={"اختر المصدر"}
-                  info={"معلومات عن مصدر القياس"}
-                />
-                <Select
-                  form={form}
-                  label={"مصدر القياسات (المساحة الكلية)"}
-                  name={"totalAreaSource"}
-                  choices={measurementSources}
-                  showValue="label"
-                  keyValue="value"
-                  placeholder={"اختر المصدر"}
-                  info={"معلومات عن مصدر القياس"}
-                />
-                <Select
-                  form={form}
-                  label={"مصدر القياسات (المساحة السكنية)"}
-                  name={"residentialAreaSource"}
-                  choices={measurementSources}
-                  showValue="label"
-                  keyValue="value"
-                  placeholder={"اختر المصدر"}
-                  info={"معلومات عن مصدر القياس"}
-                />
-
-                {/* buttons */}
-                <AccordionButtonsContainer>
-                  <AccordionSubmit<GeneralStepType>
-                    trigger={trigger}
-                    onValid={() => {
-                      setIsOpenThird(false);
-                    }}
-                    validationArray={thirdSectionFields}
-                  />
-                  <AccordionCancel setIsOpen={setIsOpenThird} />
-                </AccordionButtonsContainer>
-              </div>
-            </div>
-          </Accrodion>
+            type="number"
+            label="الطابق"
+            placeholder="أدخل رقم الطابق"
+            name="floor"
+            info="يرجى إدخال رقم الطابق الذي يقع فيه العقار"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="رقم الشقة"
+            placeholder="أدخل رقم الشقة"
+            name="apt"
+            info="يرجى إدخال رقم الشقة إذا كان العقار شقة"
+            required
+          />
+          <Select
+            form={form}
+            label="المحافظة"
+            placeholder="اختر المحافظة"
+            choices={cityChoices}
+            keyValue="value"
+            showValue="label"
+            name="county"
+            info="يرجى اختيار المحافظة التي يقع فيها العقار"
+            required
+          />
+          <Select
+            form={form}
+            label="المدينة"
+            placeholder="اختر المدينة"
+            choices={cityChoices}
+            keyValue="value"
+            showValue="label"
+            name="city"
+            info="يرجى اختيار المدينة التي يقع فيها العقار"
+            required
+          />
+          <Input
+            form={form}
+            label="الحي/المنطقة"
+            placeholder="اختر الحي أو المنطقة"
+            name="district"
+            info="يرجى اختيار الحي أو المنطقة التي يقع فيها العقار"
+            required
+          />
+          <Select
+            form={form}
+            label="نوع العقار"
+            placeholder="اختر نوع العقار"
+            choices={PROPERTYTYPE}
+            keyValue="value"
+            showValue="label"
+            name="property_type"
+            info="يرجى اختيار نوع العقار (شقة، فيلا، أرض، ...)"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="مساحة العقار (م²)"
+            placeholder="أدخل مساحة العقار"
+            name="area_space"
+            info="يرجى إدخال المساحة الكلية للعقار بالمتر المربع"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            numberRegex={/^\d*$/}
+            label="عدد غرف النوم"
+            placeholder="أدخل عدد غرف النوم"
+            name="bedrooms"
+            info="يرجى إدخال عدد غرف النوم في العقار"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="عدد الحمامات"
+            placeholder="أدخل عدد الحمامات"
+            name="bathrooms"
+            info="يرجى إدخال عدد الحمامات في العقار"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="السعر ($)"
+            placeholder="أدخل سعر العقار بالدولار"
+            name="price"
+            info="يرجى إدخال سعر العقار بالدولار الأمريكي"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="عمولة وكيل البائع ($)"
+            placeholder="أدخل عمولة وكيل البائع"
+            name="property_realtor_commission"
+            info="يرجى إدخال قيمة عمولة وكيل البائع بالدولار"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="عمولة وكيل المشتري ($)"
+            placeholder="أدخل عمولة وكيل المشتري"
+            name="buyer_realtor_commission"
+            info="يرجى إدخال قيمة عمولة وكيل المشتري بالدولار"
+            required
+          />
+          <Input
+            form={form}
+            type="number"
+            label="سنة البناء"
+            placeholder="أدخل سنة البناء"
+            name="year_built"
+            info="يرجى إدخال سنة بناء العقار"
+            required
+          />
+          <Select
+            form={form}
+            label="الحالة"
+            placeholder="اختر حالة العقار"
+            choices={STATUS}
+            keyValue="value"
+            showValue="label"
+            name="status"
+            info="يرجى اختيار حالة العقار (جديد، مستخدم، ...)"
+            required
+          />
         </div>
 
-        {/* buttons */}
-        <div className="flex justify-between w-full gap-4 px-[107px]">
-          <PreviouseButton setCurrentStep={setCurrentStep} />
+        {/* buttons container */}
+        <div className="flex justify-end w-full gap-xl">
           <NextButton id={"general_step_form"} />
         </div>
       </form>
-    </PageContainer>
+    </AnimateContainer>
   );
 }
 

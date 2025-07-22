@@ -11,14 +11,16 @@ const PreviouseButton = ({
 }: PreviouseButtonProps) => {
   return (
     <Button
-      className="!h-[45px]"
+      className="!h-[40px] min-w-[130px]"
       onClick={(e) => {
         e.preventDefault();
         setCurrentStep((prev) => prev - 1);
       }}
     >
-      <FaArrowCircleRight />
-      {title}
+      <span className="w-[30px] h-[30px] flex justify-center items-center">
+        <FaArrowCircleRight />
+      </span>
+      <span>{title}</span>
     </Button>
   );
 };

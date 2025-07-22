@@ -5,7 +5,7 @@ const VALIDATION_MESSAGES: Record<string, string> = {
 
   // String Validation Messages
   "string.base": "حقل {{#label}} يجب أن يكون من نوع نص.",
-  "string.empty": "حقل {{#label}} يجب أن لا يكون فارغا.",
+  "string.empty": "حقل {{#label}} مطلوب.",
   "string.min": "طول حقل {{#label}} يجب ألا يقل عن {{#limit}} حرف.",
   "string.max": "طول حقل {{#label}} يجب ألا يزيد عن {{#limit}} حرف.",
   "string.alphanum": "حقل {{#label}} يجب أن يحتوي على أحرف وأرقام فقط.",
@@ -19,8 +19,8 @@ const VALIDATION_MESSAGES: Record<string, string> = {
   "string.pattern.zip": "حقل {{#label}} يجب أن يكون رقم بريدي صالح.",
 
   // Number Validation Messages
-  "number.base": "حقل {{#label}} يجب أن لا يكون فارغا.",
-  "number.empty": "حقل {{#label}} يجب أن لا يكون فارغا.",
+  "number.base": "حقل {{#label}} مطلوب.",
+  "number.empty": "حقل {{#label}} مطلوب.",
   "number.integer": "حقل {{#label}} يجب أن يكون رقم صحيح.",
   "number.positive": "حقل {{#label}} يجب أن يكون رقم موجب.",
   "number.negative": "حقل {{#label}} يجب أن يكون رقم سالب.",
@@ -29,7 +29,7 @@ const VALIDATION_MESSAGES: Record<string, string> = {
 
   // Date Validation Messages
   "date.base": "حقل {{#label}} يجب أن يكون تاريخ صالح.",
-  "date.empty": "حقل {{#label}} يجب أن لا يكون فارغا.",
+  "date.empty": "حقل {{#label}} مطلوب.",
   "date.min": "التاريخ في حقل {{#label}} يجب أن يكون بعد {{#limit}}.",
   "date.max": "التاريخ في حقل {{#label}} يجب أن يكون قبل {{#limit}}.",
 
@@ -38,19 +38,18 @@ const VALIDATION_MESSAGES: Record<string, string> = {
 
   // Array Validation Messages
   "array.base": "حقل {{#label}} يجب أن يكون قائمة.",
-  "array.min": "طول القائمة في حقل {{#label}} يجب ألا يقل عن {{#limit}} عنصر.",
-  "array.max": "طول القائمة في حقل {{#label}} يجب ألا يزيد عن {{#limit}} عنصر.",
+  "array.min": "الحقل {{#label}} يجب أن يحتوي على {{#limit}} عنصر على الأقل.",
+  "array.max": "الحقل {{#label}} يجب ألا يتجاوز {{#limit}} عناصر.",
   "array.unique": "عناصر القائمة في حقل {{#label}} يجب أن تكون فريدة.",
 
   // Object Validation Messages
-  "object.base": "حقل {{#label}} يجب أن لا يكون فارغا.",
+  "object.base": "حقل {{#label}} مطلوب.",
   "object.unknown": "حقل {{#label}} يحتوي على خصائص غير صالحة.",
 
-  // from hour and to hour custom validation
-  "any.twoAtLeast": "يجب أن يكون فرق الوقت على الأقل ساعتين.",
-  "any.fromLaterThanTo": "ساعة الإغلاق أقل من ساعة الافتتاح.",
-  "any.startTimeLaterThanEnd": "ساعة النهاية يجب أن تكون بعد ساعة البداية.",
-  "any.fromSameTo": "ساعة الإغلاق تساوي ساعة الافتتاح.",
+  // custom messages
+  "file.minSize": "حجم الصورة يجب أن يكون على الأقل {{#limit}}",
+  "file.maxSize": "حجم الصورة يجب أن لا يتجاوز {{#limit}}",
+  "file.invalidType": "يجب أن يكون الملف صورة",
 };
 
 export default VALIDATION_MESSAGES;

@@ -1,14 +1,22 @@
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Button } from "./Button";
+import type { ReactNode } from "react";
 interface NextButtonProps {
   id: string;
   title?: string;
+  icon?: ReactNode;
 }
-const NextButton = ({ id, title = "التالي" }: NextButtonProps) => {
+const NextButton = ({
+  id,
+  title = "التالي",
+  icon = <FaArrowCircleLeft />,
+}: NextButtonProps) => {
   return (
-    <Button type="submit" className="!h-[45px]" id={id}>
-      {title}
-      <FaArrowCircleLeft />
+    <Button type="submit" className="!h-[40px] min-w-[130px]" id={id}>
+      <span>{title}</span>
+      <span className="w-[30px] h-[30px] flex justify-center items-center">
+        {icon}
+      </span>
     </Button>
   );
 };

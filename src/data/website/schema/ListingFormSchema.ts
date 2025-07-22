@@ -1,386 +1,185 @@
+import {
+  optionSchema,
+  type TNumber,
+  type TOption,
+  type TString,
+} from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
-import type { Path } from "react-hook-form";
-
-// optionSchema
-export const optionSchema = Joi.object({ value: Joi.string() }).unknown();
-export const urlSchema = Joi.string().regex(
-  /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
-  { name: "https://any-domain.com" }
-);
-export type TEmpty = null | undefined;
-export type TString = string | null | undefined;
-export type TNumber = number | null | undefined;
-export type TOption = { value: string; [key: string]: unknown } | TEmpty;
-
-// status step -----------------------------------------------------------
-export type ListingStatusType = "active" | "incomplete";
-
-export type StatusStepType = {
-  status: ListingStatusType;
-};
-
-export const statusStepSchema = Joi.object<StatusStepType>({
-  status: Joi.string(),
-});
-
-export const statusStepInitialValues: StatusStepType = {
-  status: "active",
-};
 
 // general step -----------------------------------------------------------
-
 export type GeneralStepType = {
-  // first accordion
+  building_num: TNumber;
+  street: TString;
+  floor: TNumber;
+  apt: TNumber;
+  county: TOption;
   city: TOption;
-  status: ListingStatusType;
   district: TString;
-  propertyId: TString;
-  geoArea: TString;
-  state: TString;
-  zoningcode: TString;
-  streetName: TString;
-  streetNumber: TString;
-  streetType: TString;
-  nameOfTheCompoundOwnershipApartments: TString;
-  theDirectionAfterTheStreetName: TString;
-  postalCode: TString;
-  subDivisionCode: TString;
-  buildingDesign: TString;
-  buildingNumber: TString;
-  buildingCompanyName: TString;
-  totalFloorsInOwnership: TNumber;
-  totalFloorsInProperty: TNumber;
-  propertyFloor: TNumber;
-  unitsInBuilding: TNumber;
-  unitsInCompound: TNumber;
-  yearBuilt: TNumber;
-  legalDescription: TString;
-  generalDescription: TString;
-  section: TString;
-  municipality: TString;
-  legalUnit: TString;
-  field: TString;
-  block: TString;
-  moreGeneralOptions: [];
-  landUnit: TString;
-  theDirectionBeforeTheStreetName: TString;
-  unitApartmentNumber: TNumber;
-  residentialplan: TString;
-
-  // second accordion
-  propertyStatus: TString;
-  offeredPrice: TNumber;
-  bedrooms: TString;
-  completeBathrooms: TNumber;
-  partialBathrooms: TNumber;
-  theApproximateAreaOfTheResidentialZone: TNumber;
-  theApproximateAreaOfTheTotalRange: TNumber;
-  numberOfCeilingFans: TNumber;
-  garageSpaces: TNumber;
-  descriptionOfTheGarage: TString;
-  furniture: TString;
-  elevator: TString;
-  parkingLotArea: TNumber;
-  carParkDescription: TString;
-  pets: TString;
-  maxPetWeight: TNumber;
-  maxPetCount: TNumber;
-  maxPetBreeding: TNumber;
-  maxPetTypes: TNumber;
-  landSize: TNumber;
-  landBack: TNumber;
-  landFront: TNumber;
-  landLeft: TNumber;
-  landRight: TNumber;
-  backDirection: TString;
-  virtualTour1: TString;
-  virtualTour2: TString;
-  ownerName: TString;
-  propertyDescription: TString;
-  primarySchool: TString;
-  middleSchool: TString;
-  moreCategoryOptions: [];
-  highSchool: TString;
-
-  // third accordion
-  landAreaSource: TString;
-  landDimensionsSource: TString;
-  totalAreaSource: TString;
-  residentialAreaSource: TString;
-  latitude: TNumber;
-  longitude: TNumber;
+  property_type: TOption;
+  area_space: TNumber;
+  bedrooms: TNumber;
+  bathrooms: TNumber;
+  price: TNumber;
+  property_realtor_commission: TNumber;
+  buyer_realtor_commission: TNumber;
+  year_built: TNumber;
+  status: TOption;
 };
 
 export const generalStepSchema = Joi.object<GeneralStepType>({
-  // first accordion fields
-  city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
-  status: Joi.string(),
-  district: Joi.string()
+  building_num: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("المقاطعة"),
-  propertyId: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رقم تعريف العقار"),
-  geoArea: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المنطقة الجغرافية"),
-  state: optionSchema.required().messages(VALIDATION_MESSAGES).label("الولاية"),
-  zoningcode: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("رمز تقسيم المناطق"),
-  streetName: Joi.string()
+    .label("رقم المبنى"),
+  street: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشارع"),
-  streetNumber: Joi.string()
+  floor: Joi.number().required().messages(VALIDATION_MESSAGES).label("الطابق"),
+  apt: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("رقم الشارع"),
-  streetType: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("نوع الشارع"),
-  nameOfTheCompoundOwnershipApartments: optionSchema
+    .label("رقم الشقة"),
+  county: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("اسم المجمع / شقق التملك"),
-  theDirectionAfterTheStreetName: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الإتجاه بعد اسم الشارع"),
-  postalCode: Joi.string()
+    .label("المحافظة"),
+  city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
+  district: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الرمز البريدي"),
-  subDivisionCode: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("رمز التقسيم الفرعي"),
-  buildingDesign: optionSchema
+    .label("الحي/المنطقة"),
+  property_type: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("نوع تصميم المبنى"),
-  buildingNumber: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("رقم البناء"),
-  buildingCompanyName: Joi.string()
+    .label("نوع العقار"),
+  area_space: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("اسم شركة البناء"),
-  totalFloorsInOwnership: Joi.number()
+    .label("مساحة العقار"),
+  bedrooms: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الطوابق الكلية في الملكية"),
-  totalFloorsInProperty: Joi.number()
+    .label("عدد غرف النوم"),
+  bathrooms: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الطوابق الكلية في البناء"),
-  propertyFloor: Joi.number()
+    .label("عدد دورات المياه"),
+  price: Joi.number().required().messages(VALIDATION_MESSAGES).label("السعر"),
+  property_realtor_commission: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("طابق العقار"),
-  unitsInBuilding: Joi.number()
+    .label("عمولة وكيل البائع"),
+  buyer_realtor_commission: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("عدد الوحدات في المبنى"),
-  unitsInCompound: Joi.number()
+    .label("عمولة وكيل المشتري"),
+  year_built: Joi.number()
     .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("عدد العقارات في المجمع"),
-  yearBuilt: Joi.number()
-    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("سنة البناء"),
-  legalDescription: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الوصف القانوني"),
-  generalDescription: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("معلومات إضافية عن العقار"),
-  section: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("القسم"),
-  municipality: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("البلدية"),
-  legalUnit: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الوحدة القانونية"),
-  field: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("المجال"),
-  block: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الكتلة السكنية"),
-  landUnit: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("القطعة / الوحدة العقارية"),
-  moreGeneralOptions: Joi.array()
-    .items(optionSchema)
-    .messages(VALIDATION_MESSAGES)
-    .label("خيارات إضافية"),
-  theDirectionBeforeTheStreetName: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الإتجاه قبل اسم الشارع"),
-  unitApartmentNumber: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("رقم الوحدة / الشقة"),
-  residentialplan: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المخطط السكني"),
+  status: optionSchema.required().messages(VALIDATION_MESSAGES).label("الحالة"),
+});
 
-  // second accordion fields
-  propertyStatus: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("نوع الحالة"),
-  offeredPrice: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("سعر العرض"),
-  bedrooms: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("غرف النوم"),
-  completeBathrooms: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الحمامات الكاملة"),
-  partialBathrooms: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الحمامات الجزئية"),
-  theApproximateAreaOfTheResidentialZone: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المساحة التقريبية للمنطقة السكنية"),
-  theApproximateAreaOfTheTotalRange: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المساحة التقريبية للنطاق الكلي"),
-  numberOfCeilingFans: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("عدد المراوح السقفية"),
-  garageSpaces: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("مساحات المرائب"),
-  descriptionOfTheGarage: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("وصف المرآب"),
-  furniture: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المفروشات"),
-  elevator: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("المصعد"),
-  parkingLotArea: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("مساحة مصفّات السيارات"),
-  carParkDescription: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("وصف مصفّ السيارات"),
-  pets: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الحيوانات الأليفة"),
-  maxPetWeight: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الحد الأعلى لوزن الحيوان"),
-  maxPetCount: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الحد الأعلى لعدد الحيوانات"),
-  maxPetBreeding: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الحد الأعلى لتكاثر الحيوانات"),
-  maxPetTypes: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الحد الأعلى لأنواع الحيوانات"),
-  landSize: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("حجم الأرض (بالفدان)"),
-  landBack: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الجزء الخلفي من الأرض"),
-  landFront: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الواجهة الأمامية من الأرض"),
-  landLeft: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("يسارية الأرض"),
-  landRight: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("يمينية الأرض"),
-  backDirection: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("اتجاه الواجهة الخلفية"),
-  virtualTour1: urlSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("رابط الجولة الإفتراضية"),
-  virtualTour2: urlSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("رابط الجولة الإفتراضية 2"),
-  ownerName: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("اسم المالك"),
-  propertyDescription: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("وصف المُلكية"),
-  primarySchool: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("المدرسة الإبتدائية"),
-  middleSchool: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("المدرسة الإعدادية"),
-  highSchool: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("المدرسة الثانوية"),
-  moreCategoryOptions: Joi.array()
-    .items(optionSchema)
-    .messages(VALIDATION_MESSAGES)
-    .label("خيارات إضافية"),
+export const generalStepInitialValues: GeneralStepType = {
+  building_num: null,
+  street: null,
+  floor: null,
+  apt: null,
+  county: null,
+  city: null,
+  district: null,
+  property_type: null,
+  area_space: null,
+  bedrooms: null,
+  bathrooms: null,
+  price: null,
+  property_realtor_commission: null,
+  buyer_realtor_commission: null,
+  year_built: null,
+  status: null,
+};
 
-  // third section
+// additional info step -----------------------------------------------------------
+export type AdditionalInfoStepType = {
+  hasBalcony: boolean;
+  balcony: TNumber;
+  hasFans: boolean;
+  fans: TNumber;
+  waterLine: TString;
+  // Individual boolean fields for additional options
+  elevator: boolean;
+  ac: boolean;
+  parking: boolean;
+  garden: boolean;
+  jacuzzi: boolean;
+  solar: boolean;
+  pool: boolean;
+};
+
+export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
+  hasBalcony: Joi.boolean(),
+  balcony: Joi.when("hasBalcony", {
+    is: true,
+    then: Joi.number().required().messages(VALIDATION_MESSAGES).label("شرفة"),
+    otherwise: Joi.number()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("شرفة"),
+  }),
+
+  hasFans: Joi.boolean(),
+  fans: Joi.when("hasFans", {
+    is: true,
+    then: Joi.number().required().messages(VALIDATION_MESSAGES).label("مراوح"),
+    otherwise: Joi.number()
+      .allow(null, "")
+      .messages(VALIDATION_MESSAGES)
+      .label("مراوح"),
+  }),
+
+  waterLine: optionSchema
+    .allow(null)
+    .messages(VALIDATION_MESSAGES)
+    .label("خط المياه الواصل للعقار"),
+  
+  // Additional options as boolean fields
+  elevator: Joi.boolean().default(false),
+  ac: Joi.boolean().default(false),
+  parking: Joi.boolean().default(false),
+  garden: Joi.boolean().default(false),
+  jacuzzi: Joi.boolean().default(false),
+  solar: Joi.boolean().default(false),
+  pool: Joi.boolean().default(false),
+});
+
+export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
+  hasBalcony: false,
+  balcony: null,
+  hasFans: false,
+  fans: null,
+  waterLine: null,
+  // Additional options initial values
+  elevator: false,
+  ac: false,
+  parking: false,
+  garden: false,
+  jacuzzi: false,
+  solar: false,
+  pool: false,
+};
+
+// location step --------------------------------------------------------------------
+export type LocationStepType = {
+  landAreaSource: TString;
+  landDimensionsSource: TString;
+  latitude: TNumber;
+  longitude: TNumber;
+  address: TString; 
+};
+
+export const LocationStepSchema = Joi.object<LocationStepType>({
   landAreaSource: optionSchema
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
@@ -389,14 +188,6 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("مصدر القياسات (أبعاد الأرض)"),
-  totalAreaSource: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("مصدر القياسات (المساحة الكلية)"),
-  residentialAreaSource: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("مصدر القياسات (المساحة السكنية)"),
   latitude: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -405,727 +196,75 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("خط الطول"),
+  address: Joi.string()
+    .allow("")
+    .messages(VALIDATION_MESSAGES)
+    .label("العنوان"), 
 });
 
-export const generalStepInitialValues: GeneralStepType = {
-  // first accordion
-  city: null,
-  status: "active",
-  district: null,
-  propertyId: null,
-  geoArea: null,
-  state: null,
-  zoningcode: null,
-  streetName: null,
-  streetNumber: null,
-  streetType: null,
-  nameOfTheCompoundOwnershipApartments: null,
-  theDirectionAfterTheStreetName: null,
-  postalCode: null,
-  subDivisionCode: null,
-  buildingDesign: null,
-  buildingNumber: null,
-  buildingCompanyName: null,
-  totalFloorsInOwnership: null,
-  totalFloorsInProperty: null,
-  propertyFloor: null,
-  unitsInBuilding: null,
-  unitsInCompound: null,
-  yearBuilt: null,
-  legalDescription: null,
-  generalDescription: null,
-  section: null,
-  municipality: null,
-  legalUnit: null,
-  field: null,
-  block: null,
-  moreGeneralOptions: [],
-  landUnit: null,
-  theDirectionBeforeTheStreetName: null,
-  unitApartmentNumber: null,
-  residentialplan: null,
-
-  // second accordion
-  propertyStatus: null,
-  offeredPrice: null,
-  bedrooms: null,
-  completeBathrooms: null,
-  partialBathrooms: null,
-  theApproximateAreaOfTheResidentialZone: null,
-  theApproximateAreaOfTheTotalRange: null,
-  numberOfCeilingFans: null,
-  garageSpaces: null,
-  descriptionOfTheGarage: null,
-  furniture: null,
-  elevator: null,
-  parkingLotArea: null,
-  carParkDescription: null,
-  pets: null,
-  maxPetWeight: null,
-  maxPetCount: null,
-  maxPetBreeding: null,
-  maxPetTypes: null,
-  landSize: null,
-  landBack: null,
-  landFront: null,
-  landLeft: null,
-  landRight: null,
-  backDirection: null,
-  virtualTour1: null,
-  virtualTour2: null,
-  ownerName: null,
-  propertyDescription: null,
-  primarySchool: null,
-  middleSchool: null,
-  moreCategoryOptions: [],
-  highSchool: null,
-
-  // third accordion
+export const LocationStepInitialValues: LocationStepType = {
   landAreaSource: null,
   landDimensionsSource: null,
-  totalAreaSource: null,
-  residentialAreaSource: null,
   latitude: null,
   longitude: null,
+  address: null
 };
 
-// sections fields list
-const allGeneralKeys = Object.keys(generalStepInitialValues);
-const firstSectionEndIndex = allGeneralKeys.indexOf("residentialplan") + 1;
-const secondSectionEndIndex = allGeneralKeys.indexOf("highSchool") + 1;
-export const firstSectionFields = allGeneralKeys.slice(
-  0,
-  firstSectionEndIndex
-) as Path<GeneralStepType>[];
-export const secondSectionFields = allGeneralKeys.slice(
-  firstSectionEndIndex,
-  secondSectionEndIndex
-) as Path<GeneralStepType>[];
-export const thirdSectionFields = allGeneralKeys.slice(
-  secondSectionEndIndex
-) as Path<GeneralStepType>[];
-
-// sections requireds fields
-export const firstSectionRequiredFields = [
-  "city",
-  "district",
-  "propertyId",
-  "geoArea",
-  "state",
-  "streetName",
-  "streetNumber",
-  "nameOfTheCompoundOwnershipApartments",
-  "postalCode",
-  "buildingDesign",
-  "buildingCompanyName",
-  "totalFloorsInOwnership",
-  "totalFloorsInProperty",
-  "propertyFloor",
-  "unitsInBuilding",
-  "unitsInCompound",
-  "legalUnit",
-  "residentialplan",
-];
-export const secondSectionRequiredFields = [
-  "propertyStatus",
-  "offeredPrice",
-  "bedrooms",
-  "completeBathrooms",
-  "partialBathrooms",
-  "theApproximateAreaOfTheResidentialZone",
-  "theApproximateAreaOfTheTotalRange",
-  "garageSpaces",
-  "descriptionOfTheGarage",
-  "furniture",
-  "elevator",
-  "parkingLotArea",
-  "carParkDescription",
-  "pets",
-  "landSize",
-  "landBack",
-  "landFront",
-  "landLeft",
-  "landRight",
-  "backDirection",
-  "ownerName",
-  "propertyDescription",
-];
-export const thirdSectionRequiredFields = ["latitude", "longitude"];
-
-// rooms step -----------------------------------------------------------
-
-export type RoomsStepType = {
-  rooms: {
-    type: { value: string } | undefined;
-    width: number | undefined;
-    length: number | undefined;
-  }[];
+// property images step --------------------------------------------------------------
+export type PropertyImagesStepType = {
+  images: [];
 };
 
-export const roomsStepSchema = Joi.object<RoomsStepType>({
-  rooms: Joi.array().items(
-    Joi.object({
-      type: Joi.object({ value: Joi.string() })
-        .unknown()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("نوع الغرفة"),
-      width: Joi.number()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("عرض الغرفة"),
-      length: Joi.number()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("طول الغرفة"),
+export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
+  // Image validation
+  images: Joi.array()
+    .items(
+      Joi.object({
+        path: Joi.any()
+          .required()
+          .custom((value, helpers) => {
+            // Existing validation logic for files
+            if (value instanceof File || value instanceof Blob) {
+              if (value.size < 256 * 1024) {
+                console.log(value.size, 256 * 1024);
+                return helpers.error("file.minSize", { limit: "256KB" });
+              }
+              if (value.size > 1024 * 1024) {
+                return helpers.error("file.maxSize", { limit: "1MB" });
+              }
+              if (!value.type.startsWith("image/")) {
+                return helpers.error("file.invalidType");
+              }
+            } else if (typeof value === "string" && !value) {
+              return helpers.error("any.required");
+            }
+            return value;
+          })
+          .messages(VALIDATION_MESSAGES),
+        mode: Joi.string().valid("edit", "delete").optional(),
+      }).unknown()
+    )
+    .custom((value, helpers) => {
+      // Filter out deleted images before counting
+      const activeImages = value?.filter((img: any) => img.mode !== "delete");
+
+      // Validate minimum count
+      if (activeImages?.length < 1) {
+        return helpers.error("array.min", { limit: 1 });
+      }
+
+      // Validate maximum count
+      if (activeImages?.length > 5) {
+        return helpers.error("array.max", { limit: 5 });
+      }
+
+      return value;
     })
-  ),
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الصور"),
 });
 
-export const roomInitailValues = {
-  type: undefined,
-  width: undefined,
-  length: undefined,
+export const PropertyImagesStepInitialValues: PropertyImagesStepType = {
+  images: [],
 };
-
-export const roomsStepInitialValues: RoomsStepType = {
-  rooms: [roomInitailValues],
-};
-
-// features step -----------------------------------------------------------
-
-const selectElementSchema = Joi.object({
-  value: Joi.string(),
-}).unknown();
-
-export type FeaturesStepType = {
-  rooms: {
-    type: { value: string } | undefined;
-    width: number | undefined;
-    length: number | undefined;
-  }[];
-  guestRoom: TOption[];
-  safty: TOption[];
-  hasPrivatePool: boolean;
-  privatePool: TOption[];
-  hasJaccuzi: boolean;
-  jaccuzi: TOption[];
-  facilities: TOption[];
-  bedroomDetailes: TOption[];
-  approvalInfo: TOption[];
-  view: TOption[];
-  stormProtiction: TOption[];
-  portInfo: TOption[];
-  terms: TOption[];
-};
-
-export const featuresStepSchema = Joi.object<FeaturesStepType>({
-  guestRoom: Joi.array()
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("غرف إضافية"),
-  safty: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("الأمان"),
-
-  hasPrivatePool: Joi.boolean(),
-  privatePool: Joi.when("hasPrivatePool", {
-    is: true,
-    then: Joi.array()
-      .items(selectElementSchema)
-      .min(1)
-      .messages(VALIDATION_MESSAGES)
-      .label("مسبح خاص"),
-    otherwise: Joi.array().messages(VALIDATION_MESSAGES).label("مسبح خاص"),
-  }),
-
-  hasJaccuzi: Joi.boolean(),
-  jaccuzi: Joi.when("hasJaccuzi", {
-    is: true,
-    then: Joi.array()
-      .items(selectElementSchema)
-      .min(1)
-      .messages(VALIDATION_MESSAGES)
-      .label("جاكوزي"),
-    otherwise: Joi.array().messages(VALIDATION_MESSAGES).label("جاكوزي"),
-  }),
-
-  facilities: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("الخدمات و المرافق"),
-  bedroomDetailes: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("تفاصيل غرف النوم"),
-  approvalInfo: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("معلومات الموافقة"),
-  view: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("الأطلالة"),
-  stormProtiction: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("الحماية من العواصف"),
-  portInfo: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("معلومات الميناء/القارب"),
-  terms: Joi.array()
-    .items(selectElementSchema)
-    .min(1)
-    .messages(VALIDATION_MESSAGES)
-    .label("الشروط"),
-
-  rooms: Joi.array().items(
-    Joi.object({
-      type: Joi.object({ value: Joi.string() })
-        .unknown()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("نوع الغرفة"),
-      width: Joi.number()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("عرض الغرفة"),
-      length: Joi.number()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("طول الغرفة"),
-    })
-  ),
-});
-
-export const featuresStepInitialValues = {
-  guestRoom: [],
-  safty: [],
-  hasPrivatePool: false,
-  privatePool: [],
-  hasJaccuzi: false,
-  jaccuzi: [],
-  facilities: [],
-  bedroomDetailes: [],
-  approvalInfo: [],
-  view: [],
-  stormProtiction: [],
-  portInfo: [],
-  terms: [],
-  rooms: [roomInitailValues],
-};
-
-// financial step -----------------------------------------------------------
-
-export type FinancialStepType = {
-  totalTaxBill: TNumber;
-  taxYear: TString;
-  taxAreaType: TOption;
-  taxDescription: TOption;
-  hoaDescription: TOption;
-  hoaPhone: TNumber;
-  mainHoaFee: TNumber;
-  mainHoaFeeFrequency: TOption;
-  hoaFee: TNumber;
-  hoaFeeFrequency: TOption;
-  mandatoryClubFee: TNumber;
-  mandatoryClubFeeFrequency: TOption;
-  apartmentFee: TNumber;
-  apartmentFeeFrequency: TOption;
-  recreationalRentalFee: TNumber;
-  recreationalRentalFeeFrequency: TOption;
-  specialAssessmentFee: TNumber;
-  specialAssessmentFeeFrequency: TOption;
-  otherFee: TNumber;
-  otherFeeFrequency: TOption;
-  mandatoryClubFeeOnce: TNumber;
-  landLeaseFeeOnce: TNumber;
-  recreationalRentalFeeOnce: TNumber;
-  otherFeeOnce: TNumber;
-  specialAssessmentFeeOnce: TNumber;
-  transferFee: TNumber;
-  applicationFee: TNumber;
-  annualFoodBeverageMinimum: TString;
-  numberOfLeasesPerYear: TNumber;
-  minimumLeaseDays: TNumber;
-  landLeaseFee: TNumber;
-  landLeaseFeeFrequency: TNumber;
-  subjectToFIRPTA: TString;
-  subjectToLease: TString;
-  leaseDescription: TString;
-  leaseExpirationDate: TString;
-  moreFinancialOptions: TOption[];
-  moreRestrictionsOptions: TOption[];
-};
-
-export const financialStepSchema = Joi.object<FinancialStepType>({
-  totalTaxBill: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("إجمالي الفاتورة الضريبية"),
-  taxYear: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("السنة الضريبية"),
-  taxAreaType: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("نوع منطقة الضرائب"),
-  taxDescription: optionSchema
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("وصف الضريبة"),
-  hoaDescription: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("وصف اتحاد الملاك"),
-  hoaPhone: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("هاتف اتحاد الملاك"),
-  mainHoaFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الرسوم الرئيسية لاتحاد الملاك"),
-  mainHoaFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار الرسوم الرئيسية لاتحاد الملاك"),
-  hoaFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم اتحاد الملاك (HOA)"),
-  hoaFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار رسوم اتحاد الملاك"),
-  mandatoryClubFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم النادي الإلزامية"),
-  mandatoryClubFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار رسوم النادي الإلزامية"),
-  apartmentFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم الشقة"),
-  apartmentFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار رسوم الشقة"),
-  recreationalRentalFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم الإيجار الترفيهي"),
-  recreationalRentalFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار رسوم الإيجار الترفيهي"),
-  specialAssessmentFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم التقييم الخاص"),
-  specialAssessmentFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار رسوم التقييم الخاص"),
-  otherFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم أخرى"),
-  otherFeeFrequency: optionSchema
-    .allow(null)
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار الرسوم الأخرى"),
-  mandatoryClubFeeOnce: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم النادي الإلزامي لمرة واحدة"),
-  landLeaseFeeOnce: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم تأجير الأرض لمرة واحدة"),
-  recreationalRentalFeeOnce: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم التأجير الترفيهي لمرة واحدة"),
-  otherFeeOnce: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم أخرى لمرة واحدة"),
-  specialAssessmentFeeOnce: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم التقييم الخاص لمرة واحدة"),
-  transferFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم التحويل"),
-  applicationFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم التقديم"),
-  annualFoodBeverageMinimum: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("الحد الأدنى السنوي للطعام والمشروبات"),
-  numberOfLeasesPerYear: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("عدد عقود الإيجار في السنة"),
-  minimumLeaseDays: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("الحد الأدنى لأيام الإيجار"),
-  landLeaseFee: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رسوم تأجير الأرض"),
-  landLeaseFeeFrequency: Joi.number()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("تكرار رسوم تأجير الأرض"),
-  subjectToFIRPTA: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("خاضع لقانون FIRPTA"),
-  subjectToLease: Joi.string()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("خاضع لعقد إيجار"),
-  leaseDescription: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("وصف عقد الإيجار"),
-  leaseExpirationDate: Joi.string()
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("تاريخ انتهاء عقد الإيجار"),
-  moreFinancialOptions: Joi.array()
-    .items(optionSchema)
-    .messages(VALIDATION_MESSAGES)
-    .label("مواصفات أخرى للرسوم المالية"),
-  moreRestrictionsOptions: Joi.array()
-    .items(optionSchema)
-    .messages(VALIDATION_MESSAGES)
-    .label("قيود أخرى"),
-});
-
-export const financialStepInitialValues: FinancialStepType = {
-  totalTaxBill: null,
-  taxYear: null,
-  taxAreaType: null,
-  taxDescription: null,
-  hoaDescription: null,
-  hoaPhone: null,
-  mainHoaFee: null,
-  mainHoaFeeFrequency: null,
-  hoaFee: null,
-  hoaFeeFrequency: null,
-  mandatoryClubFee: null,
-  mandatoryClubFeeFrequency: null,
-  apartmentFee: null,
-  apartmentFeeFrequency: null,
-  recreationalRentalFee: null,
-  recreationalRentalFeeFrequency: null,
-  specialAssessmentFee: null,
-  specialAssessmentFeeFrequency: null,
-  otherFee: null,
-  otherFeeFrequency: null,
-  mandatoryClubFeeOnce: null,
-  landLeaseFeeOnce: null,
-  recreationalRentalFeeOnce: null,
-  otherFeeOnce: null,
-  specialAssessmentFeeOnce: null,
-  transferFee: null,
-  applicationFee: null,
-  annualFoodBeverageMinimum: null,
-  numberOfLeasesPerYear: null,
-  minimumLeaseDays: null,
-  landLeaseFee: null,
-  landLeaseFeeFrequency: null,
-  subjectToFIRPTA: null,
-  subjectToLease: null,
-  leaseDescription: null,
-  leaseExpirationDate: null,
-  moreFinancialOptions: [],
-  moreRestrictionsOptions: [],
-};
-
-// compensation and listing offices step -----------------------------------------------------------
-export type CompensationAndListingOfficesStepType = {
-  individualAgentCommission: TNumber;
-  cooperativeBrokerCommission: TNumber;
-  nonCommissionedAmount: TNumber;
-  agentCommission: TNumber;
-  commissionDescription: TOption;
-  commissionAmount: TNumber;
-  ProbableShortSale: TNumber;
-  hasProbableShortSale: boolean;
-  internetSites: TOption;
-  listingInstructions: TOption;
-  listingDate: TString;
-  listingPhone: TString;
-  expirationDate: TString;
-  TypeInsertion: TOption;
-  TheSellerBeingContactedToArrangeThePresentation: boolean;
-  ThereASignOnThePropertyThatContainsContactInformationForTheSeller: boolean;
-  WillTheRealEstateAgentProvidePostContractServices: boolean;
-  WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation: boolean;
-  marketingAgentName: TString;
-  marketingAgentTitle: TString;
-  marketingAgentPhone: TNumber;
-  marketingAgentEmail: TString;
-  additionalOptions: TOption[];
-};
-
-export const compensationAndListingOfficesStepSchema =
-  Joi.object<CompensationAndListingOfficesStepType>({
-    individualAgentCommission: Joi.number()
-      .required()
-      .messages(VALIDATION_MESSAGES)
-      .label("عمولة الوكيل الفردي (%)"),
-    cooperativeBrokerCommission: Joi.number()
-      .required()
-      .messages(VALIDATION_MESSAGES)
-      .label("عمولة السمسار المتعاون (%)"),
-    agentCommission: Joi.number()
-      .required()
-      .messages(VALIDATION_MESSAGES)
-      .label("عمولة غير الممثل (%)"),
-    commissionAmount: Joi.number()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("مبلغ المكافأة (%)"),
-    commissionDescription: optionSchema
-      .allow(null)
-      .messages(VALIDATION_MESSAGES)
-      .label("وصف المكافأة"),
-
-    hasProbableShortSale: Joi.boolean(),
-    ProbableShortSale: Joi.when("hasProbableShortSale", {
-      is: true,
-      then: Joi.number()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("احتمال البيع المختصر ($/%)"),
-      otherwise: Joi.number()
-        .allow(null, "")
-        .messages(VALIDATION_MESSAGES)
-        .label("احتمال البيع المختصر ($/%)"),
-    }),
-
-    internetSites: optionSchema
-      .allow(null)
-      .messages(VALIDATION_MESSAGES)
-      .label("مواقع الانترنت"),
-    listingInstructions: optionSchema
-      .allow(null)
-      .messages(VALIDATION_MESSAGES)
-      .label("تعليمات العرض"),
-    listingDate: Joi.string()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("تاريخ الإدراج"),
-    listingPhone: Joi.string()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("هاتف موعد العرض"),
-    expirationDate: Joi.string()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("تاريخ الانتهاء"),
-    TypeInsertion: optionSchema
-      .allow(null)
-      .messages(VALIDATION_MESSAGES)
-      .label("نوع الإخراج"),
-    TheSellerBeingContactedToArrangeThePresentation: Joi.boolean()
-      .messages(VALIDATION_MESSAGES)
-      .label("هل يتم الاتصال بالبائع لترتيب العرض؟"),
-    ThereASignOnThePropertyThatContainsContactInformationForTheSeller:
-      Joi.boolean()
-        .messages(VALIDATION_MESSAGES)
-        .label("هل يوجد لافتة على العقار تحتوي على معلومات اتصال بالبائع؟"),
-    WillTheRealEstateAgentProvidePostContractServices: Joi.boolean()
-      .required()
-      .messages(VALIDATION_MESSAGES)
-      .label("هل سيقوم وسيط العقارات بأداء خدمات ما بعد العقد؟"),
-    WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation:
-      Joi.boolean()
-        .required()
-        .messages(VALIDATION_MESSAGES)
-        .label("هل سيكون وسيط العقارات متاحًا أثناء تقديم العقود والتفاوض؟"),
-    marketingAgentName: Joi.string()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("اسم وكيل التسوية"),
-    marketingAgentTitle: Joi.string()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("عنوان وكيل التسوية"),
-    marketingAgentPhone: Joi.number()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("رقم هاتف وكيل التسوية"),
-    marketingAgentEmail: Joi.string()
-      .allow(null, "")
-      .messages(VALIDATION_MESSAGES)
-      .label("البريد الإلكتروني لوكيل التسوية"),
-    additionalOptions: Joi.array()
-      .items(optionSchema)
-      .messages(VALIDATION_MESSAGES)
-      .label("خيارات إضافية"),
-  });
-
-export const compensationAndListingOfficesStepInitialValues: CompensationAndListingOfficesStepType =
-  {
-    individualAgentCommission: null,
-    cooperativeBrokerCommission: null,
-    nonCommissionedAmount: null,
-    agentCommission: null,
-    commissionDescription: null,
-    commissionAmount: null,
-    hasProbableShortSale: false,
-    ProbableShortSale: null,
-    internetSites: null,
-    listingInstructions: null,
-    listingDate: null,
-    listingPhone: null,
-    expirationDate: null,
-    TypeInsertion: null,
-    TheSellerBeingContactedToArrangeThePresentation: false,
-    ThereASignOnThePropertyThatContainsContactInformationForTheSeller: false,
-    WillTheRealEstateAgentProvidePostContractServices: false,
-    WillTheRealEstateAgentBeAvailableDuringTheContractSubmissionAndNegotiation:
-      false,
-    marketingAgentName: null,
-    marketingAgentTitle: null,
-    marketingAgentPhone: null,
-    marketingAgentEmail: null,
-    additionalOptions: [],
-  };
-
-// offices step -----------------------------------------------------------
-export const officesStepSchema = Joi.object({});
-
-export type OfficesStepType = {};
-
-export const officesStepInitialValues = {};
-
-// remarks step -----------------------------------------------------------
-export const remarksStepSchema = Joi.object({});
-
-export type RemarksStepType = {};
-
-export const remarksStepInitialValues = {};

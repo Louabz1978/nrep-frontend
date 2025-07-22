@@ -19,6 +19,7 @@ export type ColorPalette = {
   primaryFg: string;
   secondaryFg: string;
   quaternaryFg: string;
+  headerFg: string;
   inverseFg: string;
 
   /* status*/
@@ -57,6 +58,7 @@ export const defaultColorPalette: ColorPalette = {
   secondaryFg: "#000000",
   quaternaryFg: "#ffffff",
   inverseFg: "#ffffff",
+  headerFg: "#333333",
   success: "#34c759",
   error: "#c1272d",
   primaryBorder: "#333333",

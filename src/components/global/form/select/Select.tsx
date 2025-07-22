@@ -228,19 +228,19 @@ function Select<T extends FieldValues>({
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
-    <div className={`flex flex-col w-full max-w-full gap-[4px] ${addingStyle}`}>
+    <div className={`flex flex-col w-full max-w-full gap-xs ${addingStyle}`}>
       {/* select label  */}
       {label ? (
         <label
           htmlFor={name}
-          className={`text-size22 flex items-center gap-[16px] font-medium cursor-pointer ${labelStyle} ${
+          className={`text-size18 font-medium cursor-pointer ${labelStyle} ${
             isDisabled ? "text-placeholder" : " text-primary-fg"
           } transition-all`}
         >
-          <div>
+          <div className="flex items-center gap-sm">
             {label}
             {required && !isDisabled ? (
-              <span className="text-size24 text-error">{" *"}</span>
+              <span className="text-size18 text-error">{" *"}</span>
             ) : null}
           </div>
 
@@ -253,7 +253,7 @@ function Select<T extends FieldValues>({
       {/* select container to link choices list to its position */}
       <div
         ref={clickRef}
-        className={`relative w-full max-w-full flex items-center gap-[15px] ${addingSelectStyle}`}
+        className={`relative w-full max-w-full flex items-center gap-lg ${addingSelectStyle}`}
       >
         <div
           className={`flex-1 relative ${
@@ -263,9 +263,9 @@ function Select<T extends FieldValues>({
           {/* select */}
           <button
             type="button"
-            className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto h-[40px] text-[16.36px] ${
+            className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto h-5xl text-size16 ${
               isDisabled ? "bg-transparent" : "bg-input-bg"
-            } px-[12.72px] border-[1.64px] text-primary-fg rounded-[7.92px] outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+            } px-lg border-[1.5px] text-primary-fg rounded-lg outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
               isDisabled
                 ? "border-placeholder !cursor-not-allowed"
                 : getError(errors, name)
@@ -292,13 +292,13 @@ function Select<T extends FieldValues>({
                     (watch(name) as string)
                   )
                 ) : showValue ? (
-                  <div className="flex flex-1 overflow-auto items-center gap-[8px]">
+                  <div className="flex flex-1 overflow-auto items-center gap-md">
                     {(watch(name) as Record<string, ReactNode>[]).map(
                       (ele: Record<string, ReactNode>, index: number) => {
                         return (
                           <div
                             key={index}
-                            className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
+                            className="py-xxs group px-md flex items-center gap-xs rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
                           >
                             {ele[showValue]}
 
@@ -320,13 +320,13 @@ function Select<T extends FieldValues>({
                     )}
                   </div>
                 ) : (
-                  <div className="flex flex-1 items-center overflow-auto gap-[8px]">
+                  <div className="flex flex-1 items-center overflow-auto gap-md">
                     {(watch(name) as string[]).map(
                       (ele: string, index: number) => {
                         return (
                           <div
                             key={index}
-                            className="py-[2px] group px-[10px] flex items-center gap-[4px] rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
+                            className="py-xxs group px-lg flex items-center gap-xs rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
                           >
                             {ele}
 
@@ -393,16 +393,16 @@ function Select<T extends FieldValues>({
           <div
             className={`bg-tertiary-bg/65 backdrop-blur-[15px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
               isOpen
-                ? "h-[240px] overflow-auto py-1 pt-0"
+                ? "h-[240px] overflow-auto py-xs pt-0"
                 : "h-0 overflow-hidden"
-            } transition-all flex flex-col gap-1 px-1 shadow-md `}
+            } transition-all flex flex-col gap-xs px-xs shadow-md `}
           >
-            <div className="bg-tertiary-bg/65 backdrop-blur-[15px] pt-2 z-[2] sticky top-0">
+            <div className="bg-tertiary-bg/65 backdrop-blur-[15px] pt-md z-[2] sticky top-0">
               <input
                 type="text"
                 id={`select_${name}_search_${formId}`}
                 // autoFocus={true}
-                className="w-full text-size16 outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-2 px-3 border-solid border border-border text-primary-fg/90 rounded-[3px]"
+                className="w-full text-size16 outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-sm px-lg border-solid border border-border text-primary-fg/90 rounded-sm"
                 placeholder="بحث..."
                 value={searchTerm}
                 onChange={(e) => {
@@ -419,7 +419,7 @@ function Select<T extends FieldValues>({
               />
             </div>
 
-            <div className="h-full overflow-auto  text-size16 flex flex-col gap-[8px]">
+            <div className="h-full overflow-auto  text-size16 flex flex-col gap-md">
               {isError ? (
                 <ErrorComponent />
               ) : isLoading ? (
@@ -476,7 +476,7 @@ function Select<T extends FieldValues>({
                                 key
                               );
                           }}
-                          className={`py-2 px-3 flex items-center cursor-pointer group relative ${
+                          className={`py-md px-lg flex items-center cursor-pointer group relative ${
                             focusedChoose == key
                               ? "border-solid border border-primary"
                               : "border-solid border border-transparent"
@@ -502,10 +502,7 @@ function Select<T extends FieldValues>({
 
         {/* pseudo div to scroll to it when open the select to show the whole options section body on screen */}
         {isOpen ? (
-          <div
-            ref={ref}
-            className="absolute top-[280px] h-[10px] w-[10px]"
-          ></div>
+          <div ref={ref} className="absolute top-[280px] h-lg w-lg"></div>
         ) : null}
 
         {/* adding element */}
@@ -514,9 +511,10 @@ function Select<T extends FieldValues>({
         {/* beside element */}
         {info ? <Info info={info} /> : null}
       </div>
+
       {/* validation errors  */}
       {getError(errors, name) ? (
-        <span className="text-error font-medium text-size16">
+        <span className="text-error font-medium text-size14">
           {(getError(errors, name) as { message: string })?.message}
         </span>
       ) : null}
