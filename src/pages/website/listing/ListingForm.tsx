@@ -107,7 +107,7 @@ function ListingForm({ defaultValues }: ListingFormProps) {
       },
     ],
 
-    [generalStep, additionalInfoStep, locationStep, propertyImagesStep]
+    [generalStep, additionalInfoStep, locationStep]
   );
 
   // handle submit all form steps

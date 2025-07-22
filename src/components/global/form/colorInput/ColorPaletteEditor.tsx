@@ -20,7 +20,7 @@ export const ColorPaletteEditor = () => {
         value
       );
     });
-  }, []);
+  }, [palette]);
 
   const handleReset = () => {
     setPalette(defaultColorPalette);
