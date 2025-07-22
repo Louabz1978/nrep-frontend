@@ -4,7 +4,9 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 function Home() {
   return (
     <AnimateContainer>
-      <PageContainer>home</PageContainer>
+      <PageContainer>
+        <div>home</div>
+      </PageContainer>
     </AnimateContainer>
   );
 }
