@@ -11,6 +11,7 @@ import ListingLogic from "./pages/website/listing/ListingLogic";
 import PrivateRoute from "./utils/privateRoute";
 import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 import TestTable from "./pages/website/testTable/TestTable";
+import PropertyDetails from "@/pages/website/propertyDetails/PropertyDetails";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
       {
         path: "nine",
         element: <>nine</>,
+      },
+      {
+        path: "property-details",
+        element: <PropertyDetails />,
       },
     ],
   },
