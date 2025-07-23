@@ -63,20 +63,20 @@ function Textarea<T extends FieldValues>({
         {label ? (
           <label
             htmlFor={name}
-            className={`text-size22 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
+            className={`text-size18 font-medium text-primary-fg cursor-pointer ${labelStyle}`}
           >
-            <div>
+            <div className="flex items-center gap-sm">
               {label}
               {required ? (
-                <span className="text-size22 text-error">{" *"}</span>
+                <span className="text-size18 text-error">{" *"}</span>
               ) : null}
             </div>
           </label>
         ) : null}
 
-        <div className="w-full flex flex-col gap-[4px]">
+        <div className="w-full flex flex-col gap-xs">
           {/* input container to link icon to its position */}
-          <div className="relative flex items-center gap-[15px]">
+          <div className="relative flex items-center gap-lg">
             <div className="relative flex-1 flex items-center overflow-hidden">
               {/* input with react hook form register control  */}
               {
@@ -85,7 +85,7 @@ function Textarea<T extends FieldValues>({
                   id={name}
                   {...(register ? register(name) : {})}
                   disabled={disabled}
-                  className={`flex-1 h-[166px] text-[16.36px] bg-input-bg p-[12.72px] border-[1.64px] text-primary-fg rounded-[13.92px] overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+                  className={`flex-1 h-[166px] text-size16 bg-input-bg p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                     getError(errors, name)
                       ? "border-error"
                       : `${
@@ -110,7 +110,7 @@ function Textarea<T extends FieldValues>({
 
           {/* validation errors  */}
           {getError(errors, name) ? (
-            <span className="text-error font-medium text-size16">
+            <span className="text-error font-medium text-size14">
               {(getError(errors, name) as { message: string })?.message}
             </span>
           ) : null}

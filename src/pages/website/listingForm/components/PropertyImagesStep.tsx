@@ -43,7 +43,7 @@ const PropertyImagesStep = ({
           <div className="flex flex-col gap-3xl">
             <FormSectionHeader>صور العقار</FormSectionHeader>
 
-            <ImagesInput form={form} name={"images"} required />
+            <ImagesInput form={form} name={"photos"} required />
             <div className="flex justify-center md:items-center flex-col text-error font-normal">
               <p className="text-start">
                 ملاحظة : الحد الأعلى لرفع صور العقار في هذه النافذة 5 صور ,

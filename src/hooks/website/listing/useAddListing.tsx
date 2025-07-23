@@ -4,12 +4,16 @@ import QUERY_KEYS from "@/data/global/queryKeys";
 import type { ListingFormType } from "@/data/website/schema/ListingFormSchema";
 import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 // import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 
 export const useAddListings = () => {
   // query client to manage invalidating
   const queryClient = useQueryClient();
+
+  // navigate method
+  const navigate = useNavigate();
 
   // handle add listing
   const addListing = useMutation({
@@ -19,6 +23,9 @@ export const useAddListings = () => {
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.query] })
         .catch(console.error);
+
+      // navigate to all listings page
+      navigate("/listing/all-listings");
     },
   });
 
@@ -30,6 +37,17 @@ export const useAddListings = () => {
     // preparing data to submit
     const data = {
       ...(submitData ?? {}),
+      country: submitData?.country?.value,
+      county: submitData?.country?.value,
+      area: submitData?.area_space,
+      city: submitData?.city?.value,
+      property_type: submitData?.property_type?.value,
+      status: submitData?.status?.value,
+      waterLine: submitData?.waterLine?.value,
+      photos: submitData?.photos?.map(
+        (item) => (item as { path: string })?.path
+      ),
+      owner_id: 13,
     };
 
     // toaster

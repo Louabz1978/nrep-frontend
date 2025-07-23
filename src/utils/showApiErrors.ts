@@ -3,7 +3,7 @@ import type { AxiosError } from "axios";
 // handle error messages returned from backend, gets: error response, returns: errors messages notifications
 export function showApiErrors(
   error: AxiosError & { SHOW_NETWORK_ERROR: boolean } & {
-    response: { data: { detail: { msg: string }[] } };
+    response: { data: { detail: { msg: string }[] | string } };
   }
 ) {
   console.log({ error });
@@ -17,7 +17,11 @@ export function showApiErrors(
     } else if (error?.response?.status == 404) {
       return "المحتوى المطلوب غير موجود";
     } else {
-      return error?.response?.data?.detail?.[0]?.msg ?? "عذراً حدث خطأ ما";
+      return (
+        (typeof error?.response?.data?.detail == "string"
+          ? error?.response?.data?.detail
+          : error?.response?.data?.detail?.[0]?.msg) ?? "عذراً حدث خطأ ما"
+      );
     }
   } catch (err) {
     console.log(err);

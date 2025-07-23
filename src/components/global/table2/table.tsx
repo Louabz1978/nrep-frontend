@@ -263,6 +263,7 @@ export function DataTable<TData, TValue, TRow>({
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => onRowClick?.(row as TRow)}
                     className={cn(
+                      "!border-b border-secondary",
                       onRowClick ? "cursor-pointer" : "",
                       selectedRows?.find(
                         (ele) =>

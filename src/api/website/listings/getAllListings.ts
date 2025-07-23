@@ -1,7 +1,9 @@
 import axiosClient from "@/libs/axios/axios-client";
+import type { AxiosRes } from "@/types/global/axios";
 import type {
   getAllListingsProps,
   getAllListingsResult,
+  Listing,
 } from "@/types/website/listings";
 
 // get listing list api call function,
@@ -10,7 +12,7 @@ import type {
 async function getAllListings({
   queryParams,
 }: getAllListingsProps): getAllListingsResult {
-  const res = await axiosClient.get(`property`, {
+  const res = await axiosClient.get<AxiosRes<Listing[]>>(`property`, {
     params: {
       ...queryParams,
       page: queryParams?.page ?? 1,

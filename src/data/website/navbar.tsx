@@ -20,14 +20,14 @@ export const tabs: TabsType = [
     icon: BsBuildingFillAdd,
   },
   {
-    label: "قائمتي",
+    label: "العقارات",
     permission: ["Add Item"],
     icon: FaList,
     submenu: [
       {
-        label: "subTabA",
+        label: "كل العقارات",
         permission: [],
-        to: "one",
+        to: "/listing/all-listings",
       },
       {
         label: "subTabB",
@@ -46,27 +46,6 @@ export const tabs: TabsType = [
           {
             label: "subtab6",
             to: "six",
-            permission: [],
-          },
-        ],
-      },
-      {
-        label: "subTabC",
-        permission: [],
-        submenu: [
-          {
-            label: "subtab7",
-            to: "seven",
-            permission: [],
-          },
-          {
-            label: "subtab8",
-            to: "eight",
-            permission: [],
-          },
-          {
-            label: "subtab9",
-            to: "nine",
             permission: [],
           },
         ],

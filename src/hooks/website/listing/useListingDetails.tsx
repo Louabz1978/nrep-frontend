@@ -12,7 +12,7 @@ function useListingDetails(id: number) {
   });
 
   // final data
-  const listingDetails = listingDetailsQuery?.data?.data;
+  const listingDetails = listingDetailsQuery?.data;
 
   return {
     listingDetailsQuery,

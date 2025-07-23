@@ -6,7 +6,8 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import { cityChoices, PROPERTYTYPE, STATUS } from "@/data/global/select";
+import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
+import Textarea from "@/components/global/form/textarea/Textarea";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -79,7 +80,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             choices={cityChoices}
             keyValue="value"
             showValue="label"
-            name="county"
+            name="country"
             info="يرجى اختيار المحافظة التي يقع فيها العقار"
             required
           />
@@ -106,7 +107,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="نوع العقار"
             placeholder="اختر نوع العقار"
-            choices={PROPERTYTYPE}
+            choices={PROPERTY_TYPE}
             keyValue="value"
             showValue="label"
             name="property_type"
@@ -187,6 +188,15 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             showValue="label"
             name="status"
             info="يرجى اختيار حالة العقار (جديد، مستخدم، ...)"
+            required
+          />
+          <Textarea
+            form={form}
+            label="وصف العقار"
+            placeholder="أدخل وصف العقار"
+            name="description"
+            info="يرجى إدخال وصف العقار"
+            addingStyle="md:col-span-2"
             required
           />
         </div>
