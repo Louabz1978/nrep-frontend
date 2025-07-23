@@ -13,12 +13,14 @@ interface PropertyImagesStepProps {
   form: UseFormReturn<PropertyImagesStepType>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   handleSubmitForm: () => void;
+  disabled: boolean;
 }
 
 const PropertyImagesStep = ({
   form,
   setCurrentStep,
   handleSubmitForm,
+  disabled,
 }: PropertyImagesStepProps) => {
   // extract form utils
   const { handleSubmit } = form;
@@ -41,7 +43,7 @@ const PropertyImagesStep = ({
           <div className="flex flex-col gap-3xl">
             <FormSectionHeader>صور العقار</FormSectionHeader>
 
-            <ImagesInput form={form} name={"images"} required />
+            <ImagesInput form={form} name={"photos"} required />
             <div className="flex justify-center md:items-center flex-col text-error font-normal">
               <p className="text-start">
                 ملاحظة : الحد الأعلى لرفع صور العقار في هذه النافذة 5 صور ,
@@ -61,6 +63,7 @@ const PropertyImagesStep = ({
             title="إرسال"
             id={"images_step_form"}
             icon={<PiPaperPlaneRightFill className="rotate-180" />}
+            disabled={disabled}
           />
         </div>
       </form>

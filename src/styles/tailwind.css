@@ -74,15 +74,16 @@
   /* color pallet */
   --primary: #005bbb;
   --secondary: #a3d3f5;
-  
+
   /* backgrounds */
   --primary-bg: #e5e5e5;
   --secondary-bg: #d1d1d6;
   --tertiary-bg: #ffffff;
   --quaternary-bg: #333333;
   --quinary-bg: #ada7a7;
-  --senary-bg: #1c2026; 
+  --senary-bg: #1c2026;
   --popup-bg: #14191e;
+  --digital-green-bg :#6CBF84;
 
   /* foreground */
   --primary-fg: #333333;
@@ -94,6 +95,20 @@
   /* status*/
   --success: #34c759;
   --error: #c1272d;
+
+    /* general colors */
+  --yellow: #ffb400;
+  --blue: #3761e9;
+  --sky: #039be5;
+  --purple: #a447bf;
+  --green: #219653;
+  --violet: #7a4cd9;
+  --pink: #ec407a;
+  --grey: #97a3b0;
+  --orange: #ff5722;
+  --red: #e73d4a;
+  --light-pink: #fbe1e3;
+  --brand: #5867dd;
 
   /* borders */
   --primary-border: #333333;
@@ -131,8 +146,10 @@
   --tertiary-bg: #ffffff;
   --quaternary-bg: #333333;
   --quinary-bg: #ada7a7;
-  --senary-bg: #1c2026; 
+  --senary-bg: #1c2026;
   --popup-bg: #14191e;
+  --digital-green-bg :#6CBF84;
+  --table-bg : #000000
 
   /* foreground */
   --primary-fg: #333333;
@@ -145,11 +162,26 @@
   --success: #34c759;
   --error: #c1272d;
 
+    /* general colors */
+  --yellow: #ffb400;
+  --blue: #3761e9;
+  --sky: #039be5;
+  --purple: #a447bf;
+  --green: #219653;
+  --violet: #7a4cd9;
+  --pink: #ec407a;
+  --grey: #97a3b0;
+  --orange: #ff5722;
+  --red: #e73d4a;
+  --light-pink: #fbe1e3;
+  --brand: #5867dd;
+
   /* borders */
   --primary-border: #333333;
   --secondary-border: #ada7a7;
   --tertiary-border: #d9d9d9;
   --quaternary-border: #828282;
+  --pentagon-border:#ADA7A7;
 
   /* input */
   --input-bg: #ffffff;
@@ -239,7 +271,6 @@
   /* color pallet */
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
-
   /* backgrounds */
   --color-primary-bg: var(--primary-bg);
   --color-secondary-bg: var(--secondary-bg);
@@ -248,6 +279,9 @@
   --color-quinary-bg: var(--quinary-bg);
   --color-senary-bg: var(--senary-bg);
   --color-popup-bg: var(--popup-bg);
+  --color-digital-green-bg: var(  --digital-green-bg);
+  --color-table-bg: var(--table-bg);
+
 
   /* foreground */
   --color-primary-fg: var(--primary-fg);
@@ -260,11 +294,26 @@
   --color-success: var(--success);
   --color-error: var(--error);
 
+  /* general colors */
+    --color-blue: var(--blue);
+  --color-sky: var(--sky);
+  --color-yellow: var(--yellow);
+  --color-purple: var(--purple);
+  --color-green: var(--green);
+  --color-violet: var(--violet);
+  --color-pink: var(--pink);
+  --color-grey: var(--grey);
+  --color-orange: var(--orange);
+  --color-red: var(--red);
+  --color-light-pink: var(--light-pink);
+  --color-brand: var(--brand);
+
   /* borders */
   --color-primary-border: var(--primary-border);
   --color-secondary-border: var(--secondary-border);
   --color-tertiary-border: var(--tertiary-border);
   --color-quaternary-border: var(--quaternary-border);
+  --color-input-border:var(--pentagon-border);
 
   /* input */
   --color-input-bg: var(--input-bg);

@@ -1,13 +1,16 @@
-import { createBrowserRouter, Link } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "./layouts/admin/AdminLayout";
 import WebsiteLayout from "./layouts/website/WebsiteLayout";
 import GlobalLayout from "./layouts/global/GlobalLayout";
 import LoginLogic from "@/pages/global/login/LoginLogic";
 import InputLogic from "./pages/website/Input/InputLogic";
 import PrivateRoute from "./utils/privateRoute";
-import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 import TestTable from "./pages/website/testTable/TestTable";
-import AddListingLogic from "./pages/website/listing/AddListingLogic";
+import AddListingIndex from "./pages/website/listingForm/AddListingIndex";
+import EditListingIndex from "./pages/website/listingForm/EditListingIndex";
+import AllListings from "./pages/website/allListings.tsx/AllListings";
+import Home from "./pages/website/home/Home";
+import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -33,7 +36,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Link to={"/test-table"}>Click here to see table</Link>,
+        element: <Home />,
       },
       {
         path: "test-table",
@@ -44,49 +47,22 @@ const router = createBrowserRouter([
         element: <InputLogic />,
       },
       {
+        path: "listing/all-listings",
+        element: <AllListings />,
+      },
+      {
+        path: "listing/details/:id",
+        element: <ListingDetailsIndex />,
+      },
+      {
         path: "listing/add",
-        element: <AddListingLogic />,
+        element: <AddListingIndex />,
       },
       {
-        path: "color",
-        element: <ColorPaletteEditor />,
+        path: "listing/edit/:id",
+        element: <EditListingIndex />,
       },
-      {
-        path: "one",
-        element: <>one</>,
-      },
-      {
-        path: "two",
-        element: <>two</>,
-      },
-      {
-        path: "three",
-        element: <>three</>,
-      },
-      {
-        path: "four",
-        element: <>four</>,
-      },
-      {
-        path: "five",
-        element: <>five</>,
-      },
-      {
-        path: "six",
-        element: <>six</>,
-      },
-      {
-        path: "seven",
-        element: <>seven</>,
-      },
-      {
-        path: "eight",
-        element: <>eight</>,
-      },
-      {
-        path: "nine",
-        element: <>nine</>,
-      },
+
     ],
   },
   // specific pages that require the user without token

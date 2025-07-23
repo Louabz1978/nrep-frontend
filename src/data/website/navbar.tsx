@@ -2,6 +2,7 @@ import type { PermissionsType } from "@/stores/useUser";
 import type { IconType } from "react-icons/lib";
 import { BsBuildingFillAdd } from "react-icons/bs";
 import { FaList } from "react-icons/fa6";
+import { PiHouseBold } from "react-icons/pi";
 
 export type TabType = {
   label: string;
@@ -14,20 +15,26 @@ type TabsType = TabType[];
 
 export const tabs: TabsType = [
   {
+    label: "الرئيسية",
+    to: "/",
+    permission: ["Add Item"],
+    icon: PiHouseBold,
+  },
+  {
     label: "إدخال",
     to: "/input",
     permission: ["Add Item"],
     icon: BsBuildingFillAdd,
   },
   {
-    label: "قائمتي",
+    label: "العقارات",
     permission: ["Add Item"],
     icon: FaList,
     submenu: [
       {
-        label: "subTabA",
+        label: "كل العقارات",
         permission: [],
-        to: "one",
+        to: "/listing/all-listings",
       },
       {
         label: "subTabB",
@@ -46,27 +53,6 @@ export const tabs: TabsType = [
           {
             label: "subtab6",
             to: "six",
-            permission: [],
-          },
-        ],
-      },
-      {
-        label: "subTabC",
-        permission: [],
-        submenu: [
-          {
-            label: "subtab7",
-            to: "seven",
-            permission: [],
-          },
-          {
-            label: "subtab8",
-            to: "eight",
-            permission: [],
-          },
-          {
-            label: "subtab9",
-            to: "nine",
             permission: [],
           },
         ],

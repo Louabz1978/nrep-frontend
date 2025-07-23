@@ -1,6 +1,8 @@
 const QUERY_KEYS = {
   listings: {
-    resources: "listingsResources",
+    query: "listings-query",
+    details: "listings-details",
+    resources: "listings-resources",
   },
 };
 

@@ -13,9 +13,9 @@ export type GeneralStepType = {
   street: TString;
   floor: TNumber;
   apt: TNumber;
-  county: TOption;
+  country: TOption;
   city: TOption;
-  district: TString;
+  area: TString;
   property_type: TOption;
   area_space: TNumber;
   bedrooms: TNumber;
@@ -25,6 +25,7 @@ export type GeneralStepType = {
   buyer_realtor_commission: TNumber;
   year_built: TNumber;
   status: TOption;
+  description: TString;
 };
 
 export const generalStepSchema = Joi.object<GeneralStepType>({
@@ -37,16 +38,13 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشارع"),
   floor: Joi.number().required().messages(VALIDATION_MESSAGES).label("الطابق"),
-  apt: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("رقم الشقة"),
-  county: optionSchema
+  apt: Joi.number().required().messages(VALIDATION_MESSAGES).label("رقم الشقة"),
+  country: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
   city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
-  district: Joi.string()
+  area: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الحي/المنطقة"),
@@ -80,6 +78,10 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .messages(VALIDATION_MESSAGES)
     .label("سنة البناء"),
   status: optionSchema.required().messages(VALIDATION_MESSAGES).label("الحالة"),
+  description: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("وصف العقار"),
 });
 
 export const generalStepInitialValues: GeneralStepType = {
@@ -87,9 +89,9 @@ export const generalStepInitialValues: GeneralStepType = {
   street: null,
   floor: null,
   apt: null,
-  county: null,
+  country: null,
   city: null,
-  district: null,
+  area: null,
   property_type: null,
   area_space: null,
   bedrooms: null,
@@ -99,6 +101,7 @@ export const generalStepInitialValues: GeneralStepType = {
   buyer_realtor_commission: null,
   year_built: null,
   status: null,
+  description: null,
 };
 
 // additional info step -----------------------------------------------------------
@@ -107,7 +110,7 @@ export type AdditionalInfoStepType = {
   balcony: TNumber;
   hasFans: boolean;
   fans: TNumber;
-  waterLine: TString;
+  waterLine: TOption;
   // Individual boolean fields for additional options
   elevator: boolean;
   ac: boolean;
@@ -143,7 +146,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
     .allow(null)
     .messages(VALIDATION_MESSAGES)
     .label("خط المياه الواصل للعقار"),
-  
+
   // Additional options as boolean fields
   elevator: Joi.boolean().default(false),
   ac: Joi.boolean().default(false),
@@ -176,7 +179,7 @@ export type LocationStepType = {
   landDimensionsSource: TString;
   latitude: TNumber;
   longitude: TNumber;
-  address: TString; 
+  address: TString;
 };
 
 export const LocationStepSchema = Joi.object<LocationStepType>({
@@ -199,7 +202,7 @@ export const LocationStepSchema = Joi.object<LocationStepType>({
   address: Joi.string()
     .allow("")
     .messages(VALIDATION_MESSAGES)
-    .label("العنوان"), 
+    .label("العنوان"),
 });
 
 export const LocationStepInitialValues: LocationStepType = {
@@ -207,17 +210,17 @@ export const LocationStepInitialValues: LocationStepType = {
   landDimensionsSource: null,
   latitude: null,
   longitude: null,
-  address: null
+  address: null,
 };
 
 // property images step --------------------------------------------------------------
 export type PropertyImagesStepType = {
-  images: [];
+  photos: { id: number; path: any; mode: string }[];
 };
 
 export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
   // Image validation
-  images: Joi.array()
+  photos: Joi.array()
     .items(
       Joi.object({
         path: Joi.any()
@@ -266,5 +269,11 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
 });
 
 export const PropertyImagesStepInitialValues: PropertyImagesStepType = {
-  images: [],
+  photos: [],
 };
+
+// listing form type
+export type ListingFormType = GeneralStepType &
+  AdditionalInfoStepType &
+  LocationStepType &
+  PropertyImagesStepType;

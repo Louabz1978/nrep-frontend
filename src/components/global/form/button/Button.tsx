@@ -27,7 +27,7 @@ const buttonVariants = cva(
         "ghost-light":
           "font-medium !text-13p py-9p px-16p bg-transparent text-foreground-secondary hover:bg-background-hover rounded-xs",
         panel:
-          "font-medium !text-13p py-9p px-16p bg-top-panel-button text-top-panel-button-foreground hover:brightness-95 rounded-[7px]",
+          "font-medium !text-13p py-md px-lg bg-primary-bg text-primary-fg hover:brightness-95 rounded-[7px]",
         radio:
           "w-[180px] h-[40px] rounded-full py-[13px] px-[30px] bg-quinary-bg text-inverse-fg",
         "table-filter":

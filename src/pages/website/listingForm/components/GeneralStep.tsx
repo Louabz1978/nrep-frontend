@@ -6,7 +6,8 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import { cityChoices, PROPERTYTYPE, STATUS } from "@/data/global/select";
+import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
+import Textarea from "@/components/global/form/textarea/Textarea";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -37,6 +38,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             type="number"
             label="رقم البناء"
+            numberRegex={/^\d*$/}
             placeholder="أدخل رقم البناء"
             name="building_num"
             info="يرجى إدخال رقم البناء كما هو موضح في العنوان الرسمي"
@@ -55,6 +57,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             type="number"
             label="الطابق"
+            numberRegex={/^\d*$/}
             placeholder="أدخل رقم الطابق"
             name="floor"
             info="يرجى إدخال رقم الطابق الذي يقع فيه العقار"
@@ -63,6 +66,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
+            numberRegex={/^\d*$/}
             label="رقم الشقة"
             placeholder="أدخل رقم الشقة"
             name="apt"
@@ -76,7 +80,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             choices={cityChoices}
             keyValue="value"
             showValue="label"
-            name="county"
+            name="country"
             info="يرجى اختيار المحافظة التي يقع فيها العقار"
             required
           />
@@ -95,7 +99,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="الحي/المنطقة"
             placeholder="اختر الحي أو المنطقة"
-            name="district"
+            name="area"
             info="يرجى اختيار الحي أو المنطقة التي يقع فيها العقار"
             required
           />
@@ -103,7 +107,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="نوع العقار"
             placeholder="اختر نوع العقار"
-            choices={PROPERTYTYPE}
+            choices={PROPERTY_TYPE}
             keyValue="value"
             showValue="label"
             name="property_type"
@@ -168,6 +172,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
+            numberRegex={/^\d*$/}
             label="سنة البناء"
             placeholder="أدخل سنة البناء"
             name="year_built"
@@ -183,6 +188,15 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             showValue="label"
             name="status"
             info="يرجى اختيار حالة العقار (جديد، مستخدم، ...)"
+            required
+          />
+          <Textarea
+            form={form}
+            label="وصف العقار"
+            placeholder="أدخل وصف العقار"
+            name="description"
+            info="يرجى إدخال وصف العقار"
+            addingStyle="md:col-span-2"
             required
           />
         </div>
