@@ -181,6 +181,7 @@
   --secondary-border: #ada7a7;
   --tertiary-border: #d9d9d9;
   --quaternary-border: #828282;
+  --pentagon-border:#ADA7A7;
 
   /* input */
   --input-bg: #ffffff;
@@ -270,7 +271,6 @@
   /* color pallet */
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
-
   /* backgrounds */
   --color-primary-bg: var(--primary-bg);
   --color-secondary-bg: var(--secondary-bg);
@@ -313,6 +313,7 @@
   --color-secondary-border: var(--secondary-border);
   --color-tertiary-border: var(--tertiary-border);
   --color-quaternary-border: var(--quaternary-border);
+  --color-input-border:var(--pentagon-border);
 
   /* input */
   --color-input-bg: var(--input-bg);

@@ -215,7 +215,7 @@ export const LocationStepInitialValues: LocationStepType = {
 
 // property images step --------------------------------------------------------------
 export type PropertyImagesStepType = {
-  photos: { id: number; path: any }[];
+  photos: { id: number; path: any; mode: string }[];
 };
 
 export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
