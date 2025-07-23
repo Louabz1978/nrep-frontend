@@ -32,7 +32,7 @@ function EditListingIndex() {
               apt: listingDetails?.address.apt
                 ? Number(listingDetails?.address.apt)
                 : undefined,
-              district: listingDetails?.address.area, // Assuming 'area' maps to 'district'
+              area: listingDetails?.address.area, // Assuming 'area' maps to 'district'
               area_space: listingDetails?.area_space,
               bedrooms: listingDetails?.bedrooms,
               bathrooms: listingDetails?.bathrooms,

@@ -10,11 +10,9 @@ import createFormData from "@/utils/createFormData";
 async function createListing({
   data,
 }: createListingProps): createListingResult {
-  const formData = createFormData({ photos: data?.photos });
+  const formData = createFormData(data);
 
-  const res = await axiosClient.post(`property`, formData, {
-    params: data,
-  });
+  const res = await axiosClient.post(`property`, formData);
 
   return res?.data;
 }

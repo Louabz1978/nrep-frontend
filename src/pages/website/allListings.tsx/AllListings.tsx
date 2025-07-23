@@ -58,13 +58,14 @@ function AllListings() {
       },
       {
         id: "mls_num",
+        accessorKey: "mls_num",
         header: "رقم العقار",
         cell: ({ row }) => (
           <Link
             to={`/listing/details/${row?.original?.property_id}`}
             className="hover:text-primary"
           >
-            {row?.original?.mls_num ?? row?.original?.property_id}
+            {row?.original?.mls_num}
           </Link>
         ),
       },
