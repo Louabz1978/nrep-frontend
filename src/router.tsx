@@ -62,6 +62,7 @@ const router = createBrowserRouter([
         path: "listing/edit/:id",
         element: <EditListingIndex />,
       },
+
     ],
   },
   // specific pages that require the user without token
