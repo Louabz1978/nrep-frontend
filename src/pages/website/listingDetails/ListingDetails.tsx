@@ -299,7 +299,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
         className="flex justify-between w-full mt-10 gap-xl"
       >
         <div onClick={handleNavigate}>
-          <PreviouseButton />
+          <PreviouseButton س/>
         </div>
         <Button className="text-white bg-digital-green-bg border-none">طباعة التفاصيل  PDF</Button>
       </div>
