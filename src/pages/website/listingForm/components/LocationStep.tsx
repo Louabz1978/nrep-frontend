@@ -53,20 +53,18 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
   ]);
   const [isSatelliteView, setIsSatelliteView] = useState(false);
   const [isManualMode, setIsManualMode] = useState(false);
-  const [address, setAddress] = useState<string>("");
 
   // fetch address from coordinates
   const fetchAddress = async (lat: number, lng: number) => {
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ar`
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=en`
       );
       const data = await response.json();
       const fetchedAddress = data.display_name || "";
-      setAddress(fetchedAddress);
       setValue("address", fetchedAddress); // set in form
     } catch (error) {
-      setAddress("");
+      console.log(error);
       setValue("address", "");
     }
   };
@@ -160,7 +158,12 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
   const latitude = watch("latitude");
   const longitude = watch("longitude");
   useEffect(() => {
-    if (latitude && longitude && !isNaN(Number(latitude)) && !isNaN(Number(longitude))) {
+    if (
+      latitude &&
+      longitude &&
+      !isNaN(Number(latitude)) &&
+      !isNaN(Number(longitude))
+    ) {
       setMarkerPosition([Number(latitude), Number(longitude)]);
       fetchAddress(Number(latitude), Number(longitude));
     }
@@ -179,7 +182,7 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
             <FormSectionHeader>معلومات الموقع</FormSectionHeader>
 
             {/* map */}
-            <div className="flex flex-col lg:gap-5xl gap-2xl lg:px-[150px] px-0">
+            <div className="flex relative z-[1] flex-col lg:gap-5xl gap-2xl lg:px-[150px] px-0">
               {/* map view */}
               <div className="w-full flex justify-center items-center">
                 <div className="w-full h-[480px] flex items-center justify-center">

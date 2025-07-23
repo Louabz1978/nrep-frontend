@@ -2,7 +2,9 @@ import type { AxiosError } from "axios";
 
 // handle error messages returned from backend, gets: error response, returns: errors messages notifications
 export function showApiErrors(
-  error: AxiosError & { SHOW_NETWORK_ERROR: boolean }
+  error: AxiosError & { SHOW_NETWORK_ERROR: boolean } & {
+    response: { data: { detail: { msg: string }[] | string } };
+  }
 ) {
   console.log({ error });
   try {
@@ -13,9 +15,13 @@ export function showApiErrors(
     else if (error?.response?.status == 500) {
       return "حدثت مشكلة في السيرفر";
     } else if (error?.response?.status == 404) {
-      return "لم يتم العثور على المعلومات";
+      return "المحتوى المطلوب غير موجود";
     } else {
-      return "عذر حدث خطأ ما";
+      return (
+        (typeof error?.response?.data?.detail == "string"
+          ? error?.response?.data?.detail
+          : error?.response?.data?.detail?.[0]?.msg) ?? "عذراً حدث خطأ ما"
+      );
     }
   } catch (err) {
     console.log(err);

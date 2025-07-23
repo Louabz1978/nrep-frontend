@@ -95,6 +95,20 @@
   --success: #34c759;
   --error: #c1272d;
 
+    /* general colors */
+  --yellow: #ffb400;
+  --blue: #3761e9;
+  --sky: #039be5;
+  --purple: #a447bf;
+  --green: #219653;
+  --violet: #7a4cd9;
+  --pink: #ec407a;
+  --grey: #97a3b0;
+  --orange: #ff5722;
+  --red: #e73d4a;
+  --light-pink: #fbe1e3;
+  --brand: #5867dd;
+
   /* borders */
   --primary-border: #333333;
   --secondary-border: #ada7a7;
@@ -144,6 +158,20 @@
   /* status*/
   --success: #34c759;
   --error: #c1272d;
+
+    /* general colors */
+  --yellow: #ffb400;
+  --blue: #3761e9;
+  --sky: #039be5;
+  --purple: #a447bf;
+  --green: #219653;
+  --violet: #7a4cd9;
+  --pink: #ec407a;
+  --grey: #97a3b0;
+  --orange: #ff5722;
+  --red: #e73d4a;
+  --light-pink: #fbe1e3;
+  --brand: #5867dd;
 
   /* borders */
   --primary-border: #333333;
@@ -259,6 +287,20 @@
   /* status*/
   --color-success: var(--success);
   --color-error: var(--error);
+
+  /* general colors */
+    --color-blue: var(--blue);
+  --color-sky: var(--sky);
+  --color-yellow: var(--yellow);
+  --color-purple: var(--purple);
+  --color-green: var(--green);
+  --color-violet: var(--violet);
+  --color-pink: var(--pink);
+  --color-grey: var(--grey);
+  --color-orange: var(--orange);
+  --color-red: var(--red);
+  --color-light-pink: var(--light-pink);
+  --color-brand: var(--brand);
 
   /* borders */
   --color-primary-border: var(--primary-border);

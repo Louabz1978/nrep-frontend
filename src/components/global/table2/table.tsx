@@ -66,7 +66,7 @@ export function DataTable<TData, TValue, TRow>({
   data,
   miw = 1200,
   filters,
-  removeCollapseButton,
+  removeCollapseButton = true,
   onRowClick,
   selectedRows,
   setCheckedRows,
@@ -107,7 +107,7 @@ export function DataTable<TData, TValue, TRow>({
   );
 
   return (
-    <div className="space-y-4 p-6 ">
+    <div className="flex flex-col flex-1 gap-xl">
       <div className="flex justify-between items-start">
         <div className="flex gap-[24px] flex-wrap">
           <TableSearch prefix={prefix} wrapperClassName="w-fit min-w-[200px]" />
@@ -159,7 +159,7 @@ export function DataTable<TData, TValue, TRow>({
       </div>
       <div
         className={cn(
-          "relative ease-out rounded-md transition-transform z-[1] bg-tertiary-bg",
+          "relative flex-1 flex flex-col ease-out rounded-md transition-transform z-[1] bg-tertiary-bg",
           isCollapsed ? "-translate-y-14" : "translate-y-0"
         )}
       >
@@ -169,7 +169,7 @@ export function DataTable<TData, TValue, TRow>({
             onClick={toggle}
             size={"icon"}
             className={
-              "rounded-full size-8 absolute left-1/2 top-0 -translate-x-1/2 z-[1] -translate-y-1/2"
+              "rounded-full !size-[30px] absolute left-1/2 top-0 -translate-x-1/2 z-[1] -translate-y-1/2"
             }
             variant={"panel"}
           >
@@ -182,7 +182,7 @@ export function DataTable<TData, TValue, TRow>({
             />
           </Button>
         )}
-        <ScrollArea className="rounded-md border border-secondary w-full whitespace-nowrap">
+        <ScrollArea className="rounded-md flex-1 border border-secondary w-full whitespace-nowrap">
           <Table
             style={{
               minWidth: miw,
@@ -263,6 +263,7 @@ export function DataTable<TData, TValue, TRow>({
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => onRowClick?.(row as TRow)}
                     className={cn(
+                      "!border-b border-secondary",
                       onRowClick ? "cursor-pointer" : "",
                       selectedRows?.find(
                         (ele) =>

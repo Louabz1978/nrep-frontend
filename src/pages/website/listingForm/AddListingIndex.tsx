@@ -5,12 +5,8 @@ import {
   LocationStepInitialValues,
   PropertyImagesStepInitialValues,
 } from "@/data/website/schema/ListingFormSchema";
-import useListingQuery from "@/hooks/website/listing/useListingQuery";
 
-function AddListingLogic() {
-  // listing query methods
-  const { listingResources } = useListingQuery();
-
+function AddListingIndex() {
   return (
     <ListingForm
       defaultValues={{
@@ -19,9 +15,8 @@ function AddListingLogic() {
         location: LocationStepInitialValues,
         propertyImages: PropertyImagesStepInitialValues,
       }}
-      listingResources={listingResources}
     />
   );
 }
 
-export default AddListingLogic;
+export default AddListingIndex;
