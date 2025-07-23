@@ -53,6 +53,23 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
   ]);
   const [isSatelliteView, setIsSatelliteView] = useState(false);
   const [isManualMode, setIsManualMode] = useState(false);
+  const [address, setAddress] = useState<string>("");
+
+  // fetch address from coordinates
+  const fetchAddress = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ar`
+      );
+      const data = await response.json();
+      const fetchedAddress = data.display_name || "";
+      setAddress(fetchedAddress);
+      setValue("address", fetchedAddress); // set in form
+    } catch (error) {
+      setAddress("");
+      setValue("address", "");
+    }
+  };
 
   // handle submit form
   const onSubmit = (data: LocationStepType) => {
@@ -65,14 +82,15 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
     setMarkerPosition([lat, lng]);
     setValue("latitude", lat);
     setValue("longitude", lng);
-
     void trigger(["latitude", "longitude"]);
+    fetchAddress(lat, lng);
   };
   // change the latitude when the user edits on the input field
   const handleLatitudeChange = () => {
     const lat = watch("latitude");
     if (lat && !isNaN(Number(lat))) {
       setMarkerPosition([Number(lat), markerPosition[1]]);
+      fetchAddress(Number(lat), markerPosition[1]);
     }
   };
 
@@ -81,6 +99,7 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
     const lng = watch("longitude");
     if (lng && !isNaN(Number(lng))) {
       setMarkerPosition([markerPosition[0], Number(lng)]);
+      fetchAddress(markerPosition[0], Number(lng));
     }
   };
 
@@ -96,6 +115,7 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
           setValue("latitude", latitude);
           setValue("longitude", longitude);
           void trigger(["latitude", "longitude"]);
+          fetchAddress(latitude, longitude);
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -137,13 +157,14 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
     shadowAnchor: [12, 41],
   });
 
-  const lat = watch("latitude");
-  const lng = watch("longitude");
+  const latitude = watch("latitude");
+  const longitude = watch("longitude");
   useEffect(() => {
-    if (lat && lng && !isNaN(Number(lat)) && !isNaN(Number(lng))) {
-      setMarkerPosition([Number(lat), Number(lng)]);
+    if (latitude && longitude && !isNaN(Number(latitude)) && !isNaN(Number(longitude))) {
+      setMarkerPosition([Number(latitude), Number(longitude)]);
+      fetchAddress(Number(latitude), Number(longitude));
     }
-  }, [watch, lat, lng]);
+  }, [latitude, longitude]);
 
   return (
     <AnimateContainer>
@@ -178,7 +199,28 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
                           : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       }
                     />
-                    <Marker position={markerPosition} icon={regularMarkerIcon}>
+                    {/* Marker for the selected location on the map */}
+                    <Marker
+                      position={markerPosition}
+                      icon={regularMarkerIcon}
+                      draggable={isManualMode} // Allow dragging if manual mode is enabled
+                      eventHandlers={{
+                        // When the marker is dragged and dropped
+                        dragend: (e) => {
+                          const marker = e.target;
+                          const position = marker.getLatLng();
+                          // Update marker position state
+                          setMarkerPosition([position.lat, position.lng]);
+                          // Update form values for latitude and longitude
+                          setValue("latitude", position.lat);
+                          setValue("longitude", position.lng);
+                          // Trigger validation for latitude and longitude fields
+                          void trigger(["latitude", "longitude"]);
+                          // Fetch address for the new coordinates
+                          fetchAddress(position.lat, position.lng);
+                        },
+                      }}
+                    >
                       <Popup>
                         الموقع المحدد
                         <br />
@@ -194,7 +236,6 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
                   </MapContainer>
                 </div>
               </div>
-
               {/* buttons */}
               <div className="flex justify-center lg:flex-row flex-col w-full lg:gap-2xl gap-lg">
                 <Button
@@ -255,6 +296,14 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
                 numberRegex={/^\d*\.?\d*$/}
                 onChange={handleLongitudeChange}
                 info={"أدخل خط الطول أو انقر على الخريطة"}
+              />
+              <Input
+                form={form}
+                label={"العنوان (Address)"}
+                placeholder={"محافظة حمص"}
+                name={"address"}
+                type={"text"}
+                info={"يمكنك تعديل العنوان أو تركه تلقائياً"}
               />
               <Select
                 form={form}
