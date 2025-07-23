@@ -151,141 +151,124 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   return (
     <AnimateContainer>
-      <FormSectionHeader>تفاصيل العقار</FormSectionHeader>
-      <div className="h-full border-3 mt-8 w-full max-w-full">
-        {/* First Section: Property Details and Image */}
-        <div className="flex flex-col lg:flex-row justify-between lg:h-[324px] w-full">
-          <div className="flex flex-col w-full lg:w-2/3 border-b-3 lg:border-l-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-6 md:gap-y-8 w-full text-right rtl"
-              dir="rtl"
-            >
-              {detailsRows1.map((row, rowIdx) =>
-                row.map((item, colIdx) => (
-                  <div
-                    key={rowIdx + "-" + colIdx}
-                    className="flex gap-x-2 min-w-0"
-                  >
-                    <span className="text-size15 font-bold">{item.label}</span>
-                    <span className="text-size14 text-primary-fg break-words ml-2">
-                      {item.value}
-                    </span>
-                  </div>
-                ))
-              )}
+      <PageContainer>
+        <FormSectionHeader>تفاصيل العقار</FormSectionHeader>
+        <div className="h-full border-3 mt-8 w-full max-w-full">
+          {/* First Section: Property Details and Image */}
+          <div className="flex flex-col lg:flex-row justify-between lg:h-[324px] w-full">
+            <div className="flex flex-col w-full lg:w-2/3 border-b-3 lg:border-l-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-6 md:gap-y-8 w-full text-right rtl"
+                dir="rtl"
+              >
+                {detailsRows1.map((row, rowIdx) =>
+                  row.map((item, colIdx) => (
+                    <div
+                      key={rowIdx + "-" + colIdx}
+                      className="flex gap-x-2 min-w-0"
+                    >
+                      <span className="text-size15 font-bold">
+                        {item.label}
+                      </span>
+                      <span className="text-size14 text-primary-fg break-words ml-2">
+                        {item.value}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+            <div className="w-full lg:w-1/3 h-48 lg:h-full border-b-3 flex items-center justify-center p-2 lg:p-3 min-w-0">
+              <img
+                src={dummyProperty.image}
+                alt="property"
+                className="size-full object-cover rounded-md max-h-[324px] min-w-0"
+                style={{ maxWidth: "100%", maxHeight: "324px" }}
+              />
             </div>
           </div>
-          <div className="w-full lg:w-1/3 h-48 lg:h-full border-b-3 flex items-center justify-center p-2 lg:p-3 min-w-0">
-            <img
-              src={dummyProperty.image}
-              alt="property"
-              className="size-full object-cover rounded-md max-h-[324px] min-w-0"
-              style={{ maxWidth: "100%", maxHeight: "324px" }}
-            />
-          </div>
-        </div>
-        {/* Second Section: More Details */}
-        <div className="flex flex-col justify-between w-full">
-          <div className="flex flex-col w-full border-b-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 lg:gap-x-8 gap-y-6 lg:gap-y-8 w-full text-right rtl"
-              dir="rtl"
-            >
-              {detailsRows2.map((row, rowIdx) =>
-                row.map((item, colIdx) => (
-                  <div
-                    key={rowIdx + "-" + colIdx}
-                    className="flex gap-x-2 min-w-0"
-                  >
-                    <span className="text-size15 font-bold">{item.label}</span>
-                    <span className="text-size14 text-primary-fg break-words ml-2">
-                      {item.value}
-                    </span>
-                  </div>
-                ))
-              )}
+          {/* Second Section: More Details */}
+          <div className="flex flex-col justify-between w-full">
+            <div className="flex flex-col w-full border-b-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-4 lg:gap-x-8 gap-y-6 lg:gap-y-8 w-full text-right rtl"
+                dir="rtl"
+              >
+                {detailsRows2.map((row, rowIdx) =>
+                  row.map((item, colIdx) => (
+                    <div
+                      key={rowIdx + "-" + colIdx}
+                      className="flex gap-x-2 min-w-0"
+                    >
+                      <span className="text-size15 font-bold">
+                        {item.label}
+                      </span>
+                      <span className="text-size14 text-primary-fg break-words ml-2">
+                        {item.value}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        {/* Taxes Table */}
-        <div className="border-b-3 overflow-x-auto p-5 w-full">
-          <div className="bg-[#E5E7EA] rounded-md p-2 min-w-[320px] w-full overflow-x-auto">
-            <table
-              className="w-full text-right rtl border-separate border-spacing-0 min-w-[400px]"
-              dir="rtl"
-            >
-              <thead>
-                <tr className="bg-[#E5E7EA]">
-                  <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal w-12">
-                    #
-                  </th>
-                  <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal w-32">
-                    السنة
-                  </th>
-                  <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal w-32">
-                    الضرائب
-                  </th>
-                  <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal">
-                    الوصف
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                {taxesData.map((row) => (
-                  <tr key={row.id}>
-                    <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
-                      {row.id}
-                    </td>
-                    <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
-                      {row.year}
-                    </td>
-                    <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
-                      {row.tax}
-                    </td>
-                    <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
-                      {row.desc}
-                    </td>
+          {/* Taxes Table */}
+          <div className="border-b-3 overflow-x-auto p-5 w-full">
+            <div className="bg-[#E5E7EA] rounded-md p-2 min-w-[320px] w-full overflow-x-auto">
+              <table
+                className="w-full text-right rtl border-separate border-spacing-0 min-w-[400px]"
+                dir="rtl"
+              >
+                <thead>
+                  <tr className="bg-[#E5E7EA]">
+                    <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal w-12">
+                      #
+                    </th>
+                    <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal w-32">
+                      السنة
+                    </th>
+                    <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal w-32">
+                      الضرائب
+                    </th>
+                    <th className="border border-[#E5E7EA] py-2 px-2 md:px-4 font-normal">
+                      الوصف
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white">
+                  {taxesData.map((row) => (
+                    <tr key={row.id}>
+                      <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
+                        {row.id}
+                      </td>
+                      <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
+                        {row.year}
+                      </td>
+                      <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
+                        {row.tax}
+                      </td>
+                      <td className="border border-[#E5E7EA] py-2 px-2 md:px-4">
+                        {row.desc}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        {/* Third Section: Additional Notes */}
-        <div className="flex flex-col w-full">
-          <div className="flex flex-col w-full border-b-3 h-full p-4 lg:p-6 gap-y-6 lg:gap-y-10 justify-center">
-            {detailsRows3.map((row, rowIdx) =>
-              row.map((item, colIdx) => (
-                <div
-                  key={rowIdx + "-" + colIdx}
-                  className="flex gap-x-2 flex-wrap min-w-0"
-                >
-                  <span className="text-size15 font-bold break-words whitespace-pre-line">
-                    {item.label}
-                  </span>
-                  <span className="text-size14 text-primary-fg break-words whitespace-pre-line ml-2">
-                    {item.value}
-                  </span>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-        {/* Fourth Section: Broker Details */}
-        <div className="flex flex-col lg:flex-row justify-between w-full">
-          <div className="flex flex-col w-full border-b-2 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 md:gap-x-2 gap-y-4 md:gap-y-6 w-full text-right rtl"
-              dir="rtl"
-            >
-              {detailsRows4.map((row, rowIdx) =>
+          {/* Third Section: Additional Notes */}
+          <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full border-b-3 h-full p-4 lg:p-6 gap-y-6 lg:gap-y-10 justify-center">
+              {detailsRows3.map((row, rowIdx) =>
                 row.map((item, colIdx) => (
                   <div
                     key={rowIdx + "-" + colIdx}
-                    className="flex gap-x-2 min-w-0"
+                    className="flex gap-x-2 flex-wrap min-w-0"
                   >
-                    <span className="text-size15 font-bold">{item.label}</span>
-                    <span className="text-size14 text-primary-fg break-words ml-2">
+                    <span className="text-size15 font-bold break-words whitespace-pre-line">
+                      {item.label}
+                    </span>
+                    <span className="text-size14 text-primary-fg break-words whitespace-pre-line ml-2">
                       {item.value}
                     </span>
                   </div>
@@ -293,16 +276,41 @@ function ListingDetails({ data }: ListingDetailsProps) {
               )}
             </div>
           </div>
+          {/* Fourth Section: Broker Details */}
+          <div className="flex flex-col lg:flex-row justify-between w-full">
+            <div className="flex flex-col w-full border-b-2 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 md:gap-x-2 gap-y-4 md:gap-y-6 w-full text-right rtl"
+                dir="rtl"
+              >
+                {detailsRows4.map((row, rowIdx) =>
+                  row.map((item, colIdx) => (
+                    <div
+                      key={rowIdx + "-" + colIdx}
+                      className="flex gap-x-2 min-w-0"
+                    >
+                      <span className="text-size15 font-bold">
+                        {item.label}
+                      </span>
+                      <span className="text-size14 text-primary-fg break-words ml-2">
+                        {item.value}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div
-        className="flex justify-between w-full mt-10 gap-xl"
-      >
-        <div onClick={handleNavigate}>
-          <PreviouseButton />
+        <div className="flex justify-between w-full mt-10 gap-xl">
+          <div onClick={handleNavigate}>
+            <PreviouseButton />
+          </div>
+          <Button className="text-white bg-digital-green-bg border-none">
+            طباعة التفاصيل PDF
+          </Button>
         </div>
-        <Button className="text-white bg-digital-green-bg border-none">طباعة التفاصيل  PDF</Button>
-      </div>
+      </PageContainer>
     </AnimateContainer>
   );
 }

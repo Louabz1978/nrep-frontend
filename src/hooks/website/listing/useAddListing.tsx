@@ -43,9 +43,9 @@ export const useAddListings = () => {
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
       waterLine: submitData?.waterLine?.value,
-      photos: submitData?.photos?.map(
-        (item) => (item as { path: string })?.path
-      ),
+      photos: submitData?.photos
+        ?.filter((item) => item?.mode != "delete")
+        ?.map((item) => (item as { path: string })?.path),
       owner_id: 13,
     };
 
