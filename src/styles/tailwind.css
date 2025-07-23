@@ -74,15 +74,16 @@
   /* color pallet */
   --primary: #005bbb;
   --secondary: #a3d3f5;
-  
+
   /* backgrounds */
   --primary-bg: #e5e5e5;
   --secondary-bg: #d1d1d6;
   --tertiary-bg: #ffffff;
   --quaternary-bg: #333333;
   --quinary-bg: #ada7a7;
-  --senary-bg: #1c2026; 
+  --senary-bg: #1c2026;
   --popup-bg: #14191e;
+  --digital-green-bg :#6CBF84;
 
   /* foreground */
   --primary-fg: #333333;
@@ -145,8 +146,10 @@
   --tertiary-bg: #ffffff;
   --quaternary-bg: #333333;
   --quinary-bg: #ada7a7;
-  --senary-bg: #1c2026; 
+  --senary-bg: #1c2026;
   --popup-bg: #14191e;
+  --digital-green-bg :#6CBF84;
+  --table-bg : #000000
 
   /* foreground */
   --primary-fg: #333333;
@@ -276,6 +279,9 @@
   --color-quinary-bg: var(--quinary-bg);
   --color-senary-bg: var(--senary-bg);
   --color-popup-bg: var(--popup-bg);
+  --color-digital-green-bg: var(  --digital-green-bg);
+  --color-table-bg: var(--table-bg);
+
 
   /* foreground */
   --color-primary-fg: var(--primary-fg);

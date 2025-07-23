@@ -2,12 +2,20 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import type { ListingDetailsType } from "@/types/website/listings";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
+import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
+import PreviouseButton from "@/components/global/form/button/PreviouseButton";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/global/ui/button";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
 }
 function ListingDetails({ data }: ListingDetailsProps) {
-  // console.log(data);
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(-1);
+  };
 
   const dummyProperty = {
     image:
@@ -142,7 +150,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
   ];
 
   return (
-    <PageContainer>
+    <AnimateContainer>
       <FormSectionHeader>تفاصيل العقار</FormSectionHeader>
       <div className="h-full border-3 mt-8 w-full max-w-full">
         {/* First Section: Property Details and Image */}
@@ -287,7 +295,15 @@ function ListingDetails({ data }: ListingDetailsProps) {
           </div>
         </div>
       </div>
-    </PageContainer>
+      <div
+        className="flex justify-between w-full mt-10 gap-xl"
+      >
+        <div onClick={handleNavigate}>
+          <PreviouseButton />
+        </div>
+        <Button className="text-white bg-digital-green-bg border-none">طباعة التفاصيل  PDF</Button>
+      </div>
+    </AnimateContainer>
   );
 }
 
