@@ -39,7 +39,6 @@ export const useAddListings = () => {
       ...(submitData ?? {}),
       country: submitData?.country?.value,
       county: submitData?.country?.value,
-      area: submitData?.area_space,
       city: submitData?.city?.value,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,

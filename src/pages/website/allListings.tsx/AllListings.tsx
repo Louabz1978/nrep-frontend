@@ -57,14 +57,14 @@ function AllListings() {
         enableSorting: false,
       },
       {
-        id: "property_id",
+        id: "mls_num",
         header: "رقم العقار",
         cell: ({ row }) => (
           <Link
             to={`/listing/details/${row?.original?.property_id}`}
             className="hover:text-primary"
           >
-            {row?.original?.property_id}
+            {row?.original?.mls_num ?? row?.original?.property_id}
           </Link>
         ),
       },

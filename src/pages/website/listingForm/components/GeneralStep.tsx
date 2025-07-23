@@ -99,7 +99,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="الحي/المنطقة"
             placeholder="اختر الحي أو المنطقة"
-            name="district"
+            name="area"
             info="يرجى اختيار الحي أو المنطقة التي يقع فيها العقار"
             required
           />
