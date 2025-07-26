@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/global/ui/checkbox";
 import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import useAllListings from "@/hooks/website/listing/useAllListings";
+import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
 import type { Listing } from "@/types/website/listings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -20,6 +21,9 @@ import { Link } from "react-router-dom";
 function AllListings() {
   // get all listings
   const { allListings, allListingsQuery, totalPages } = useAllListings();
+
+  // handle delete listing methods
+  const { deleteListing, handleDeleteListing } = useDeleteListings();
 
   // listing item columns
   const listingColumns: ColumnDef<Listing>[] = useMemo(
@@ -49,45 +53,58 @@ function AllListings() {
         ),
         enableSorting: false,
         enableHiding: false,
-      },
-      {
-        id: "order",
-        header: "#",
-        cell: ({ row }) => row?.index + 1,
-        enableSorting: false,
+        size: 8,
+        minSize: 8,
       },
       {
         id: "mls_num",
-        accessorKey: "mls_num",
+        accessorKey: "address.building_num",
         header: "رقم العقار",
         cell: ({ row }) => (
           <Link
             to={`/listing/details/${row?.original?.property_id}`}
             className="hover:text-primary"
           >
-            {row?.original?.mls_num}
+            {`${row?.original?.address?.building_num ?? ""} ${
+              row?.original?.address?.street ?? ""
+            } ${row?.original?.address?.apt ?? ""} ${
+              row?.original?.address?.floor ?? ""
+            }`}
           </Link>
         ),
+        size: 35,
       },
       {
         id: "address",
         header: "العنوان",
-        accessorKey: "address.county",
+        accessorKey: "address.building_num",
         cell: ({ row }) => {
-          return cityChoices?.find(
+          const county = cityChoices?.find(
             (item) => item?.value == row?.original?.address?.county
           )?.label;
+          const city = cityChoices?.find(
+            (item) => item?.value == row?.original?.address?.city
+          )?.label;
+
+          return `${row?.original?.address?.building_num ?? ""} ${
+            row?.original?.address?.street ?? ""
+          } ${row?.original?.address?.apt ?? ""} ${
+            row?.original?.address?.floor ?? ""
+          }, ${row?.original?.address?.area}, ${city}, ${county}`;
         },
+        size: 50,
       },
       {
         id: "price",
         header: "السعر",
         accessorKey: "price",
+        size: 20,
       },
       {
         id: "area",
         header: "المنطقة",
         accessorKey: "address.area",
+        size: 10,
       },
       {
         id: "city",
@@ -98,6 +115,7 @@ function AllListings() {
             (item) => item?.value == row?.original?.address?.city
           )?.label;
         },
+        size: 10,
       },
       {
         id: "status",
@@ -117,6 +135,7 @@ function AllListings() {
             />
           );
         },
+        size: 10,
       },
       {
         id: "action",
@@ -132,16 +151,22 @@ function AllListings() {
               </Link>
 
               {/* delete */}
-              <Button
-                size={"icon"}
-                className="bg-red"
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log(row?.original?.property_id);
-                }}
-              >
-                <PiTrashSimpleBold />
-              </Button>
+              <div>
+                <Button
+                  size={"icon"}
+                  className="bg-red"
+                  disabled={
+                    deleteListing?.isPending &&
+                    deleteListing?.variables?.id == row?.original?.property_id
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteListing(row?.original?.property_id);
+                  }}
+                >
+                  <PiTrashSimpleBold />
+                </Button>
+              </div>
 
               {/* details */}
               <Link to={`/listing/details/${row?.original?.property_id}`}>
@@ -152,10 +177,11 @@ function AllListings() {
             </div>
           );
         },
+        size: 25,
         enableSorting: false,
       },
     ],
-    []
+    [handleDeleteListing, deleteListing]
   );
   return (
     <AnimateContainer>

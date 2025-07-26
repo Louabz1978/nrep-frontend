@@ -20,9 +20,8 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   const { handleSubmit } = form;
 
   // handle submit form
-  const onSubmit = (data: GeneralStepType) => {
+  const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
-    console.log(data);
   };
 
   return (
@@ -36,9 +35,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <FormSectionHeader>المعلومات العامة</FormSectionHeader>
           <Input
             form={form}
-            type="number"
             label="رقم البناء"
-            numberRegex={/^\d*$/}
             placeholder="أدخل رقم البناء"
             name="building_num"
             info="يرجى إدخال رقم البناء كما هو موضح في العنوان الرسمي"

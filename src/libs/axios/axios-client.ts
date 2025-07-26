@@ -37,6 +37,8 @@ axiosClient.interceptors.response.use(
     console.log({ error });
     // navigate to login page if the token is expired
     if (typeof window != "undefined" && error?.response?.status === 401) {
+      secureLocalStorage.removeItem("ACCESS_TOKEN");
+      secureLocalStorage.removeItem("USER");
       window.location.replace(`${window.location.origin}/login`);
     }
     let err = error;

@@ -9,7 +9,7 @@ import Joi from "joi";
 
 // general step -----------------------------------------------------------
 export type GeneralStepType = {
-  building_num: TNumber;
+  building_num: TString;
   street: TString;
   floor: TNumber;
   apt: TNumber;
@@ -29,10 +29,10 @@ export type GeneralStepType = {
 };
 
 export const generalStepSchema = Joi.object<GeneralStepType>({
-  building_num: Joi.number()
+  building_num: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("رقم المبنى"),
+    .label("رقم البناء"),
   street: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
@@ -219,33 +219,43 @@ export type PropertyImagesStepType = {
 };
 
 export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
-  // Image validation
   photos: Joi.array()
     .items(
       Joi.object({
         path: Joi.any()
-          .required()
-          .custom((value, helpers) => {
-            // Existing validation logic for files
-            if (value instanceof File || value instanceof Blob) {
-              if (value.size < 256 * 1024) {
-                console.log(value.size, 256 * 1024);
-                return helpers.error("file.minSize", { limit: "256KB" });
-              }
-              if (value.size > 1024 * 1024) {
-                return helpers.error("file.maxSize", { limit: "1MB" });
-              }
-              if (!value.type.startsWith("image/")) {
-                return helpers.error("file.invalidType");
-              }
-            } else if (typeof value === "string" && !value) {
-              return helpers.error("any.required");
-            }
-            return value;
+          .when("mode", {
+            is: Joi.not("delete"),
+            then: Joi.required(),
+            otherwise: Joi.optional(),
           })
           .messages(VALIDATION_MESSAGES),
         mode: Joi.string().valid("edit", "delete").optional(),
-      }).unknown()
+      })
+        .unknown()
+        .custom((value, helpers) => {
+          // Skip validation if this is a deleted item
+          if (value.mode === "delete") {
+            return value;
+          }
+
+          // Validate the path value
+          if (value.path instanceof File || value.path instanceof Blob) {
+            if (value.path.size < 256 * 1024) {
+              return helpers.error("file.minSize", { limit: "256KB" });
+            }
+            if (value.path.size > 1024 * 1024) {
+              return helpers.error("file.maxSize", { limit: "1MB" });
+            }
+            if (!value.path.type.startsWith("image/")) {
+              return helpers.error("file.invalidType");
+            }
+          } else if (typeof value.path === "string" && !value.path) {
+            return helpers.error("any.required");
+          }
+
+          return value;
+        })
+        .messages(VALIDATION_MESSAGES)
     )
     .custom((value, helpers) => {
       // Filter out deleted images before counting

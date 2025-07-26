@@ -37,7 +37,6 @@ function Navbar() {
   };
 
   const hasPermission = (permissions: string[]) => {
-    console.log(permissions);
     return true;
     // return permissions.length === 0 || checkPermissions(permissions);
   };

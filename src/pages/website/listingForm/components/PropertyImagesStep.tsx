@@ -26,9 +26,8 @@ const PropertyImagesStep = ({
   const { handleSubmit } = form;
 
   // handle submit form
-  const onSubmit = (data: PropertyImagesStepType) => {
+  const onSubmit = () => {
     handleSubmitForm();
-    console.log(data);
   };
 
   return (
