@@ -57,6 +57,8 @@ export interface Listing {
   created_by_user: User;
   owner: User;
   address: Address;
+  street: string;
+  apt: number;
 }
 
 export interface ListingDetailsType {
@@ -118,5 +120,13 @@ export interface updateListingProps {
 export type updateListingResult = Promise<{
   data: ListingDetailsType;
   id: number;
+  message: string;
+}>;
+
+export interface removeListingProps {
+  id: number;
+}
+
+export type removeListingResult = Promise<{
   message: string;
 }>;

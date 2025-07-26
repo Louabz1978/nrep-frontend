@@ -72,7 +72,6 @@ function LocationStep({ form, setCurrentStep }: LocationStepProps) {
   // handle submit form
   const onSubmit = (data: LocationStepType) => {
     setCurrentStep((prev) => prev + 1);
-    console.log(data);
   };
 
   // choose the location on the map by clicking on the map

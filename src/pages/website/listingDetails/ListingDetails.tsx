@@ -5,7 +5,9 @@ import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg"
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/global/ui/button";
+import { usePDF } from "react-to-pdf";
+import { Button } from "@/components/global/form/button/Button";
+import { cityChoices } from "@/data/global/select";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -17,19 +19,25 @@ function ListingDetails({ data }: ListingDetailsProps) {
     navigate(-1);
   };
 
+  const county = cityChoices?.find(
+    (item) => item?.value == data?.address?.county
+  )?.label;
+  const city = cityChoices?.find((item) => item?.value == data?.address?.city)
+    ?.label;
+
   const dummyProperty = {
     image:
       `${import.meta.env.VITE_BACKEND_URL}${data.image_url?.replace(
         /^\{|\}$/g,
         ""
       )}` || image, // Use imported image as a placeholder
-    buildingNumber: data.mls_num || "452146",
+    buildingNumber: data.address.building_num || "452146",
     streetName: data.address.street || "النص هنا",
     floorNumber: data.floor || "3",
     apartmentNumber: data.address.apt || "2",
     area: data.address.area || "النص هنا",
-    city: data.address.city || "النص هنا",
-    governorate: data.address.county || "حمص",
+    city: city || "النص هنا",
+    governorate: county || "حمص",
     price: data.price || "1000000",
     bedrooms: data.bedrooms || "3",
     bathrooms: data.bathrooms || "النص هنا",
@@ -149,14 +157,27 @@ function ListingDetails({ data }: ListingDetailsProps) {
     { id: 4, year: 2021, tax: 123000, desc: "" },
   ];
 
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+
   return (
     <AnimateContainer>
       <PageContainer>
         <FormSectionHeader>تفاصيل العقار</FormSectionHeader>
-        <div className="h-full border-3 mt-8 w-full max-w-full">
+        <div
+          className="h-full border-3 mt-8 w-full max-w-full bg-tertiary-bg"
+          ref={targetRef}
+        >
           {/* First Section: Property Details and Image */}
-          <div className="flex flex-col lg:flex-row justify-between lg:h-[324px] w-full">
-            <div className="flex flex-col w-full lg:w-2/3 border-b-3 lg:border-l-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
+          <div className="flex flex-col-reverse lg:flex-row border-b-3 justify-between lg:min-h-[324px] h-max w-full">
+            <div className="flex flex-col w-full lg:w-2/3 lg:border-l-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
+              <div className="w-full flex justify-center items-center">
+                <div key={"mls"} className="flex items-center gap-x-2 min-w-0">
+                  <span className="text-size22 font-bold">{"MLS"}</span>
+                  <span className="text-size20 text-primary-fg break-words ml-2">
+                    {data?.mls_num}
+                  </span>
+                </div>
+              </div>
               <div
                 className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-6 md:gap-y-8 w-full text-right rtl"
                 dir="rtl"
@@ -176,15 +197,32 @@ function ListingDetails({ data }: ListingDetailsProps) {
                     </div>
                   ))
                 )}
+
+                {/* address */}
+                <div
+                  key={"address"}
+                  className="flex gap-x-2 min-w-0 col-span-full"
+                >
+                  <span className="text-size15 font-bold">{"العنوان: "}</span>
+                  <span className="text-size14 text-primary-fg break-words ml-2">
+                    {`${data?.address?.building_num ?? ""} ${
+                      data?.address?.street ?? ""
+                    } ${data?.address?.apt ?? ""} ${
+                      data?.address?.floor ?? ""
+                    }, ${data?.address?.area}, ${city}, ${county}`}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="w-full lg:w-1/3 h-48 lg:h-full border-b-3 flex items-center justify-center p-2 lg:p-3 min-w-0">
-              <img
-                src={dummyProperty.image}
-                alt="property"
-                className="size-full object-cover rounded-md max-h-[324px] min-w-0"
-                style={{ maxWidth: "100%", maxHeight: "324px" }}
-              />
+            <div className="w-full lg:w-1/3 flex justify-center items-center h-full max-lg:border-b-3 p-2 lg:p-3 min-w-0">
+              <div className="h-[320px] w-full">
+                <img
+                  src={dummyProperty.image}
+                  alt="property"
+                  className="size-full object-cover rounded-md"
+                  style={{ maxWidth: "100%", maxHeight: "324px" }}
+                />
+              </div>
             </div>
           </div>
           {/* Second Section: More Details */}
@@ -306,7 +344,13 @@ function ListingDetails({ data }: ListingDetailsProps) {
           <div onClick={handleNavigate}>
             <PreviouseButton />
           </div>
-          <Button className="text-white bg-digital-green-bg border-none">
+          <Button
+            className=" bg-green border-none"
+            onClick={(e) => {
+              e.preventDefault();
+              toPDF();
+            }}
+          >
             طباعة التفاصيل PDF
           </Button>
         </div>

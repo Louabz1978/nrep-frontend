@@ -22,7 +22,6 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
   // handle submit form
   const onSubmit = (data: AdditionalInfoStepType) => {
     setCurrentStep((prev) => prev + 1);
-    console.log(data);
   };
 
   return (

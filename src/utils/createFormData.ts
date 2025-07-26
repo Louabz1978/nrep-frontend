@@ -10,7 +10,7 @@ function createFormData(
 
     if (Array.isArray(value)) {
       // Handle arrays (string[], number[], boolean[])
-      value.forEach((item, index) => {
+      value.forEach((item) => {
         if (item !== undefined && item !== null) {
           formData.append(`${key}`, item);
         }
