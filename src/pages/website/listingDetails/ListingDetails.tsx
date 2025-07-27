@@ -7,7 +7,9 @@ import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { useNavigate } from "react-router-dom";
 import { usePDF } from "react-to-pdf";
 import { Button } from "@/components/global/form/button/Button";
-import { cityChoices } from "@/data/global/select";
+import { cityChoices, STATUS } from "@/data/global/select";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -24,13 +26,13 @@ function ListingDetails({ data }: ListingDetailsProps) {
   )?.label;
   const city = cityChoices?.find((item) => item?.value == data?.address?.city)
     ?.label;
+  const status = STATUS?.find((item) => item?.value == data?.status)?.label;
 
   const dummyProperty = {
-    image:
-      `${import.meta.env.VITE_BACKEND_URL}${data.image_url?.replace(
-        /^\{|\}$/g,
-        ""
-      )}` || image, // Use imported image as a placeholder
+    image: data.image_url
+      ?.replace(/^\{|\}$/g, "")
+      .split(",")
+      ?.map((item) => `${import.meta.env.VITE_BACKEND_URL}${item}`) || [image],
     buildingNumber: data.address.building_num || "452146",
     streetName: data.address.street || "النص هنا",
     floorNumber: data.floor || "3",
@@ -38,7 +40,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     area: data.address.area || "النص هنا",
     city: city || "النص هنا",
     governorate: county || "حمص",
-    price: data.price || "1000000",
+    price: data.price || 1000000,
     bedrooms: data.bedrooms || "3",
     bathrooms: data.bathrooms || "النص هنا",
     sellerCommission: data.property_realtor_commission || "$",
@@ -46,7 +48,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     buildYear: data.year_built || "1999",
     buyerCommission: data.buyer_realtor_commission || "$",
     propertyArea: data.area_space || "200",
-    status: data.status || "قيد الانجاز",
+    status: status || "قيد الانجاز",
     balcony: "2",
     fans: "3",
     waterLine: "خزان",
@@ -120,6 +122,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
       {
         label: " ملاحظات الوسيط : ",
         value:
+          data?.description ||
           "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط, للإستفسار : 0912345678 - example@gmail.com",
       },
     ],
@@ -127,17 +130,29 @@ function ListingDetails({ data }: ListingDetailsProps) {
   const detailsRows4 = [
     [
       { label: "شركة الوساطة : ", value: "Nerp Group" },
-      { label: "رقم الهاتف : ", value: "0912345678 / 0987654321" },
-      { label: "العنوان : ", value: "حمص - الإنشاءات - شارع عنترة بن شداد" },
       {
-        label: " الوسيط المسؤول : ",
-        value: "الوسيط المسجل , أحمد قيسون - 0999887612",
+        label: "رقم الهاتف : ",
+        value: data?.created_by_user?.phone_number || "0912345678 / 0987654321",
+      },
+      {
+        label: "العنوان : ",
+        value:
+          data?.created_by_user?.address ||
+          "حمص - الإنشاءات - شارع عنترة بن شداد",
+      },
+      {
+        label: " الوسيط المسؤول: ",
+        value: data?.created_by_user?.first_name
+          ? `${data?.created_by_user?.first_name ?? ""} ${
+              data?.created_by_user?.last_name ?? ""
+            } `
+          : "الوسيط المسجل , أحمد قيسون - 0999887612",
       },
     ],
     [
-      { label: "تاريخ العقد : ", value: "XX / XX / 20XX" },
-      { label: "تاريخ الإنتهاء : ", value: "XX / XX / 20XX" },
-      { label: "تاريخ آخر تحديث : ", value: "XX / XX / 20XX" },
+      { label: "تاريخ العقد : ", value: "12 / 05 / 2025" },
+      { label: "تاريخ الإنتهاء : ", value: "12 / 05 / 2026" },
+      { label: "تاريخ آخر تحديث : ", value: "09 / 07 / 2025" },
       { label: "الشرط : ", value: "" },
       { label: "انتهاء الشرط : ", value: "" },
     ],
@@ -168,8 +183,8 @@ function ListingDetails({ data }: ListingDetailsProps) {
           ref={targetRef}
         >
           {/* First Section: Property Details and Image */}
-          <div className="flex flex-col-reverse lg:flex-row border-b-3 justify-between lg:min-h-[324px] h-max w-full">
-            <div className="flex flex-col w-full lg:w-2/3 lg:border-l-3 h-full p-4 lg:p-6 gap-4 lg:gap-6 justify-center">
+          <div className="flex flex-col-reverse lg:flex-row border-b-3 justify-between lg:h-[400px] min-h-max h-max w-full">
+            <div className="flex flex-col w-full lg:w-2/3 lg:border-l-3 p-4 h-full overflow-auto lg:p-6 gap-4 lg:gap-6 justify-center">
               <div className="w-full flex justify-center items-center">
                 <div key={"mls"} className="flex items-center gap-x-2 min-w-0">
                   <span className="text-size22 font-bold">{"MLS"}</span>
@@ -207,21 +222,48 @@ function ListingDetails({ data }: ListingDetailsProps) {
                   <span className="text-size14 text-primary-fg break-words ml-2">
                     {`${data?.address?.building_num ?? ""} ${
                       data?.address?.street ?? ""
-                    } ${data?.address?.apt ?? ""} ${
-                      data?.address?.floor ?? ""
+                    } طابق ${data?.address?.floor ?? ""} شقة ${
+                      data?.address?.apt ?? ""
                     }, ${data?.address?.area}, ${city}, ${county}`}
                   </span>
                 </div>
               </div>
             </div>
-            <div className="w-full lg:w-1/3 flex justify-center items-center h-full max-lg:border-b-3 p-2 lg:p-3 min-w-0">
-              <div className="h-[320px] w-full">
-                <img
-                  src={dummyProperty.image}
-                  alt="property"
-                  className="size-full object-cover rounded-md"
-                  style={{ maxWidth: "100%", maxHeight: "324px" }}
-                />
+            <div className="w-full lg:w-1/3 flex flex-col justify-center items-center gap-[8px] h-full max-lg:border-b-3 p-2 lg:p-3 min-w-0">
+              <div className="h-[320px] w-full relative">
+                <Swiper
+                  modules={[Navigation]}
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                  spaceBetween={10}
+                  slidesPerView={1}
+                  className="h-full w-full rounded-md"
+                >
+                  {dummyProperty.image?.map((img, index) => (
+                    <SwiperSlide key={index}>
+                      <img
+                        src={img}
+                        alt={`property ${index + 1}`}
+                        className="size-full object-cover"
+                        style={{ maxWidth: "100%", maxHeight: "324px" }}
+                      />
+                    </SwiperSlide>
+                  ))}
+
+                  {/* Custom navigation arrows */}
+                  <div className="swiper-button-prev !text-inverse-fg bg-quaternary-bg/20 backdrop-blur-[15px] rounded-full !size-[40px] after:!text-xl"></div>
+                  <div className="swiper-button-next !text-inverse-fg bg-quaternary-bg/20 backdrop-blur-[15px] rounded-full !size-[40px] after:!text-xl"></div>
+                </Swiper>
+              </div>
+              <div>
+                <span className="font-bold text-size15">
+                  القيمة التقديرية للعقار:{" "}
+                </span>
+                <span className="text-green text-size14">
+                  {((dummyProperty?.price * 80) / 100).toFixed(2)}
+                </span>
               </div>
             </div>
           </div>

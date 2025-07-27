@@ -138,6 +138,8 @@ function ListingForm({ defaultValues, id }: ListingFormProps) {
       }).catch(console.error);
   };
 
+  console.log(propertyImagesStep.formState.errors);
+
   return (
     <AnimateContainer>
       <PageContainer className="gap-5xl">

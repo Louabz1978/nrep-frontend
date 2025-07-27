@@ -3,12 +3,8 @@ import ListingForm from "./ListingForm";
 import useListingDetails from "@/hooks/website/listing/useListingDetails";
 import StatusManager from "@/components/global/statusManager/StatusManager";
 import { ListingFormSkeleton } from "./components/ListingFormSkeleton";
-import {
-  cityChoices,
-  PROPERTY_TYPE,
-  STATUS,
-  WATERLINE,
-} from "@/data/global/select";
+import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
+import { additionalInfoStepInitialValues } from "@/data/website/schema/ListingFormSchema";
 
 function EditListingIndex() {
   // listing id
@@ -26,7 +22,7 @@ function EditListingIndex() {
           id={listingId}
           defaultValues={{
             general: {
-              building_num: listingDetails?.address.building_num,
+              building_num: listingDetails?.address.building_num + "",
               street: listingDetails?.address.street,
               floor: listingDetails?.address.floor,
               apt: listingDetails?.address.apt
@@ -83,7 +79,7 @@ function EditListingIndex() {
               pool: false,
               balcony: 0,
               fans: 0,
-              waterLine: WATERLINE[0],
+              waterLine: additionalInfoStepInitialValues?.waterLine,
             },
             location: {
               latitude: listingDetails?.latitude,
@@ -94,12 +90,14 @@ function EditListingIndex() {
             },
             propertyImages: {
               photos: listingDetails?.image_url
-                ? [
-                    {
-                      id: -1,
-                      path: listingDetails?.image_url,
-                    },
-                  ]
+                ? listingDetails.image_url
+                    ?.replace(/^\{|\}$/g, "")
+                    .split(",")
+                    ?.map((item, index) => ({
+                      id: index + 1,
+                      path: item,
+                      mode: "normal",
+                    }))
                 : [],
             },
           }}

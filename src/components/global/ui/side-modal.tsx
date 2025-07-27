@@ -161,7 +161,10 @@ export function SideModal({
             <X className="size-[20px] text-secondary-fg group-hover:text-primary-fg transition-colors duration-[0.3s]" />
           </DrawerClose>
         </DrawerHeader>
-        <div className="[&:has(*.no-padding)]:!p-0 flex-1 w-full p-[24px] pt-[20px] overflow-auto z-10">
+        <div
+          className="[&:has(*.no-padding)]:!p-0 flex-1 w-full p-[24px] pt-[20px] overflow-auto z-10"
+          dir="rtl"
+        >
           {children}
         </div>
       </DrawerContent>

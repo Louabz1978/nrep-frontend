@@ -229,7 +229,7 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
             otherwise: Joi.optional(),
           })
           .messages(VALIDATION_MESSAGES),
-        mode: Joi.string().valid("edit", "delete").optional(),
+        mode: Joi.string().optional(),
       })
         .unknown()
         .custom((value, helpers) => {
