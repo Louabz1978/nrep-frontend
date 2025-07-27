@@ -48,8 +48,8 @@ const SelectTrigger = React.forwardRef<
       ref={ref}
       className={cn(
         variant == "white"
-          ? "group flex justify-between h-[34px] w-full rounded-[5px] text-input-foreground bg-card py-[6px] ps-[12px] pe-[33px] border border-solid border-input text-13p font-medium placeholder:text-input-placeholder outline-none disabled:cursor-not-allowed disabled:opacity-70 transition-all duration-[0.2s]"
-          : "group flex justify-between h-[39px] w-full rounded-[5px] text-input-foreground bg-input-background py-[9.5px] px-[14px] border border-solid border-input-background text-13p font-medium placeholder:text-input-placeholder outline-none focus:border-input-border-focus focus:bg-input-background-focus aria-expanded:border-input-border-focus aria-expanded:bg-input-background-focus disabled:cursor-not-allowed disabled:bg-input-background-disabled disabled:text-input-placeholder transition-all duration-[0.2s]",
+          ? "group flex justify-between h-[34px] w-full rounded-[5px] text-input-foreground bg-card py-[6px] ps-[12px] pe-[33px] border border-solid border-input text-13p font-medium placeholder:text-placeholder-secondary outline-none disabled:cursor-not-allowed disabled:opacity-70 transition-all duration-[0.2s]"
+          : "group flex justify-between h-[39px] w-full rounded-[5px] text-input-foreground bg-input-background py-[9.5px] px-[14px] border border-solid border-input-background text-13p font-medium placeholder:text-placeholder-secondary outline-none focus:border-input-border-focus focus:bg-input-background-focus aria-expanded:border-input-border-focus aria-expanded:bg-input-background-focus disabled:cursor-not-allowed disabled:bg-input-background-disabled disabled:text-input-placeholder transition-all duration-[0.2s]",
         "truncate",
         className,
         !!Icon && "ps-9",

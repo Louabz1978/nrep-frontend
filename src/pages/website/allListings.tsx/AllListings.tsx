@@ -3,6 +3,11 @@ import { Button } from "@/components/global/form/button/Button";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable, type Filters } from "@/components/global/table2/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
@@ -144,36 +149,52 @@ function AllListings() {
           return (
             <div className="flex items-center gap-md">
               {/* edit */}
-              <Link to={`/listing/edit/${row?.original?.property_id}`}>
-                <Button size={"icon"} className="bg-green">
-                  <PiPencilSimpleBold />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/listing/edit/${row?.original?.property_id}`}>
+                    <Button size={"icon"} className="bg-green">
+                      <PiPencilSimpleBold />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تعديل</TooltipContent>
+              </Tooltip>
 
               {/* delete */}
-              <div>
-                <Button
-                  size={"icon"}
-                  className="bg-red"
-                  disabled={
-                    deleteListing?.isPending &&
-                    deleteListing?.variables?.id == row?.original?.property_id
-                  }
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDeleteListing(row?.original?.property_id);
-                  }}
-                >
-                  <PiTrashSimpleBold />
-                </Button>
-              </div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div>
+                    <Button
+                      size={"icon"}
+                      className="bg-red"
+                      disabled={
+                        deleteListing?.isPending &&
+                        deleteListing?.variables?.id ==
+                          row?.original?.property_id
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDeleteListing(row?.original?.property_id);
+                      }}
+                    >
+                      <PiTrashSimpleBold />
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>حذف</TooltipContent>
+              </Tooltip>
 
               {/* details */}
-              <Link to={`/listing/details/${row?.original?.property_id}`}>
-                <Button size={"icon"}>
-                  <PiInfoBold />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/listing/details/${row?.original?.property_id}`}>
+                    <Button size={"icon"}>
+                      <PiInfoBold />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تفاصيل</TooltipContent>
+              </Tooltip>
             </div>
           );
         },
