@@ -11,6 +11,7 @@ import EditListingIndex from "./pages/website/listingForm/EditListingIndex";
 import AllListings from "./pages/website/allListings.tsx/AllListings";
 import Home from "./pages/website/home/Home";
 import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
+import MyListings from "./pages/website/myListings/MyListing";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "listing/all-listings",
         element: <AllListings />,
+      },
+      {
+        path: "listing/my-listings",
+        element: <MyListings />,
       },
       {
         path: "listing/details/:id",

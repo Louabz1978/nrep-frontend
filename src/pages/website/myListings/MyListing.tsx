@@ -6,7 +6,7 @@ import { DataTable } from "@/components/global/table2/table";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import useAllListings from "@/hooks/website/listing/useAllListings";
+import useMyListings from "@/hooks/website/listing/useMyListings";
 import type { Listing } from "@/types/website/listings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -17,9 +17,9 @@ import {
 } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
-function AllListings() {
-  // get all listings
-  const { allListings, allListingsQuery, totalPages } = useAllListings();
+function MyListings() {
+  // get my listings
+  const { myListings, myListingsQuery, totalPages } = useMyListings();
 
   // listing item columns
   const listingColumns: ColumnDef<Listing>[] = useMemo(
@@ -161,11 +161,11 @@ function AllListings() {
     <AnimateContainer>
       <PageContainer>
         <DataTable
-          prefix={TABLE_PREFIXES.allListings}
+          prefix={TABLE_PREFIXES.myListings}
           columns={listingColumns}
           filters={[]}
-          data={(allListings ?? []) as Listing[]}
-          query={allListingsQuery}
+          data={(myListings ?? []) as Listing[]}
+          query={myListingsQuery}
           totalPageCount={totalPages}
         />
       </PageContainer>
@@ -173,4 +173,4 @@ function AllListings() {
   );
 }
 
-export default AllListings;
+export default MyListings;

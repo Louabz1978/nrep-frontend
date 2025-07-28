@@ -101,6 +101,12 @@ export interface getAllListingsProps {
 
 export type getAllListingsResult = Promise<Listing[]>;
 
+export interface getMyListingsProps {
+  queryParams: Record<string, string>;
+}
+
+export type getMyListingsResult = Promise<Listing[]>;
+
 export interface createListingProps {
   data: Record<string, string | string[] | undefined | null | number | boolean>;
 }

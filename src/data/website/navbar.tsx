@@ -37,6 +37,11 @@ export const tabs: TabsType = [
         to: "/listing/all-listings",
       },
       {
+        label: "عقاراتي",
+        permission: [],
+        to: "/listing/my-listings",
+      },
+      {
         label: "subTabB",
         permission: [],
         submenu: [
