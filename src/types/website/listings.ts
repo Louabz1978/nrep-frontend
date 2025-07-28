@@ -3,8 +3,6 @@ import type {
   PropertyTypeValue,
   StatusValue,
 } from "@/data/global/select";
-import type { ListingFormType } from "@/data/website/schema/ListingFormSchema";
-// import type { PaginationData } from "../global/pagination";
 
 export interface getListingsDetailsProps {
   id: number;
@@ -113,7 +111,16 @@ export type createListingResult = Promise<{
 }>;
 
 export interface updateListingProps {
-  data: ListingFormType;
+  data: Record<
+    string,
+    | string
+    | string[]
+    | undefined
+    | null
+    | number
+    | boolean
+    | Record<string, string | string[] | undefined | null | number | boolean>
+  >;
   id: number;
 }
 

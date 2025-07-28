@@ -2,7 +2,12 @@ import Badge from "@/components/global/badge/Badge";
 import { Button } from "@/components/global/form/button/Button";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
-import { DataTable } from "@/components/global/table2/table";
+import { DataTable, type Filters } from "@/components/global/table2/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
@@ -67,8 +72,8 @@ function AllListings() {
           >
             {`${row?.original?.address?.building_num ?? ""} ${
               row?.original?.address?.street ?? ""
-            } ${row?.original?.address?.apt ?? ""} ${
-              row?.original?.address?.floor ?? ""
+            } طابق ${row?.original?.address?.floor ?? ""} شقة ${
+              row?.original?.address?.apt ?? ""
             }`}
           </Link>
         ),
@@ -88,8 +93,8 @@ function AllListings() {
 
           return `${row?.original?.address?.building_num ?? ""} ${
             row?.original?.address?.street ?? ""
-          } ${row?.original?.address?.apt ?? ""} ${
-            row?.original?.address?.floor ?? ""
+          } طابق ${row?.original?.address?.floor ?? ""} شقة ${
+            row?.original?.address?.apt ?? ""
           }, ${row?.original?.address?.area}, ${city}, ${county}`;
         },
         size: 50,
@@ -144,36 +149,52 @@ function AllListings() {
           return (
             <div className="flex items-center gap-md">
               {/* edit */}
-              <Link to={`/listing/edit/${row?.original?.property_id}`}>
-                <Button size={"icon"} className="bg-green">
-                  <PiPencilSimpleBold />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/listing/edit/${row?.original?.property_id}`}>
+                    <Button size={"icon"} className="bg-green">
+                      <PiPencilSimpleBold />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تعديل</TooltipContent>
+              </Tooltip>
 
               {/* delete */}
-              <div>
-                <Button
-                  size={"icon"}
-                  className="bg-red"
-                  disabled={
-                    deleteListing?.isPending &&
-                    deleteListing?.variables?.id == row?.original?.property_id
-                  }
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDeleteListing(row?.original?.property_id);
-                  }}
-                >
-                  <PiTrashSimpleBold />
-                </Button>
-              </div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div>
+                    <Button
+                      size={"icon"}
+                      className="bg-red"
+                      disabled={
+                        deleteListing?.isPending &&
+                        deleteListing?.variables?.id ==
+                          row?.original?.property_id
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDeleteListing(row?.original?.property_id);
+                      }}
+                    >
+                      <PiTrashSimpleBold />
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>حذف</TooltipContent>
+              </Tooltip>
 
               {/* details */}
-              <Link to={`/listing/details/${row?.original?.property_id}`}>
-                <Button size={"icon"}>
-                  <PiInfoBold />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/listing/details/${row?.original?.property_id}`}>
+                    <Button size={"icon"}>
+                      <PiInfoBold />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تفاصيل</TooltipContent>
+              </Tooltip>
             </div>
           );
         },
@@ -183,13 +204,37 @@ function AllListings() {
     ],
     [handleDeleteListing, deleteListing]
   );
+
+  // filter config
+  const filter: Filters = useMemo(
+    () => [
+      {
+        id: "3",
+        type: "select",
+        label: "الحالة",
+        title: "الحالة",
+        searchKey: "status",
+        options: STATUS,
+      },
+
+      {
+        id: "9",
+        type: "number",
+        label: "السعر",
+        title: "السعر",
+        searchKey: "price",
+      },
+    ],
+    []
+  );
+
   return (
     <AnimateContainer>
       <PageContainer>
         <DataTable
           prefix={TABLE_PREFIXES.allListings}
           columns={listingColumns}
-          filters={[]}
+          filters={filter}
           data={(allListings ?? []) as Listing[]}
           query={allListingsQuery}
           totalPageCount={totalPages}

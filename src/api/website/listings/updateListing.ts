@@ -10,7 +10,7 @@ async function updateListing({
   data,
   id,
 }: updateListingProps): updateListingResult {
-  const res = await axiosClient.post(`property/${id}`, data);
+  const res = await axiosClient.put(`property/${id}`, data);
 
   return { ...(res?.data ?? {}), id };
 }

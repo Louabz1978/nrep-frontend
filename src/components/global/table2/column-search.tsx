@@ -116,12 +116,19 @@ export default function ColumnSearch({
             value={(inputValue ?? "") as string}
             onValueChange={handleSelectChange}
           >
-            <SelectTrigger currentValue={(inputValue ?? "") as string}>
-              <SelectValue placeholder={label} />
+            <SelectTrigger
+              currentValue={(inputValue ?? "") as string}
+              className="!text-size14 cursor-pointer"
+            >
+              <SelectValue placeholder={label} className="text-size14" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="border border-primary-border shadow-lg rounded-md bg-tertiary-bg">
               {options.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
+                <SelectItem
+                  key={opt.value}
+                  value={opt.value}
+                  className="hover:bg-primary/20 transition-all text-size14"
+                >
                   {opt.label}
                 </SelectItem>
               ))}
@@ -193,7 +200,7 @@ export default function ColumnSearch({
           {!hasValue ? (
             <span
               onClick={removeFilter}
-              className="absolute opacity-0 group-hover:opacity-100 transition top-0 right-0 translate-x-1/2 -translate-y-1/2 size-4 rounded-full border bg-red-500/80 flex items-center justify-center"
+              className="absolute opacity-0 group-hover:opacity-100 transition top-0 right-0 translate-x-1/2 -translate-y-1/2 size-4 rounded-full border border-primary-border bg-error/75 flex items-center justify-center"
             >
               <X strokeWidth={1.3} className="size-3 text-white" />
             </span>
@@ -214,7 +221,7 @@ export default function ColumnSearch({
         <div className="flex gap-2 flex-col">
           {renderInputNode()}
           <Button onClick={handleSearch} className="w-full rounded-xs">
-            {"إرسال"}
+            {"تم"}
           </Button>
         </div>
       </PopoverContent>

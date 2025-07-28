@@ -7,14 +7,20 @@ import { useState } from "react";
 import { LuLogIn, LuSearch } from "react-icons/lu";
 import { Popover, PopoverContent } from "@/components/global/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
-import { PiSignOut, PiUser } from "react-icons/pi";
+import { PiGear, PiSignOut, PiUser } from "react-icons/pi";
 import useLogoutMutation from "@/hooks/global/logout/useLogoutMutation";
+import { useModal } from "@/hooks/global/use-modal";
+import { SideModal } from "@/components/global/ui/side-modal";
+import Settings from "@/components/global/settings/Settings";
 
 function Header() {
   // user info
   const { user } = useUser();
   // search value
   const [search, setSearch] = useState("");
+
+  // modal control method
+  const { openModal } = useModal();
 
   // logout mutations
   const { handleLogout, logout } = useLogoutMutation();
@@ -66,6 +72,14 @@ function Header() {
             <AiOutlineBell className="size-[24px] text-inverse-fg cursor-pointer" />
             <span className="absolute -top-xxs right-[1px] size-[7px] bg-error rounded-full"></span>
           </Link>
+
+          {/* settings */}
+          <PiGear
+            className="size-[24px] text-inverse-fg cursor-pointer"
+            onClick={() => {
+              openModal("settings");
+            }}
+          />
         </div>
 
         {/* search input */}
@@ -102,6 +116,10 @@ function Header() {
       <Link to="/" className="size-6xl rounded-xl overflow-hidden">
         <img src={logo} alt="NREP" className="size-full object-cover" />
       </Link>
+
+      <SideModal size="sm" title={"إعدادات الموقع"} id={`settings`}>
+        <Settings />
+      </SideModal>
     </header>
   );
 }

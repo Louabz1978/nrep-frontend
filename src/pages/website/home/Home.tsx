@@ -34,7 +34,7 @@ function Home() {
               </div>
             </div>
             {/* News: 4/12 columns, fills vertical space */}
-            <div className="lg:col-span-4 flex flex-col gap-6 grid">
+            <div className="lg:col-span-4 flex flex-col gap-6">
               <NewsNotificationsCard />
             </div>
           </div>

@@ -11,6 +11,8 @@ import { AnimatePresence } from "framer-motion";
 import { ColorPaletteProvider } from "./providers/ColorPaletteProvider";
 import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 import NuqsProvider from "./providers/NuqsProvider";
+import "swiper/css/navigation";
+import "swiper/swiper-bundle.css";
 
 // build query client that every useQuery and useMutation use it
 const queryClient = new QueryClient();
@@ -24,7 +26,7 @@ createRoot(document.getElementById("root")!).render(
             <SonnerToast />
             <AnimatePresence mode="wait">
               <RouterProvider router={router} />
-              <ColorPaletteEditor />
+              {/* <ColorPaletteEditor /> */}
             </AnimatePresence>
             <ReactQueryDevtools />
           </QueryClientProvider>
