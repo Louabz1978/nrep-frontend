@@ -123,7 +123,8 @@ function ImagesInput<T extends FieldValues>({
     });
 
     setValue(name, initFiles);
-    trigger(name);
+    form.clearErrors(name);
+    await trigger(name);
   };
 
   const handleDragEnter = (e: React.DragEvent) => {
@@ -157,8 +158,9 @@ function ImagesInput<T extends FieldValues>({
   };
 
   const currentFiles = watch(name)?.filter(
-    (item: { mode: "delete" | "edit" }) => item.mode !== "delete"
+    (item: { mode?: "delete" | "edit" }) => item.mode !== "delete"
   );
+
   const canAddMore = !max || currentFiles?.length < max;
 
   return (
@@ -190,104 +192,117 @@ function ImagesInput<T extends FieldValues>({
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        {currentFiles?.map((item: ImageFile, i: number) => (
-          <div className="flex flex-col gap-xs" key={item.id}>
-            <div className="w-full h-[280px] rounded-full">
-              <input
-                type="file"
-                id={`${name}__added_image_${i}`}
-                multiple={false}
-                onChange={async (e) => {
-                  e.preventDefault();
-                  await handleEditMultiFile(e, item.id);
-                  e.target.value = "";
-                }}
-                accept={acceptTypes}
-                className="hidden"
-              />
+        {watch(name)?.map((item: ImageFile, i: number) => {
+          if (item?.mode == "delete") return null;
+          return (
+            <div className="flex flex-col gap-xs" key={item.id}>
+              <div className="w-full h-[280px] rounded-full">
+                <input
+                  type="file"
+                  id={`${name}__added_image_${i}`}
+                  multiple={false}
+                  onChange={async (e) => {
+                    e.preventDefault();
+                    await handleEditMultiFile(e, item.id);
+                    e.target.value = "";
+                  }}
+                  accept={acceptTypes}
+                  className="hidden"
+                />
 
-              <div
-                className="flex justify-center items-center w-full h-[280px] border border-solid border-border rounded-xl overflow-hidden shrink-0 cursor-pointer relative"
-                onMouseEnter={() => setShowOptions(i)}
-                onMouseLeave={() => setShowOptions(false)}
-              >
-                <div className="w-full h-[280px]">
-                  <img
-                    src={
-                      typeof item.path === "object"
-                        ? URL.createObjectURL(item.path)
-                        : `${
-                            import.meta.env.VITE_BACKEND_URL
-                          }${item.path?.replace(/^\{|\}$/g, "")}`
-                    }
-                    className="size-full object-cover"
-                    alt={`Preview ${i + 1}`}
-                  />
-                </div>
+                <div
+                  className="flex justify-center items-center w-full h-[280px] border border-solid border-border rounded-xl overflow-hidden shrink-0 cursor-pointer relative"
+                  onMouseEnter={() => setShowOptions(i)}
+                  onMouseLeave={() => setShowOptions(false)}
+                >
+                  <div className="w-full h-[280px]">
+                    <img
+                      src={
+                        typeof item.path === "object"
+                          ? URL.createObjectURL(item.path)
+                          : `${
+                              import.meta.env.VITE_BACKEND_URL
+                            }${item.path?.replace(/^\{|\}$/g, "")}`
+                      }
+                      className="size-full object-cover"
+                      alt={`Preview ${i + 1}`}
+                    />
+                  </div>
 
-                <AnimatePresence>
-                  {showOptions === i && (
-                    <motion.div
-                      initial={{ translate: "0 100%" }}
-                      animate={{ translate: 0 }}
-                      exit={{ translate: "0 100%" }}
-                      transition={{ ease: "linear", duration: 0.3 }}
-                      className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-xl cursor-auto text-size20 font-bold"
-                    >
-                      {editable && (
-                        <label
-                          title="تعديل"
-                          htmlFor={`${name}__added_image_${i}`}
-                          className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
-                        >
-                          <MdEdit className="shadow-shadow size-[20px]" />
-                        </label>
-                      )}
+                  <AnimatePresence>
+                    {showOptions === i && (
+                      <motion.div
+                        initial={{ translate: "0 100%" }}
+                        animate={{ translate: 0 }}
+                        exit={{ translate: "0 100%" }}
+                        transition={{ ease: "linear", duration: 0.3 }}
+                        className="absolute flex gap-2 justify-center items-center right-0 top-0 h-full w-full bg-primary-overlay backdrop-blur-[6px] text-primary-fg rounded-xl cursor-auto text-size20 font-bold"
+                      >
+                        {editable && (
+                          <label
+                            title="تعديل"
+                            htmlFor={`${name}__added_image_${i}`}
+                            className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
+                          >
+                            <MdEdit className="shadow-shadow size-[20px]" />
+                          </label>
+                        )}
 
-                      {deletable && (
+                        {deletable && (
+                          <span
+                            title="حذف"
+                            className="text-error shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
+                            onMouseDown={async () => {
+                              await handleDeleteMultiFile(item.id);
+                            }}
+                          >
+                            <FaTrash className="shadow-shadow size-[20px]" />
+                          </span>
+                        )}
+
                         <span
-                          title="حذف"
-                          className="text-error shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
+                          className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
+                          title="عرض"
                           onMouseDown={async () => {
-                            await handleDeleteMultiFile(item.id);
+                            const fileUrl =
+                              typeof item.path === "object"
+                                ? URL.createObjectURL(item.path)
+                                : `${process.env.BACKEND_BASE_URL}/images/${item.path}`;
+                            window.open(fileUrl);
                           }}
                         >
-                          <FaTrash className="shadow-shadow size-[20px]" />
+                          <BiSolidFolderOpen className="shadow-shadow size-[20px]" />
                         </span>
-                      )}
-
-                      <span
-                        className="text-primary-fg shadow-shadow bg-tertiary-bg/80 backdrop-blur-[6px] flex justify-center items-center p-sm rounded-full cursor-pointer"
-                        title="عرض"
-                        onMouseDown={async () => {
-                          const fileUrl =
-                            typeof item.path === "object"
-                              ? URL.createObjectURL(item.path)
-                              : `${process.env.BACKEND_BASE_URL}/images/${item.path}`;
-                          window.open(fileUrl);
-                        }}
-                      >
-                        <BiSolidFolderOpen className="shadow-shadow size-[20px]" />
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-            </div>
 
-            {getError(errors, `${name}.${i}.path` as Path<T>) ? (
-              <span className="text-error font-medium text-size14">
-                {
-                  (
-                    getError(errors, `${name}.${i}.path` as Path<T>) as {
-                      message: string;
-                    }
-                  )?.message
-                }
-              </span>
-            ) : null}
-          </div>
-        ))}
+              {getError(errors, `${name}.${i}.path` as Path<T>) ? (
+                <span className="text-error font-medium text-size14">
+                  {
+                    (
+                      getError(errors, `${name}.${i}.path` as Path<T>) as {
+                        message: string;
+                      }
+                    )?.message
+                  }
+                </span>
+              ) : getError(errors, `${name}.${i}` as Path<T>) ? (
+                <span className="text-error font-medium text-size14">
+                  {
+                    (
+                      getError(errors, `${name}.${i}` as Path<T>) as {
+                        message: string;
+                      }
+                    )?.message
+                  }
+                </span>
+              ) : null}
+            </div>
+          );
+        })}
 
         {canAddMore &&
           (addable ? (

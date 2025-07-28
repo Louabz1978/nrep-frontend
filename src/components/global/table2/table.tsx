@@ -187,14 +187,29 @@ export function DataTable<TData, TValue, TRow>({
             style={{
               minWidth: miw,
               width: "100%",
+              tableLayout: "fixed",
+              direction: "rtl",
             }}
           >
+            <colgroup>
+              {table.getLeafHeaders().map((header) => (
+                <col
+                  key={header.id}
+                  style={{ width: `${header.getSize()}px` }}
+                />
+              ))}
+            </colgroup>
+
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="bg-secondary">
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        style={{ width: `${header.getSize()}px` }}
+                        className="relative"
+                      >
                         {header.isPlaceholder ? null : (
                           <div
                             className={cn(
@@ -277,6 +292,7 @@ export function DataTable<TData, TValue, TRow>({
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
+                        style={{ width: `${cell.column.getSize()}px` }}
                         className="border-t border-l last:border-l-0 border-secondary max-w-[150px]"
                       >
                         {(cell.getValue() !== undefined &&
