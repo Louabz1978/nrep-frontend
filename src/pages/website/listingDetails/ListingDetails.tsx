@@ -13,6 +13,17 @@ import { Navigation } from "swiper/modules";
 import { useState } from "react";
 import { FaHouse, FaMap } from "react-icons/fa6";
 import { FaMoneyBillAlt } from "react-icons/fa";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+} from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -66,6 +77,10 @@ function ListingDetails({ data }: ListingDetailsProps) {
     solarEnergy: "لا يوجد",
     mls: data.mls_num,
     propertyType: data.property_type,
+    latitude: data.latitude,
+    longitude: data.longitude,
+    DimensionsOfTheEarth: 170,
+
   };
 
   const detailsRows1 = [
@@ -122,9 +137,8 @@ function ListingDetails({ data }: ListingDetailsProps) {
       {
         label: " الوسيط المسؤول: ",
         value: data?.created_by_user?.first_name
-          ? `${data?.created_by_user?.first_name ?? ""} ${
-              data?.created_by_user?.last_name ?? ""
-            } `
+          ? `${data?.created_by_user?.first_name ?? ""} ${data?.created_by_user?.last_name ?? ""
+          } `
           : "الوسيط المسجل , أحمد قيسون - 0999887612",
       },
     ],
@@ -160,11 +174,9 @@ function ListingDetails({ data }: ListingDetailsProps) {
         <div className="p-3 mb-6 rounded-s flex items-center justify-center border-2 ">
           <div className="flex justify-center items-center w-full text-primary font-bold underline">
             <span className="text-center w-full block">
-              {`${data?.address?.building_num ?? "  "} ${
-                data?.address?.street ?? "  "
-              } الطابق ${data?.address?.floor ?? "  "} الشقة ${
-                data?.address?.apt ?? "  "
-              } ${data?.address?.area}, ${city}, ${county}`}
+              {`${data?.address?.building_num ?? "  "} ${data?.address?.street ?? "  "
+                } الطابق ${data?.address?.floor ?? "  "} الشقة ${data?.address?.apt ?? "  "
+                } ${data?.address?.area}, ${city}, ${county}`}
             </span>
           </div>
         </div>
@@ -361,13 +373,55 @@ function ListingDetails({ data }: ListingDetailsProps) {
     </div>
   );
 
-  const renderMapTab = () => (
-    <div className="p-6 border-2 border-quaternary-border">
-      <div className="bg-gray-200 h-96 rounded-md flex items-center justify-center">
-        <p className="text-quaternary-bordertext-lg">خريطة العقار</p>
+  const renderMapTab = () => {
+    const regularMarkerIcon = new L.Icon({
+      iconUrl: markerIcon,
+      iconRetinaUrl: markerIcon2x,
+      shadowUrl: markerShadow,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [0, -41],
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41],
+    });
+    const lat = dummyProperty.latitude ? Number(dummyProperty.latitude) : 34.7324273;
+    const lng = dummyProperty.longitude ? Number(dummyProperty.longitude) : 36.7136959;
+    const markerPosition = [lat, lng] as [number, number];
+    return (
+      <div className="p-[var(--spacing-3xl)] border-quaternary-border border-2">
+        <div className="rounded-3xl max-w-200 m-auto">
+          <div className="w-full h-96 rounded-md overflow-hidden">
+            <MapContainer
+              center={markerPosition}
+              zoom={30}
+              className="w-full h-full rounded-2xl"
+              scrollWheelZoom={true}
+              attributionControl={false}
+              zoomControl={true}
+            >
+              <TileLayer
+                attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={markerPosition} icon={regularMarkerIcon}>
+                <Popup>
+                  الموقع المحدد
+                  <br />
+                  خط العرض: {lat.toFixed(2)}
+                  <br />
+                  خط الطول: {lng.toFixed(2)}
+                </Popup>
+              </Marker>
+            </MapContainer>
+          </div>
+          <div className="flex justify-between items-center mt-[var(--spacing-4xl)] font-bold">
+            <span>مصدر القياسات ( أبعاد الأرض ) :{dummyProperty.DimensionsOfTheEarth}</span>
+            <span>مصدر القياسات ( مساحة الأرض ) :{dummyProperty.propertyArea}</span>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <AnimateContainer>
@@ -377,11 +431,10 @@ function ListingDetails({ data }: ListingDetailsProps) {
         {/* Tabs */}
         <div className="flex  mt-6 gap-2" style={{ direction: "ltr" }}>
           <button
-            className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md  font-medium ${
-              activeTab === "details"
+            className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md  font-medium ${activeTab === "details"
                 ? " bg-white border-2 border-b-0 border-quaternary-border"
                 : "bg-quaternary-border text-white "
-            }`}
+              }`}
             onClick={() => setActiveTab("details")}
           >
             <div>
@@ -390,11 +443,10 @@ function ListingDetails({ data }: ListingDetailsProps) {
             <div>التفاصيل</div>
           </button>
           <button
-            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${
-              activeTab === "taxes"
+            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${activeTab === "taxes"
                 ? " bg-white border-2 border-b-0 border-quaternary-border"
                 : "bg-quaternary-border text-white"
-            }`}
+              }`}
             onClick={() => setActiveTab("taxes")}
           >
             <div>
@@ -403,11 +455,10 @@ function ListingDetails({ data }: ListingDetailsProps) {
             <div>الضرائب</div>
           </button>
           <button
-            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${
-              activeTab === "map"
+            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${activeTab === "map"
                 ? " bg-white border-2 border-b-0 border-quaternary-border"
                 : "bg-quaternary-border text-white"
-            }`}
+              }`}
             onClick={() => setActiveTab("map")}
           >
             <div>
