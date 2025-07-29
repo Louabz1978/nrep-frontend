@@ -13,12 +13,7 @@ import { Navigation } from "swiper/modules";
 import { useState } from "react";
 import { FaHouse, FaMap } from "react-icons/fa6";
 import { FaMoneyBillAlt } from "react-icons/fa";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
@@ -30,6 +25,8 @@ interface ListingDetailsProps {
 }
 
 function ListingDetails({ data }: ListingDetailsProps) {
+  console.log(data);
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
 
@@ -45,35 +42,48 @@ function ListingDetails({ data }: ListingDetailsProps) {
   const status = STATUS?.find((item) => item?.value == data?.status)?.label;
 
   const dummyProperty = {
+    ac: "يوجد",
+    apartmentNumber: data.address.apt || "2",
+    area: data.address.area || "النص هنا",
+    approximatePrice: ((data.price * 80) / 100).toFixed(2),
+    balcony: "2",
+    bathrooms: data.bathrooms || "النص هنا",
+    bedrooms: data.bedrooms || "3",
+    buildYear: data.year_built || "1999",
+    buildingNumber: data.address.building_num || "452146",
+    buyerCommission: data.buyer_realtor_commission + "%" || "$",
+    city: city || "النص هنا",
+    contractExpiration: "xx/x/20xx",
+    description:
+      data.description ||
+      "هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عِش في واحدة من أكثر المواقع طلبًا ",
+    elevator: "لا يوجد",
+    email: data.owner.email || "seller@gmail.com",
+    fans: "3",
+    floor: data.floor || "2",
+    floorNumber: data.floor || "3",
+    garden: "يوجد",
+    governorate: county || "حمص",
     image: data.image_url
       ?.replace(/^\{|\}$/g, "")
       .split(",")
       ?.map((item) => `${import.meta.env.VITE_BACKEND_URL}${item}`) || [image],
-    buildingNumber: data.address.building_num || "452146",
-    streetName: data.address.street || "النص هنا",
-    floorNumber: data.floor || "3",
-    apartmentNumber: data.address.apt || "2",
-    area: data.address.area || "النص هنا",
-    city: city || "النص هنا",
-    governorate: county || "حمص",
-    price: data.price || 1000000,
-    bedrooms: data.bedrooms || "3",
-    bathrooms: data.bathrooms || "النص هنا",
-    sellerCommission: data.property_realtor_commission || "$",
-    floor: data.floor || "2",
-    buildYear: data.year_built || "1999",
-    buyerCommission: data.buyer_realtor_commission || "$",
-    propertyArea: data.area_space || "200",
-    status: status || "قيد الانجاز",
-    balcony: "2",
-    fans: "3",
-    waterLine: "يوجد",
-    pool: "لا يوجد",
     jacuzzy: "لا يوجد",
-    ac: "يوجد",
-    garden: "يوجد",
+    licenseNumber: "2516584005",
+    mls: data.mls_num || "454942",
     parking: "يوجد",
-    elevator: "لا يوجد",
+    phoneNumber: data.owner.phone_number || "0909091009",
+    pool: "لا يوجد",
+    previewInstruction:
+      "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
+    price: data.price || 1000000,
+    propertyArea: data.area_space || "200",
+    propertyOwner: data.owner.first_name + data.owner.last_name || "seller 11",
+    propertyType: data.property_type || "شقة",
+    realEstateCompany: "NREP",
+    responsibleMediator:
+      data.created_by_user.first_name + data.owner.last_name || "realtor 11",
+    sellerCommission: data.property_realtor_commission + "%" || "$",
     solarEnergy: "لا يوجد",
     mls: data.mls_num,
     propertyType: data.property_type,
@@ -81,6 +91,9 @@ function ListingDetails({ data }: ListingDetailsProps) {
     longitude: data.longitude,
     DimensionsOfTheEarth: 170,
 
+    status: status || "قيد الانجاز",
+    streetName: data.address.street || "النص هنا",
+    waterLine: "يوجد",
   };
 
   const detailsRows1 = [
@@ -104,16 +117,12 @@ function ListingDetails({ data }: ListingDetailsProps) {
     [
       { label: "عدد غرف النوم :", value: dummyProperty.bedrooms },
       { label: "عدد الحمامات :", value: dummyProperty.bathrooms },
-    ],
-    [
       { label: "عدد الشرف : ", value: dummyProperty.balcony },
       { label: "مراوح : ", value: dummyProperty.fans },
       { label: "خط المياه الواصل للعقار : ", value: dummyProperty.waterLine },
       { label: "مسبح : ", value: dummyProperty.pool },
       { label: "جاكوزي : ", value: dummyProperty.jacuzzy },
       { label: "مكيف  : ", value: dummyProperty.ac },
-    ],
-    [
       { label: "حديقة : ", value: dummyProperty.garden },
       { label: "مصعد : ", value: dummyProperty.elevator },
       { label: "مكان مخصص لركن الألية : ", value: dummyProperty.parking },
@@ -123,37 +132,18 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   const detailsRows4 = [
     [
-      { label: "شركة الوساطة : ", value: "Nerp Group" },
+      { label: "الوسيط المسؤول :", value: dummyProperty.responsibleMediator },
+      { label: "الشركة العقارية :", value: dummyProperty.realEstateCompany },
+      { label: "عمولة  البائع :", value: dummyProperty.buyerCommission },
+      { label: "رقم الهاتف :", value: dummyProperty.phoneNumber },
+      { label: "البريد الالكتروني :", value: dummyProperty.email },
+      { label: "عمولة  المشتري :", value: dummyProperty.sellerCommission },
       {
-        label: "رقم الهاتف : ",
-        value: data?.created_by_user?.phone_number || "0912345678 / 0987654321",
+        label: "تاريخ الإنتهاء العقد :",
+        value: dummyProperty.contractExpiration,
       },
-      {
-        label: "العنوان : ",
-        value:
-          data?.created_by_user?.address ||
-          "حمص - الإنشاءات - شارع عنترة بن شداد",
-      },
-      {
-        label: " الوسيط المسؤول: ",
-        value: data?.created_by_user?.first_name
-          ? `${data?.created_by_user?.first_name ?? ""} ${data?.created_by_user?.last_name ?? ""
-          } `
-          : "الوسيط المسجل , أحمد قيسون - 0999887612",
-      },
-    ],
-    [
-      { label: "تاريخ العقد : ", value: "12 / 05 / 2025" },
-      { label: "تاريخ الإنتهاء : ", value: "12 / 05 / 2026" },
-      { label: "تاريخ آخر تحديث : ", value: "09 / 07 / 2025" },
-      { label: "الشرط : ", value: "" },
-      { label: "انتهاء الشرط : ", value: "" },
-    ],
-    [
-      { label: "الإعلان : ", value: "نعم" },
-      { label: "فسخ العقد : ", value: "غير مذكور" },
-      { label: "السعر الأصلي : ", value: "120000$" },
-      { label: "العمولة : ", value: "2.5 %" },
+      { label: "رقم الرخصة :", value: dummyProperty.licenseNumber },
+      { label: "اسم صاحب العقار :", value: dummyProperty.propertyOwner },
     ],
   ];
 
@@ -174,9 +164,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
         <div className="p-3 mb-6 rounded-s flex items-center justify-center border-2 ">
           <div className="flex justify-center items-center w-full text-primary font-bold underline">
             <span className="text-center w-full block">
-              {`${data?.address?.building_num ?? "  "} ${data?.address?.street ?? "  "
-                } الطابق ${data?.address?.floor ?? "  "} الشقة ${data?.address?.apt ?? "  "
-                } ${data?.address?.area}, ${city}, ${county}`}
+              {`${data?.address?.building_num ?? "  "} ${
+                data?.address?.street ?? "  "
+              } الطابق ${data?.address?.floor ?? "  "} الشقة ${
+                data?.address?.apt ?? "  "
+              } ${data?.address?.area}, ${city}, ${county}`}
             </span>
           </div>
         </div>
@@ -215,7 +207,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             </div>
             <div className="text-center mt-2">
               <div className="text-digital-green-bg text-size20 font-bold">
-                القيمة التقديرية للعقار : $ {dummyProperty.price}{" "}
+                القيمة التقديرية للعقار : $ {dummyProperty.approximatePrice}{" "}
               </div>
             </div>
           </div>
@@ -285,21 +277,14 @@ function ListingDetails({ data }: ListingDetailsProps) {
           <div>
             <h4 className="font-bold mb-2">وصف العقار:</h4>
             <p className="text-quaternary-border leading-relaxed">
-              هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عش في واحدة من
-              أكثر المواقع طلبا في تورنتو، محاطة بالمطاعم والمقاهي والمعارض
-              الفنية البحيرة، المدينة، والممرات الحجرية القديمة ، منزلك الجديد
-              يجمع كل شيء. تسوق محليا في سوق سانت لورانس، وعش حياة صديقة للبيئة
-              مع معرفة أن ميناك حاصل على اعتراف في الحفاظ على الطاقة، وتمش حيلما
-              استطعت لأنك تستطيع .
+              {dummyProperty.description}
             </p>
           </div>
 
           <div>
             <h4 className="font-bold mb-2">تعليمات المعاينة:</h4>
             <p className="text-quaternary-border">
-              المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح، يتم قبول العروض
-              يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .
-              للإستفسار: example@gmail.com - 0912345678
+              {dummyProperty.previewInstruction}
             </p>
           </div>
         </div>
@@ -384,8 +369,12 @@ function ListingDetails({ data }: ListingDetailsProps) {
       shadowSize: [41, 41],
       shadowAnchor: [12, 41],
     });
-    const lat = dummyProperty.latitude ? Number(dummyProperty.latitude) : 34.7324273;
-    const lng = dummyProperty.longitude ? Number(dummyProperty.longitude) : 36.7136959;
+    const lat = dummyProperty.latitude
+      ? Number(dummyProperty.latitude)
+      : 34.7324273;
+    const lng = dummyProperty.longitude
+      ? Number(dummyProperty.longitude)
+      : 36.7136959;
     const markerPosition = [lat, lng] as [number, number];
     return (
       <div className="p-[var(--spacing-3xl)] border-quaternary-border border-2">
@@ -415,8 +404,13 @@ function ListingDetails({ data }: ListingDetailsProps) {
             </MapContainer>
           </div>
           <div className="flex justify-between items-center mt-[var(--spacing-4xl)] font-bold">
-            <span>مصدر القياسات ( أبعاد الأرض ) :{dummyProperty.DimensionsOfTheEarth}</span>
-            <span>مصدر القياسات ( مساحة الأرض ) :{dummyProperty.propertyArea}</span>
+            <span>
+              مصدر القياسات ( أبعاد الأرض ) :
+              {dummyProperty.DimensionsOfTheEarth}
+            </span>
+            <span>
+              مصدر القياسات ( مساحة الأرض ) :{dummyProperty.propertyArea}
+            </span>
           </div>
         </div>
       </div>
@@ -431,10 +425,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
         {/* Tabs */}
         <div className="flex  mt-6 gap-2" style={{ direction: "ltr" }}>
           <button
-            className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md  font-medium ${activeTab === "details"
+            className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md  font-medium ${
+              activeTab === "details"
                 ? " bg-white border-2 border-b-0 border-quaternary-border"
                 : "bg-quaternary-border text-white "
-              }`}
+            }`}
             onClick={() => setActiveTab("details")}
           >
             <div>
@@ -443,10 +438,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
             <div>التفاصيل</div>
           </button>
           <button
-            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${activeTab === "taxes"
+            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${
+              activeTab === "taxes"
                 ? " bg-white border-2 border-b-0 border-quaternary-border"
                 : "bg-quaternary-border text-white"
-              }`}
+            }`}
             onClick={() => setActiveTab("taxes")}
           >
             <div>
@@ -455,10 +451,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
             <div>الضرائب</div>
           </button>
           <button
-            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${activeTab === "map"
+            className={`flex items-center justify-around gap-3 bg-quaternary-border rounded-t-md  px-6 py-3 font-medium ${
+              activeTab === "map"
                 ? " bg-white border-2 border-b-0 border-quaternary-border"
                 : "bg-quaternary-border text-white"
-              }`}
+            }`}
             onClick={() => setActiveTab("map")}
           >
             <div>
