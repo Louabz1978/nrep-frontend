@@ -19,14 +19,14 @@ import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import StatusManager from "@/components/global/statusManager/StatusManager";
+import useListingPredictPrice from "@/hooks/website/listing/usePredictListingPrice";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
 }
 
 function ListingDetails({ data }: ListingDetailsProps) {
-  console.log(data);
-
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
 
@@ -155,6 +155,24 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
 
+  // Get predict price of this listing
+  const { listingPredictPrice, listingPredictPriceQuery } =
+    useListingPredictPrice({
+      num_bedrooms: 4,
+      num_bathrooms: 2,
+      has_solar_panels: true,
+      has_ac: true,
+      has_swimming_pool: true,
+      quality: 3.5,
+      area_sqm: 175,
+      construction_year: 2010,
+      renovation_year: 2018,
+      property_type: "villa",
+      latitude: 36.25,
+      longitude: 36.75,
+      avg_nearby_price: 200000.23,
+    });
+
   const renderDetailsTab = () => (
     <div className="w-full border-quaternary-border border-2">
       {/* Address Bar */}
@@ -204,8 +222,23 @@ function ListingDetails({ data }: ListingDetailsProps) {
               </Swiper>
             </div>
             <div className="text-center mt-2">
-              <div className="text-digital-green-bg text-size20 font-bold">
-                القيمة التقديرية للعقار : $ {dummyProperty.approximatePrice}{" "}
+              <div
+                className="text-digital-green-bg text-size20 font-bold flex items-center justify-center"
+                dir="rtl"
+              >
+                <div>القيمة التقديرية للعقار :</div>
+                <StatusManager
+                  Loader={() => "loading"}
+                  query={listingPredictPriceQuery}
+                  ErrorHandler={() =>
+                    ((dummyProperty?.price * 80) / 100).toFixed(2)
+                  }
+                >
+                  <span>
+                    {listingPredictPrice?.predicted_price ||
+                      dummyProperty.approximatePrice}
+                  </span>
+                </StatusManager>
               </div>
             </div>
           </div>

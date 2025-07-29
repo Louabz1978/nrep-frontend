@@ -9,4 +9,5 @@ export interface StatusManagerProps {
   query?: UseQueryResult;
   isEmpty?: boolean;
   emptyContent?: ReactNode;
+  ErrorHandler?: ({ error }: { error?: Error }) => ReactNode;
 }

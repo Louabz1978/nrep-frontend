@@ -9,6 +9,7 @@ function StatusManager({
   query,
   isEmpty,
   loaderInSlider,
+  ErrorHandler = ErrorComponent,
   emptyContent = <EmptyContent />,
 }: StatusManagerProps) {
   // pending status
@@ -29,7 +30,7 @@ function StatusManager({
   }
 
   // error status
-  if (query?.isError) return <ErrorComponent error={query?.error} />;
+  if (query?.isError) return <ErrorHandler error={query?.error} />;
 
   // no data recieved
   if (isEmpty) return emptyContent;
