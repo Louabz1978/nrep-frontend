@@ -2,11 +2,17 @@ import Badge from "@/components/global/badge/Badge";
 import { Button } from "@/components/global/form/button/Button";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
-import { DataTable } from "@/components/global/table2/table";
+import { DataTable, type Filters } from "@/components/global/table2/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import useAllListings from "@/hooks/website/listing/useAllListings";
+import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
 import type { Listing } from "@/types/website/listings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -20,6 +26,9 @@ import { Link } from "react-router-dom";
 function AllListings() {
   // get all listings
   const { allListings, allListingsQuery, totalPages } = useAllListings();
+
+  // handle delete listing methods
+  const { deleteListing, handleDeleteListing } = useDeleteListings();
 
   // listing item columns
   const listingColumns: ColumnDef<Listing>[] = useMemo(
@@ -49,45 +58,58 @@ function AllListings() {
         ),
         enableSorting: false,
         enableHiding: false,
-      },
-      {
-        id: "order",
-        header: "#",
-        cell: ({ row }) => row?.index + 1,
-        enableSorting: false,
+        size: 8,
+        minSize: 8,
       },
       {
         id: "mls_num",
-        accessorKey: "mls_num",
+        accessorKey: "address.building_num",
         header: "رقم العقار",
         cell: ({ row }) => (
           <Link
             to={`/listing/details/${row?.original?.property_id}`}
             className="hover:text-primary"
           >
-            {row?.original?.mls_num}
+            {`${row?.original?.address?.building_num ?? ""} ${
+              row?.original?.address?.street ?? ""
+            } طابق ${row?.original?.address?.floor ?? ""} شقة ${
+              row?.original?.address?.apt ?? ""
+            }`}
           </Link>
         ),
+        size: 35,
       },
       {
         id: "address",
         header: "العنوان",
-        accessorKey: "address.county",
+        accessorKey: "address.building_num",
         cell: ({ row }) => {
-          return cityChoices?.find(
+          const county = cityChoices?.find(
             (item) => item?.value == row?.original?.address?.county
           )?.label;
+          const city = cityChoices?.find(
+            (item) => item?.value == row?.original?.address?.city
+          )?.label;
+
+          return `${row?.original?.address?.building_num ?? ""} ${
+            row?.original?.address?.street ?? ""
+          } طابق ${row?.original?.address?.floor ?? ""} شقة ${
+            row?.original?.address?.apt ?? ""
+          }, ${row?.original?.address?.area}, ${city}, ${county}`;
         },
+        size: 50,
       },
       {
         id: "price",
         header: "السعر",
         accessorKey: "price",
+        size: 20,
       },
       {
         id: "area",
         header: "المنطقة",
         accessorKey: "address.area",
+        size: 10,
       },
       {
         id: "city",
@@ -98,6 +120,7 @@ function AllListings() {
             (item) => item?.value == row?.original?.address?.city
           )?.label;
         },
+        size: 10,
       },
       {
         id: "status",
@@ -117,6 +140,7 @@ function AllListings() {
             />
           );
         },
+        size: 10,
       },
       {
         id: "action",
@@ -125,45 +149,92 @@ function AllListings() {
           return (
             <div className="flex items-center gap-md">
               {/* edit */}
-              <Link to={`/listing/edit/${row?.original?.property_id}`}>
-                <Button size={"icon"} className="bg-green">
-                  <PiPencilSimpleBold />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/listing/edit/${row?.original?.property_id}`}>
+                    <Button size={"icon"} className="bg-green">
+                      <PiPencilSimpleBold />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تعديل</TooltipContent>
+              </Tooltip>
 
               {/* delete */}
-              <Button
-                size={"icon"}
-                className="bg-red"
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log(row?.original?.property_id);
-                }}
-              >
-                <PiTrashSimpleBold />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div>
+                    <Button
+                      size={"icon"}
+                      className="bg-red"
+                      disabled={
+                        deleteListing?.isPending &&
+                        deleteListing?.variables?.id ==
+                          row?.original?.property_id
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDeleteListing(row?.original?.property_id);
+                      }}
+                    >
+                      <PiTrashSimpleBold />
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>حذف</TooltipContent>
+              </Tooltip>
 
               {/* details */}
-              <Link to={`/listing/details/${row?.original?.property_id}`}>
-                <Button size={"icon"}>
-                  <PiInfoBold />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/listing/details/${row?.original?.property_id}`}>
+                    <Button size={"icon"}>
+                      <PiInfoBold />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تفاصيل</TooltipContent>
+              </Tooltip>
             </div>
           );
         },
+        size: 25,
         enableSorting: false,
+      },
+    ],
+    [handleDeleteListing, deleteListing]
+  );
+
+  // filter config
+  const filter: Filters = useMemo(
+    () => [
+      {
+        id: "3",
+        type: "select",
+        label: "الحالة",
+        title: "الحالة",
+        searchKey: "status",
+        options: STATUS,
+      },
+
+      {
+        id: "9",
+        type: "number",
+        label: "السعر",
+        title: "السعر",
+        searchKey: "price",
       },
     ],
     []
   );
+
   return (
     <AnimateContainer>
       <PageContainer>
         <DataTable
           prefix={TABLE_PREFIXES.allListings}
           columns={listingColumns}
-          filters={[]}
+          filters={filter}
           data={(allListings ?? []) as Listing[]}
           query={allListingsQuery}
           totalPageCount={totalPages}
