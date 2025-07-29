@@ -85,8 +85,6 @@ function ListingDetails({ data }: ListingDetailsProps) {
       data.created_by_user.first_name + data.owner.last_name || "realtor 11",
     sellerCommission: data.property_realtor_commission + "%" || "$",
     solarEnergy: "لا يوجد",
-    mls: data.mls_num,
-    propertyType: data.property_type,
     latitude: data.latitude,
     longitude: data.longitude,
     DimensionsOfTheEarth: 170,
