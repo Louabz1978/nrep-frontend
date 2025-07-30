@@ -11,7 +11,7 @@ import { cityChoices, STATUS } from "@/data/global/select";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { useState } from "react";
-import { FaHouse, FaMap } from "react-icons/fa6";
+import { FaMap, FaSatelliteDish } from "react-icons/fa";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -29,6 +29,8 @@ interface ListingDetailsProps {
 function ListingDetails({ data }: ListingDetailsProps) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
+  const [isSatellite, setIsSatellite] = useState(false);
+  const [rotate, setRotate] = useState(false);
 
   const handleNavigate = () => {
     navigate(-1);
@@ -408,8 +410,24 @@ function ListingDetails({ data }: ListingDetailsProps) {
       : 36.7136959;
     const markerPosition = [lat, lng] as [number, number];
     return (
-      <div className="p-[var(--spacing-3xl)] border-quaternary-border border-2">
+      <div className="p-[var(--spacing-3xl)] border-quaternary-border border-2 sticky">
         <div className="rounded-3xl max-w-200 m-auto">
+          <div className="flex justify-end mb-2">
+            <button
+              className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-primary bg-white text-primary cursor-pointer shadow transition"
+              onClick={() => {
+                setRotate(true);
+                setIsSatellite((prev) => !prev);
+              }}
+            >
+              <span
+                className={rotate ? 'animate-rotate' : ''}
+                onAnimationEnd={() => setRotate(false)}
+              >
+                {isSatellite ? <FaMap size={20} /> : <FaSatelliteDish size={20} />}
+              </span>
+            </button>
+          </div>
           <div className="w-full h-96 rounded-md overflow-hidden">
             <MapContainer
               center={markerPosition}
@@ -419,10 +437,17 @@ function ListingDetails({ data }: ListingDetailsProps) {
               attributionControl={false}
               zoomControl={true}
             >
-              <TileLayer
-                attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+              {isSatellite ? (
+                <TileLayer
+                  attribution='Tiles © Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                />
+              ) : (
+                <TileLayer
+                  attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+              )}
               <Marker position={markerPosition} icon={regularMarkerIcon}>
                 <Popup>
                   الموقع المحدد
@@ -464,7 +489,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             onClick={() => setActiveTab("details")}
           >
             <div>
-              <FaHouse />
+              <FaMap />
             </div>
             <div>التفاصيل</div>
           </button>
