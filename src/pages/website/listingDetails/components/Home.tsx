@@ -116,8 +116,9 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
         {/* Image/Slider Section */}
         <div className="w-full lg:w-1/2 flex flex-col">
           <div className="mb-4 sm:mb-6">
-            <div className="h-[220px] xs:h-[260px] sm:h-[320px] md:h-[360px] lg:h-[400px] w-full relative">
+            <div className="h-[220px] relative xs:h-[260px] sm:h-[320px] no-print md:h-[360px] lg:h-[400px] w-full relative">
               <Swiper
+                data-html2canvas-ignore={true}
                 modules={[Navigation]}
                 navigation={{
                   nextEl: ".swiper-button-next",
@@ -131,6 +132,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   <SwiperSlide key={index}>
                     <img
                       src={img}
+                      // src={"https://picsum.photos/200/300"}
                       alt={`property ${index + 1}`}
                       className="w-full h-full object-cover rounded-md"
                       style={{ maxWidth: "100%", maxHeight: "100%" }}
@@ -142,7 +144,22 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                 <div className="swiper-button-prev !text-inverse-fg bg-quaternary-bg/20 backdrop-blur-[15px] rounded-full !size-[32px] sm:!size-[40px] after:!text-lg sm:after:!text-xl"></div>
                 <div className="swiper-button-next !text-inverse-fg bg-quaternary-bg/20 backdrop-blur-[15px] rounded-full !size-[32px] sm:!size-[40px] after:!text-lg sm:after:!text-xl"></div>
               </Swiper>
+
+              <div className="absolute z-0 top-0 left-0 w-full h-full">
+                <img
+                  // src={dummyProperty.image?.[0]}
+                  src={"https://picsum.photos/200/300"}
+                  alt={`property`}
+                  className="w-full h-full object-cover rounded-md"
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
+                />
+              </div>
+              <div
+                data-html2canvas-ignore={true}
+                className="absolute z-0 top-0 left-0 w-full h-full bg-tertiary-bg"
+              ></div>
             </div>
+
             <div className="text-center mt-2">
               <div
                 className="text-digital-green-bg text-size16 sm:text-size18 md:text-size20 font-bold flex flex-col sm:flex-row items-center justify-center gap-1"
@@ -249,7 +266,12 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
           <div className="h-[2px] w-[600px] bg-primary"></div>
         </div>
 
-        <div className="space-y-6 p-5">
+        <div
+          className="space-y-6 p-5"
+          style={{
+            direction: "rtl",
+          }}
+        >
           <div>
             <h4 className="font-bold mb-2">وصف العقار:</h4>
             <p className="text-quaternary-border leading-relaxed">

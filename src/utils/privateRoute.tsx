@@ -10,6 +10,10 @@ interface PrivateRouteProps {
   role: UserType;
 }
 
+const hasPermission = (userRole: UserType[], requiredRole: UserType) => {
+  return userRole?.includes(requiredRole);
+};
+
 // Prevent user from accessing other user type pages
 const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
   const isThereToken = secureLocalStorage.getItem("ACCESS_TOKEN");
@@ -18,16 +22,17 @@ const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
       [key: string]: unknown;
     }
   )?.token_type as UserType;
+  const userRoles = [userType] as UserType[];
 
   // allow all users to enter this page
   if (role == "allow") return element;
 
   // user logged in and his role fit with required role
-  if (isThereToken && userType === role) return element;
+  if (isThereToken && hasPermission(userRoles, role)) return element;
 
   // if user logged in but try to login again, route him to his index page
   if (role === "mustUnauth" && isThereToken) {
-    switch (userType) {
+    switch (userRoles?.[0]) {
       case "admin":
         return <Navigate to="/admin" />;
       default:

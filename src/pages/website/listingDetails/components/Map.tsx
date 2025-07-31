@@ -41,6 +41,7 @@ const RenderMapTab = ({ dummyProperty }: RenderMapTabProps) => {
       <div className="rounded-3xl max-w-200 m-auto">
         <div className="flex justify-end mb-2">
           <button
+            data-html2canvas-ignore={true}
             className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-primary bg-white text-primary cursor-pointer shadow transition"
             onClick={() => {
               setRotate(true);

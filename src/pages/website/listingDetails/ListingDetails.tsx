@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePDF } from "react-to-pdf";
+// import { usePDF } from "react-to-pdf";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
@@ -15,6 +15,9 @@ import type { ListingDetailsType } from "@/types/website/listings";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaHouse } from "react-icons/fa6";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas-pro";
+import "./components/print.css";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -29,7 +32,110 @@ const TABS = [
 function ListingDetails({ data }: ListingDetailsProps) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  const pdfRef = useRef<HTMLDivElement>(null);
+  const taxesRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadPDF = async () => {
+    if (!pdfRef.current || !taxesRef.current || !mapRef.current) return;
+
+    try {
+      document.body.classList.add("printing");
+
+      // 1. Create a container for combined content
+      const container = document.createElement("div");
+      container.style.width = "100%";
+      container.style.position = "absolute";
+      container.style.left = "-9999px";
+      document.body.appendChild(container);
+
+      // 2. Clone and modify both sections
+      const detailsClone = pdfRef.current.cloneNode(true) as HTMLElement;
+      const taxesClone = taxesRef.current.cloneNode(true) as HTMLElement;
+      const mapClone = mapRef.current.cloneNode(true) as HTMLElement;
+
+      // Remove unnecessary margins/padding
+      detailsClone.style.display = "block";
+      detailsClone.style.pageBreakAfter = "always";
+      detailsClone.style.margin = "0";
+      detailsClone.style.padding = "0";
+      taxesClone.style.display = "block";
+      taxesClone.style.pageBreakAfter = "always";
+      taxesClone.style.margin = "0";
+      taxesClone.style.padding = "0";
+      mapClone.style.display = "block";
+      mapClone.style.pageBreakAfter = "always";
+      mapClone.style.margin = "0";
+      mapClone.style.padding = "0";
+
+      // Add section headers
+      const detailsHeader = document.createElement("h2");
+      detailsHeader.textContent = "تفاصيل العقار";
+      detailsHeader.style.textAlign = "center";
+      detailsHeader.style.marginBottom = "10px";
+
+      const taxesHeader = document.createElement("h2");
+      taxesHeader.textContent = "الضرائب";
+      taxesHeader.style.textAlign = "center";
+      taxesHeader.style.margin = "20px 0 10px 0";
+      const mapHeader = document.createElement("h2");
+      mapHeader.textContent = "الموقع";
+      mapHeader.style.textAlign = "center";
+      mapHeader.style.margin = "20px 0 10px 0";
+
+      // 3. Build the combined content
+      container.appendChild(detailsHeader);
+      container.appendChild(detailsClone);
+      container.appendChild(taxesHeader);
+      container.appendChild(taxesClone);
+      container.appendChild(mapClone);
+
+      // 4. Capture as single image
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true, // Required for some external images
+        logging: true,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: 1280,
+        windowHeight: container.scrollHeight,
+        onclone: (clonedDoc, element) => {
+          element.style.display = "block";
+          clonedDoc.body.style.overflow = "visible";
+        },
+      });
+
+      // 5. Generate PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/png");
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Scale to fit page height if needed
+      const maxHeight = 297; // A4 height in mm
+      const finalHeight = Math.min(imgHeight, maxHeight);
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        imgWidth,
+        finalHeight,
+        undefined,
+        "FAST"
+      );
+
+      pdf.save("property-report.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      document.body.classList.remove("printing");
+      const containers = document.querySelectorAll("#print-container");
+      containers.forEach((container) => container.remove());
+    }
+  };
 
   const handleNavigate = () => navigate(-1);
 
@@ -116,14 +222,30 @@ function ListingDetails({ data }: ListingDetailsProps) {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-tertiary-bg" ref={targetRef}>
-          {activeTab === "details" && (
+        <div className="bg-tertiary-bg">
+          <div
+            ref={pdfRef}
+            data-tab-content="details"
+            style={{ display: activeTab === "details" ? "block" : "none" }}
+          >
             <RenderDetailsTab dummyProperty={dummyProperty} />
-          )}
-          {activeTab === "taxes" && <RenderTaxesTab />}
-          {activeTab === "map" && (
+          </div>
+
+          <div
+            ref={taxesRef}
+            data-tab-content="taxes"
+            style={{ display: activeTab === "taxes" ? "block" : "none" }}
+          >
+            <RenderTaxesTab />
+          </div>
+
+          <div
+            ref={mapRef}
+            data-tab-content="map"
+            style={{ display: activeTab === "map" ? "block" : "none" }}
+          >
             <RenderMapTab dummyProperty={dummyProperty} />
-          )}
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -135,7 +257,8 @@ function ListingDetails({ data }: ListingDetailsProps) {
             className="bg-green border-none"
             onClick={(e) => {
               e.preventDefault();
-              toPDF();
+              handleDownloadPDF();
+              // toPDF();
             }}
           >
             طباعة التفاصيل PDF
