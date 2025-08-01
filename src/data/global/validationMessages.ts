@@ -50,6 +50,8 @@ const VALIDATION_MESSAGES: Record<string, string> = {
   "file.minSize": "حجم الصورة يجب أن يكون على الأقل {{#limit}}",
   "file.maxSize": "حجم الصورة يجب أن لا يتجاوز {{#limit}}",
   "file.invalidType": "يجب أن يكون الملف صورة",
+  "custom.singleMainImage": "يمكنك تحديد صورة واحدة فقط كصورة رئيسية",
+  "custom.MainImageRequired": "يجب تحديد صورة واحدة كصورة رئيسية",
 };
 
 export default VALIDATION_MESSAGES;

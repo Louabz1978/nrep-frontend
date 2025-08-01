@@ -22,6 +22,9 @@ export const useDeleteListings = () => {
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.query] })
         .catch(console.error);
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEYS.listings.myListings] })
+        .catch(console.error);
 
       // navigate to all listings page
       navigate("/listing/all-listings");

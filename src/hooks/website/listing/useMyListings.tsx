@@ -14,7 +14,7 @@ function useMyListings() {
 
   // get listing details
   const myListingsQuery = useQuery({
-    queryKey: [QUERY_KEYS?.listings?.query, JSON.stringify(queryParams)],
+    queryKey: [QUERY_KEYS?.listings?.myListings, JSON.stringify(queryParams)],
     queryFn: () => getMyListings({ queryParams }),
     retry: false,
     refetchOnWindowFocus: false,

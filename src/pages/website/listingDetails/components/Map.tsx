@@ -29,6 +29,7 @@ const RenderMapTab = ({ dummyProperty }: RenderMapTabProps) => {
     shadowSize: [41, 41],
     shadowAnchor: [12, 41],
   });
+
   const lat = dummyProperty.latitude
     ? Number(dummyProperty.latitude)
     : 34.7324273;
@@ -36,13 +37,14 @@ const RenderMapTab = ({ dummyProperty }: RenderMapTabProps) => {
     ? Number(dummyProperty.longitude)
     : 36.7136959;
   const markerPosition = [lat, lng] as [number, number];
+
   return (
-    <div className="p-[var(--spacing-3xl)] border-quaternary-border border-2 sticky">
+    <div className="p-3xl border-quaternary-border border-2 sticky">
       <div className="rounded-3xl max-w-200 m-auto">
         <div className="flex justify-end mb-2">
           <button
             data-html2canvas-ignore={true}
-            className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-primary bg-white text-primary cursor-pointer shadow transition"
+            className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-primary bg-tertiary-bg text-primary cursor-pointer shadow transition"
             onClick={() => {
               setRotate(true);
               setIsSatellite((prev) => !prev);
@@ -63,8 +65,8 @@ const RenderMapTab = ({ dummyProperty }: RenderMapTabProps) => {
         <div className="w-full h-96 rounded-md overflow-hidden">
           <MapContainer
             center={markerPosition}
-            zoom={30}
-            className="w-full h-full rounded-2xl"
+            zoom={10}
+            className="w-full h-full"
             scrollWheelZoom={true}
             attributionControl={false}
             zoomControl={true}

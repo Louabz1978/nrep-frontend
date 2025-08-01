@@ -24,6 +24,9 @@ export const useEditListings = () => {
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.query] })
         .catch(console.error);
       queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEYS.listings.myListings] })
+        .catch(console.error);
+      queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.details, res?.id] })
         .catch(console.error);
 

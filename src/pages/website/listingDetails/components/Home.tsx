@@ -1,7 +1,8 @@
-import StatusManager from "@/components/global/statusManager/StatusManager";
+// import StatusManager from "@/components/global/statusManager/StatusManager";
+import { STATUS_COLORS, STATUS_TEXT } from "@/data/global/select";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import useListingPredictPrice from "@/hooks/website/listing/usePredictListingPrice";
+// import useListingPredictPrice from "@/hooks/website/listing/usePredictListingPrice";
 
 type RenderDetailsTabProps = {
   dummyProperty: any;
@@ -9,27 +10,30 @@ type RenderDetailsTabProps = {
 
 const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
   // Get predict price of this listing
-  const { listingPredictPrice, listingPredictPriceQuery } =
-    useListingPredictPrice({
-      num_bedrooms: 4,
-      num_bathrooms: 2,
-      has_solar_panels: true,
-      has_ac: true,
-      has_swimming_pool: true,
-      quality: 3.5,
-      area_sqm: 175,
-      construction_year: 2010,
-      renovation_year: 2018,
-      property_type: "villa",
-      latitude: 36.25,
-      longitude: 36.75,
-      avg_nearby_price: 200000.23,
-    });
+  // const { listingPredictPrice, listingPredictPriceQuery } =
+  //   useListingPredictPrice({
+  //     num_bedrooms: 4,
+  //     num_bathrooms: 2,
+  //     has_solar_panels: true,
+  //     has_ac: true,
+  //     has_swimming_pool: true,
+  //     quality: 3.5,
+  //     area_sqm: 175,
+  //     construction_year: 2010,
+  //     renovation_year: 2018,
+  //     property_type: "villa",
+  //     latitude: 36.25,
+  //     longitude: 36.75,
+  //     avg_nearby_price: 200000.23,
+  //   });
 
   const detailsRows1 = [
     [
       { label: "السعر :", value: dummyProperty.price },
-      { label: "الحالة : ", value: dummyProperty.status },
+      {
+        label: "الحالة : ",
+        value: dummyProperty.status?.label ?? dummyProperty?.status,
+      },
       { label: "رقم البناء :", value: dummyProperty.buildingNumber },
       { label: "مساحة العقار : ", value: dummyProperty.propertyArea },
       { label: "اسم الشارع :", value: dummyProperty.streetName },
@@ -116,7 +120,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
         {/* Image/Slider Section */}
         <div className="w-full lg:w-1/2 flex flex-col">
           <div className="mb-4 sm:mb-6">
-            <div className="h-[220px] relative xs:h-[260px] sm:h-[320px] no-print md:h-[360px] lg:h-[400px] w-full relative">
+            <div className="h-[220px] relative xs:h-[260px] sm:h-[320px] no-print md:h-[360px] lg:h-[400px] w-full">
               <Swiper
                 data-html2canvas-ignore={true}
                 modules={[Navigation]}
@@ -147,8 +151,8 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
 
               <div className="absolute z-0 top-0 left-0 w-full h-full">
                 <img
-                  // src={dummyProperty.image?.[0]}
-                  src={"https://picsum.photos/200/300"}
+                  src={dummyProperty.image?.[0]}
+                  // src={"https://picsum.photos/200/300"}
                   alt={`property`}
                   className="w-full h-full object-cover rounded-md"
                   style={{ maxWidth: "100%", maxHeight: "100%" }}
@@ -166,7 +170,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                 dir="rtl"
               >
                 <div>القيمة التقديرية للعقار :</div>
-                <StatusManager
+                {/* <StatusManager
                   Loader={() => "loading"}
                   query={listingPredictPriceQuery}
                   ErrorHandler={() =>
@@ -177,7 +181,8 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                     {listingPredictPrice?.predicted_price ||
                       dummyProperty.approximatePrice}
                   </span>
-                </StatusManager>
+                </StatusManager> */}
+                <span>${((dummyProperty?.price * 80) / 100).toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -202,14 +207,11 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   <div
                     key={rowIdx + "-" + colIdx}
                     className={`flex gap-x-2 min-w-0 ${
-                      item.value === "نشط"
-                        ? "text-digital-green-bg"
-                        : item.value === "غير نشط"
-                        ? "text-error"
-                        : item.value === " قيد للانجاز "
-                        ? "text-orange"
-                        : item.value === "  غير معروض"
-                        ? "text-quaternary-border"
+                      colIdx == 1
+                        ? STATUS_TEXT?.[
+                            dummyProperty?.status
+                              ?.value as keyof typeof STATUS_TEXT
+                          ]
                         : ""
                     }`}
                   >

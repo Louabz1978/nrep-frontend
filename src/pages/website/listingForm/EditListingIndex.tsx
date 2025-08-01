@@ -97,8 +97,10 @@ function EditListingIndex() {
                       id: index + 1,
                       path: item,
                       mode: "normal",
+                      isMain: index == 0 ? true : false,
                     }))
                 : [],
+              mode: "edit",
             },
           }}
         />

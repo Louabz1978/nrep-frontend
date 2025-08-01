@@ -73,6 +73,12 @@ export const STATUS_COLORS: Record<StatusColorKey, string> = {
   Closed: "bg-red/70 border-red",
   "Out Of Market": "bg-grey/70 border-grey",
 };
+export const STATUS_TEXT: Record<StatusColorKey, string> = {
+  Active: "text-green",
+  Pending: "text-yellow",
+  Closed: "text-red",
+  "Out Of Market": "text-grey",
+};
 
 // Water line options
 type WaterLineValue = "main" | "tank" | "well";

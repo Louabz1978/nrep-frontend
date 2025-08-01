@@ -6,7 +6,7 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
-import { cityChoices, STATUS } from "@/data/global/select";
+import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
 import { FaMap } from "react-icons/fa";
 import RenderDetailsTab from "./components/Home";
 import RenderTaxesTab from "./components/Taxes";
@@ -17,7 +17,7 @@ import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaHouse } from "react-icons/fa6";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
-import "./components/print.css";
+import { toast } from "sonner";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -38,6 +38,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || !taxesRef.current || !mapRef.current) return;
+
+    // Show preparing toast with loading state
+    const toastId = toast.loading("جار تجهيز ملف PDF...", {
+      duration: Infinity, // Don't auto-dismiss
+    });
 
     try {
       document.body.classList.add("printing");
@@ -88,6 +93,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
       container.appendChild(detailsClone);
       container.appendChild(taxesHeader);
       container.appendChild(taxesClone);
+      container.appendChild(mapHeader);
       container.appendChild(mapClone);
 
       // 4. Capture as single image
@@ -127,8 +133,18 @@ function ListingDetails({ data }: ListingDetailsProps) {
         "FAST"
       );
 
+      // Show success message and download
+      toast.success("جار تنزيل ملف PDF...", {
+        id: toastId,
+        duration: 2000,
+      });
       pdf.save("property-report.pdf");
     } catch (error) {
+      toast.error("فشل إنشاء ملف PDF", {
+        id: toastId,
+        description: "حدث خطأ أثناء محاولة إنشاء الملف",
+        duration: 3000,
+      });
       console.error("Error generating PDF:", error);
     } finally {
       document.body.classList.remove("printing");
@@ -144,7 +160,10 @@ function ListingDetails({ data }: ListingDetailsProps) {
   )?.label;
   const city = cityChoices?.find((item) => item?.value == data?.address?.city)
     ?.label;
-  const status = STATUS?.find((item) => item?.value == data?.status)?.label;
+  const status = STATUS?.find((item) => item?.value == data?.status);
+  const propertyType = PROPERTY_TYPE?.find(
+    (item) => item?.value == data?.property_type
+  )?.label;
 
   const dummyProperty = {
     ac: "يوجد",
@@ -184,7 +203,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     price: data.price || 1000000,
     propertyArea: data.area_space || "200",
     propertyOwner: data.owner.first_name + data.owner.last_name || "seller 11",
-    propertyType: data.property_type || "شقة",
+    propertyType: propertyType || "شقة",
     realEstateCompany: "NREP",
     responsibleMediator:
       data.created_by_user.first_name + data.owner.last_name || "realtor 11",
