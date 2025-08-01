@@ -42,9 +42,11 @@ const PropertyImagesStep = ({
         {/* inputs */}
         <div className="flex-1">
           <div className="flex flex-col gap-3xl">
-            <FormSectionHeader>صور العقار</FormSectionHeader>
+            <div className="flex flex-col flex-1 gap-0">
+              <FormSectionHeader>صور العقار</FormSectionHeader>
 
-            <ImagesInput form={form} name={"photos"} required />
+              <ImagesInput form={form} name={"photos"} required />
+            </div>
             <div className="flex justify-center md:items-center flex-col text-error font-normal">
               {mode == "add" ? (
                 <p className="text-start">

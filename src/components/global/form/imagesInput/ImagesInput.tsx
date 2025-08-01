@@ -170,6 +170,12 @@ function ImagesInput<T extends FieldValues>({
 
   return (
     <div className={`flex flex-col gap-xs ${containerClassName}`}>
+      <div className="text-error flex justify-center mb-[10px] items-center text-center font-medium text-size14 min-h-[22px]">
+        {getError(errors, name)
+          ? (getError(errors, name) as { message: string })?.message
+          : null}
+      </div>
+
       {label ? (
         <label
           htmlFor={name}
@@ -421,12 +427,6 @@ function ImagesInput<T extends FieldValues>({
             </div>
           ))}
       </div>
-
-      {getError(errors, name) ? (
-        <span className="text-error font-medium text-size14">
-          {(getError(errors, name) as { message: string })?.message}
-        </span>
-      ) : null}
     </div>
   );
 }

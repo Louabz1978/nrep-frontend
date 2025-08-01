@@ -202,11 +202,13 @@ function ListingDetails({ data }: ListingDetailsProps) {
       "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
     price: data.price || 1000000,
     propertyArea: data.area_space || "200",
-    propertyOwner: data.owner.first_name + data.owner.last_name || "seller 11",
+    propertyOwner:
+      data.owner.first_name + " " + data.owner.last_name || "seller 11",
     propertyType: propertyType || "شقة",
     realEstateCompany: "NREP",
     responsibleMediator:
-      data.created_by_user.first_name + data.owner.last_name || "realtor 11",
+      data.created_by_user.first_name + " " + data.owner.last_name ||
+      "realtor 11",
     sellerCommission: data.property_realtor_commission + "%" || "$",
     solarEnergy: "لا يوجد",
     latitude: data.latitude,
