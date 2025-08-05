@@ -126,13 +126,15 @@ export type getAllListingsResult = Promise<
   } & PaginationData<Listing[]>
 >;
 
-// export type getAllListingsResult = Promise<Listing[]>;
-
 export interface getMyListingsProps {
   queryParams: Record<string, string>;
 }
 
-export type getMyListingsResult = Promise<Listing[]>;
+export type getMyListingsResult = Promise<
+  {
+    message?: string;
+  } & PaginationData<Listing[]>
+>;
 
 export interface createListingProps {
   data: Record<string, string | string[] | undefined | null | number | boolean>;

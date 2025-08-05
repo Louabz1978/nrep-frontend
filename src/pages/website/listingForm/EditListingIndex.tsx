@@ -5,8 +5,13 @@ import StatusManager from "@/components/global/statusManager/StatusManager";
 import { ListingFormSkeleton } from "./components/ListingFormSkeleton";
 import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
 import { additionalInfoStepInitialValues } from "@/data/website/schema/ListingFormSchema";
+import NotAllowedPage from "@/components/global/notAllowed/NotAllowedPage";
+import { useUser } from "@/stores/useUser";
 
 function EditListingIndex() {
+  // user information
+  const { user } = useUser();
+
   // listing id
   const { id } = useParams<{ id: string }>();
   const listingId = Number(id);
@@ -16,7 +21,8 @@ function EditListingIndex() {
 
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingFormSkeleton}>
-      {!listingDetails ? null : (
+      {!listingDetails ? null : listingDetails?.created_by_user?.user_id ==
+        user?.user_id ? (
         <ListingForm
           key={listingId}
           id={listingId}
@@ -68,18 +74,18 @@ function EditListingIndex() {
               },
             },
             additionalInfo: {
-              hasBalcony: false, // Default values since not in API
+              hasBalcony: false,
               hasFans: false,
               elevator: false,
               ac: false,
-              parking: false,
+              garage: false,
               garden: false,
               jacuzzi: false,
-              solar: false,
+              solar_system: false,
               pool: false,
               balcony: 0,
-              fans: 0,
-              waterLine: additionalInfoStepInitialValues?.waterLine,
+              fan_number: 0,
+              water: additionalInfoStepInitialValues?.water,
             },
             location: {
               latitude: listingDetails?.latitude,
@@ -104,6 +110,8 @@ function EditListingIndex() {
             },
           }}
         />
+      ) : (
+        <NotAllowedPage />
       )}
     </StatusManager>
   );

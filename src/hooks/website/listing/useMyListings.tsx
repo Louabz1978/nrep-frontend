@@ -21,10 +21,10 @@ function useMyListings() {
   });
 
   // final data
-  const myListings = myListingsQuery?.data;
+  const myListings = myListingsQuery?.data?.data;
 
   // total pages
-  const totalPages = 1;
+  const totalPages = myListingsQuery?.data?.pagination?.total_pages;
 
   return {
     myListingsQuery,
