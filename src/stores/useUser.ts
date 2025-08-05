@@ -1,13 +1,13 @@
 import { atom, useAtom } from "jotai";
 import secureLocalStorage from "react-secure-storage";
-import WEBSITE_PERMISSIONS from "@/data/website/permissions";
-import ADMIN_PERMISSIONS from "@/data/admin/permissoins";
-import type { User } from "@/types/global/user";
+import type { User, UserType } from "@/types/global/user";
 import jsonParse from "@/utils/jsonParse";
 
 const userAtom = atom<User | null>(
   // Initial value from localStorage
-  jsonParse(secureLocalStorage.getItem("USER") as string) as User | null
+  jsonParse(
+    secureLocalStorage.getItem("USER") as unknown as string
+  ) as unknown as User | null
 );
 
 // Create a derived atom with write capability
@@ -27,23 +27,43 @@ const userWithPersistenceAtom = atom(
 );
 
 // permissions type
-export type PermissionsType = (
-  | keyof typeof WEBSITE_PERMISSIONS
-  | keyof typeof ADMIN_PERMISSIONS
-)[];
+export type PermissionsType = UserType[];
+
+export const USER_TYPES = [
+  "mustUnauth",
+  "admin",
+  "broker",
+  "tenant",
+  "realtor",
+  "buyer",
+  "seller",
+  "free",
+  "allow",
+] as const;
+
+export const HOME_PAGE: Record<UserType, string> = {
+  admin: "/admin",
+  broker: "/broker",
+  tenant: "/tenant",
+  realtor: "/",
+  buyer: "/buyer",
+  seller: "/seller",
+  mustUnauth: "/login",
+  free: "/",
+  allow: "/",
+  "": "",
+} as const;
 
 // Derived atom for permissions check
 const checkPermissionsAtom = atom(
   (get) =>
     (requiredPermissions: PermissionsType = []): boolean => {
       const user = get(userAtom);
-      const permissionsList = { ...WEBSITE_PERMISSIONS, ...ADMIN_PERMISSIONS };
       let permissionStatus = false;
 
       requiredPermissions.forEach((permission) => {
         permissionStatus =
-          permissionStatus ||
-          (user?.permissions?.includes(permissionsList[permission]) ?? false);
+          permissionStatus || (user?.roles?.includes(permission) ?? false);
       });
 
       // return permissionStatus;
