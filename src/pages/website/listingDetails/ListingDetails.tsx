@@ -226,20 +226,22 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
         {/* Tabs */}
         <div className="flex mt-6 gap-2 " style={{ direction: "ltr" }}>
-          {TABS.map((tab) => (
-            <button
-              key={tab.key}
-              className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${
-                activeTab === tab.key
-                  ? "bg-tertiary-bg border-2 border-b-0 border-quaternary-border"
-                  : "bg-quaternary-border text-tertiary-bg"
-              }`}
-              onClick={() => setActiveTab(tab.key)}
-            >
-              <div>{tab.icon}</div>
-              <div>{tab.label}</div>
-            </button>
-          ))}
+          <div className="flex overflow-hidden gap-2">
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${
+                  activeTab === tab.key
+                    ? "bg-tertiary-bg border-2 border-b-0 border-quaternary-border"
+                    : "bg-quaternary-border text-tertiary-bg"
+                }`}
+                onClick={() => setActiveTab(tab.key)}
+              >
+                <div>{tab.icon}</div>
+                <div>{tab.label}</div>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Tab Content */}

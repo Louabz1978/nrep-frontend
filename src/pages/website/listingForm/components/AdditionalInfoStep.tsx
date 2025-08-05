@@ -53,7 +53,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
               numberRegex={/^\d*$/}
               type="number"
               toggle={"hasFans"}
-              name={"fans"}
+              name={"fan_number"}
               placeholder={"مراوح"}
               info={"يرجى تحديد عدد المراوح المتوفرة في العقار"}
               required
@@ -65,7 +65,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
               choices={WATERLINE}
               keyValue="value"
               showValue="label"
-              name={"waterLine"}
+              name={"water"}
               info="يرجى اختيار نوع خط المياه الواصل للعقار (رئيسي، خزان، بئر)"
             />
 
@@ -93,7 +93,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
                   form={form}
                   type="tags"
                   label="مكان مخصص لركن الآلية"
-                  name="parking"
+                  name="garage"
                   info="هل يتوفر مكان مخصص لركن السيارة؟"
                 />
                 <Input
@@ -114,7 +114,7 @@ function AdditionalInfoStep({ form, setCurrentStep }: AdditionalInfoStepProps) {
                   form={form}
                   type="tags"
                   label="طاقة شمسية"
-                  name="solar"
+                  name="solar_system"
                   info="هل يتوفر نظام طاقة شمسية؟"
                 />
                 <Input

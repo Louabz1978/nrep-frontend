@@ -21,10 +21,10 @@ function useAllListings() {
   });
 
   // final data
-  const allListings = allListingsQuery?.data;
+  const allListings = allListingsQuery?.data?.data;
 
   // total pages
-  const totalPages = 1;
+  const totalPages = allListingsQuery?.data?.pagination?.total_pages;
 
   return {
     allListingsQuery,

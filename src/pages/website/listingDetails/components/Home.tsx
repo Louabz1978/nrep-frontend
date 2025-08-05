@@ -1,5 +1,7 @@
 // import StatusManager from "@/components/global/statusManager/StatusManager";
 import { STATUS_COLORS, STATUS_TEXT } from "@/data/global/select";
+import { FaPlay, FaRegImages } from "react-icons/fa6";
+import { GoScreenFull } from "react-icons/go";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 // import useListingPredictPrice from "@/hooks/website/listing/usePredictListingPrice";
@@ -130,7 +132,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                 }}
                 spaceBetween={10}
                 slidesPerView={1}
-                className="h-full w-full rounded-md"
+                className="h-full w-full rounded-t-md"
               >
                 {dummyProperty.image?.map((img: string, index: number) => (
                   <SwiperSlide key={index}>
@@ -138,7 +140,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                       src={img}
                       // src={"https://picsum.photos/200/300"}
                       alt={`property ${index + 1}`}
-                      className="w-full h-full object-cover rounded-md"
+                      className="w-full h-full object-cover rounded-t-md"
                       style={{ maxWidth: "100%", maxHeight: "100%" }}
                     />
                   </SwiperSlide>
@@ -154,7 +156,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   src={dummyProperty.image?.[0]}
                   // src={"https://picsum.photos/200/300"}
                   alt={`property`}
-                  className="w-full h-full object-cover rounded-md"
+                  className="w-full h-full object-cover rounded-t-md"
                   style={{ maxWidth: "100%", maxHeight: "100%" }}
                 />
               </div>
@@ -163,6 +165,10 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                 className="absolute z-0 top-0 left-0 w-full h-full bg-tertiary-bg"
               ></div>
             </div>
+              <div className="shadow-primary-shadow w-full h-[30px] flex items-center justify-between p-5 rounded-md">
+                <div className="flex items-center gap-3 text-size20"><FaPlay /> <FaRegImages /> <GoScreenFull /></div>
+                <div>1/32</div>
+              </div>
 
             <div className="text-center mt-2">
               <div
@@ -232,17 +238,22 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       {/* Second Section: More Details */}
       <div className="flex flex-col justify-between w-full">
         <div className="flex flex-col w-full h-full justify-center">
-          {/* The main container for the grid with top and bottom borders */}
-          <div className="grid grid-cols-3 w-full" dir="rtl">
+          {/* Responsive grid: 1 col on xs, 2 on sm/md, 3 on lg+ */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full" dir="rtl">
             {detailsRows2.map((column, colIdx) => (
-              // Each column with a conditional left border to create separators
               <div
                 key={colIdx}
-                className={`flex flex-col  lg:gap-y-8  lg:p-6 text-right ${
-                  colIdx < detailsRows2.length - 1
-                    ? "border-l-1 border-b-1 "
-                    : ""
-                }`}
+                className={
+                  [
+                    "flex flex-col text-right",
+                    "gap-y-4 sm:gap-y-6 lg:gap-y-8",
+                    "p-2 sm:p-4 lg:p-6",
+                    // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
+                    colIdx < detailsRows2.length - 1
+                      ? "lg:border-l-1 border-b-1"
+                      : "",
+                  ].join(" ")
+                }
               >
                 {column.map((item, itemIdx) => (
                   <div key={itemIdx} className="flex gap-x-2 min-w-0">
@@ -260,30 +271,30 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
 
       {/* Notes Section */}
       <div className="border-b-1 p-2">
-        <div className="flex items-center justify-between">
-          <div className="h-[2px] w-[600px] bg-primary"></div>
-          <h3 className="flex items-center justify-center text-lg font-bold text-primary">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="hidden sm:block h-[2px] w-[200px] md:w-[400px] lg:w-[600px] bg-primary"></div>
+          <h3 className="flex items-center justify-center text-base sm:text-lg font-bold text-primary whitespace-nowrap">
             الملاحظات
           </h3>
-          <div className="h-[2px] w-[600px] bg-primary"></div>
+          <div className="hidden sm:block h-[2px] w-[200px] md:w-[400px] lg:w-[600px] bg-primary"></div>
         </div>
 
         <div
-          className="space-y-6 p-5"
+          className="space-y-4 sm:space-y-6 p-2 sm:p-5"
           style={{
             direction: "rtl",
           }}
         >
           <div>
-            <h4 className="font-bold mb-2">وصف العقار:</h4>
-            <p className="text-quaternary-border leading-relaxed">
+            <h4 className="font-bold mb-2 text-size15 sm:text-base">وصف العقار:</h4>
+            <p className="text-quaternary-border leading-relaxed text-size14 sm:text-base">
               {dummyProperty.description}
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold mb-2">تعليمات المعاينة:</h4>
-            <p className="text-quaternary-border">
+            <h4 className="font-bold mb-2 text-size15 sm:text-base">تعليمات المعاينة:</h4>
+            <p className="text-quaternary-border text-size14 sm:text-base">
               {dummyProperty.previewInstruction}
             </p>
           </div>
@@ -293,15 +304,22 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       {/* Fourth Section: Broker Details */}
       <div className="flex flex-col justify-between w-full">
         <div className="flex flex-col w-full h-full justify-center">
-          {/* The main container for the grid with top and bottom borders */}
-          <div className="grid grid-cols-3 w-full" dir="rtl">
+          {/* Responsive grid: 1 col on xs, 2 on sm/md, 3 on lg+ */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full" dir="rtl">
             {detailsRows4.map((column, colIdx) => (
-              // Each column with a conditional left border to create separators
               <div
                 key={colIdx}
-                className={`flex border-b-1 flex-col lg:gap-y-8 lg:p-6 text-right ${
-                  colIdx < detailsRows4.length - 1 ? "border-l-1" : ""
-                }`}
+                className={
+                  [
+                    "flex flex-col text-right",
+                    "gap-y-4 sm:gap-y-6 lg:gap-y-8",
+                    "p-2 sm:p-4 lg:p-6",
+                    // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
+                    colIdx < detailsRows4.length - 1
+                      ? "lg:border-l-1 border-b-1"
+                      : "",
+                  ].join(" ")
+                }
               >
                 {column.map((item, itemIdx) => (
                   <div key={itemIdx} className="flex gap-x-2 min-w-0">

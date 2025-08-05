@@ -3,6 +3,7 @@ import type {
   PropertyTypeValue,
   StatusValue,
 } from "@/data/global/select";
+import type { PaginationData } from "../global/pagination";
 
 export interface getListingsDetailsProps {
   id: number;
@@ -119,12 +120,13 @@ export interface getAllListingsProps {
   queryParams: Record<string, string>;
 }
 
-// export type getAllListingsResult = Promise<{
-//   data: PaginationData<Listing[]>;
-//   message?: string;
-// }>;
+export type getAllListingsResult = Promise<
+  {
+    message?: string;
+  } & PaginationData<Listing[]>
+>;
 
-export type getAllListingsResult = Promise<Listing[]>;
+// export type getAllListingsResult = Promise<Listing[]>;
 
 export interface getMyListingsProps {
   queryParams: Record<string, string>;
