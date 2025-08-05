@@ -11,6 +11,16 @@ import {
   // ScriptableContext, // Removed: Not used directly here
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import Select from "@/components/global/form/select/Select";
+import { useForm } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
+import cleanValues from "@/utils/cleanValues";
+import {
+  FilterChartsInitialValues,
+  FilterChartsSchema,
+  type FilterChartsType,
+} from "@/data/website/schema/FilterCharts";
+import Input from "@/components/global/form/input/Input";
 
 // Register all necessary components and the datalabels plugin
 ChartJS.register(
@@ -48,6 +58,20 @@ const gradientColors = [
 
 // --- Main Component ---
 const MarketMonitorCard = () => {
+  const form = useForm({
+    resolver: joiResolver(FilterChartsSchema),
+    defaultValues: cleanValues(
+      FilterChartsInitialValues,
+      FilterChartsInitialValues
+    ),
+    mode: "onChange",
+  });
+
+  const onSubmit = (data: FilterChartsType) => {
+    console.log("Search data:", data);
+    // Handle search submission here
+  };
+
   const data = {
     // Use the labels from our chartData object
     labels: chartData.map((item) => item.label),
@@ -85,7 +109,7 @@ const MarketMonitorCard = () => {
   };
 
   const options = {
-    indexAxis: 'y' as const, // This makes the bar chart horizontal
+    indexAxis: "y" as const, // This makes the bar chart horizontal
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -93,9 +117,7 @@ const MarketMonitorCard = () => {
       legend: { display: false },
       tooltip: { enabled: false },
 
-
       datalabels: {
-
         text: {
           anchor: "end", // Anchor to the left side of the bar (RTL)
           align: "right", // Align text to the left (RTL)
@@ -180,18 +202,44 @@ const MarketMonitorCard = () => {
 
   return (
     <div
-    className="h-[280px] bg-white rounded-[var(--spacing-2xl)] shadow p-[var(--spacing-xl)] min-h-[420px] flex flex-col justify-between"
-    dir="rtl"
+      className="h-[500px] shadow-primary-shadow bg-tertiary-bg rounded-[var(--spacing-2xl)] p-[var(--spacing-xl)] min-h-[420px] flex flex-col justify-between"
+      dir="rtl"
     >
-    <h2 className="text-[28px] font-bold text-right mb-[var(--spacing-lg)] text-black">
-      مراقب السوق
-    </h2>
-    {/* Changed height from 350 to 420 */}
-    <div style={{ height: 420, width: "100%", position: "relative" }}>
-      <Bar data={data} options={options} plugins={[ChartDataLabels]} />
-    </div>
+      <h2 className="text-size28 font-bold text-right mb-[var(--spacing-lg)] text-secondary-fg">
+        مراقب السوق
+      </h2>
+      {/* Changed height from 350 to 420 */}
+      <div style={{ height: 420, width: "100%", position: "relative" }}>
+        <Bar data={data} options={options} plugins={[ChartDataLabels]} />
       </div>
-    );
+      <div>
+        <form>
+          <div className="flex items-center justify-between gap-2">
+          <Input
+            form={form}
+            label="التاريخ"
+            name="date"
+            placeholder=""
+            type="date"
+          />
+            <Select
+              form={form}
+              label="المنطقة"
+              name="area"
+              placeholder=""
+              choices={[
+                { value: "riyadh", label: "الرياض" },
+                { value: "jeddah", label: "جدة" },
+                { value: "dammam", label: "الدمام" },
+              ]}
+              showValue="label"
+              keyValue="value"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default MarketMonitorCard;

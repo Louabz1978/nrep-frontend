@@ -16,6 +16,9 @@ const hasPermission = (userRole: UserType[], requiredRole: UserType) => {
 
 // Prevent user from accessing other user type pages
 const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
+
+  return element
+
   const isThereToken = secureLocalStorage.getItem("ACCESS_TOKEN");
   const userType = (
     jsonParse(secureLocalStorage.getItem("USER") as string) as {

@@ -27,86 +27,71 @@ const SearchCard = () => {
   };
 
   return (
-    <div className="bg-white rounded-[var(--spacing-2xl)] shadow p-[var(--spacing-xl)] min-h-[300px] flex flex-col justify-between">
-      <h2 className="text-[24px] font-semibold text-right mb-[var(--spacing-lg)] text-black">
+    <div className="bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-xl)] min-h-[300px] flex flex-col justify-between">
+      <h2 className="text-[24px] font-semibold text-right mb-[var(--spacing-lg)] text-secondary-fg">
         البحث
       </h2>
       <form
         className="flex flex-col gap-[var(--spacing-lg)]"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
-          <Select
-            form={form}
-            label="المحافظة"
-            name="governorate"
-            placeholder="اختر المحافظة"
-            choices={[
-              { value: "homs", label: "حمص" },
-              { value: "damascus", label: "دمشق" },
-              { value: "aleppo", label: "حلب" },
-              { value: "hama", label: "حماه" },
-            ]}
-            showValue="label"
-            keyValue="value"
-          />
-          <Select
-            form={form}
-            label="المدينة"
-            name="city"
-            placeholder="اختر المدينة"
-            choices={[
-              { value: "riyadh", label: "الرياض" },
-              { value: "jeddah", label: "جدة" },
-              { value: "dammam", label: "الدمام" },
-            ]}
-            showValue="label"
-            keyValue="value"
-          />
-          <Input
-            form={form}
-            label="اسم الشارع"
-            name="street_name"
-            placeholder="اسم الشارع"
-            type="text"
-          />
-          <Input
-            form={form}
-            label="الرمز البريدي"
-            name="postal_code"
-            placeholder="الرمز البريدي"
-            type="text"
-          />
-          <Select
-            form={form}
-            label="اتجاه الشارع"
-            name="street_direction"
-            placeholder="اختر الاتجاه"
-            choices={[
-              { value: "north", label: "شمال" },
-              { value: "south", label: "جنوب" },
-              { value: "east", label: "شرق" },
-              { value: "west", label: "غرب" },
-            ]}
-            showValue="label"
-            keyValue="value"
-          />
-          <Select
-            form={form}
-            label="لاحقة الشارع"
-            name="street_suffix"
-            placeholder="اختر اللاحقة"
-            choices={[
-              { value: "a", label: "أ" },
-              { value: "b", label: "ب" },
-              { value: "c", label: "ج" },
-            ]}
-            showValue="label"
-            keyValue="value"
-          />
+        <div className="flex flex-col gap-y-[30px]">
+          <div>
+            <Input
+              form={form}
+              label="MLS"
+              name="MLS"
+              placeholder="MLS"
+              type="number"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
+            <Input
+              form={form}
+              label="رقم البناء"
+              name="building_number"
+              placeholder="رقم البناء"
+              type="number"
+            />
+            <Input
+              form={form}
+              label="اسم الشارع"
+              name="street_name"
+              placeholder="اسم الشارع"
+              type="text"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
+            <Select
+              form={form}
+              label="المنطقة"
+              name="governorate"
+              placeholder="اختر المنطقة"
+              choices={[
+                { value: "riyadh", label: "الرياض" },
+                { value: "jeddah", label: "جدة" },
+                { value: "dammam", label: "الدمام" },
+              ]}
+              showValue="label"
+              keyValue="value"
+            />
+            <Select
+              form={form}
+              label="المدينة"
+              name="city"
+              placeholder="اختر المدينة"
+              choices={[
+                { value: "riyadh", label: "الرياض" },
+                { value: "jeddah", label: "جدة" },
+                { value: "dammam", label: "الدمام" },
+              ]}
+              showValue="label"
+              keyValue="value"
+            />
+          </div>
         </div>
         <div className="flex justify-center mt-5">
-          <Button type="submit" className="w-fit flex items-center justify-center text-white cursor-pointer">
+          <Button type="submit" className="w-fit flex items-center justify-center text-tertiary-bg cursor-pointer">
             <div className="flex items-center justify-arround gap-5">
               <div>بحث</div>
               <div>

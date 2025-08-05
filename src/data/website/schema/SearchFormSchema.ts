@@ -1,4 +1,4 @@
-import { optionSchema, type TOption, type TString } from "@/data/global/schema";
+import { optionSchema, type TNumber, type TOption, type TString } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
@@ -6,9 +6,8 @@ export type SearchFormType = {
   governorate: TOption;
   city: TOption;
   street_name: TString;
-  postal_code: TString;
-  street_direction: TOption;
-  street_suffix: TOption;
+  building_number : TNumber;
+  MLS : TNumber;
 };
 
 export const searchFormSchema = Joi.object<SearchFormType>({
@@ -24,25 +23,18 @@ export const searchFormSchema = Joi.object<SearchFormType>({
     .allow("")
     .messages(VALIDATION_MESSAGES)
     .label("اسم الشارع"),
-  postal_code: Joi.string()
-    .allow("")
+  MLS: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("الرمز البريدي"),
-  street_direction: optionSchema
-    .allow(null, "")
+    .label("MLS"),
+  building_number: Joi.number()
     .messages(VALIDATION_MESSAGES)
-    .label("اتجاه الشارع"),
-  street_suffix: optionSchema
-    .allow(null, "")
-    .messages(VALIDATION_MESSAGES)
-    .label("لاحقة الشارع"),
+    .label("رقم االبناء"),
 });
 
 export const searchFormInitialValues: SearchFormType = {
   governorate: null,
   city: null,
   street_name: "",
-  postal_code: "",
-  street_direction: null,
-  street_suffix: null,
+  building_number:null,
+  MLS:null,
 };
