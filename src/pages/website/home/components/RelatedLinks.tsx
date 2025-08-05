@@ -10,8 +10,7 @@ const searches = [
   { name: "التواصل مع مجلس الوسطاء العقاريين في حمص", link: "/" },
 ];
 const RelatedLinks = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-[380px] bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-xl)] flex flex-col justify-between">
@@ -20,9 +19,9 @@ const RelatedLinks = () => {
       </h2>
       {searches.map((item, idx) => (
         <p
-          onClick={()=>navigate(item.link)}
+          onClick={() => navigate(item.link)}
           key={idx}
-          className="cursor-pointer text-right text-lg  font-normal flex items-center gap-3 underline text-sky"
+          className="cursor-pointer text-right text-lg  font-normal flex items-center gap-3 underline text-sky hover:text-primary"
         >
           {item.name} <GoLinkExternal />
         </p>
