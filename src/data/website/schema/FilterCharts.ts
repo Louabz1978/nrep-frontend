@@ -12,12 +12,12 @@ export const FilterChartsSchema = Joi.object<FilterChartsType>({
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("المنطقة"),
-  date: Joi.string()
-    .allow("")
+  date: optionSchema
+    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("التاريح"),
 });
 export const FilterChartsInitialValues: FilterChartsType = {
   area: null,
-  date:""
+  date:null
 };
