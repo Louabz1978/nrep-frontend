@@ -12,7 +12,8 @@ import type {
 async function getMyListings({
   queryParams,
 }: getMyListingsProps): getMyListingsResult {
-  const res = await axiosClient.get<AxiosRes<Listing[]>>(`property/my-properties`, {
+  // property/my-properties
+  const res = await axiosClient.get<AxiosRes<Listing[]>>(`property`, {
     params: {
       ...queryParams,
       page: queryParams?.page ?? 1,

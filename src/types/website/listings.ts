@@ -90,6 +90,31 @@ export interface ListingDetailsType {
 
 export type getListingsDetailsResult = Promise<ListingDetailsType>;
 
+export type ListingsPredictPriceRequestData = {
+  num_bedrooms: number;
+  num_bathrooms: number;
+  has_solar_panels: boolean;
+  has_ac: boolean;
+  has_swimming_pool: boolean;
+  quality: number;
+  area_sqm: number;
+  construction_year: number;
+  renovation_year: number;
+  property_type: PropertyTypeValue;
+  latitude: number;
+  longitude: number;
+  avg_nearby_price: number;
+};
+export interface getListingsPredictPriceProps {
+  data: ListingsPredictPriceRequestData;
+}
+
+export interface ListingPredictPriceType {
+  predicted_price: number;
+}
+
+export type getListingsPredictPriceResult = Promise<ListingPredictPriceType>;
+
 export interface getAllListingsProps {
   queryParams: Record<string, string>;
 }
