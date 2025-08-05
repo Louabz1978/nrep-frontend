@@ -215,22 +215,33 @@ const MarketMonitorCard = () => {
       <div>
         <form>
           <div className="flex items-center justify-between gap-2">
-          <Input
-            form={form}
-            label="التاريخ"
-            name="date"
-            placeholder=""
-            type="date"
-          />
+
+            <Select
+              form={form}
+              label="التاريخ"
+              name="date"
+              placeholder="التاريخ"
+              choices={[
+                { value: "weak", label: "أسبوع" },
+                { value: "month", label: "شهر" },
+                { value: "three-month", label: "ثلاثة أشهر" },
+                { value: "six-month", label: "ستة أشهر" },
+                { value: "year", label: "سنة" },
+              ]}
+              showValue="label"
+              keyValue="value"
+            />
             <Select
               form={form}
               label="المنطقة"
               name="area"
-              placeholder=""
+              placeholder="المنطقة"
               choices={[
-                { value: "riyadh", label: "الرياض" },
-                { value: "jeddah", label: "جدة" },
-                { value: "dammam", label: "الدمام" },
+                { value: "insha'at", label: "الإنشاءات" },
+                { value: "al-ghota", label: "الغوطة" },
+                { value: "al-hamra", label: "الحمراء" },
+                { value: "al-mahatah", label: "المحطة" },
+                { value: "al-dablan", label: "الدبلان" },
               ]}
               showValue="label"
               keyValue="value"
