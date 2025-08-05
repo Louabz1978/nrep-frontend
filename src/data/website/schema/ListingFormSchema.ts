@@ -109,15 +109,15 @@ export type AdditionalInfoStepType = {
   hasBalcony: boolean;
   balcony: TNumber;
   hasFans: boolean;
-  fans: TNumber;
-  waterLine: TOption;
+  fan_number: TNumber;
+  water: TOption;
   // Individual boolean fields for additional options
   elevator: boolean;
   ac: boolean;
-  parking: boolean;
+  garage: boolean;
   garden: boolean;
   jacuzzi: boolean;
-  solar: boolean;
+  solar_system: boolean;
   pool: boolean;
 };
 
@@ -133,7 +133,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
   }),
 
   hasFans: Joi.boolean(),
-  fans: Joi.when("hasFans", {
+  fan_number: Joi.when("hasFans", {
     is: true,
     then: Joi.number().required().messages(VALIDATION_MESSAGES).label("مراوح"),
     otherwise: Joi.number()
@@ -142,7 +142,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
       .label("مراوح"),
   }),
 
-  waterLine: optionSchema
+  water: optionSchema
     .allow(null)
     .messages(VALIDATION_MESSAGES)
     .label("خط المياه الواصل للعقار"),
@@ -150,10 +150,10 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
   // Additional options as boolean fields
   elevator: Joi.boolean().default(false),
   ac: Joi.boolean().default(false),
-  parking: Joi.boolean().default(false),
+  garage: Joi.boolean().default(false),
   garden: Joi.boolean().default(false),
   jacuzzi: Joi.boolean().default(false),
-  solar: Joi.boolean().default(false),
+  solar_system: Joi.boolean().default(false),
   pool: Joi.boolean().default(false),
 });
 
@@ -161,15 +161,15 @@ export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
   hasBalcony: false,
   balcony: null,
   hasFans: false,
-  fans: null,
-  waterLine: null,
+  fan_number: null,
+  water: null,
   // Additional options initial values
   elevator: false,
   ac: false,
-  parking: false,
+  garage: false,
   garden: false,
   jacuzzi: false,
-  solar: false,
+  solar_system: false,
   pool: false,
 };
 

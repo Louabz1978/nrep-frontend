@@ -56,28 +56,28 @@ export const PROPERTY_TYPE: PropertyTypeOption[] = [
 ];
 
 // Status options
-export type StatusValue = "Active" | "Pending" | "Closed" | "Out Of Market";
+export type StatusValue = "active" | "pending" | "closed" | "out Of Market";
 export type StatusOption = SelectOption<StatusValue>;
 export const STATUS: StatusOption[] = [
-  { value: "Active", label: "نشط" },
-  { value: "Pending", label: "قيد البيع" },
-  { value: "Closed", label: "مباع" },
-  { value: "Out Of Market", label: "غير معروض" },
+  { value: "active", label: "نشط" },
+  { value: "pending", label: "قيد البيع" },
+  { value: "closed", label: "مباع" },
+  { value: "out Of Market", label: "غير معروض" },
 ];
 
 // Status colors type
 export type StatusColorKey = StatusValue;
 export const STATUS_COLORS: Record<StatusColorKey, string> = {
-  Active: "bg-green/70 border-green",
-  Pending: "bg-yellow/70 border-yellow",
-  Closed: "bg-red/70 border-red",
-  "Out Of Market": "bg-grey/70 border-grey",
+  active: "bg-green/70 border-green",
+  pending: "bg-yellow/70 border-yellow",
+  closed: "bg-red/70 border-red",
+  "out Of Market": "bg-grey/70 border-grey",
 };
 export const STATUS_TEXT: Record<StatusColorKey, string> = {
-  Active: "text-green",
-  Pending: "text-yellow",
-  Closed: "text-red",
-  "Out Of Market": "text-grey",
+  active: "text-green",
+  pending: "text-yellow",
+  closed: "text-red",
+  "out Of Market": "text-grey",
 };
 
 // Water line options

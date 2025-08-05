@@ -45,10 +45,12 @@ export const useAddListings = () => {
       city: submitData?.city?.value,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
-      waterLine: submitData?.waterLine?.value,
+      water: submitData?.water?.value,
       photos: submitData?.photos
         ?.filter((item) => item?.mode != "delete")
         ?.map((item) => (item as { path: string })?.path),
+      metadata: JSON.stringify([]),
+      ac: 1,
       owner_id: 13,
     };
 
