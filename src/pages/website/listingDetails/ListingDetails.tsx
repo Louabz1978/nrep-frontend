@@ -30,6 +30,9 @@ const TABS = [
 ];
 
 function ListingDetails({ data }: ListingDetailsProps) {
+
+  console.log(data)
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
