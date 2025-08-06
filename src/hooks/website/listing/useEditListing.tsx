@@ -63,7 +63,7 @@ export const useEditListings = () => {
       city: submitData?.city?.value,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
-      water: submitData?.water?.value,
+      water: submitData?.water?.value || null,
       photos: submitData?.photos
         ?.filter((item) => item?.mode != "delete" && item?.mode !== "normal")
         ?.map((item) => (item as { path: string })?.path),
@@ -76,6 +76,8 @@ export const useEditListings = () => {
       main_photo: mainImageName ?? "",
       owner_id: 13,
     };
+
+    console.log(data);
 
     // toaster
     toast.promise(editListing.mutateAsync({ data, id }), {

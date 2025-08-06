@@ -231,7 +231,7 @@ function ImagesInput<T extends FieldValues>({
                       src={
                         typeof item.path === "object"
                           ? URL.createObjectURL(item.path)
-                          : `${item.path}`
+                          : `${item.path?.replace("//static", "/static")}`
                       }
                       className="size-full object-cover"
                       alt={`Preview ${i + 1}`}
@@ -276,7 +276,7 @@ function ImagesInput<T extends FieldValues>({
                             const fileUrl =
                               typeof item.path === "object"
                                 ? URL.createObjectURL(item.path)
-                                : `${process.env.BACKEND_BASE_URL}/images/${item.path}`;
+                                : item.path?.replace("//static", "/static");
                             window.open(fileUrl);
                           }}
                         >

@@ -12,6 +12,7 @@ async function updateListing({
   id,
 }: updateListingProps): updateListingResult {
   const formData = createFormData(data);
+  if (!data?.water) formData.append("water", null);
 
   const res = await axiosClient.put(`property/${id}`, formData);
 

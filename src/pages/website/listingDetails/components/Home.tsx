@@ -155,7 +155,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
               <div className="absolute z-0 top-0 left-0 w-full h-full">
                 <img
                   src={
-                    dummyProperty.image?.find((img: ImageType) => !img?.is_main)
+                    dummyProperty.image?.find((img: ImageType) => img?.is_main)
                       ?.url ?? ""
                   }
                   // src={"https://picsum.photos/200/300"}

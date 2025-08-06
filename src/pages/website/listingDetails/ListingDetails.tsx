@@ -6,7 +6,12 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
-import { cityChoices, PROPERTY_TYPE, STATUS, WATERLINE } from "@/data/global/select";
+import {
+  cityChoices,
+  PROPERTY_TYPE,
+  STATUS,
+  WATERLINE,
+} from "@/data/global/select";
 import { FaMap } from "react-icons/fa";
 import RenderDetailsTab from "./components/Home";
 import RenderTaxesTab from "./components/Taxes";
@@ -30,19 +35,19 @@ const TABS = [
 ];
 
 function ListingDetails({ data }: ListingDetailsProps) {
-
-  console.log(data)
+  console.log(data);
 
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
   const taxesRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<null>(null);
+  const mapRef2 = useRef<null>(null);
   //resize the map when the tab is changed
   useEffect(() => {
-    if (activeTab === "map" && mapRef.current) {
+    if (activeTab === "map" && mapRef2.current) {
       setTimeout(() => {
-        mapRef.current?.invalidateSize();
+        mapRef2.current?.invalidateSize();
       }, 100);
     }
   }, [activeTab]);
@@ -68,7 +73,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
       // 2. Clone and modify both sections
       const detailsClone = pdfRef.current.cloneNode(true) as HTMLElement;
       const taxesClone = taxesRef.current.cloneNode(true) as HTMLElement;
-      const mapClone = mapRef.current.cloneNode(true) as HTMLElement;
+      const mapClone = mapRef.current?.cloneNode(true) as HTMLElement;
 
       // Remove unnecessary margins/padding
       detailsClone.style.display = "block";
@@ -180,11 +185,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
   )?.label;
 
   const dummyProperty = {
-    ac: data.additional.ac?  "يوجد" : "لا يوجد",
+    ac: data.additional.ac ? "يوجد" : "لا يوجد",
     apartmentNumber: data.address.apt || "2",
     area: data.address.area || "النص هنا",
     approximatePrice: ((data.price * 80) / 100).toFixed(2),
-    balcony: data.additional.balcony || "2",
+    balcony: data.additional.balcony || 0,
     bathrooms: data.bathrooms || "النص هنا",
     bedrooms: data.bedrooms || "3",
     buildYear: data.year_built || "1999",
@@ -195,20 +200,23 @@ function ListingDetails({ data }: ListingDetailsProps) {
     description:
       data.description ||
       "هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عِش في واحدة من أكثر المواقع طلبًا ",
-    elevator: data.additional.elevator? " يوجد" : "لا يوجد",
+    elevator: data.additional.elevator ? " يوجد" : "لا يوجد",
     email: data.owner.email || "seller@gmail.com",
-    fans: data.additional.fan_number ,
+    fans: data.additional.fan_number || 0,
     floor: data?.address?.floor || "2",
     floorNumber: data.address?.floor || "3",
-    garden: data.additional.garden? "يوجد" : "لا يوجد",
+    garden: data.additional.garden ? "يوجد" : "لا يوجد",
     governorate: county || "حمص",
-    image: data.images_urls || [{ url: image, is_main: true }],
-    jacuzzy: data.additional.jacuzzi? "يوجد" : "لا يوجد",
+    image: data.images_urls?.map((item) => ({
+      url: item?.url?.replace("//static", "/static"),
+      is_main: item?.is_main,
+    })) || [{ url: image, is_main: true }],
+    jacuzzy: data.additional.jacuzzi ? "يوجد" : "لا يوجد",
     licenseNumber: "2516584005",
     mls: data.mls_num || "454942",
-    parking:data.additional.garage? "يوجد" : "لا يوجد",
+    parking: data.additional.garage ? "يوجد" : "لا يوجد",
     phoneNumber: data.owner.phone_number || "0909091009",
-    pool: data.additional.pool? "يوجد" : "لا يوجد",
+    pool: data.additional.pool ? "يوجد" : "لا يوجد",
     previewInstruction:
       "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
     price: data.price || 1000000,
@@ -221,13 +229,13 @@ function ListingDetails({ data }: ListingDetailsProps) {
       data.created_by_user.first_name + " " + data.owner.last_name ||
       "realtor 11",
     sellerCommission: data.property_realtor_commission + "%" || "$",
-    solarEnergy:data.additional.garden? "يوجد" : "لا يوجد",
+    solarEnergy: data.additional.solar_system ? "يوجد" : "لا يوجد",
     latitude: data.latitude,
     longitude: data.longitude,
     DimensionsOfTheEarth: 170,
     status: status || "قيد الانجاز",
     streetName: data.address.street || "النص هنا",
-    waterLine: waterLine || "خزان",
+    waterLine: waterLine || "لا يوجد",
   };
 
   return (
@@ -241,10 +249,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
             {TABS.map((tab) => (
               <button
                 key={tab.key}
-                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${activeTab === tab.key
+                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${
+                  activeTab === tab.key
                     ? "bg-tertiary-bg border-2 border-b-0 border-quaternary-border"
                     : "bg-quaternary-border text-tertiary-bg"
-                  }`}
+                }`}
                 onClick={() => setActiveTab(tab.key)}
               >
                 <div>{tab.icon}</div>
@@ -277,7 +286,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             data-tab-content="map"
             style={{ display: activeTab === "map" ? "block" : "none" }}
           >
-            <RenderMapTab dummyProperty={dummyProperty} mapRef={mapRef} />
+            <RenderMapTab dummyProperty={dummyProperty} mapRef={mapRef2} />
           </div>
         </div>
 
