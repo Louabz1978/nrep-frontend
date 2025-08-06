@@ -27,12 +27,12 @@ const SearchCard = () => {
   };
 
   return (
-    <div className="bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-xl)] min-h-[300px] flex flex-col justify-between">
+    <div className="bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-xl)] min-h-[300px] flex flex-col ">
       <h2 className="text-[24px] font-semibold text-right mb-[var(--spacing-lg)] text-secondary-fg">
         البحث
       </h2>
       <form
-        className="flex flex-col gap-[var(--spacing-lg)]"
+        className="flex flex-col gap-[var(--spacing-lg)] flex-1"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-y-[30px]">
@@ -90,8 +90,11 @@ const SearchCard = () => {
             />
           </div>
         </div>
-        <div className="flex justify-center mt-5">
-          <Button type="submit" className="w-fit flex items-center justify-center text-tertiary-bg cursor-pointer">
+        <div className="flex justify-center mt-auto">
+          <Button
+            type="submit"
+            className="w-fit flex items-center justify-center text-tertiary-bg cursor-pointer"
+          >
             <div className="flex items-center justify-arround gap-5">
               <div>بحث</div>
               <div>

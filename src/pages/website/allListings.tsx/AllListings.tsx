@@ -13,6 +13,7 @@ import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import useAllListings from "@/hooks/website/listing/useAllListings";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
+import { useUser } from "@/stores/useUser";
 import type { Listing } from "@/types/website/listings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -24,6 +25,9 @@ import {
 import { Link } from "react-router-dom";
 
 function AllListings() {
+  // user information
+  const { user } = useUser();
+
   // get all listings
   const { allListings, allListingsQuery, totalPages } = useAllListings();
 
@@ -146,13 +150,24 @@ function AllListings() {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
+          const isSameUser =
+            row?.original?.created_by_user?.user_id == user?.user_id;
+
           return (
             <div className="flex items-center gap-md">
               {/* edit */}
               <Tooltip>
                 <TooltipTrigger>
-                  <Link to={`/listing/edit/${row?.original?.property_id}`}>
-                    <Button size={"icon"} className="bg-green">
+                  <Link
+                    to={`/listing/edit/${row?.original?.property_id}`}
+                    className={`${isSameUser ? "" : "pointer-events-none"}`}
+                    aria-disabled={!isSameUser}
+                  >
+                    <Button
+                      size={"icon"}
+                      className="bg-green"
+                      disabled={!isSameUser}
+                    >
                       <PiPencilSimpleBold />
                     </Button>
                   </Link>
@@ -168,9 +183,10 @@ function AllListings() {
                       size={"icon"}
                       className="bg-red"
                       disabled={
-                        deleteListing?.isPending &&
-                        deleteListing?.variables?.id ==
-                          row?.original?.property_id
+                        (deleteListing?.isPending &&
+                          deleteListing?.variables?.id ==
+                            row?.original?.property_id) ||
+                        !isSameUser
                       }
                       onClick={(e) => {
                         e.preventDefault();

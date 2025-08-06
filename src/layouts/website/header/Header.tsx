@@ -33,7 +33,7 @@ function Header() {
         {/* icons */}
         <div className="flex items-center gap-lg">
           {/* login / user info */}
-          {user?.access_token ? (
+          {user ? (
             <Popover>
               <PopoverTrigger>
                 <CgProfile className="size-[24px] cursor-pointer" />

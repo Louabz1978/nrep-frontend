@@ -8,21 +8,21 @@ import RelatedLinks from "@/pages/website/home/components/RelatedLinks";
 function Home() {
   return (
     <AnimateContainer>
-        <div className="min-h-screen">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* First four components in two columns (2 in each column) */}
-            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <SearchCard />
-                <MarketMonitorCard />
-                <RelatedLinks />
-                <ExternalLinksCard />
-            </div>
-            {/* Last component in its own column */}
-            <div className="lg:col-span-4 flex flex-col gap-6">
-              <NewsNotificationsCard />
-            </div>
+      <div className="min-h-screen">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* First four components in two columns (2 in each column) */}
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SearchCard />
+            <MarketMonitorCard />
+            <RelatedLinks />
+            <ExternalLinksCard />
+          </div>
+          {/* Last component in its own column */}
+          <div className="lg:col-span-4 flex flex-col gap-6">
+            <NewsNotificationsCard />
           </div>
         </div>
+      </div>
     </AnimateContainer>
   );
 }

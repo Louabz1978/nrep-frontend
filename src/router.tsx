@@ -12,28 +12,14 @@ import AllListings from "./pages/website/allListings.tsx/AllListings";
 import Home from "./pages/website/home/Home";
 import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
 import MyListings from "./pages/website/myListings/MyListing";
+import OtherUserHome from "./pages/global/OtherUserHome";
 
 // Browser URL router container
 const router = createBrowserRouter([
-  // admin pages
-  {
-    path: "/admin",
-    element: <PrivateRoute element={<AdminLayout />} role={"admin"} />,
-    children: [
-      {
-        index: true,
-        element: <>home</>,
-      },
-      {
-        path: "*",
-        element: <>404</>,
-      },
-    ],
-  },
-  // private website pages
+  // realtor pages
   {
     path: "/",
-    element: <PrivateRoute element={<WebsiteLayout />} role={"bearer"} />,
+    element: <PrivateRoute element={<WebsiteLayout />} role={"realtor"} />,
     children: [
       {
         index: true,
@@ -67,7 +53,81 @@ const router = createBrowserRouter([
         path: "listing/edit/:id",
         element: <EditListingIndex />,
       },
-
+    ],
+  },
+  // admin pages
+  {
+    path: "/admin",
+    element: <PrivateRoute element={<AdminLayout />} role={"admin"} />,
+    children: [
+      {
+        index: true,
+        element: <OtherUserHome type="admin" />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
+    ],
+  },
+  // broker pages
+  {
+    path: "/broker",
+    element: <PrivateRoute element={<AdminLayout />} role={"broker"} />,
+    children: [
+      {
+        index: true,
+        element: <OtherUserHome type="broker" />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
+    ],
+  },
+  // seller pages
+  {
+    path: "/seller",
+    element: <PrivateRoute element={<AdminLayout />} role={"seller"} />,
+    children: [
+      {
+        index: true,
+        element: <OtherUserHome type="seller" />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
+    ],
+  },
+  // buyer pages
+  {
+    path: "/buyer",
+    element: <PrivateRoute element={<AdminLayout />} role={"buyer"} />,
+    children: [
+      {
+        index: true,
+        element: <OtherUserHome type="buyer" />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
+    ],
+  },
+  // tenant pages
+  {
+    path: "/tenant",
+    element: <PrivateRoute element={<AdminLayout />} role={"tenant"} />,
+    children: [
+      {
+        index: true,
+        element: <OtherUserHome type="tenant" />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
     ],
   },
   // specific pages that require the user without token

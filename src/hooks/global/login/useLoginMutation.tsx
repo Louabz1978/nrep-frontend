@@ -6,7 +6,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import secureLocalStorage from "react-secure-storage";
-import { useUser } from "@/stores/useUser";
+import { HOME_PAGE, useUser } from "@/stores/useUser";
+import { jwtDecode } from "jwt-decode";
+import type { User, UserType } from "@/types/global/user";
 
 function useLoginMutation() {
   // navigate method
@@ -19,10 +21,11 @@ function useLoginMutation() {
   const login = useMutation({
     mutationFn: loginFunction,
     onSuccess: async ({ user }) => {
+      const data: User = jwtDecode(user.access_token);
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
-      secureLocalStorage.setItem("USER", { data: user });
-      setUser(user);
-      navigate("/");
+      secureLocalStorage.setItem("USER", { data: data });
+      setUser(data);
+      navigate(HOME_PAGE[data?.roles?.[0] as UserType]);
     },
   });
 
