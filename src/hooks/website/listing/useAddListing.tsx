@@ -52,10 +52,9 @@ export const useAddListings = () => {
         ?.filter((item) => item?.mode != "delete")
         ?.map((item) => (item as { path: string })?.path),
       metadata: JSON.stringify([]),
-      mainImage: (
+      main_photo: (
         submitData?.photos?.find((item) => item?.isMain)?.path as File
       )?.name,
-      ac: 1,
       owner_id: 13,
     };
 
