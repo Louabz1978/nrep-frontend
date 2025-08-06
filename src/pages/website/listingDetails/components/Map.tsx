@@ -5,6 +5,7 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { useState } from "react";
 import { FaMap, FaSatelliteDish } from "react-icons/fa6";
+import type { MutableRefObject } from "react";
 
 type RenderMapTabProps = {
   dummyProperty: {
@@ -13,9 +14,10 @@ type RenderMapTabProps = {
     DimensionsOfTheEarth?: number | string;
     propertyArea?: number | string;
   };
+  mapRef?: MutableRefObject<null>;
 };
 
-const RenderMapTab = ({ dummyProperty }: RenderMapTabProps) => {
+const RenderMapTab = ({ dummyProperty, mapRef }: RenderMapTabProps) => {
   const [isSatellite, setIsSatellite] = useState(false);
   const [rotate, setRotate] = useState(false);
 
@@ -64,8 +66,9 @@ const RenderMapTab = ({ dummyProperty }: RenderMapTabProps) => {
         </div>
         <div className="w-full h-96 rounded-md overflow-hidden">
           <MapContainer
+            ref={mapRef}
             center={markerPosition}
-            zoom={10}
+            zoom={15}
             className="w-full h-full"
             scrollWheelZoom={true}
             attributionControl={false}

@@ -137,7 +137,7 @@
   --shadow-xs: 0px 1px 2px 0px #010d120d;
 }
 
-/* Dark mode */
+/* Dark mode */ 
 .dark:root {
   /* color pallet */
   --primary: #005bbb;
@@ -202,7 +202,7 @@
 }
 
 @theme {
-  /* Text size */
+  /* Text size */ 
   --text-size3: calc(0.1675rem * var(--text-factor));
   --text-size4: calc(0.25rem * var(--text-factor));
   --text-size5: calc(0.3125rem * var(--text-factor));

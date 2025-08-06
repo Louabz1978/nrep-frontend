@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { usePDF } from "react-to-pdf";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
@@ -37,7 +37,15 @@ function ListingDetails({ data }: ListingDetailsProps) {
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
   const taxesRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<null>(null);
+  //resize the map when the tab is changed
+  useEffect(() => {
+    if (activeTab === "map" && mapRef.current) {
+      setTimeout(() => {
+        mapRef.current?.invalidateSize();
+      }, 100);
+    }
+  }, [activeTab]);
 
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || !taxesRef.current || !mapRef.current) return;
@@ -233,11 +241,10 @@ function ListingDetails({ data }: ListingDetailsProps) {
             {TABS.map((tab) => (
               <button
                 key={tab.key}
-                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${
-                  activeTab === tab.key
+                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${activeTab === tab.key
                     ? "bg-tertiary-bg border-2 border-b-0 border-quaternary-border"
                     : "bg-quaternary-border text-tertiary-bg"
-                }`}
+                  }`}
                 onClick={() => setActiveTab(tab.key)}
               >
                 <div>{tab.icon}</div>
@@ -270,7 +277,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             data-tab-content="map"
             style={{ display: activeTab === "map" ? "block" : "none" }}
           >
-            <RenderMapTab dummyProperty={dummyProperty} />
+            <RenderMapTab dummyProperty={dummyProperty} mapRef={mapRef} />
           </div>
         </div>
 
