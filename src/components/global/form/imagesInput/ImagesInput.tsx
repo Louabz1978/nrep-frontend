@@ -14,11 +14,15 @@ import type {
   UseFormReturn,
 } from "react-hook-form";
 import Toggle from "../toggle/Toggle";
+import { PiStar, PiStarFill } from "react-icons/pi";
+import { Tooltip, TooltipContent } from "../../tooltip/Tooltiop";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface ImageFile {
   id: number;
   path: string | File;
   mode?: "edit" | "delete";
+  isMain: boolean;
 }
 
 interface ImagesInputProps<T extends FieldValues> {
@@ -73,14 +77,14 @@ function ImagesInput<T extends FieldValues>({
   const handleAddFiles = useCallback(
     async (files: FileList | File[]) => {
       let initFiles = watch(name) as (
-        | { id: number; path: File }
+        | { id: number; path: File; isMain: boolean }
         | PathValue<T, Path<T>>[number]
       )[];
       let newId = customFileId - 1;
 
       await Promise.all(
         Array.from(files).map((file) => {
-          initFiles = [...initFiles, { id: newId, path: file }];
+          initFiles = [...initFiles, { id: newId, path: file, isMain: false }];
           newId -= 1;
         })
       );
@@ -103,12 +107,13 @@ function ImagesInput<T extends FieldValues>({
     e: React.ChangeEvent<HTMLInputElement>,
     fileId: number
   ) => {
-    const initFiles = watch(name).map((file: { id: number }) => {
+    const initFiles = watch(name).map((file: ImageFile) => {
       if (file.id !== fileId) return file;
       return {
         id: file.id,
         path: e.target.files?.[0] as File,
         mode: "edit" as const,
+        isMain: file?.isMain,
       };
     });
 
@@ -119,7 +124,7 @@ function ImagesInput<T extends FieldValues>({
   const handleDeleteMultiFile = async (fileId: number) => {
     const initFiles = watch(name).map((file: ImageFile) => {
       if (file.id !== fileId) return file;
-      return { ...file, mode: "delete" as const };
+      return { ...file, mode: "delete" as const, isMain: false };
     });
 
     setValue(name, initFiles);
@@ -165,6 +170,12 @@ function ImagesInput<T extends FieldValues>({
 
   return (
     <div className={`flex flex-col gap-xs ${containerClassName}`}>
+      <div className="text-error flex justify-center mb-[10px] items-center text-center font-medium text-size14 min-h-[22px]">
+        {getError(errors, name)
+          ? (getError(errors, name) as { message: string })?.message
+          : null}
+      </div>
+
       {label ? (
         <label
           htmlFor={name}
@@ -211,7 +222,7 @@ function ImagesInput<T extends FieldValues>({
                 />
 
                 <div
-                  className="flex justify-center items-center w-full h-[280px] border border-solid border-border rounded-xl overflow-hidden shrink-0 cursor-pointer relative"
+                  className="flex justify-center group/image items-center w-full h-[280px] border border-solid border-border rounded-xl overflow-hidden shrink-0 cursor-pointer relative"
                   onMouseEnter={() => setShowOptions(i)}
                   onMouseLeave={() => setShowOptions(false)}
                 >
@@ -220,9 +231,7 @@ function ImagesInput<T extends FieldValues>({
                       src={
                         typeof item.path === "object"
                           ? URL.createObjectURL(item.path)
-                          : `${
-                              import.meta.env.VITE_BACKEND_URL
-                            }${item.path?.replace(/^\{|\}$/g, "")}`
+                          : `${item.path}`
                       }
                       className="size-full object-cover"
                       alt={`Preview ${i + 1}`}
@@ -276,6 +285,70 @@ function ImagesInput<T extends FieldValues>({
                       </motion.div>
                     )}
                   </AnimatePresence>
+
+                  <div className="absolute size-[28px] top-[10px] right-[10px]">
+                    <div className="relative size-full flex items-center justify-center">
+                      {item?.isMain ? (
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <PiStarFill
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const initFiles = watch(name);
+                                form.setValue(
+                                  name,
+                                  initFiles?.map(
+                                    (item: ImageFile, index: number) => {
+                                      if (index == i)
+                                        return {
+                                          ...(item ?? {}),
+                                          isMain: false,
+                                        };
+                                      return item;
+                                    }
+                                  )
+                                );
+                                trigger(name);
+                              }}
+                              className="text-primary size-[28px] cursor-pointer"
+                            />
+                            <TooltipContent>
+                              إزالة التعيين رئيسية
+                            </TooltipContent>
+                          </TooltipTrigger>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <PiStar
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                const initFiles = watch(name);
+                                form.setValue(
+                                  name,
+                                  initFiles?.map(
+                                    (item: ImageFile, index: number) => {
+                                      if (index == i)
+                                        return {
+                                          ...(item ?? {}),
+                                          isMain: true,
+                                        };
+                                      return item;
+                                    }
+                                  )
+                                );
+                                trigger(name);
+                              }}
+                              className="text-primary size-[28px] opacity-0 group-hover/image:opacity-100 transition-all duration-[0.3s] cursor-pointer"
+                            />
+                            <TooltipContent>تعيين كصورة رئيسية</TooltipContent>
+                          </TooltipTrigger>
+                        </Tooltip>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -333,7 +406,7 @@ function ImagesInput<T extends FieldValues>({
                   <>
                     <FaRegImage className="size-[100px]" />
                     <span className="text-size18 font-medium">
-                      أدخال صور العقار
+                      إدخال صور العقار
                     </span>
                     <span className="text-size16 text-placeholder">
                       أو اسحب وأسقط الصور هنا
@@ -352,12 +425,6 @@ function ImagesInput<T extends FieldValues>({
             </div>
           ))}
       </div>
-
-      {getError(errors, name) ? (
-        <span className="text-error font-medium text-size14">
-          {(getError(errors, name) as { message: string })?.message}
-        </span>
-      ) : null}
     </div>
   );
 }

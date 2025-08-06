@@ -24,6 +24,9 @@ export const useEditListings = () => {
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.query] })
         .catch(console.error);
       queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEYS.listings.myListings] })
+        .catch(console.error);
+      queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.details, res?.id] })
         .catch(console.error);
 
@@ -39,24 +42,34 @@ export const useEditListings = () => {
     // forms:
   ) {
     // preparing data to submit
+    const mainImage = submitData?.photos?.find((item) => item?.isMain);
+    const mainImageName =
+      typeof mainImage?.path == "string"
+        ? mainImage?.path?.split("/")?.[mainImage?.path?.split("/")?.length - 1]
+        : (mainImage?.path as File)?.name;
+
+    const images_urls = submitData?.photos
+      ?.filter((item) => item?.mode == "normal")
+      ?.map((item) => (item as { path: string })?.path);
     const data = {
       ...(submitData ?? {}),
-      address: {
-        floor: submitData.floor + "",
-        apt: submitData.apt + "",
-        area: submitData.area,
-        city: submitData.city?.value,
-        county: submitData.country?.value,
-        building_num: submitData.building_num,
-        street: submitData.street,
-      },
       country: submitData?.country?.value,
       county: submitData?.country?.value,
       city: submitData?.city?.value,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
-      waterLine: submitData?.waterLine?.value,
-      photos: undefined,
+      water: submitData?.water?.value,
+      photos: submitData?.photos
+        ?.filter((item) => item?.mode != "delete" && item?.mode !== "normal")
+        ?.map((item) => (item as { path: string })?.path),
+      images_urls: images_urls?.length ? images_urls : "",
+      fan_number: submitData?.hasFans ? submitData?.fan_number : 0,
+      balcony: submitData?.hasBalcony ? submitData?.balcony : 0,
+      metadata: JSON.stringify([]),
+      longitude: Number(submitData?.longitude),
+      latitude: Number(submitData?.latitude),
+      mainImage: mainImageName ?? "",
+      ac: 1,
       owner_id: 13,
     };
 

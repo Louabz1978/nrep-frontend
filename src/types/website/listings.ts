@@ -3,6 +3,8 @@ import type {
   PropertyTypeValue,
   StatusValue,
 } from "@/data/global/select";
+import type { PaginationData } from "../global/pagination";
+import type { UserType } from "../global/user";
 
 export interface getListingsDetailsProps {
   id: number;
@@ -14,7 +16,7 @@ interface User {
   last_name: string;
   email: string;
   phone_number: string;
-  role: string[];
+  role: UserType[];
   address: string | null;
   created_by: number;
   created_at: string;
@@ -59,12 +61,28 @@ export interface Listing {
   apt: number;
 }
 
+export interface Additional {
+  elevator: boolean;
+  balcony: number;
+  ac: boolean;
+  fan_number: number;
+  garage: boolean;
+  garden: boolean;
+  solar_system: boolean;
+  water: "tank";
+  jacuzzi: boolean;
+  pool: boolean;
+}
+
+export interface ImageType {
+  url: string;
+  is_main: boolean;
+}
 export interface ListingDetailsType {
   property_id: number;
   description: string;
   price: number;
   property_type: PropertyTypeValue;
-  floor: number;
   bedrooms: number;
   bathrooms: number;
   property_realtor_commission: number;
@@ -76,11 +94,12 @@ export interface ListingDetailsType {
   status: StatusValue;
   created_at: string;
   last_updated: string;
-  image_url: string;
   mls_num: number | null;
   created_by_user: User;
   owner: User;
   address: Address;
+  additional: Additional;
+  images_urls: ImageType[];
 }
 
 // export type getListingsDetailsResult = Promise<{
@@ -119,18 +138,21 @@ export interface getAllListingsProps {
   queryParams: Record<string, string>;
 }
 
-// export type getAllListingsResult = Promise<{
-//   data: PaginationData<Listing[]>;
-//   message?: string;
-// }>;
-
-export type getAllListingsResult = Promise<Listing[]>;
+export type getAllListingsResult = Promise<
+  {
+    message?: string;
+  } & PaginationData<Listing[]>
+>;
 
 export interface getMyListingsProps {
   queryParams: Record<string, string>;
 }
 
-export type getMyListingsResult = Promise<Listing[]>;
+export type getMyListingsResult = Promise<
+  {
+    message?: string;
+  } & PaginationData<Listing[]>
+>;
 
 export interface createListingProps {
   data: Record<string, string | string[] | undefined | null | number | boolean>;
@@ -142,16 +164,7 @@ export type createListingResult = Promise<{
 }>;
 
 export interface updateListingProps {
-  data: Record<
-    string,
-    | string
-    | string[]
-    | undefined
-    | null
-    | number
-    | boolean
-    | Record<string, string | string[] | undefined | null | number | boolean>
-  >;
+  data: Record<string, string | string[] | undefined | null | number | boolean>;
   id: number;
 }
 

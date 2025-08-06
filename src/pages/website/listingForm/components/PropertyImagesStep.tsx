@@ -14,6 +14,7 @@ interface PropertyImagesStepProps {
   setCurrentStep: Dispatch<SetStateAction<number>>;
   handleSubmitForm: () => void;
   disabled: boolean;
+  mode: "edit" | "add";
 }
 
 const PropertyImagesStep = ({
@@ -21,6 +22,7 @@ const PropertyImagesStep = ({
   setCurrentStep,
   handleSubmitForm,
   disabled,
+  mode,
 }: PropertyImagesStepProps) => {
   // extract form utils
   const { handleSubmit } = form;
@@ -40,14 +42,22 @@ const PropertyImagesStep = ({
         {/* inputs */}
         <div className="flex-1">
           <div className="flex flex-col gap-3xl">
-            <FormSectionHeader>صور العقار</FormSectionHeader>
+            <div className="flex flex-col flex-1 gap-0">
+              <FormSectionHeader>صور العقار</FormSectionHeader>
 
-            <ImagesInput form={form} name={"photos"} required />
+              <ImagesInput form={form} name={"photos"} required />
+            </div>
             <div className="flex justify-center md:items-center flex-col text-error font-normal">
-              <p className="text-start">
-                ملاحظة : الحد الأعلى لرفع صور العقار في هذه النافذة 5 صور ,
-                لإضافة المزيد الرجاء زيارة صفحة العقار الخاصة ,
-              </p>
+              {mode == "add" ? (
+                <p className="text-start">
+                  ملاحظة : الحد الأعلى لرفع صور العقار في هذه النافذة 5 صور ,
+                  لإضافة المزيد الرجاء زيارة صفحة العقار الخاصة ,
+                </p>
+              ) : (
+                <p className="text-start">
+                  ملاحظة : الحد الأعلى لرفع صور العقار في هذه النافذة 32 صورة ,
+                </p>
+              )}
               <p className="text-start">
                 ملاحظة : الحد الأدنى لحجم الصورة 256KB , و الحد الأعلى 1MB .
               </p>

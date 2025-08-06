@@ -15,5 +15,16 @@ export default defineConfig({
   },
   server: {
     port: 5174,
+    proxy: {
+      "/api": {
+        target: "http://syrianrealtors.com:8000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/static": {
+        target: "http://syrianrealtors.com:8000",
+        changeOrigin: true,
+      },
+    },
   },
 });

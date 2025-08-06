@@ -12,7 +12,7 @@ async function getListingsDetails({
 }: getListingsDetailsProps): getListingsDetailsResult {
   const res = await axiosClient.get(`property/${id}`);
 
-  return res?.data;
+  return res?.data?.property;
 }
 
 export default getListingsDetails;

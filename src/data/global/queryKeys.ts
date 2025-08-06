@@ -1,6 +1,7 @@
 const QUERY_KEYS = {
   listings: {
     query: "listings-query",
+    myListings: "my-listings-query",
     details: "listings-details",
     predictPrice: "listings-predictP-price",
     resources: "listings-resources",

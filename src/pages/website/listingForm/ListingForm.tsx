@@ -165,6 +165,7 @@ function ListingForm({ defaultValues, id }: ListingFormProps) {
               setCurrentStep={setCurrentStep}
               handleSubmitForm={handleSubmitForm}
               disabled={id ? editListing?.isPending : addListing?.isPending}
+              mode={id ? "edit" : "add"}
             />
           )}
         </div>

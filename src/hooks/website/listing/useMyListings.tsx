@@ -14,17 +14,17 @@ function useMyListings() {
 
   // get listing details
   const myListingsQuery = useQuery({
-    queryKey: [QUERY_KEYS?.listings?.query, JSON.stringify(queryParams)],
+    queryKey: [QUERY_KEYS?.listings?.myListings, JSON.stringify(queryParams)],
     queryFn: () => getMyListings({ queryParams }),
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   // final data
-  const myListings = myListingsQuery?.data;
+  const myListings = myListingsQuery?.data?.data;
 
   // total pages
-  const totalPages = 1;
+  const totalPages = myListingsQuery?.data?.pagination?.total_pages;
 
   return {
     myListingsQuery,

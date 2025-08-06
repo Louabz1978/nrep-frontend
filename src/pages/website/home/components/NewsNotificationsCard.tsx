@@ -14,22 +14,22 @@ const news = [
 ];
 
 const NewsNotificationsCard = () => (
-  <div className="bg-white rounded-[var(--spacing-2xl)] shadow p-[var(--spacing-xl)] min-h-[600px] flex flex-col justify-between">
-    <h2 className="text-[24px] font-semibold text-right mb-[var(--spacing-lg)] text-black">
+  <div className="bg-tertiary-bg shadow-primary-shadow rounded-[var(--spacing-2xl)]  p-[var(--spacing-xl)] h-full flex flex-col justify-between">
+    <h2 className="text-size24 font-semibold text-right mb-[var(--spacing-lg)] text-secondary-fg">
       أخبار عقارية سورية
     </h2>
     <div className="flex-1 flex flex-col gap-6">
       {news.map((item, idx) => (
         <div
           key={idx}
-          className="text-right border-b border-gray-100 pb-4 last:border-0"
+          className="text-right border-b border-quaternary-border pb-4 last:border-0"
         >
-          <div className="font-bold text-lg mb-2 text-black">{item.title}</div>
-          <div className="text-sm text-gray-700 leading-relaxed mb-3 text-justify">
+          <div className="font-bold text-lg mb-2 text-secondary-fg">{item.title}</div>
+          <div className="text-sm text-quaternary-border leading-relaxed mb-3 text-justify">
             {item.desc}
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">
+            <span className="text-quaternary-border text-xs">
               {new Date().toLocaleDateString("ar-SY", {
                 year: "numeric",
                 month: "long",
@@ -38,7 +38,7 @@ const NewsNotificationsCard = () => (
             </span>
             <a
               href="#"
-              className="text-green-600 text-xs font-medium hover:underline flex items-center"
+              className="text-digital-green-bg text-xs font-medium hover:underline flex items-center"
             >
               التفاصيل الكاملة
               <svg
@@ -60,7 +60,7 @@ const NewsNotificationsCard = () => (
         </div>
       ))}
     </div>
-    <button className="mt-6 text-green-600 text-sm font-semibold hover:underline self-end flex items-center">
+    <button className="mt-6 text-digital-green-bg text-sm font-semibold hover:underline self-end flex items-center">
       المزيد من الأخبار
       <svg
         xmlns="http://www.w3.org/2000/svg"

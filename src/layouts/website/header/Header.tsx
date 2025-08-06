@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
-import logo from "@/assets/images/logo.svg";
+import logo from "@/assets/images/f3b7d16bf74e641e8ec7b5e4a2a6ba14cc7746c5.jpg";
 import { useUser } from "@/stores/useUser";
 import { useState } from "react";
 import { LuLogIn, LuSearch } from "react-icons/lu";
@@ -27,13 +27,13 @@ function Header() {
 
   return (
     // header container
-    <header className="w-full bg-quaternary-bg h-7xl border-b border-secondary-border flex items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
+    <header className="w-full bg-layout-bg h-7xl flex items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
       {/* right area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
         {/* icons */}
         <div className="flex items-center gap-lg">
           {/* login / user info */}
-          {user?.access_token ? (
+          {user ? (
             <Popover>
               <PopoverTrigger>
                 <CgProfile className="size-[24px] cursor-pointer" />
@@ -113,8 +113,8 @@ function Header() {
       </div>
 
       {/* logo */}
-      <Link to="/" className="size-6xl rounded-xl overflow-hidden">
-        <img src={logo} alt="NREP" className="size-full object-cover" />
+      <Link to="/" className="">
+        <img src={logo} alt="NREP" className="w-[150px] h-[70px]" />
       </Link>
 
       <SideModal size="sm" title={"إعدادات الموقع"} id={`settings`}>

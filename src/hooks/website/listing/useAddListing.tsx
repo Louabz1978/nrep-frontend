@@ -23,6 +23,9 @@ export const useAddListings = () => {
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.query] })
         .catch(console.error);
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEYS.listings.myListings] })
+        .catch(console.error);
 
       // navigate to all listings page
       navigate("/listing/all-listings");
@@ -42,10 +45,17 @@ export const useAddListings = () => {
       city: submitData?.city?.value,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
-      waterLine: submitData?.waterLine?.value,
+      water: submitData?.water?.value,
+      fan_number: submitData?.hasFans ? submitData?.fan_number : 0,
+      balcony: submitData?.hasBalcony ? submitData?.balcony : 0,
       photos: submitData?.photos
         ?.filter((item) => item?.mode != "delete")
         ?.map((item) => (item as { path: string })?.path),
+      metadata: JSON.stringify([]),
+      mainImage: (
+        submitData?.photos?.find((item) => item?.isMain)?.path as File
+      )?.name,
+      ac: 1,
       owner_id: 13,
     };
 

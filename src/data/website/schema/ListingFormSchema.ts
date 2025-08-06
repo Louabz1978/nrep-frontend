@@ -109,15 +109,15 @@ export type AdditionalInfoStepType = {
   hasBalcony: boolean;
   balcony: TNumber;
   hasFans: boolean;
-  fans: TNumber;
-  waterLine: TOption;
+  fan_number: TNumber;
+  water: TOption;
   // Individual boolean fields for additional options
   elevator: boolean;
   ac: boolean;
-  parking: boolean;
+  garage: boolean;
   garden: boolean;
   jacuzzi: boolean;
-  solar: boolean;
+  solar_system: boolean;
   pool: boolean;
 };
 
@@ -133,7 +133,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
   }),
 
   hasFans: Joi.boolean(),
-  fans: Joi.when("hasFans", {
+  fan_number: Joi.when("hasFans", {
     is: true,
     then: Joi.number().required().messages(VALIDATION_MESSAGES).label("مراوح"),
     otherwise: Joi.number()
@@ -142,7 +142,7 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
       .label("مراوح"),
   }),
 
-  waterLine: optionSchema
+  water: optionSchema
     .allow(null)
     .messages(VALIDATION_MESSAGES)
     .label("خط المياه الواصل للعقار"),
@@ -150,10 +150,10 @@ export const additionalInfoStepSchema = Joi.object<AdditionalInfoStepType>({
   // Additional options as boolean fields
   elevator: Joi.boolean().default(false),
   ac: Joi.boolean().default(false),
-  parking: Joi.boolean().default(false),
+  garage: Joi.boolean().default(false),
   garden: Joi.boolean().default(false),
   jacuzzi: Joi.boolean().default(false),
-  solar: Joi.boolean().default(false),
+  solar_system: Joi.boolean().default(false),
   pool: Joi.boolean().default(false),
 });
 
@@ -161,15 +161,15 @@ export const additionalInfoStepInitialValues: AdditionalInfoStepType = {
   hasBalcony: false,
   balcony: null,
   hasFans: false,
-  fans: null,
-  waterLine: null,
+  fan_number: null,
+  water: null,
   // Additional options initial values
   elevator: false,
   ac: false,
-  parking: false,
+  garage: false,
   garden: false,
   jacuzzi: false,
-  solar: false,
+  solar_system: false,
   pool: false,
 };
 
@@ -214,8 +214,15 @@ export const LocationStepInitialValues: LocationStepType = {
 };
 
 // property images step --------------------------------------------------------------
+export type ImageInputFile = {
+  id: number;
+  path: any;
+  mode: string;
+  isMain: boolean;
+};
 export type PropertyImagesStepType = {
-  photos: { id: number; path: any; mode: string }[];
+  photos: ImageInputFile[];
+  mode: "add" | "edit";
 };
 
 export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
@@ -230,6 +237,7 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
           })
           .messages(VALIDATION_MESSAGES),
         mode: Joi.string().optional(),
+        isMain: Joi.boolean(),
       })
         .unknown()
         .custom((value, helpers) => {
@@ -258,17 +266,32 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
         .messages(VALIDATION_MESSAGES)
     )
     .custom((value, helpers) => {
-      // Filter out deleted images before counting
-      const activeImages = value?.filter((img: any) => img.mode !== "delete");
+      // Filter out deleted images before validation
+      const activeImages = value?.filter(
+        (img: ImageInputFile) => img.mode !== "delete"
+      );
+      const context = helpers.state.ancestors[0]; // Get parent object to access mode
+      console.log({ context });
 
       // Validate minimum count
       if (activeImages?.length < 1) {
         return helpers.error("array.min", { limit: 1 });
       }
 
-      // Validate maximum count
-      if (activeImages?.length > 5) {
-        return helpers.error("array.max", { limit: 5 });
+      // Validate maximum count based on mode
+      const maxCount = context?.mode === "add" ? 5 : 32;
+      if (activeImages?.length > maxCount) {
+        return helpers.error("array.max", { limit: maxCount });
+      }
+
+      // Validate only one main image
+      const mainImagesCount = activeImages.filter(
+        (img: ImageInputFile) => img.isMain === true
+      ).length;
+      if (mainImagesCount > 1) {
+        return helpers.error("custom.singleMainImage");
+      } else if (mainImagesCount < 1) {
+        return helpers.error("custom.MainImageRequired");
       }
 
       return value;
@@ -276,10 +299,12 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الصور"),
+  mode: Joi.string().valid("add", "edit").required(),
 });
 
 export const PropertyImagesStepInitialValues: PropertyImagesStepType = {
   photos: [],
+  mode: "add",
 };
 
 // listing form type

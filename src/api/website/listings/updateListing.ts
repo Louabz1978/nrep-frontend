@@ -3,6 +3,7 @@ import type {
   updateListingProps,
   updateListingResult,
 } from "@/types/website/listings";
+import createFormData from "@/utils/createFormData";
 
 // update listing api call function,
 // gets: listing new data, id of listing
@@ -10,7 +11,9 @@ async function updateListing({
   data,
   id,
 }: updateListingProps): updateListingResult {
-  const res = await axiosClient.put(`property/${id}`, data);
+  const formData = createFormData(data);
+
+  const res = await axiosClient.put(`property/${id}`, formData);
 
   return { ...(res?.data ?? {}), id };
 }
