@@ -6,7 +6,7 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
-import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
+import { cityChoices, PROPERTY_TYPE, STATUS, WATERLINE } from "@/data/global/select";
 import { FaMap } from "react-icons/fa";
 import RenderDetailsTab from "./components/Home";
 import RenderTaxesTab from "./components/Taxes";
@@ -30,6 +30,9 @@ const TABS = [
 ];
 
 function ListingDetails({ data }: ListingDetailsProps) {
+
+  console.log(data)
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
@@ -164,13 +167,16 @@ function ListingDetails({ data }: ListingDetailsProps) {
   const propertyType = PROPERTY_TYPE?.find(
     (item) => item?.value == data?.property_type
   )?.label;
+  const waterLine = WATERLINE?.find(
+    (item) => item?.value == data?.additional.water
+  )?.label;
 
   const dummyProperty = {
-    ac: "يوجد",
+    ac: data.additional.ac?  "يوجد" : "لا يوجد",
     apartmentNumber: data.address.apt || "2",
     area: data.address.area || "النص هنا",
     approximatePrice: ((data.price * 80) / 100).toFixed(2),
-    balcony: "2",
+    balcony: data.additional.balcony || "2",
     bathrooms: data.bathrooms || "النص هنا",
     bedrooms: data.bedrooms || "3",
     buildYear: data.year_built || "1999",
@@ -181,20 +187,20 @@ function ListingDetails({ data }: ListingDetailsProps) {
     description:
       data.description ||
       "هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عِش في واحدة من أكثر المواقع طلبًا ",
-    elevator: "لا يوجد",
+    elevator: data.additional.elevator? " يوجد" : "لا يوجد",
     email: data.owner.email || "seller@gmail.com",
-    fans: "3",
+    fans: data.additional.fan_number ,
     floor: data?.address?.floor || "2",
     floorNumber: data.address?.floor || "3",
-    garden: "يوجد",
+    garden: data.additional.garden? "يوجد" : "لا يوجد",
     governorate: county || "حمص",
     image: data.images_urls || [{ url: image, is_main: true }],
-    jacuzzy: "لا يوجد",
+    jacuzzy: data.additional.jacuzzi? "يوجد" : "لا يوجد",
     licenseNumber: "2516584005",
     mls: data.mls_num || "454942",
-    parking: "يوجد",
+    parking:data.additional.garage? "يوجد" : "لا يوجد",
     phoneNumber: data.owner.phone_number || "0909091009",
-    pool: "لا يوجد",
+    pool: data.additional.pool? "يوجد" : "لا يوجد",
     previewInstruction:
       "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
     price: data.price || 1000000,
@@ -207,13 +213,13 @@ function ListingDetails({ data }: ListingDetailsProps) {
       data.created_by_user.first_name + " " + data.owner.last_name ||
       "realtor 11",
     sellerCommission: data.property_realtor_commission + "%" || "$",
-    solarEnergy: "لا يوجد",
+    solarEnergy:data.additional.garden? "يوجد" : "لا يوجد",
     latitude: data.latitude,
     longitude: data.longitude,
     DimensionsOfTheEarth: 170,
     status: status || "قيد الانجاز",
     streetName: data.address.street || "النص هنا",
-    waterLine: "خزان",
+    waterLine: waterLine || "خزان",
   };
 
   return (

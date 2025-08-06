@@ -55,7 +55,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       { label: "عدد غرف النوم :", value: dummyProperty.bedrooms },
       { label: "عدد الحمامات :", value: dummyProperty.bathrooms },
       { label: "عدد الشرف :", value: dummyProperty.balcony },
-      { label: "مراوح :", value: dummyProperty.fans },
+      { label: "عدد المراوح :", value: dummyProperty.fans },
     ],
     [
       { label: "مكيف :", value: dummyProperty.ac },
