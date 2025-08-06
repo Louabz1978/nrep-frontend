@@ -231,9 +231,7 @@ function ImagesInput<T extends FieldValues>({
                       src={
                         typeof item.path === "object"
                           ? URL.createObjectURL(item.path)
-                          : `${
-                              import.meta.env.VITE_BACKEND_URL
-                            }${item.path?.replace(/^\{|\}$/g, "")}`
+                          : `${item.path}`
                       }
                       className="size-full object-cover"
                       alt={`Preview ${i + 1}`}

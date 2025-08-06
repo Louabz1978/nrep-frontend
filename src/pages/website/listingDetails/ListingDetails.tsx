@@ -184,14 +184,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
     elevator: "لا يوجد",
     email: data.owner.email || "seller@gmail.com",
     fans: "3",
-    floor: data.floor || "2",
-    floorNumber: data.floor || "3",
+    floor: data?.address?.floor || "2",
+    floorNumber: data.address?.floor || "3",
     garden: "يوجد",
     governorate: county || "حمص",
-    image: data.image_url
-      ?.replace(/^\{|\}$/g, "")
-      .split(",")
-      ?.map((item) => `${import.meta.env.VITE_BACKEND_URL}${item}`) || [image],
+    image: data.images_urls || [{ url: image, is_main: true }],
     jacuzzy: "لا يوجد",
     licenseNumber: "2516584005",
     mls: data.mls_num || "454942",

@@ -3,7 +3,12 @@ import ListingForm from "./ListingForm";
 import useListingDetails from "@/hooks/website/listing/useListingDetails";
 import StatusManager from "@/components/global/statusManager/StatusManager";
 import { ListingFormSkeleton } from "./components/ListingFormSkeleton";
-import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
+import {
+  cityChoices,
+  PROPERTY_TYPE,
+  STATUS,
+  WATERLINE,
+} from "@/data/global/select";
 import { additionalInfoStepInitialValues } from "@/data/website/schema/ListingFormSchema";
 import NotAllowedPage from "@/components/global/notAllowed/NotAllowedPage";
 import { useUser } from "@/stores/useUser";
@@ -74,18 +79,43 @@ function EditListingIndex() {
               },
             },
             additionalInfo: {
-              hasBalcony: false,
-              hasFans: false,
-              elevator: false,
-              ac: false,
-              garage: false,
-              garden: false,
-              jacuzzi: false,
-              solar_system: false,
-              pool: false,
-              balcony: 0,
-              fan_number: 0,
-              water: additionalInfoStepInitialValues?.water,
+              hasBalcony:
+                listingDetails?.additional?.balcony > 0 ||
+                additionalInfoStepInitialValues?.hasBalcony,
+              hasFans:
+                listingDetails?.additional?.fan_number > 0 ||
+                additionalInfoStepInitialValues?.hasFans,
+              elevator:
+                listingDetails?.additional?.elevator ||
+                additionalInfoStepInitialValues?.elevator,
+              ac:
+                listingDetails?.additional?.ac ||
+                additionalInfoStepInitialValues?.ac,
+              garage:
+                listingDetails?.additional?.garage ||
+                additionalInfoStepInitialValues?.garage,
+              garden:
+                listingDetails?.additional?.garden ||
+                additionalInfoStepInitialValues?.garden,
+              jacuzzi:
+                listingDetails?.additional?.jacuzzi ||
+                additionalInfoStepInitialValues?.jacuzzi,
+              solar_system:
+                listingDetails?.additional?.solar_system ||
+                additionalInfoStepInitialValues?.solar_system,
+              pool:
+                listingDetails?.additional?.pool ||
+                additionalInfoStepInitialValues?.pool,
+              balcony:
+                listingDetails?.additional?.balcony ||
+                additionalInfoStepInitialValues?.balcony,
+              fan_number:
+                listingDetails?.additional?.fan_number ||
+                additionalInfoStepInitialValues?.fan_number,
+              water:
+                WATERLINE?.find(
+                  (item) => item?.value == listingDetails?.additional?.water
+                ) || additionalInfoStepInitialValues?.water,
             },
             location: {
               latitude: listingDetails?.latitude,
@@ -95,16 +125,13 @@ function EditListingIndex() {
               landDimensionsSource: "",
             },
             propertyImages: {
-              photos: listingDetails?.image_url
-                ? listingDetails.image_url
-                    ?.replace(/^\{|\}$/g, "")
-                    .split(",")
-                    ?.map((item, index) => ({
-                      id: index + 1,
-                      path: item,
-                      mode: "normal",
-                      isMain: index == 0 ? true : false,
-                    }))
+              photos: listingDetails?.images_urls
+                ? listingDetails.images_urls?.map((item, index) => ({
+                    id: index + 1,
+                    path: item?.url,
+                    mode: "normal",
+                    isMain: item?.is_main,
+                  }))
                 : [],
               mode: "edit",
             },
