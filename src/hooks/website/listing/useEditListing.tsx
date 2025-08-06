@@ -47,6 +47,10 @@ export const useEditListings = () => {
       typeof mainImage?.path == "string"
         ? mainImage?.path?.split("/")?.[mainImage?.path?.split("/")?.length - 1]
         : (mainImage?.path as File)?.name;
+
+    const images_urls = submitData?.photos
+      ?.filter((item) => item?.mode == "normal")
+      ?.map((item) => (item as { path: string })?.path);
     const data = {
       ...(submitData ?? {}),
       country: submitData?.country?.value,
@@ -58,9 +62,9 @@ export const useEditListings = () => {
       photos: submitData?.photos
         ?.filter((item) => item?.mode != "delete" && item?.mode !== "normal")
         ?.map((item) => (item as { path: string })?.path),
-      images_urls: submitData?.photos
-        ?.filter((item) => item?.mode == "normal")
-        ?.map((item) => (item as { path: string })?.path),
+      images_urls: images_urls?.length ? images_urls : "",
+      fan_number: submitData?.hasFans ? submitData?.fan_number : 0,
+      balcony: submitData?.hasBalcony ? submitData?.balcony : 0,
       metadata: JSON.stringify([]),
       longitude: Number(submitData?.longitude),
       latitude: Number(submitData?.latitude),
