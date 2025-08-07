@@ -16,7 +16,7 @@ const SettingsButton = ({ id }: Props) => {
           size={"icon-circle"}
           variant={"ghost-light"}
         >
-          <Settings strokeWidth={1.4} className="text-secondary-fg" />
+          <Settings strokeWidth={1.4} className="text-secondary-fg size-3xl" />
         </Button>
       </TooltipTrigger>
       <TooltipContent>

@@ -176,7 +176,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
               <div className="flex items-center gap-3 text-size20">
                 <FaPlay /> <FaRegImages /> <GoScreenFull />
               </div>
-              <div>1/32</div>
+              <div>{/* 1/32 */}</div>
             </div>
 
             <div className="text-center mt-2">

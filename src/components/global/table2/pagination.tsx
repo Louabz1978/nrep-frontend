@@ -115,7 +115,7 @@ export function DynamicPagination({
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-3 w-full">
+    <div className="flex flex-col md:flex-row items-center gap-lg w-full">
       <Pagination>
         <PaginationContent className="max-sm:gap-0">
           <PaginationItem>

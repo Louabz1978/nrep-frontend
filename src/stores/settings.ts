@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS = {
   invoicesStyle: "table",
   navBrowser: true,
   textSize: 1,
+  spaceSize: 1,
 };
 
 // Helper function to get initial settings from localStorage
@@ -32,6 +33,16 @@ export const textSizeAtom = atom(
   (get, set, newTextSize) => {
     const currentSettings = get(settingsAtom);
     const updatedSettings = { ...currentSettings, textSize: newTextSize };
+    secureLocalStorage.setItem("SETTINGS", updatedSettings);
+    set(settingsAtom, updatedSettings);
+  }
+);
+// Derived atom for spaceSize
+export const spaceSizeAtom = atom(
+  (get) => get(settingsAtom).spaceSize,
+  (get, set, newSpaceSize) => {
+    const currentSettings = get(settingsAtom);
+    const updatedSettings = { ...currentSettings, spaceSize: newSpaceSize };
     secureLocalStorage.setItem("SETTINGS", updatedSettings);
     set(settingsAtom, updatedSettings);
   }

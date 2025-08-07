@@ -37,7 +37,7 @@ const TableSearch = ({ className, prefix = "", ...props }: InputProps) => {
       value={value}
       onChange={handleChange}
       className={cn(
-        "w-100 bg-white h-[36px] rounded-[8px] placeholder:text-xs leading-tight py-1 px-2 !text-sm ",
+        "w-100 bg-white !h-2lg !text-size16 rounded-[8px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
         className
       )}
     />

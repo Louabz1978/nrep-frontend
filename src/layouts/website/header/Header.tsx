@@ -113,8 +113,8 @@ function Header() {
       </div>
 
       {/* logo */}
-      <Link to="/" className="">
-        <img src={logo} alt="NREP" className="w-[150px] h-[70px]" />
+      <Link to="/" className="w-11xl h-7xl">
+        <img src={logo} alt="NREP" className="size-full object-contain" />
       </Link>
 
       <SideModal size="sm" title={"إعدادات الموقع"} id={`settings`}>

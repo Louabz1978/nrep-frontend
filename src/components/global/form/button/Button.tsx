@@ -22,7 +22,7 @@ const buttonVariants = cva(
           "font-medium !text-13p py-9p px-16p bg-secondary text-secondary-foreground hover:bg-secondary-hover rounded-xs border border-solid border-secondary hover:border-secondary-hover",
         ghost:
           "font-medium !text-13p py-9p px-16p bg-transparent text-accent-hover hover:text-white hover:bg-accent-hover rounded-xs border border-solid border-transparent hover:border-accent-hover",
-        link: "font-medium !text-[13px] py-[9px] px-[16px] bg-transparent text-primary hover:bg-transparent rounded-xs border border-solid border-transparent hover:border-transparent",
+        link: "font-medium !text-size13 py-[9px] px-[16px] bg-transparent text-primary hover:bg-transparent rounded-xs border border-solid border-transparent hover:border-transparent",
 
         "ghost-light":
           "font-medium !text-13p py-9p px-16p bg-transparent text-foreground-secondary hover:bg-background-hover rounded-xs",
@@ -31,19 +31,19 @@ const buttonVariants = cva(
         radio:
           "w-[180px] h-[40px] rounded-full py-[13px] px-[30px] bg-quinary-bg text-inverse-fg",
         "table-filter":
-          "min-w-[100px] h-full px-[5px] py-[2px] bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+          "min-w-10xl text-size16 h-full px-sm py-xxs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
         pagination:
-          "font-medium !text-[13px] h-[40px] py-[9px] px-[16px] bg-transparent text-primary hover:text-primary-fg rounded-[7px] border border-solid border-primary ",
+          "font-medium !text-size13 h-[40px] py-[9px] px-[16px] bg-transparent text-primary hover:text-primary-fg rounded-[7px] border border-solid border-primary ",
         "pagination-current":
-          "font-medium !text-[13px] py-[9px] px-[16px] bg-primary text-inverse-fg hover:bg-primary rounded-xs border border-solid border-primary hover:border-primary",
+          "font-medium !text-size13 py-[9px] px-[16px] bg-primary text-inverse-fg hover:bg-primary rounded-xs border border-solid border-primary hover:border-primary",
       },
 
       size: {
         default: "",
-        sm: "h-8 rounded-md px-3 text-xs",
+        sm: "!size-4xl rounded-md text-sm !p-0",
         lg: "h-10 rounded-md px-8",
         login: " rounded-[18px] h-[50px]",
-        icon: "!p-0 flex justify-center items-center !size-[35px] rounded-[7px]",
+        icon: "!p-0 flex justify-center items-center !size-4xl rounded-[7px]",
         "icon-circle":
           "h-[32px] w-[32px] flex justify-center items-center rounded-full !p-0",
         "panel-icon": "h-[36px] w-[36px] flex justify-center interface !p-0",
@@ -73,7 +73,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        // className={"hover:brightness-95"}
+        // className={"h-8"}
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}

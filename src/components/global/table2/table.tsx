@@ -66,7 +66,7 @@ export function DataTable<TData, TValue, TRow>({
   data,
   miw = 1200,
   filters,
-  removeCollapseButton = true,
+  removeCollapseButton = false,
   onRowClick,
   selectedRows,
   setCheckedRows,
@@ -109,24 +109,24 @@ export function DataTable<TData, TValue, TRow>({
   return (
     <div className="flex flex-col flex-1 gap-xl">
       <div className="flex justify-between items-start">
-        <div className="flex gap-[24px] flex-wrap">
+        <div className="flex gap-3xl flex-wrap items-center">
           <TableSearch prefix={prefix} wrapperClassName="w-fit min-w-[200px]" />
           {filters && filters.length > 0 ? (
             <Fragment>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button size={"sm"} className="rounded-xs !px-2">
-                    <ListFilterPlus />
+                  <Button size={"sm"} className="!rounded-sm">
+                    <ListFilterPlus className="size-2xl" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[220px] p-3 rounded-sm bg-tertiary-bg">
-                  <p className="mb-3">{"الفلتر"}</p>
+                <PopoverContent className="w-[220px] p-lg rounded-sm bg-tertiary-bg">
+                  <p className="mb-lg">{"الفلتر"}</p>
 
                   {filters.map((f) => {
                     return (
                       <Label className="flex items-center" key={f.id}>
                         <Checkbox
-                          className="capitalize me-2"
+                          className="capitalize me-md"
                           checked={allowedFilters.includes(f.id)}
                           onCheckedChange={(value) => {
                             setAllowedFilters((pre) =>
@@ -169,7 +169,7 @@ export function DataTable<TData, TValue, TRow>({
             onClick={toggle}
             size={"icon"}
             className={
-              "rounded-full !size-[30px] absolute left-1/2 top-0 -translate-x-1/2 z-[1] -translate-y-1/2"
+              "rounded-full !size-4xl absolute left-1/2 top-0 -translate-x-1/2 z-[1] -translate-y-1/2"
             }
             variant={"panel"}
           >
@@ -238,7 +238,7 @@ export function DataTable<TData, TValue, TRow>({
                                 <ChevronDown
                                   size={14}
                                   className={cn(
-                                    "text-primary-fg -mt-1",
+                                    "text-primary-fg -mt-sm",
                                     header.column.getIsSorted() === "desc"
                                       ? "text-primary-fg opacity-100"
                                       : "opacity-50"
@@ -265,7 +265,7 @@ export function DataTable<TData, TValue, TRow>({
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 text-center text-secondary-fg"
+                      className="h-9xl text-center text-secondary-fg"
                     >
                       {"لا يوجد نتائج"}
                     </TableCell>
@@ -315,7 +315,7 @@ export function DataTable<TData, TValue, TRow>({
           </Table>
         </ScrollArea>
 
-        <div className="flex items-center justify-end space-x-2 py-3 px-3">
+        <div className="flex items-center justify-end space-x-md py-lg px-lg">
           <div className="flex-1 text-sm text-secondary-fg">
             {`تم تحديد ${table.getFilteredSelectedRowModel().rows.length} من
             ${table.getFilteredRowModel().rows.length}`}
@@ -329,7 +329,7 @@ export function DataTable<TData, TValue, TRow>({
         </div>
       </div>
       <SideModal size="sm" title={"إعدادات الجدول"} id={`table-${id}`}>
-        <div className="space-y-6">
+        <div className="space-y-3xl">
           <p className="text-lg">{"الأعمدة المعروضة"}</p>
           {table
             .getAllColumns()
@@ -338,7 +338,7 @@ export function DataTable<TData, TValue, TRow>({
               return (
                 <Label className="flex items-center" key={column.id}>
                   <Checkbox
-                    className="capitalize me-2"
+                    className="capitalize me-md"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)

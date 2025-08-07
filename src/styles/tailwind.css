@@ -69,6 +69,7 @@
 /* General var */
 :root {
   --text-factor: 1;
+  --space-factor: 1;
 }
 
 /* Light mode */
@@ -332,7 +333,7 @@
   --shadow-accordion-shadow: var(--accordion-shadow);
 
   /* spaces */
-  --spacing-xxs: 2px;
+  /* --spacing-xxs: 2px;
   --spacing-xs: 4px;
   --spacing-sm: 6px;
   --spacing-md: 8px;
@@ -347,7 +348,26 @@
   --spacing-8xl: 80px;
   --spacing-9xl: 96px;
   --spacing-10xl: 112px;
-  --spacing-11xl: 160px;
+  --spacing-11xl: 160px; */
+
+  --spacing-xxs: calc(2px * var(--space-factor));
+--spacing-xs: calc(4px * var(--space-factor));
+--spacing-sm: calc(6px * var(--space-factor));
+--spacing-md: calc(8px * var(--space-factor));
+--spacing-lg: calc(12px * var(--space-factor));
+--spacing-xl: calc(16px * var(--space-factor));
+--spacing-2xl: calc(20px * var(--space-factor));
+--spacing-3xl: calc(24px * var(--space-factor));
+--spacing-4xl: calc(32px * var(--space-factor));
+--spacing-2lg: calc(36px * var(--space-factor));
+--spacing-5xl: calc(40px * var(--space-factor));
+--spacing-6xl: calc(48px * var(--space-factor));
+--spacing-7xl: calc(64px * var(--space-factor));
+--spacing-8xl: calc(80px * var(--space-factor));
+--spacing-9xl: calc(96px * var(--space-factor));
+--spacing-10xl: calc(112px * var(--space-factor));
+--spacing-11xl: calc(160px * var(--space-factor));
+
   --spacing-container-max-width-desktop: 1280px;
   --spacing-container-padding-mobile: 16px;
   --spacing-container-padding-desktop: 32px;

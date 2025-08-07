@@ -13,7 +13,7 @@ function RowSkeletonLoader<TData>({ table }: RowSkeletonLoaderProps<TData>) {
         const randomWidth = `${40 + Math.random() * 60}%`;
         return (
           <TableCell key={`skeleton-cell-${cellIndex}`}>
-            <Skeleton className="h-4" style={{ width: randomWidth }} />
+            <Skeleton className="h-xl" style={{ width: randomWidth }} />
           </TableCell>
         );
       })}

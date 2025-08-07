@@ -68,20 +68,16 @@ function AllListings() {
       {
         id: "mls_num",
         accessorKey: "address.building_num",
-        header: "رقم العقار",
+        header: "MLS",
         cell: ({ row }) => (
           <Link
             to={`/listing/details/${row?.original?.property_id}`}
             className="hover:text-primary"
           >
-            {`${row?.original?.address?.building_num ?? ""} ${
-              row?.original?.address?.street ?? ""
-            } طابق ${row?.original?.address?.floor ?? ""} شقة ${
-              row?.original?.address?.apt ?? ""
-            }`}
+            {`#${row?.original?.mls_num}`}
           </Link>
         ),
-        size: 35,
+        size: 25,
       },
       {
         id: "address",

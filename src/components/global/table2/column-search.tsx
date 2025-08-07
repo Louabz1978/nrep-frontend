@@ -189,7 +189,7 @@ export default function ColumnSearch({
         <Button
           variant="table-filter"
           className={cn(
-            "min-w-[100px] h-full px-[5px] py-[2px] bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+            "min-w-10xl h-full !text-size16 px-sm py-xxs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
             hasValue ? "bg-primary text-white" : ""
           )}
         >
@@ -200,9 +200,9 @@ export default function ColumnSearch({
           {!hasValue ? (
             <span
               onClick={removeFilter}
-              className="absolute opacity-0 group-hover:opacity-100 transition top-0 right-0 translate-x-1/2 -translate-y-1/2 size-4 rounded-full border border-primary-border bg-error/75 flex items-center justify-center"
+              className="absolute opacity-0 group-hover:opacity-100 transition top-0 right-0 translate-x-1/2 -translate-y-1/2 size-xl rounded-full border border-primary-border bg-error/75 flex items-center justify-center"
             >
-              <X strokeWidth={1.3} className="size-3 text-white" />
+              <X strokeWidth={1.3} className="size-lg text-white" />
             </span>
           ) : null}
 
@@ -210,15 +210,15 @@ export default function ColumnSearch({
           {hasValue ? (
             <span
               onClick={handleClear}
-              className="border-s border-white h-full flex items-center ps-[5px] justify-center ms-2 cursor-pointer"
+              className="border-s border-white h-full flex items-center ps-sm justify-center ms-2 cursor-pointer"
             >
-              <X strokeWidth={1.3} className="size-4 text-white" />
+              <X strokeWidth={1.3} className="size-xl text-white" />
             </span>
           ) : null}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 rounded-sm bg-white shadow-sm border z-[40] ">
-        <div className="flex gap-2 flex-col">
+        <div className="flex gap-xs flex-col">
           {renderInputNode()}
           <Button onClick={handleSearch} className="w-full rounded-xs">
             {"تم"}
