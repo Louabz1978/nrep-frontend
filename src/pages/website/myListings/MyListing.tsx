@@ -22,8 +22,12 @@ import {
   PiTrashSimpleBold,
 } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import { useUser } from "@/stores/useUser";
 
 function MyListings() {
+  // user information
+  const { hasPermissions } = useUser();
+
   // get my listings
   const { myListings, myListingsQuery, totalPages } = useMyListings();
 
@@ -157,28 +161,30 @@ function MyListings() {
               </Tooltip>
 
               {/* delete */}
-              <Tooltip>
-                <TooltipTrigger>
-                  <div>
-                    <Button
-                      size={"icon"}
-                      className="bg-red"
-                      disabled={
-                        deleteListing?.isPending &&
-                        deleteListing?.variables?.id ==
-                          row?.original?.property_id
-                      }
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDeleteListing(row?.original?.property_id);
-                      }}
-                    >
-                      <PiTrashSimpleBold />
-                    </Button>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>حذف</TooltipContent>
-              </Tooltip>
+              {hasPermissions(["admin"]) ? (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div>
+                      <Button
+                        size={"icon"}
+                        className="bg-red"
+                        disabled={
+                          deleteListing?.isPending &&
+                          deleteListing?.variables?.id ==
+                            row?.original?.property_id
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDeleteListing(row?.original?.property_id);
+                        }}
+                      >
+                        <PiTrashSimpleBold />
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>حذف</TooltipContent>
+                </Tooltip>
+              ) : null}
 
               {/* details */}
               <Tooltip>
