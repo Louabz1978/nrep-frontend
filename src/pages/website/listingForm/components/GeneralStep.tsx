@@ -202,7 +202,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             placeholder="أدخل وصف العقار"
             name="description"
             info="يرجى إدخال وصف العقار"
-            addingStyle="md:col-span-3"
+            addingStyle="col-span-full"
             required
           />
           <Textarea
@@ -211,7 +211,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             placeholder="أدخل تعليمات المعاينة"
             name="show_inst"
             info="يرجى إدخال تعليمات المعاينة"
-            addingStyle="md:col-span-3"
+            addingStyle="col-span-full"
             required
           />
         </div>

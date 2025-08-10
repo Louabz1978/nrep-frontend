@@ -9,7 +9,10 @@ import {
   STATUS,
   WATERLINE,
 } from "@/data/global/select";
-import { additionalInfoStepInitialValues } from "@/data/website/schema/ListingFormSchema";
+import {
+  additionalInfoStepInitialValues,
+  generalStepInitialValues,
+} from "@/data/website/schema/ListingFormSchema";
 import NotAllowedPage from "@/components/global/notAllowed/NotAllowedPage";
 import { useUser } from "@/stores/useUser";
 
@@ -33,6 +36,11 @@ function EditListingIndex() {
           id={listingId}
           defaultValues={{
             general: {
+              exp_date:
+                listingDetails?.exp_date || generalStepInitialValues?.exp_date,
+              show_inst:
+                listingDetails?.show_inst ||
+                generalStepInitialValues?.show_inst,
               building_num: listingDetails?.address.building_num + "",
               street: listingDetails?.address.street,
               floor: listingDetails?.address.floor,

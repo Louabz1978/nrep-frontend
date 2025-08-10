@@ -90,7 +90,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       { label: "عمولة  المشتري :", value: dummyProperty.sellerCommission },
       { label: "اسم صاحب العقار :", value: dummyProperty.propertyOwner },
       {
-        label: "تاريخ الإنتهاء العقد :",
+        label: "تاريخ انتهاء العقد :",
         value: dummyProperty.contractExpiration,
       },
     ],

@@ -100,6 +100,8 @@ export interface ListingDetailsType {
   address: Address;
   additional: Additional;
   images_urls: ImageType[];
+  show_inst: string;
+  exp_date: string;
 }
 
 // export type getListingsDetailsResult = Promise<{
