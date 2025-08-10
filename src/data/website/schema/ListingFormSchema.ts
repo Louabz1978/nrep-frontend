@@ -26,6 +26,8 @@ export type GeneralStepType = {
   year_built: TNumber;
   status: TOption;
   description: TString;
+  exp_date: TString;
+  show_inst: TString;
 };
 
 export const generalStepSchema = Joi.object<GeneralStepType>({
@@ -82,6 +84,14 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("وصف العقار"),
+  show_inst: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("تعليمات المعاينة"),
+  exp_date: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("تاريخ انتهاء العقد"),
 });
 
 export const generalStepInitialValues: GeneralStepType = {
@@ -102,6 +112,8 @@ export const generalStepInitialValues: GeneralStepType = {
   year_built: null,
   status: null,
   description: null,
+  exp_date: null,
+  show_inst: null,
 };
 
 // additional info step -----------------------------------------------------------

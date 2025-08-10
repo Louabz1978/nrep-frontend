@@ -71,14 +71,33 @@ const checkPermissionsAtom = atom(
     }
 );
 
+// Has permissions
+const hasPermissionsAtom = atom(
+  (get) =>
+    (requiredPermissions: PermissionsType = []): boolean => {
+      const user = get(userAtom);
+      let permissionStatus = false;
+
+      requiredPermissions.forEach((permission) => {
+        permissionStatus =
+          permissionStatus || (user?.roles?.includes(permission) ?? false);
+      });
+
+      return permissionStatus;
+      // return true;
+    }
+);
+
 // Hook to use the user context
 export const useUser = () => {
   const [user, setUser] = useAtom(userWithPersistenceAtom);
   const checkPermissions = useAtom(checkPermissionsAtom)[0];
+  const hasPermissions = useAtom(hasPermissionsAtom)[0];
 
   return {
     user,
     setUser,
     checkPermissions,
+    hasPermissions,
   };
 };

@@ -201,7 +201,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
       data.description ||
       "هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عِش في واحدة من أكثر المواقع طلبًا ",
     elevator: data.additional.elevator ? " يوجد" : "لا يوجد",
-    email: data.owner.email || "seller@gmail.com",
+    email: data.created_by_user.email || "seller@gmail.com",
     fans: data.additional.fan_number || 0,
     floor: data?.address?.floor || "2",
     floorNumber: data.address?.floor || "3",
@@ -215,7 +215,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     licenseNumber: "2516584005",
     mls: data.mls_num || "454942",
     parking: data.additional.garage ? "يوجد" : "لا يوجد",
-    phoneNumber: data.owner.phone_number || "0909091009",
+    phoneNumber: data.created_by_user.phone_number || "0909091009",
     pool: data.additional.pool ? "يوجد" : "لا يوجد",
     previewInstruction:
       "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
@@ -226,8 +226,11 @@ function ListingDetails({ data }: ListingDetailsProps) {
     propertyType: propertyType || "شقة",
     realEstateCompany: "NREP",
     responsibleMediator:
-      data.created_by_user.first_name + " " + data.owner.last_name ||
-      "realtor 11",
+      `${data.created_by_user.first_name ?? ""}${
+        data.created_by_user.last_name
+          ? ` ${data.created_by_user.last_name}`
+          : ""
+      }` || "---",
     sellerCommission: data.property_realtor_commission + "%" || "$",
     solarEnergy: data.additional.solar_system ? "يوجد" : "لا يوجد",
     latitude: data.latitude,

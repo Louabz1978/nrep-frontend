@@ -187,13 +187,31 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             info="يرجى اختيار حالة العقار (جديد، مستخدم، ...)"
             required
           />
+          <Input
+            form={form}
+            type="date"
+            label="تاريخ انتهاء العقد"
+            placeholder="أدخل تاريخ انتهاء العقد"
+            name="exp_date"
+            info="يرجى إدخال تاريخ انتهاء العقد"
+            required
+          />
           <Textarea
             form={form}
             label="وصف العقار"
             placeholder="أدخل وصف العقار"
             name="description"
             info="يرجى إدخال وصف العقار"
-            addingStyle="md:col-span-2"
+            addingStyle="md:col-span-3"
+            required
+          />
+          <Textarea
+            form={form}
+            label="تعليمات المعاينة"
+            placeholder="أدخل تعليمات المعاينة"
+            name="show_inst"
+            info="يرجى إدخال تعليمات المعاينة"
+            addingStyle="md:col-span-3"
             required
           />
         </div>

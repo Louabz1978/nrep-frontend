@@ -42,16 +42,16 @@ export type PropertyTypeValue =
   | "apartment"
   | "villa"
   | "farm"
-  | "shop"
-  | "land"
+  | "store"
+  | "house"
   | "building";
 export type PropertyTypeOption = SelectOption<PropertyTypeValue>;
 export const PROPERTY_TYPE: PropertyTypeOption[] = [
   { value: "apartment", label: "شقة" },
   { value: "villa", label: "فيلا" },
   { value: "farm", label: "مزرعة" },
-  { value: "shop", label: "محل تجاري" },
-  { value: "land", label: "ارض" },
+  { value: "store", label: "محل تجاري" },
+  { value: "house", label: "ارض" },
   { value: "building", label: "بناء" },
 ];
 
