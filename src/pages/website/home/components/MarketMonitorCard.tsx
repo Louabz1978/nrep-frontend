@@ -42,7 +42,7 @@ const chartData = [
   { label: "معلق", value: 430 },
   { label: "منتهي الصلاحية", value: 390 },
   { label: "مسحوب", value: 110 },
-  { label: "ملغي", value: 275 },
+  { label: "ملغي", value: 275},
 ];
 
 const gradientColors = [

@@ -13,6 +13,7 @@ import Home from "./pages/website/home/Home";
 import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
 import MyListings from "./pages/website/myListings/MyListing";
 import OtherUserHome from "./pages/global/OtherUserHome";
+import ContactFormIndex from "./pages/website/ContactForm/ContactFormIndex";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "listing/edit/:id",
         element: <EditListingIndex />,
+      },
+      {
+        path: "contact/add",
+        element: <ContactFormIndex  />,
       },
     ],
   },
