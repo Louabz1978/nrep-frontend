@@ -21,6 +21,20 @@ const MESSAGES = {
       success: "تم تعديل العقار بنجاح!",
     },
   },
+  contact: {
+    add: {
+      loading: "جار إضافة البائع...",
+      success: "تمت إضافة البائع بنجاح!",
+    },
+    edit: {
+      loading: "جار تعديل البائع...",
+      success: "تم تعديل البائع بنجاح!",
+    },
+    delete:{
+      loading: "جار حذف البائع...",
+      success: "تم حذف البائع بنجاح!",
+    }
+  },
 };
 
 export default MESSAGES;

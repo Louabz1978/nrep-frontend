@@ -13,7 +13,9 @@ import Home from "./pages/website/home/Home";
 import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
 import MyListings from "./pages/website/myListings/MyListing";
 import OtherUserHome from "./pages/global/OtherUserHome";
-import ContactFormIndex from "./pages/website/ContactForm/ContactFormIndex";
+import AddContactFormIndex from "./pages/website/ContactForm/AddContactFormIndex";
+import ContactTable from "./pages/website/contactTable/ContactTable";
+import EditContactFormIndex from "./pages/website/ContactForm/EditContactFormIndex";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -55,8 +57,16 @@ const router = createBrowserRouter([
         element: <EditListingIndex />,
       },
       {
+        path: "contact",
+        element: <ContactTable  />,
+      },
+      {
         path: "contact/add",
-        element: <ContactFormIndex  />,
+        element: <AddContactFormIndex  />,
+      },
+      {
+        path: "contact/edit/:id",
+        element: <EditContactFormIndex  />,
       },
     ],
   },
