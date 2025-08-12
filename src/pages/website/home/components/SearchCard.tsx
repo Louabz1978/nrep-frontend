@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
@@ -8,10 +8,15 @@ import {
   type SearchFormType,
 } from "@/data/website/schema/SearchFormSchema";
 import cleanValues from "@/utils/cleanValues";
-import { Button } from "@/components/global/ui/button";
 import { FaSearch } from "react-icons/fa";
+import { Button } from "@/components/global/form/button/Button";
+import { cityChoices } from "@/data/global/select";
+import { hasValue } from "@/utils/filter";
+import { useNavigate } from "react-router-dom";
+import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 
 const SearchCard = () => {
+  const navigate = useNavigate();
   const form = useForm({
     resolver: joiResolver(searchFormSchema),
     defaultValues: cleanValues(
@@ -22,9 +27,29 @@ const SearchCard = () => {
   });
 
   const onSubmit = (data: SearchFormType) => {
-    console.log("Search data:", data);
-    // Handle search submission here
+    const finalData = { ...data, city: data?.city?.value };
+
+    let params = "";
+    Object.keys(finalData)?.map((key) => {
+      if (hasValue(finalData?.[key as keyof typeof finalData]))
+        params += `${TABLE_PREFIXES.allListings}_${key}=${finalData?.[
+          key as keyof typeof finalData
+        ]}&`;
+    });
+    navigate(`listing/all-listings${params ? `?${params}` : ""}`);
   };
+
+  // disable flags
+  const mls = useWatch({ control: form.control, name: "mls" });
+  const area = useWatch({ control: form.control, name: "area" });
+  const city = useWatch({ control: form.control, name: "city" });
+  const min_price = useWatch({ control: form.control, name: "min_price" });
+  const max_price = useWatch({ control: form.control, name: "max_price" });
+  const isMLSDisabled =
+    hasValue(area) ||
+    hasValue(city) ||
+    hasValue(min_price) ||
+    hasValue(max_price);
 
   return (
     <div className="bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-xl)] min-h-[300px] flex flex-col ">
@@ -40,53 +65,53 @@ const SearchCard = () => {
             <Input
               form={form}
               label="MLS"
-              name="MLS"
+              name="mls"
               placeholder="MLS"
               type="number"
+              disabled={isMLSDisabled}
             />
+          </div>
+
+          <div className="w-full flex items-center gap-[10px]">
+            <div className="flex-1 border-b border-secondary-border"></div>
+            <div>أو</div>
+            <div className="flex-1 border-b border-secondary-border"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
             <Input
               form={form}
-              label="رقم البناء"
-              name="building_number"
-              placeholder="رقم البناء"
-              type="number"
-            />
-            <Input
-              form={form}
-              label="اسم الشارع"
-              name="street_name"
-              placeholder="اسم الشارع"
+              label="الحي"
+              name="area"
+              placeholder="ادخل الحي"
               type="text"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
-            <Select
-              form={form}
-              label="المنطقة"
-              name="governorate"
-              placeholder="اختر المنطقة"
-              choices={[
-                { value: "riyadh", label: "الرياض" },
-                { value: "jeddah", label: "جدة" },
-                { value: "dammam", label: "الدمام" },
-              ]}
-              showValue="label"
-              keyValue="value"
+              disabled={!!mls}
             />
             <Select
               form={form}
               label="المدينة"
               name="city"
               placeholder="اختر المدينة"
-              choices={[
-                { value: "riyadh", label: "الرياض" },
-                { value: "jeddah", label: "جدة" },
-                { value: "dammam", label: "الدمام" },
-              ]}
+              choices={cityChoices}
               showValue="label"
               keyValue="value"
+              disabled={!!mls}
+            />
+
+            <Input
+              form={form}
+              label="السعر (من)"
+              type="number"
+              name="min_price"
+              placeholder="الحد الأدنى للسعر"
+              disabled={!!mls}
+            />
+            <Input
+              form={form}
+              label="السعر (إلى)"
+              type="number"
+              name="max_price"
+              placeholder="الحد الأعلى للسعر"
+              disabled={!!mls}
             />
           </div>
         </div>

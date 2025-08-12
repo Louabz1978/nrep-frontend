@@ -13,11 +13,21 @@ export interface InputProps
   wrapperClassName?: string;
   hasError?: boolean;
   prefix: string;
+  searchKey: string;
+  searchPlaceholder: string;
+  searchType: "text" | "number";
 }
 
-const TableSearch = ({ className, prefix = "", ...props }: InputProps) => {
+const TableSearch = ({
+  className,
+  prefix = "",
+  searchKey,
+  searchPlaceholder,
+  searchType,
+  ...props
+}: InputProps) => {
   const [q, setQ] = useQueryState(
-    `${prefix}_search`,
+    `${prefix}_${searchKey}`,
     parseAsString.withDefault("")
   );
   const [value, setValue] = useState(q);
@@ -31,7 +41,8 @@ const TableSearch = ({ className, prefix = "", ...props }: InputProps) => {
 
   return (
     <Input
-      placeholder={"بحث..."}
+      placeholder={searchPlaceholder}
+      type={searchType}
       variant="white"
       {...props}
       value={value}

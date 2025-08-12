@@ -223,20 +223,41 @@ function AllListings() {
   const filter: Filters = useMemo(
     () => [
       {
-        id: "3",
+        id: "city",
+        type: "select",
+        label: "المدينة",
+        title: "المدينة",
+        searchKey: "city",
+        options: cityChoices,
+      },
+      {
+        id: "area",
+        type: "text",
+        label: "الحي",
+        title: "الحي",
+        searchKey: "area",
+      },
+      {
+        id: "min_price",
+        type: "number",
+        label: "السعر الأدنى",
+        title: "السعر الأدنى",
+        searchKey: "min_price",
+      },
+      {
+        id: "max_price",
+        type: "number",
+        label: "السعر الأعلى",
+        title: "السعر الأعلى",
+        searchKey: "max_price",
+      },
+      {
+        id: "status",
         type: "select",
         label: "الحالة",
         title: "الحالة",
         searchKey: "status",
         options: STATUS,
-      },
-
-      {
-        id: "9",
-        type: "number",
-        label: "السعر",
-        title: "السعر",
-        searchKey: "price",
       },
     ],
     []
@@ -252,6 +273,9 @@ function AllListings() {
           data={(allListings ?? []) as Listing[]}
           query={allListingsQuery}
           totalPageCount={totalPages}
+          searchKey="mls"
+          searchPlaceholder="بحث عن MLS ..."
+          searchType="number"
         />
       </PageContainer>
     </AnimateContainer>

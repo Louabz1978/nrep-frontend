@@ -187,7 +187,7 @@ function Input<T extends FieldValues>({
           {label ? (
             <label
               htmlFor={name}
-              className={`text-size18 font-medium text-primary-fg cursor-pointer ${labelStyle} ${
+              className={`text-size18 font-medium cursor-pointer ${labelStyle} ${
                 isDisabled ? "text-placeholder" : " text-primary-fg"
               } transition-all`}
             >

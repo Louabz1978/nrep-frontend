@@ -1,40 +1,44 @@
-import { optionSchema, type TNumber, type TOption, type TString } from "@/data/global/schema";
+import {
+  optionSchema,
+  type TNumber,
+  type TOption,
+  type TString,
+} from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
 export type SearchFormType = {
-  governorate: TOption;
+  area: TString;
   city: TOption;
-  street_name: TString;
-  building_number : TNumber;
-  MLS : TNumber;
+  min_price: TNumber;
+  max_price: TNumber;
+  mls: TNumber;
 };
 
 export const searchFormSchema = Joi.object<SearchFormType>({
-  governorate: optionSchema
+  area: Joi.string()
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
-    .label("المحافظة"),
+    .label("الحي"),
   city: optionSchema
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("المدينة"),
-  street_name: Joi.string()
-    .allow("")
+  min_price: Joi.number()
+    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
-    .label("اسم الشارع"),
-  MLS: Joi.number()
+    .label("السعر (من)"),
+  mls: Joi.number().allow(null, "").messages(VALIDATION_MESSAGES).label("MLS"),
+  max_price: Joi.number()
+    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
-    .label("MLS"),
-  building_number: Joi.number()
-    .messages(VALIDATION_MESSAGES)
-    .label("رقم االبناء"),
+    .label("السعر (إلى)"),
 });
 
 export const searchFormInitialValues: SearchFormType = {
-  governorate: null,
+  area: null,
   city: null,
-  street_name: "",
-  building_number:null,
-  MLS:null,
+  max_price: null,
+  min_price: null,
+  mls: null,
 };

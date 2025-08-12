@@ -11,6 +11,7 @@ export function hasValue(value: any): boolean {
 
 export function cleanParams(params: {}) {
   let finalParams: any = { ...params };
+  finalParams = { ...params };
   Object.keys(params)?.map((key) => {
     if (!hasValue(params[key as keyof typeof params])) {
       delete finalParams[key as keyof typeof finalParams];

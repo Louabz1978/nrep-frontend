@@ -59,6 +59,9 @@ interface DataTableProps<TData, TValue, TRow> {
   query?: UseQueryResult;
   prefix: string;
   initialSorting?: SortingState;
+  searchKey?: string;
+  searchPlaceholder?: string;
+  searchType?: "text" | "number";
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -74,6 +77,9 @@ export function DataTable<TData, TValue, TRow>({
   query,
   prefix,
   initialSorting = [],
+  searchKey = "search",
+  searchPlaceholder = "بحث...",
+  searchType = "text",
 }: DataTableProps<TData, TValue, TRow>) {
   const id = useId();
 
@@ -110,7 +116,13 @@ export function DataTable<TData, TValue, TRow>({
     <div className="flex flex-col flex-1 gap-xl">
       <div className="flex justify-between items-start">
         <div className="flex gap-3xl flex-wrap items-center">
-          <TableSearch prefix={prefix} wrapperClassName="w-fit min-w-[200px]" />
+          <TableSearch
+            prefix={prefix}
+            wrapperClassName="w-fit min-w-[200px]"
+            searchKey={searchKey}
+            searchPlaceholder={searchPlaceholder}
+            searchType={searchType}
+          />
           {filters && filters.length > 0 ? (
             <Fragment>
               <Popover>
