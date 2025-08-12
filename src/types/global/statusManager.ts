@@ -10,4 +10,5 @@ export interface StatusManagerProps {
   isEmpty?: boolean;
   emptyContent?: ReactNode;
   ErrorHandler?: ({ error }: { error?: Error }) => ReactNode;
+  showLoader?: boolean;
 }

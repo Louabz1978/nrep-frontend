@@ -11,7 +11,13 @@ function StatusManager({
   loaderInSlider,
   ErrorHandler = ErrorComponent,
   emptyContent = <EmptyContent />,
+  showLoader,
 }: StatusManagerProps) {
+  if (showLoader)
+    return [...Array(loaderCount)]?.map((_, index) => {
+      return <Loader key={index} />;
+    });
+
   // pending status
   if (query?.isPending) {
     if (loaderInSlider) {
