@@ -6,6 +6,12 @@ const QUERY_KEYS = {
     predictPrice: "listings-predictP-price",
     resources: "listings-resources",
   },
+  contact: {
+    query: "contact-query",
+    myContact: "my-Contact-query",
+    details: "contact-details",
+  },
+  contacts: "contacts-query",
 };
 
 export default QUERY_KEYS;

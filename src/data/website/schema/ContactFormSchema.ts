@@ -8,7 +8,8 @@ export type ContactFormType = {
   father_name : TString,
   surname : TString,
   mother_name_and_surname : TString,
-  place_and_date_of_birth : TString,
+  place_of_birth : TString,
+  date_of_birth : TString,
   registry : TString,
   national_number : TNumber,
 };
@@ -30,10 +31,14 @@ export const ContactFormSchema = Joi.object<ContactFormType>({
   .required()
   .messages(VALIDATION_MESSAGES)
   .label("اسم و نسة الأم"),
-  place_and_date_of_birth: Joi.string()
+  place_of_birth: Joi.string()
   .required()
   .messages(VALIDATION_MESSAGES)
-  .label("مكان و تاريخ الولادة"),
+  .label("مكان الولادة"),
+  date_of_birth: Joi.string()
+  .required()
+  .messages(VALIDATION_MESSAGES)
+  .label("تاريخ الولادة"),
   registry: Joi.string()
   .required()
   .messages(VALIDATION_MESSAGES)
@@ -49,7 +54,8 @@ export const contactFormInitialValues: ContactFormType = {
   father_name: null,
   surname:null,
   mother_name_and_surname: null,
-  place_and_date_of_birth:null,
+  place_of_birth:null,
+  date_of_birth:null,
   registry:null,
   national_number:null ,
 };
