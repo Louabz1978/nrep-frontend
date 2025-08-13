@@ -41,6 +41,7 @@ import StatusManager from "../statusManager/StatusManager";
 import { type UseQueryResult } from "@tanstack/react-query";
 import RowSkeletonLoader from "./row-skeleton-loader";
 import EmptyCell from "./empty-cell";
+import AddButton from "./AddButton";
 
 type FilterItem = Omit<ColumnSearchProps, "state">;
 export type Filters = FilterItem[];
@@ -55,6 +56,7 @@ interface DataTableProps<TData, TValue, TRow> {
   selectedRows?: ({ id: string } | undefined | null)[];
   checkedRows?: Row<TData>[];
   setCheckedRows?: Dispatch<SetStateAction<Row<TData>[]>>;
+  to?:string;
   totalPageCount?: number;
   query?: UseQueryResult;
   prefix: string;
@@ -62,6 +64,7 @@ interface DataTableProps<TData, TValue, TRow> {
   searchKey?: string;
   searchPlaceholder?: string;
   searchType?: "text" | "number";
+  show?:boolean;
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -73,6 +76,7 @@ export function DataTable<TData, TValue, TRow>({
   onRowClick,
   selectedRows,
   setCheckedRows,
+  to,
   totalPageCount = 0,
   query,
   prefix,
@@ -80,6 +84,7 @@ export function DataTable<TData, TValue, TRow>({
   searchKey = "search",
   searchPlaceholder = "بحث...",
   searchType = "text",
+  show,
 }: DataTableProps<TData, TValue, TRow>) {
   const id = useId();
 
@@ -167,7 +172,10 @@ export function DataTable<TData, TValue, TRow>({
             </Fragment>
           ) : null}
         </div>
+        <div className="flex items-center justify-between gap-5">
+       <AddButton to={`${to}`}/>
         <SettingsButton id={id} />
+       </div>
       </div>
       <div
         className={cn(

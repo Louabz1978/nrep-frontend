@@ -162,10 +162,10 @@ function Navbar() {
                   <button
                     className={`group flex flex-col items-center gap-xxs transition-colors cursor-pointer text-size18 duration-[0.3s] focus:outline-none ${
                       isCurrentPath || hasCurrentChild
-                        ? "text-primary"
+                        ? "text-secondary"
                         : isOpen
                         ? "text-secondary text-size18"
-                        : "text-inverse-fg text-size18 hover:text-secondary"
+                        : "text-inverse-fg text-size18 hover:text-primary"
                     }`}
                   >
                     <div className="flex items-center gap-md">
@@ -184,10 +184,10 @@ function Navbar() {
                     <span
                       className={`h-xxs w-full rounded-full transition-all duration-[0.3s] ${
                         isCurrentPath || hasCurrentChild
-                          ? "bg-primary"
+                          ? "bg-secondary"
                           : isOpen
                           ? "bg-secondary text-size18"
-                          : "bg-transparent text-size18 group-hover:bg-secondary"
+                          : "bg-transparent text-size18 group-hover:bg-primary"
                       }`}
                     />
                   </button>
@@ -209,8 +209,8 @@ function Navbar() {
               to={tab.to}
               className={`group flex flex-col gap-xxs items-center transition-colors text-size18 duration-[0.3s]] focus:outline-none ${
                 isCurrentPath
-                  ? "text-primary"
-                  : "text-inverse-fg hover:text-secondary"
+                  ? "text-secondary"
+                  : "text-inverse-fg hover:text-primary"
               }`}
             >
               <div className="flex items-center gap-md">
@@ -224,8 +224,8 @@ function Navbar() {
               <span
                 className={`h-xxs w-full rounded-full transition-all duration-[0.3s] ${
                   isCurrentPath
-                    ? "bg-primary"
-                    : "bg-transparent group-hover:bg-secondary"
+                    ? "bg-secondary"
+                    : "bg-transparent group-hover:bg-primary"
                 }`}
               />
             </Link>

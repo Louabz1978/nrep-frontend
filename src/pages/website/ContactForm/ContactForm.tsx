@@ -3,23 +3,58 @@ import Input from "@/components/global/form/input/Input";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import type { ContactFormType } from "@/data/website/schema/ContactFormSchema";
-import type { UseFormReturn } from "react-hook-form";
+import {
+  contactFormInitialValues,
+  ContactFormSchema,
+  type ContactFormType,
+} from "@/data/website/schema/ContactFormSchema";
+import { useAddContact } from "@/hooks/website/Contact/useAddContact";
+import { useEditContact } from "@/hooks/website/Contact/useEditContact";
+import cleanValues from "@/utils/cleanValues";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { useForm } from "react-hook-form";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 
 interface ContactFormProps {
-  form: UseFormReturn<ContactFormType>;
-  handleSubmitContactForm: () => void;
+  defaultValues: ContactFormType;
   isEdit?: boolean;
   disabled?: boolean;
+  id?: number;
 }
 
 const ContactForm = ({
-  form,
-  handleSubmitContactForm,
+  defaultValues,
   isEdit = false,
   disabled,
+  id,
 }: ContactFormProps) => {
+  // Add contact hook
+  const { handleAddContact } = useAddContact();
+  // Edit contact hook
+  const { handleEditContact } = useEditContact();
+
+  // Contact form
+  const form = useForm({
+    resolver: joiResolver(ContactFormSchema),
+    defaultValues: cleanValues(contactFormInitialValues, defaultValues),
+    mode: "onChange",
+  });
+
+  const handleSubmitContactForm = () => {
+    if (id)
+      handleEditContact(
+        {
+          ...form.watch(),
+        },
+        id
+      ).catch(console.error);
+    else {
+      handleAddContact({
+        ...form.watch(),
+      });
+    }
+  };
+
   const { handleSubmit } = form;
 
   // handle submit form

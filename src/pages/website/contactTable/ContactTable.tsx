@@ -211,6 +211,8 @@ function ContactTable() {
           data={(allContacts ?? []) as ContactWithUser[]}
           query={allContactsQuery}
           totalPageCount={totalPages}
+          to="/contact/add"
+          show={true}
         />
       </PageContainer>
     </AnimateContainer>
