@@ -64,7 +64,7 @@ interface DataTableProps<TData, TValue, TRow> {
   searchKey?: string;
   searchPlaceholder?: string;
   searchType?: "text" | "number";
-  show?:boolean;
+  show?:boolean ;
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -173,7 +173,7 @@ export function DataTable<TData, TValue, TRow>({
           ) : null}
         </div>
         <div className="flex items-center justify-between gap-5">
-       <AddButton to={`${to}`}/>
+       {show && <AddButton to={`${to}`}/>}
         <SettingsButton id={id} />
        </div>
       </div>
