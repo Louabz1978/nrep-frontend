@@ -130,7 +130,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="w-full bg-quaternary-bg h-6xl shadow-navbar-shadow flex items-center gap-3xl px-container-padding-desktop">
+    <nav className="w-full bg-quaternary-bg h-6xl shadow-navbar-shadow flex items-center gap-3xl px-15">
       {tabs
         .filter((tab) => hasPermission(tab.permission))
         .map((tab, index) => {

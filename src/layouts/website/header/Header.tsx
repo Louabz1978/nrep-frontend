@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
-import logo from "@/assets/images/f3b7d16bf74e641e8ec7b5e4a2a6ba14cc7746c5.jpg";
+import logo from "@/assets/images/logo.jpg";
 import { useUser } from "@/stores/useUser";
 import { useState } from "react";
 import { LuLogIn, LuSearch } from "react-icons/lu";
@@ -28,8 +28,42 @@ function Header() {
   return (
     // header container
     <header className="w-full bg-layout-bg h-7xl flex items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
+      {/* logo */}
+      <Link to="/" className="w-11xl h-7xl">
+        <img src={logo} alt="NREP" className="size-full object-contain" />
+      </Link>
+
       {/* right area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
+        {/* search input */}
+        <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
+          <input
+            id="search"
+            name="search"
+            value={search}
+            onChange={(e) => setSearch(e?.target?.value)}
+            placeholder="بحث..."
+            className="h-[28px] w-full text-primary-fg bg-tertiary-bg text-size16 placeholder:text-size16 placeholder:text-placeholder-secondary rounded-full px-xl py-sm pl-4xl text-primary-foreground focus:outline-none"
+          />
+
+          {/* search icon */}
+          <LuSearch
+            className={`${
+              search ? "hidden" : "block"
+            } h-xl pointer-events-none absolute right-7xl top-[50%] -translate-y-[50%] w-xl text-primary-icon group-hover:text-primary-fg transition-all`}
+          />
+
+          {/* clear icon */}
+          <span
+            className={`absolute inset-y-0 h-full group left-3 flex items-center justify-center cursor-pointer ${
+              search ? "block" : "hidden"
+            }`}
+            onClick={() => setSearch("")}
+          >
+            <AiOutlineClose className="size-[12px] text-primary-icon group-hover:text-primary-fg transition-all" />
+          </span>
+        </div>
+
         {/* icons */}
         <div className="flex items-center gap-lg">
           {/* login / user info */}
@@ -81,41 +115,7 @@ function Header() {
             }}
           />
         </div>
-
-        {/* search input */}
-        <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
-          <input
-            id="search"
-            name="search"
-            value={search}
-            onChange={(e) => setSearch(e?.target?.value)}
-            placeholder="بحث..."
-            className="h-[28px] w-full text-primary-fg bg-tertiary-bg text-size16 placeholder:text-size16 placeholder:text-placeholder-secondary rounded-full px-xl py-sm pl-4xl text-primary-foreground focus:outline-none"
-          />
-
-          {/* search icon */}
-          <LuSearch
-            className={`${
-              search ? "hidden" : "block"
-            } h-xl pointer-events-none absolute right-7xl top-[50%] -translate-y-[50%] w-xl text-primary-icon group-hover:text-primary-fg transition-all`}
-          />
-
-          {/* clear icon */}
-          <span
-            className={`absolute inset-y-0 h-full group left-3 flex items-center justify-center cursor-pointer ${
-              search ? "block" : "hidden"
-            }`}
-            onClick={() => setSearch("")}
-          >
-            <AiOutlineClose className="size-[12px] text-primary-icon group-hover:text-primary-fg transition-all" />
-          </span>
-        </div>
       </div>
-
-      {/* logo */}
-      <Link to="/" className="w-11xl h-7xl">
-        <img src={logo} alt="NREP" className="size-full object-contain" />
-      </Link>
 
       <SideModal size="sm" title={"إعدادات الموقع"} id={`settings`}>
         <Settings />
