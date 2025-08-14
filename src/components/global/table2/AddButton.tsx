@@ -11,7 +11,7 @@ const AddButton = ({ to }: Props) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Link to={to}>
-            <Button className="bg-digital-green-bg border-0 rounded-md" size={"icon"}>
+            <Button className="bg-digital-green-bg border-0 rounded-md cursor-pointer" size={"icon"}>
               <CiCirclePlus strokeWidth={1.4} className="text-tertiary-bg size-4xl" />
             </Button>
           </Link>
