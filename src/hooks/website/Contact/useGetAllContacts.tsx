@@ -14,7 +14,7 @@ function useGetAllContacts() {
 
   // get listing details
   const allContactsQuery = useQuery({
-    queryKey: [QUERY_KEYS?.listings?.query, JSON.stringify(queryParams)],
+    queryKey: [QUERY_KEYS?.contact?.query, JSON.stringify(queryParams)],
     queryFn: () => getAllContacts({ queryParams }),
     retry: false,
     refetchOnWindowFocus: false,
