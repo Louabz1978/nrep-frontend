@@ -20,7 +20,7 @@ function Header() {
   // search value
   const [search, setSearch] = useState("");
   //navigate
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // modal control method
   const { openModal } = useModal();
@@ -41,10 +41,9 @@ function Header() {
 
       {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
-
         <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
-          type="number"
+            type="number"
             id="search"
             name="search"
             value={search}
@@ -53,7 +52,9 @@ function Header() {
             className="h-[28px] w-full text-primary-fg bg-tertiary-bg text-size16 placeholder:text-size16 placeholder:text-placeholder-secondary rounded-full px-xl py-sm pl-4xl text-primary-foreground focus:outline-none"
             onKeyDown={(e) => {
               if (e.key === "Enter" && search.trim()) {
-                navigate(`listing/all-listings?mls_num=${(search.trim())}`);
+                navigate(
+                  `listing/all-listings?allListings_mls_num=${search.trim()}`
+                );
               }
             }}
           />
