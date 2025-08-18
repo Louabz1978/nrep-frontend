@@ -19,10 +19,11 @@ import RenderMapTab from "./components/Map";
 import type { ListingDetailsType } from "@/types/website/listings";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import { FaMoneyBillAlt } from "react-icons/fa";
-import { FaHouse } from "react-icons/fa6";
+import { FaHouse, FaImages } from "react-icons/fa6";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
+import RenderImagesTab from "./components/Images";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -30,6 +31,7 @@ interface ListingDetailsProps {
 
 const TABS = [
   { key: "details", label: "التفاصيل", icon: <FaHouse /> },
+  { key: "images", label: "الصور", icon: <FaImages /> },
   { key: "taxes", label: "الضرائب", icon: <FaMoneyBillAlt /> },
   { key: "map", label: "الخريطة", icon: <FaMap /> },
 ];
@@ -43,6 +45,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
   const taxesRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<null>(null);
   const mapRef2 = useRef<null>(null);
+  const imagesRef = useRef<null>(null);
   //resize the map when the tab is changed
   useEffect(() => {
     if (activeTab === "map" && mapRef2.current) {
@@ -181,63 +184,65 @@ function ListingDetails({ data }: ListingDetailsProps) {
     (item) => item?.value == data?.property_type
   )?.label;
   const waterLine = WATERLINE?.find(
-    (item) => item?.value == data?.additional.water
+    (item) => item?.value == data?.additional?.water
   )?.label;
 
+  const firstName = data?.owner?.first_name ?? "";
+  const lastName = data?.owner?.last_name ?? "";
+  const fullName = `${firstName}${lastName ? ` ${lastName}` : ""}`.trim();
+
+  const createdByFirstName = data?.created_by_user?.first_name ?? "";
+  const createdByLastName = data?.created_by_user?.last_name ?? "";
+  const createdByFullName = `${createdByFirstName}${createdByLastName ? ` ${createdByLastName}` : ""}`.trim();
+
   const dummyProperty = {
-    ac: data.additional.ac ? "يوجد" : "لا يوجد",
-    apartmentNumber: data.address.apt || "2",
-    area: data.address.area || "النص هنا",
+    ac: data.additional?.ac ? "يوجد" : "لا يوجد",
+    apartmentNumber: data.address?.apt || "2",
+    area: data.address?.area || "النص هنا",
     approximatePrice: ((data.price * 80) / 100).toFixed(2),
-    balcony: data.additional.balcony || 0,
+    balcony: data.additional?.balcony || 0,
     bathrooms: data.bathrooms || "النص هنا",
     bedrooms: data.bedrooms || "3",
     buildYear: data.year_built || "1999",
-    buildingNumber: data.address.building_num || "452146",
+    buildingNumber: data.address?.building_num || "452146",
     buyerCommission: data.buyer_realtor_commission + "%" || "$",
     city: city || "النص هنا",
     contractExpiration: "xx/x/20xx",
     description:
       data.description ||
       "هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عِش في واحدة من أكثر المواقع طلبًا ",
-    elevator: data.additional.elevator ? " يوجد" : "لا يوجد",
-    email: data.created_by_user.email || "seller@gmail.com",
-    fans: data.additional.fan_number || 0,
+    elevator: data.additional?.elevator ? " يوجد" : "لا يوجد",
+    email: data.created_by_user?.email || "seller@gmail.com",
+    fans: data.additional?.fan_number || 0,
     floor: data?.address?.floor || "2",
     floorNumber: data.address?.floor || "3",
-    garden: data.additional.garden ? "يوجد" : "لا يوجد",
+    garden: data.additional?.garden ? "يوجد" : "لا يوجد",
     governorate: county || "حمص",
     image: data.images_urls?.map((item) => ({
       url: item?.url?.replace("//static", "/static"),
       is_main: item?.is_main,
     })) || [{ url: image, is_main: true }],
-    jacuzzy: data.additional.jacuzzi ? "يوجد" : "لا يوجد",
+    jacuzzy: data.additional?.jacuzzi ? "يوجد" : "لا يوجد",
     licenseNumber: "2516584005",
     mls: data.mls_num || "454942",
-    parking: data.additional.garage ? "يوجد" : "لا يوجد",
-    phoneNumber: data.created_by_user.phone_number || "0909091009",
-    pool: data.additional.pool ? "يوجد" : "لا يوجد",
+    parking: data.additional?.garage ? "يوجد" : "لا يوجد",
+    phoneNumber: data.created_by_user?.phone_number || "0909091009",
+    pool: data.additional?.pool ? "يوجد" : "لا يوجد",
     previewInstruction:
       "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
     price: data.price || 1000000,
     propertyArea: data.area_space || "200",
-    propertyOwner:
-      data.owner.first_name + " " + data.owner.last_name || "seller 11",
+    propertyOwner: fullName || "seller 11",
     propertyType: propertyType || "شقة",
     realEstateCompany: "NREP",
-    responsibleMediator:
-      `${data.created_by_user.first_name ?? ""}${
-        data.created_by_user.last_name
-          ? ` ${data.created_by_user.last_name}`
-          : ""
-      }` || "---",
+    responsibleMediator: createdByFullName || "---",
     sellerCommission: data.property_realtor_commission + "%" || "$",
-    solarEnergy: data.additional.solar_system ? "يوجد" : "لا يوجد",
+    solarEnergy: data.additional?.solar_system ? "يوجد" : "لا يوجد",
     latitude: data.latitude,
     longitude: data.longitude,
     DimensionsOfTheEarth: 170,
     status: status || "قيد الانجاز",
-    streetName: data.address.street || "النص هنا",
+    streetName: data.address?.street || "النص هنا",
     waterLine: waterLine || "لا يوجد",
   };
 
@@ -290,6 +295,14 @@ function ListingDetails({ data }: ListingDetailsProps) {
             style={{ display: activeTab === "map" ? "block" : "none" }}
           >
             <RenderMapTab dummyProperty={dummyProperty} mapRef={mapRef2} />
+          </div>
+
+          <div
+            ref={imagesRef}
+            data-tab-content="images"
+            style={{ display: activeTab === "images" ? "block" : "none" }}
+          >
+            <RenderImagesTab dummyProperty={dummyProperty} />
           </div>
         </div>
 
