@@ -21,7 +21,7 @@ function useGetAllContacts() {
   });
 
   // final data
-  const allContacts = allContactsQuery?.data?.data
+  const allContacts = allContactsQuery?.data?.data;
 
   // total pages
   const totalPages = allContactsQuery?.data?.pagination?.total_pages;

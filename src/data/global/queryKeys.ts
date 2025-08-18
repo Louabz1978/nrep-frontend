@@ -11,7 +11,6 @@ const QUERY_KEYS = {
     myContact: "my-Contact-query",
     details: "contact-details",
   },
-  contacts: "contacts-query",
 };
 
 export default QUERY_KEYS;

@@ -9,7 +9,12 @@ import {
   PopoverContent,
 } from "@/components/global/ui/popover";
 
-function Navbar() {
+type NavbarProps = {
+  variant?: "bar" | "inline";
+  className?: string;
+};
+
+function Navbar({ variant = "bar", className = "" }: NavbarProps) {
   // const { checkPermissions } = useUser();
   const location = useLocation();
   const [openPopovers, setOpenPopovers] = useState<string[]>([]);
@@ -36,7 +41,7 @@ function Navbar() {
     return false;
   };
 
-  const hasPermission = (permissions: string[]) => {
+  const hasPermission = (_permissions: string[]) => {
     return true;
     // return permissions.length === 0 || checkPermissions(permissions);
   };
@@ -79,7 +84,6 @@ function Navbar() {
                       : "text-inverse-fg hover:text-secondary !text-size16"
                   }`}
                 >
-                  <span>{item.label}</span>
                   <LuChevronDown
                     className={`size-[16px] mr-2 transition-transform duration-200 ${
                       isOpen ? "rotate-180" : ""
@@ -109,7 +113,7 @@ function Navbar() {
             className={`flex items-center border-b border-secondary-border last:border-b-0 justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
               isCurrentPath
                 ? "text-primary"
-                : "text-inverse-fg hover:text-secondary"
+                : "text-primary"
             }`}
           >
             {item.label}
@@ -120,7 +124,7 @@ function Navbar() {
             className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer  ${
               isCurrentPath
                 ? "text-primary"
-                : "text-inverse-fg hover:text-secondary"
+                : "text-primary"
             }`}
           >
             {item.label}
@@ -129,8 +133,13 @@ function Navbar() {
       });
   };
 
+  const containerClasses =
+    variant === "inline"
+      ? `h-full bg-transparent shadow-none flex items-center gap-6xl px-0 ${className}`
+      : `w-full bg-quaternary-bg h-6xl shadow-navbar-shadow flex items-center gap-3xl px-15 ${className}`;
+
   return (
-    <nav className="w-full bg-quaternary-bg h-6xl shadow-navbar-shadow flex items-center gap-3xl px-15">
+    <nav className={containerClasses}>
       {tabs
         .filter((tab) => hasPermission(tab.permission))
         .map((tab, index) => {
@@ -162,16 +171,13 @@ function Navbar() {
                   <button
                     className={`group flex flex-col items-center gap-xxs transition-colors cursor-pointer text-size18 duration-[0.3s] focus:outline-none ${
                       isCurrentPath || hasCurrentChild
-                        ? "text-secondary"
+                        ? "p-sm bg-tertiary-bg rounded-lg text-primary"
                         : isOpen
-                        ? "text-secondary text-size18"
-                        : "text-inverse-fg text-size18 hover:text-primary"
+                        ? "text-tertiary-bg text-size18"
+                        : "text-inverse-fg text-size18 "
                     }`}
                   >
                     <div className="flex items-center gap-md">
-                      {tab.icon && (
-                        <tab.icon className="size-[16px] transition-colors duration-[0.3s]" />
-                      )}
                       <span className="transition-colors duration-[0.3s]">
                         {tab.label}
                       </span>
@@ -181,20 +187,12 @@ function Navbar() {
                         }`}
                       />
                     </div>
-                    <span
-                      className={`h-xxs w-full rounded-full transition-all duration-[0.3s] ${
-                        isCurrentPath || hasCurrentChild
-                          ? "bg-secondary"
-                          : isOpen
-                          ? "bg-secondary text-size18"
-                          : "bg-transparent text-size18 group-hover:bg-primary"
-                      }`}
-                    />
+
                   </button>
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-64 mt-0 !bg-quaternary-bg !p-0 rounded-[8px]"
+                  className="w-35 mt-0 border-none bg-tertiary-bg !p-0 rounded-[8px]"
                   sideOffset={8}
                 >
                   <div className="space-y-1">{renderSubMenu(tab.submenu)}</div>
@@ -209,8 +207,8 @@ function Navbar() {
               to={tab.to}
               className={`group flex flex-col gap-xxs items-center transition-colors text-size18 duration-[0.3s]] focus:outline-none ${
                 isCurrentPath
-                  ? "text-secondary"
-                  : "text-inverse-fg hover:text-primary"
+                  ? "p-sm px-lg bg-tertiary-bg rounded-lg text-primary"
+                  : "text-inverse-fg "
               }`}
             >
               <div className="flex items-center gap-md">
@@ -221,13 +219,7 @@ function Navbar() {
                   {tab.label}
                 </span>
               </div>
-              <span
-                className={`h-xxs w-full rounded-full transition-all duration-[0.3s] ${
-                  isCurrentPath
-                    ? "bg-secondary"
-                    : "bg-transparent group-hover:bg-primary"
-                }`}
-              />
+
             </Link>
           ) : (
             <span

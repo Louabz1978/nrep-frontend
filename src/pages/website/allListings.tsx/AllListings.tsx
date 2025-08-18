@@ -23,6 +23,7 @@ import {
   PiTrashSimpleBold,
 } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import StatusForm from "./StatusForm";
 
 function AllListings() {
   // user information
@@ -127,18 +128,7 @@ function AllListings() {
         header: "الحالة",
         accessorKey: "status",
         cell: ({ row }) => {
-          return (
-            <Badge
-              status={
-                STATUS?.find((item) => item?.value == row?.original?.status)
-                  ?.value as keyof typeof STATUS_COLORS
-              }
-              label={
-                STATUS?.find((item) => item?.value == row?.original?.status)
-                  ?.label ?? row?.original?.status
-              }
-            />
-          );
+          return <StatusForm row={row} />;
         },
         size: 10,
       },

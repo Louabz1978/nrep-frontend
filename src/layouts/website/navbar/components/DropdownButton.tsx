@@ -25,7 +25,7 @@ function DropdownButton({
   return (
     <button
       onClick={onClick}
-      className={`group flex flex-col items-center px-4 py-2 rounded transition-colors bg-quaternary-bg duration-200 cursor-pointer focus:outline-none ${getTabStyle(
+      className={`group  items-center px-4 py-2 rounded transition-colors bg-quaternary-bg duration-200 cursor-pointer focus:outline-none ${getTabStyle(
         tab
       )} hover:text-secondary`}
     >

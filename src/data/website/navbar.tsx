@@ -17,7 +17,6 @@ export const tabs: TabsType = [
   {
     label: "قائمة الاسماء",
     permission: ["Add Item"],
-    icon: BsMenuButton,
     submenu: [
       {
         label: "الرئيسة",
@@ -35,12 +34,10 @@ export const tabs: TabsType = [
     label: "إدخال",
     to: "/input",
     permission: ["Add Item"],
-    icon: BsBuildingFillAdd,
   },
   {
     label: "العقارات",
     permission: ["Add Item"],
-    icon: FaList,
     submenu: [
       {
         label: "كل العقارات",

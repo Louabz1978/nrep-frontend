@@ -16,11 +16,11 @@ interface TabButtonProps {
 
 /**
  * TabButton Component
- * 
+ *
  * Renders a navigation tab button that can be either:
  * - A dropdown button (with chevron icon) for tabs with submenus
  * - A simple display element for tabs without submenus
- * 
+ *
  * Features:
  * - Dynamic styling based on active state
  * - Hover effects and transitions
@@ -45,7 +45,7 @@ function TabButton({ tab, isOpen, activeTab, onClick, getTabStyle, location }: T
             }`}
           />
         </div>
-        
+
         {/* Active state underline indicator */}
         <span
           className={`block h-1 w-full mt-1 rounded-full transition-all duration-200 ${
@@ -66,7 +66,7 @@ function TabButton({ tab, isOpen, activeTab, onClick, getTabStyle, location }: T
         <MdSettingsInputComponent className="w-8 h-8 transition-colors duration-200 group-hover:text-primary" />
         <span className="group-hover:text-primary transition-colors duration-200">{tab.label}</span>
       </div>
-      
+
       {/* Active state underline indicator */}
       <span
         className={`block h-1 w-full mt-1 rounded-full transition-all duration-200 ${
@@ -77,4 +77,4 @@ function TabButton({ tab, isOpen, activeTab, onClick, getTabStyle, location }: T
   );
 }
 
-export default TabButton; 
+export default TabButton;

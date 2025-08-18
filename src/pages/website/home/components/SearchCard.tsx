@@ -61,22 +61,7 @@ const SearchCard = () => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-y-[30px]">
-          <div>
-            <Input
-              form={form}
-              label="MLS"
-              name="mls"
-              placeholder="MLS"
-              type="number"
-              disabled={isMLSDisabled}
-            />
-          </div>
-
-          <div className="w-full flex items-center gap-[10px]">
-            <div className="flex-1 border-b border-secondary-border"></div>
-            <div>أو</div>
-            <div className="flex-1 border-b border-secondary-border"></div>
-          </div>
+      
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
             <Input
               form={form}

@@ -1,7 +1,7 @@
-import { Settings } from "lucide-react";
 import { Button } from "../form/button/Button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip/Tooltiop";
 import { useModal } from "@/hooks/global/use-modal";
+import { PiGear } from "react-icons/pi";
 type Props = { id: string };
 const SettingsButton = ({ id }: Props) => {
   const { openModal } = useModal();
@@ -13,15 +13,13 @@ const SettingsButton = ({ id }: Props) => {
           onClick={() => {
             openModal(`table-${id}`);
           }}
-          size={"icon-circle"}
-          variant={"ghost-light"}
+          className="bg-primary border-0 !size-4xl rounded-md cursor-pointer flex justify-center items-center"
+          size={"icon"}
         >
-          <Settings strokeWidth={1.4} className="text-secondary-fg size-5xl pb-1" />
+          <PiGear className="text-inverse-fg size-3xl" />
         </Button>
       </TooltipTrigger>
-      <TooltipContent>
-        <p>{"الإعدادات"}</p>
-      </TooltipContent>
+      <TooltipContent>الإعدادات</TooltipContent>
     </Tooltip>
   );
 };
