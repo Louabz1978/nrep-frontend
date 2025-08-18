@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
 import logo from "@/assets/images/logo.jpg";
@@ -12,12 +12,15 @@ import useLogoutMutation from "@/hooks/global/logout/useLogoutMutation";
 import { useModal } from "@/hooks/global/use-modal";
 import { SideModal } from "@/components/global/ui/side-modal";
 import Settings from "@/components/global/settings/Settings";
+import Navbar from "../navbar/Navbar";
 
 function Header() {
   // user info
   const { user } = useUser();
   // search value
   const [search, setSearch] = useState("");
+  //navigate
+  const navigate = useNavigate()
 
   // modal control method
   const { openModal } = useModal();
@@ -27,30 +30,32 @@ function Header() {
 
   return (
     // header container
-    <header className="w-full bg-layout-bg h-7xl flex items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
-      {/* logo */}
-      <Link to="/" className="w-11xl h-7xl">
-        <img src={logo} alt="NREP" className="size-full object-contain" />
-      </Link>
+    <header className="w-full bg-layout-bg h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
+      {/* brand + inline nav */}
+      <div className="flex items-center gap-4xl">
+        <Link to="/" className="w-11xl h-7xl">
+          <img src={logo} alt="NREP" className="size-full object-contain" />
+        </Link>
+        <Navbar variant="inline" />
+      </div>
 
-      {/* right area */}
+      {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
-        {/* search input */}
+
         <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
+          type="number"
             id="search"
             name="search"
             value={search}
             onChange={(e) => setSearch(e?.target?.value)}
-            placeholder="بحث..."
+            placeholder="البحث عبر MLS"
             className="h-[28px] w-full text-primary-fg bg-tertiary-bg text-size16 placeholder:text-size16 placeholder:text-placeholder-secondary rounded-full px-xl py-sm pl-4xl text-primary-foreground focus:outline-none"
-          />
-
-          {/* search icon */}
-          <LuSearch
-            className={`${
-              search ? "hidden" : "block"
-            } h-xl pointer-events-none absolute right-7xl top-[50%] -translate-y-[50%] w-xl text-primary-icon group-hover:text-primary-fg transition-all`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && search.trim()) {
+                navigate(`listing/all-listings?mls_num=${(search.trim())}`);
+              }
+            }}
           />
 
           {/* clear icon */}
@@ -98,14 +103,17 @@ function Header() {
           )}
 
           {/* notifications */}
-          <Link
-            to="/notifications"
-            aria-label="Notifications"
-            className="relative"
-          >
-            <AiOutlineBell className="size-[24px] text-inverse-fg cursor-pointer" />
-            <span className="absolute -top-xxs right-[1px] size-[7px] bg-error rounded-full"></span>
-          </Link>
+          <div className="flex items-center gap-lg">
+            <Link
+              to="/notifications"
+              aria-label="Notifications"
+              className="relative"
+            >
+              <AiOutlineBell className="size-[24px] text-inverse-fg cursor-pointer" />
+              <span className="absolute -top-xxs right-[1px] size-[7px] bg-error rounded-full"></span>
+            </Link>
+            <span className="w-[1px] h-[18px] bg-inverse-fg/30" />
+          </div>
 
           {/* settings */}
           <PiGear
