@@ -12,7 +12,7 @@ function ListingDetailsSkeleton() {
 
         {/* Tabs */}
         <div className="flex mt-6 gap-2" style={{ direction: "ltr" }}>
-          {[1, 2, 3].map((tab) => (
+          {[1, 2, 3, 4].map((tab) => (
             <Skeleton key={tab} className="h-12 w-32 rounded-t-md" />
           ))}
         </div>
