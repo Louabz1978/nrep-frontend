@@ -193,7 +193,9 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   const createdByFirstName = data?.created_by_user?.first_name ?? "";
   const createdByLastName = data?.created_by_user?.last_name ?? "";
-  const createdByFullName = `${createdByFirstName}${createdByLastName ? ` ${createdByLastName}` : ""}`.trim();
+  const createdByFullName = `${createdByFirstName}${
+    createdByLastName ? ` ${createdByLastName}` : ""
+  }`.trim();
 
   const dummyProperty = {
     ac: data.additional?.ac ? "يوجد" : "لا يوجد",
@@ -207,10 +209,8 @@ function ListingDetails({ data }: ListingDetailsProps) {
     buildingNumber: data.address?.building_num || "452146",
     buyerCommission: data.buyer_realtor_commission + "%" || "$",
     city: city || "النص هنا",
-    contractExpiration: "xx/x/20xx",
-    description:
-      data.description ||
-      "هذه الإطلالات البانورامية المذهلة موجودة فعلاً! عِش في واحدة من أكثر المواقع طلبًا ",
+    contractExpiration: data?.exp_date ?? "---",
+    description: data.description || "---",
     elevator: data.additional?.elevator ? " يوجد" : "لا يوجد",
     email: data.created_by_user?.email || "seller@gmail.com",
     fans: data.additional?.fan_number || 0,
@@ -228,8 +228,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     parking: data.additional?.garage ? "يوجد" : "لا يوجد",
     phoneNumber: data.created_by_user?.phone_number || "0909091009",
     pool: data.additional?.pool ? "يوجد" : "لا يوجد",
-    previewInstruction:
-      "المعاينات متاحة في أي وقت باستخدام صندوق المفاتيح. يتم قبول العروض يوم الاثنين 29 أكتوبر، ويجب التسجيل قبل الساعة 5 مساءً مع الوسيط .للإستفسار : 0912345678 - example@gmail.com",
+    previewInstruction: data?.show_inst ?? "---",
     price: data.price || 1000000,
     propertyArea: data.area_space || "200",
     propertyOwner: fullName || "seller 11",
@@ -253,7 +252,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
         {/* Tabs */}
         <div className="flex mt-6 gap-2 " style={{ direction: "ltr" }}>
-          <div className="flex overflow-hidden gap-2">
+          <div className="flex overflow-auto gap-2">
             {TABS.map((tab) => (
               <button
                 key={tab.key}
@@ -272,7 +271,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-tertiary-bg">
+        <div className="bg-tertiary-bg h-full">
           <div
             ref={pdfRef}
             data-tab-content="details"
@@ -285,6 +284,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             ref={taxesRef}
             data-tab-content="taxes"
             style={{ display: activeTab === "taxes" ? "block" : "none" }}
+            className="h-full"
           >
             <RenderTaxesTab />
           </div>
@@ -301,6 +301,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             ref={imagesRef}
             data-tab-content="images"
             style={{ display: activeTab === "images" ? "block" : "none" }}
+            className="h-full"
           >
             <RenderImagesTab dummyProperty={dummyProperty} />
           </div>

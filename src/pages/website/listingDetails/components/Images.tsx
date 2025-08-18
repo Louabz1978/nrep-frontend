@@ -25,8 +25,8 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
       : undefined;
 
   return (
-    <div className="w-full border-quaternary-border border-2">
-      <div className="p-3xl">
+    <div className="w-full border-quaternary-border border-2 h-full">
+      <div className="p-3xl h-full">
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3xl">
           {images?.map((img: ImageType, index: number) => {
             const url = img?.url;
@@ -57,7 +57,7 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
             />
           </div>
 
-          <div className="flex justify-between p-4xl gap-4xl h-[calc(100%_-_45px)]">
+          <div className="flex justify-between md:flex-row flex-col-reverse md:p-4xl p-md md:gap-4xl gap-2xl h-[calc(100%_-_45px)]">
             <div className="flex-1 grid xl:grid-cols-3 lg:grid-cols-2 gap-xl overflow-auto h-full">
               {images?.map((img: ImageType, index: number) => {
                 const url = img?.url;
@@ -73,7 +73,7 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
                     <img
                       src={url}
                       alt={`${index}`}
-                      className="size-full"
+                      className="size-full object-cover"
                       loading="lazy"
                     />
                   </button>
@@ -81,7 +81,7 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
               })}
             </div>
 
-            <div className=" rounded-2xl size-[400px] overflow-hidden border">
+            <div className=" rounded-2xl md:size-[400px] w-full aspect-square overflow-hidden border">
               {activeImageUrl ? (
                 <img
                   src={activeImageUrl}

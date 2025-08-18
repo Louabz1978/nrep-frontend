@@ -8,7 +8,7 @@ const RenderTaxesTab = () => {
   ];
 
   return (
-    <div className="p-6 border-2 border-quaternary-border">
+    <div className="p-6 border-2 border-quaternary-border h-full">
       <div className="bg-primary-bg rounded-md p-4">
         <table
           className="w-full text-right rtl border-separate border-spacing-0"
@@ -33,11 +33,15 @@ const RenderTaxesTab = () => {
           <tbody className="bg-tertiary-bg">
             {taxesData.map((row) => (
               <tr key={row.id}>
-                <td className="border border-primary-bg  py-2 px-4">{row.id}</td>
+                <td className="border border-primary-bg  py-2 px-4">
+                  {row.id}
+                </td>
                 <td className="border border-primary-bg  py-2 px-4">
                   {row.year}
                 </td>
-                <td className="border border-primary-bg  py-2 px-4">{row.tax}</td>
+                <td className="border border-primary-bg  py-2 px-4">
+                  {row.tax}
+                </td>
                 <td className="border border-primary-bg  py-2 px-4">
                   {row.desc}
                 </td>
