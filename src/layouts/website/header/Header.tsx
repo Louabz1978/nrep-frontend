@@ -44,6 +44,7 @@ function Header() {
 
         <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
+          type="number"
             id="search"
             name="search"
             value={search}
