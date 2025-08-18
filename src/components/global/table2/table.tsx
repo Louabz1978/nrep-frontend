@@ -56,7 +56,7 @@ interface DataTableProps<TData, TValue, TRow> {
   selectedRows?: ({ id: string } | undefined | null)[];
   checkedRows?: Row<TData>[];
   setCheckedRows?: Dispatch<SetStateAction<Row<TData>[]>>;
-  to?:string;
+  to?: string;
   totalPageCount?: number;
   query?: UseQueryResult;
   prefix: string;
@@ -64,7 +64,7 @@ interface DataTableProps<TData, TValue, TRow> {
   searchKey?: string;
   searchPlaceholder?: string;
   searchType?: "text" | "number";
-  show?:boolean ;
+  show?: boolean;
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -172,10 +172,10 @@ export function DataTable<TData, TValue, TRow>({
             </Fragment>
           ) : null}
         </div>
-        <div className="flex items-center justify-between gap-5">
-       {show && <AddButton to={`${to}`}/>}
-        <SettingsButton id={id} />
-       </div>
+        <div className="flex items-center justify-between gap-lg">
+          {show && <AddButton to={`${to}`} />}
+          <SettingsButton id={id} />
+        </div>
       </div>
       <div
         className={cn(

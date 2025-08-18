@@ -2,8 +2,10 @@ import {
   useEffect,
   useRef,
   useState,
+  type Dispatch,
   type KeyboardEventHandler,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import ErrorComponent from "../../error/ErrorComponent";
 import Loader from "../../loader/Loader";
@@ -39,6 +41,11 @@ interface SelectProps<T extends FieldValues> {
   addingStyle?: string;
   addingInputStyle?: string;
   addingSelectStyle?: string;
+  customTrigger?: ({
+    setIsOpen,
+  }: {
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
+  }) => ReactNode;
   addingElement?: (data: { isOpen: boolean }) => ReactNode;
   choiceElement?: (data: {
     choice: Record<string, ReactNode> | string;
@@ -51,6 +58,7 @@ interface SelectProps<T extends FieldValues> {
   info?: string | ReactNode;
   toggle?: Path<T>;
   required?: boolean;
+  onChange?: (data: { choice: Record<string, ReactNode> | string }) => void;
 }
 
 function Select<T extends FieldValues>({
@@ -79,6 +87,8 @@ function Select<T extends FieldValues>({
   info,
   toggle,
   required,
+  customTrigger,
+  onChange,
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const clickRef = useRef<HTMLDivElement | null>(null);
@@ -143,6 +153,7 @@ function Select<T extends FieldValues>({
       }
       // single
       else setValue(name, emptyValue as PathValue<T, Path<T>>);
+      onChange?.(emptyValue);
     }
     // add
     else {
@@ -261,133 +272,137 @@ function Select<T extends FieldValues>({
           } flex items-center`}
         >
           {/* select */}
-          <button
-            type="button"
-            className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto h-5xl text-size16 ${
-              isDisabled ? "bg-transparent" : "bg-input-bg"
-            } px-lg border-[1.5px] text-primary-fg rounded-lg outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
-              isDisabled
-                ? "border-placeholder !cursor-not-allowed"
-                : getError(errors, name)
-                ? "border-error"
-                : `border-secondary-border ${
-                    isValid(form)
-                      ? "focus-visible:border-success"
-                      : "focus-visible:border-secondary"
-                  } hover:border-secondary`
-            } ${addingInputStyle} flex justify-between items-center`}
-            onKeyDown={handleKeyDown}
-            onClick={(e) => {
-              e.preventDefault();
-              if (!isDisabled) setIsOpen((prev) => !prev);
-            }}
-          >
-            <div className="overflow-auto text-nowrap flex-1 flex text-start">
-              {(watch(name) && !isArray(watch(name))) ||
-              (isArray(watch(name)) && watch(name).length) ? (
-                !multiple ? (
-                  showValue ? (
-                    (watch(name) as Record<string, ReactNode>)[showValue]
-                  ) : (
-                    (watch(name) as string)
-                  )
-                ) : showValue ? (
-                  <div className="flex flex-1 overflow-auto items-center gap-md">
-                    {(watch(name) as Record<string, ReactNode>[]).map(
-                      (ele: Record<string, ReactNode>, index: number) => {
-                        return (
-                          <div
-                            key={index}
-                            className="py-xxs group px-md flex items-center gap-xs rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
-                          >
-                            {ele[showValue]}
-
-                            <FaXmark
-                              className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (!isDisabled)
-                                  handleChoiceClick(
-                                    e as unknown as MouseEvent,
-                                    ele
-                                  );
-                              }}
-                            />
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex flex-1 items-center overflow-auto gap-md">
-                    {(watch(name) as string[]).map(
-                      (ele: string, index: number) => {
-                        return (
-                          <div
-                            key={index}
-                            className="py-xxs group px-lg flex items-center gap-xs rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
-                          >
-                            {ele}
-
-                            <FaXmark
-                              className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (!isDisabled)
-                                  handleChoiceClick(
-                                    e as unknown as MouseEvent,
-                                    ele
-                                  );
-                              }}
-                            />
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                )
-              ) : (
-                <span className="text-placeholder">{placeholder}</span>
-              )}
-            </div>
-
-            {/* delete option */}
-            {!multiple && !preventRemove && watch(name) ? (
-              <span
-                title="إفراغ"
-                className={`relative font-light text-size12 p-1 text-error rounded-full bg-error/30 opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
-              >
-                <FaXmark />
-                <div
-                  className="absolute w-full h-full top-0 left-0"
-                  id={`dont-close`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!isDisabled)
-                      handleChoiceClick(
-                        e as unknown as MouseEvent,
-                        watch(name)
-                      );
-                  }}
-                ></div>
-              </span>
-            ) : null}
-
-            {/* select arrow */}
-            <div
-              className={`relative toggle-button ${
+          {customTrigger ? (
+            customTrigger({ setIsOpen })
+          ) : (
+            <button
+              type="button"
+              className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto h-5xl text-size16 ${
+                isDisabled ? "bg-transparent" : "bg-input-bg"
+              } px-lg border-[1.5px] text-primary-fg rounded-lg outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                 isDisabled
-                  ? "text-placeholder"
-                  : `${isOpen ? "text-secondary" : "text-primary"}`
-              } ${
-                isOpen ? "rotate-180 duration-[0.3s]" : "duration-[0.3s]"
-              } transition-all`}
+                  ? "border-placeholder !cursor-not-allowed"
+                  : getError(errors, name)
+                  ? "border-error"
+                  : `border-secondary-border ${
+                      isValid(form)
+                        ? "focus-visible:border-success"
+                        : "focus-visible:border-secondary"
+                    } hover:border-secondary`
+              } ${addingInputStyle} flex justify-between items-center`}
+              onKeyDown={handleKeyDown}
+              onClick={(e) => {
+                e.preventDefault();
+                if (!isDisabled) setIsOpen((prev) => !prev);
+              }}
             >
-              <FaAngleDown />
-            </div>
-          </button>
+              <div className="overflow-auto text-nowrap flex-1 flex text-start">
+                {(watch(name) && !isArray(watch(name))) ||
+                (isArray(watch(name)) && watch(name).length) ? (
+                  !multiple ? (
+                    showValue ? (
+                      (watch(name) as Record<string, ReactNode>)[showValue]
+                    ) : (
+                      (watch(name) as string)
+                    )
+                  ) : showValue ? (
+                    <div className="flex flex-1 overflow-auto items-center gap-md">
+                      {(watch(name) as Record<string, ReactNode>[]).map(
+                        (ele: Record<string, ReactNode>, index: number) => {
+                          return (
+                            <div
+                              key={index}
+                              className="py-xxs group px-md flex items-center gap-xs rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
+                            >
+                              {ele[showValue]}
+
+                              <FaXmark
+                                className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  if (!isDisabled)
+                                    handleChoiceClick(
+                                      e as unknown as MouseEvent,
+                                      ele
+                                    );
+                                }}
+                              />
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-1 items-center overflow-auto gap-md">
+                      {(watch(name) as string[]).map(
+                        (ele: string, index: number) => {
+                          return (
+                            <div
+                              key={index}
+                              className="py-xxs group px-lg flex items-center gap-xs rounded-full border border-placeholder bg-transparent text-placeholder text-size16"
+                            >
+                              {ele}
+
+                              <FaXmark
+                                className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  if (!isDisabled)
+                                    handleChoiceClick(
+                                      e as unknown as MouseEvent,
+                                      ele
+                                    );
+                                }}
+                              />
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  )
+                ) : (
+                  <span className="text-placeholder">{placeholder}</span>
+                )}
+              </div>
+
+              {/* delete option */}
+              {!multiple && !preventRemove && watch(name) ? (
+                <span
+                  title="إفراغ"
+                  className={`relative font-light text-size12 p-1 text-error rounded-full bg-error/30 opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
+                >
+                  <FaXmark />
+                  <div
+                    className="absolute w-full h-full top-0 left-0"
+                    id={`dont-close`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!isDisabled)
+                        handleChoiceClick(
+                          e as unknown as MouseEvent,
+                          watch(name)
+                        );
+                    }}
+                  ></div>
+                </span>
+              ) : null}
+
+              {/* select arrow */}
+              <div
+                className={`relative toggle-button ${
+                  isDisabled
+                    ? "text-placeholder"
+                    : `${isOpen ? "text-secondary" : "text-primary"}`
+                } ${
+                  isOpen ? "rotate-180 duration-[0.3s]" : "duration-[0.3s]"
+                } transition-all`}
+              >
+                <FaAngleDown />
+              </div>
+            </button>
+          )}
 
           {/* choices list */}
           <div

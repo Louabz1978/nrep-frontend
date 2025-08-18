@@ -17,21 +17,14 @@ import { PiPaperPlaneRightFill } from "react-icons/pi";
 
 interface ContactFormProps {
   defaultValues: ContactFormType;
-  isEdit?: boolean;
-  disabled?: boolean;
   id?: number;
 }
 
-const ContactForm = ({
-  defaultValues,
-  isEdit = false,
-  disabled,
-  id,
-}: ContactFormProps) => {
+const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
   // Add contact hook
-  const { handleAddContact } = useAddContact();
+  const { handleAddContact, addContact } = useAddContact();
   // Edit contact hook
-  const { handleEditContact } = useEditContact();
+  const { handleEditContact, editContact } = useEditContact();
 
   // Contact form
   const form = useForm({
@@ -66,7 +59,7 @@ const ContactForm = ({
     <AnimateContainer>
       <PageContainer>
         <FormSectionHeader>
-          {isEdit ? "تعديل بيانات المشتري" : "إضافة مشتري جديد"}
+          {id ? "تعديل بيانات المشتري" : "إضافة مشتري جديد"}
         </FormSectionHeader>
         <form
           id="cotact_form"
@@ -148,7 +141,11 @@ const ContactForm = ({
             />
           </div>
           <div className="flex justify-end w-full gap-xl mt-auto">
-            <Button id="contact_form" disabled={disabled} className="gap-5">
+            <Button
+              id="contact_form"
+              disabled={id ? editContact?.isPending : addContact?.isPending}
+              className="gap-lg"
+            >
               إرسال <PiPaperPlaneRightFill className={"rotate-180"} />
             </Button>
           </div>

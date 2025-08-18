@@ -319,6 +319,19 @@ export const PropertyImagesStepInitialValues: PropertyImagesStepType = {
   mode: "add",
 };
 
+// general step -----------------------------------------------------------
+export type StatusFormType = {
+  status: TOption;
+};
+
+export const statusFormSchema = Joi.object<StatusFormType>({
+  status: optionSchema.required().messages(VALIDATION_MESSAGES).label("الحالة"),
+});
+
+export const statusFormInitialValues: StatusFormType = {
+  status: null,
+};
+
 // listing form type
 export type ListingFormType = GeneralStepType &
   AdditionalInfoStepType &

@@ -55,7 +55,7 @@ export const useAddListings = () => {
       main_photo: (
         submitData?.photos?.find((item) => item?.isMain)?.path as File
       )?.name,
-      owner_id: 13,
+      owner_id: 1,
     };
 
     // toaster

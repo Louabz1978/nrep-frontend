@@ -74,10 +74,8 @@ export const useEditListings = () => {
       longitude: Number(submitData?.longitude),
       latitude: Number(submitData?.latitude),
       main_photo: mainImageName ?? "",
-      owner_id: 13,
+      owner_id: 1,
     };
-
-    console.log(data);
 
     // toaster
     toast.promise(editListing.mutateAsync({ data, id }), {

@@ -39,7 +39,6 @@ const EditContactFormIndex = () => {
               contactFormInitialValues.national_number,
           }}
           id={contactId}
-          isEdit={true}
         />
       )}
     </StatusManager>
