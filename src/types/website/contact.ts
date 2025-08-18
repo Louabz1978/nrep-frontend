@@ -11,8 +11,8 @@ export interface ContactFormData
   father_name: string | null;
   surname: string | null;
   mother_name_and_surname: string | null;
-  place_of_birth: string | null;
-  date_of_birth: string | null;
+  place_birth: string | null;
+  date_birth: string | null;
   registry: string | null;
   national_number: number | null;
 }

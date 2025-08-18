@@ -108,7 +108,7 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
               type="text"
               label="مكان الولادة"
               placeholder="أدخل مكان  الولادة"
-              name="place_of_birth"
+              name="place_birth"
               info="يرجى إدخال مكان الولادة"
               required
             />
@@ -117,7 +117,7 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
               type="date"
               label="تاريخ الولادة"
               placeholder="أدخل تاريخ الولادة"
-              name="date_of_birth"
+              name="date_birth"
               info="يرجى إدخال تاريخ الولادة"
               required
             />

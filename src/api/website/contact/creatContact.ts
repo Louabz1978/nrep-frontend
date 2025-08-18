@@ -12,7 +12,7 @@ async function createContact({
 }: CreateContactProps): CreateContactResult {
   const formData = createFormData(data);
 
-  const res = await axiosClient.post(`contact`, formData);
+  const res = await axiosClient.post(`consumers`, data);
 
   return res?.data;
 }

@@ -43,8 +43,10 @@ interface SelectProps<T extends FieldValues> {
   addingSelectStyle?: string;
   customTrigger?: ({
     setIsOpen,
+    isOpen,
   }: {
     setIsOpen: Dispatch<SetStateAction<boolean>>;
+    isOpen?: boolean;
   }) => ReactNode;
   addingElement?: (data: { isOpen: boolean }) => ReactNode;
   choiceElement?: (data: {
@@ -58,7 +60,7 @@ interface SelectProps<T extends FieldValues> {
   info?: string | ReactNode;
   toggle?: Path<T>;
   required?: boolean;
-  onChange?: (data: { choice: Record<string, ReactNode> | string }) => void;
+  onChange?: (data: any) => void;
 }
 
 function Select<T extends FieldValues>({
@@ -142,6 +144,7 @@ function Select<T extends FieldValues>({
           const newValue = [...(watch(name) ?? [])];
           newValue.splice(index, 1);
           setValue(name, newValue as PathValue<T, Path<T>>);
+          onChange?.(newValue);
         } else {
           const index = (watch(name) as string[]).findIndex(
             (ele: string) => ele == finalChoice
@@ -149,6 +152,7 @@ function Select<T extends FieldValues>({
           const newValue = [...(watch(name) ?? [])];
           newValue.splice(index, 1);
           setValue(name, newValue as PathValue<T, Path<T>>);
+          onChange?.(newValue);
         }
       }
       // single
@@ -163,11 +167,13 @@ function Select<T extends FieldValues>({
           T,
           Path<T>
         >);
+        onChange?.([...(watch(name) ?? []), finalChoice]);
       }
       // single
       else {
         setValue(name, finalChoice as PathValue<T, Path<T>>);
         setIsOpen(false);
+        onChange?.(finalChoice);
       }
     }
     trigger(name);
@@ -273,7 +279,7 @@ function Select<T extends FieldValues>({
         >
           {/* select */}
           {customTrigger ? (
-            customTrigger({ setIsOpen })
+            customTrigger({ setIsOpen, isOpen })
           ) : (
             <button
               type="button"
@@ -406,7 +412,7 @@ function Select<T extends FieldValues>({
 
           {/* choices list */}
           <div
-            className={`bg-tertiary-bg/65 backdrop-blur-[15px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
+            className={`bg-tertiary-bg/65 backdrop-blur-[15px] min-w-[200px] rounded-b-[6px] z-[15] absolute bottom-0 translate-y-full w-full ${
               isOpen
                 ? "h-[240px] overflow-auto py-xs pt-0"
                 : "h-0 overflow-hidden"

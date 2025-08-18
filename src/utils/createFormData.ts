@@ -4,7 +4,7 @@ function createFormData(
   const formData = new FormData();
 
   for (const [key, value] of Object.entries(data)) {
-    if (value === undefined || value === null) {
+    if (value === undefined) {
       continue; // Skip undefined/null values
     }
 
@@ -17,7 +17,7 @@ function createFormData(
       });
     } else {
       // Handle primitives (string, number, boolean)
-      formData.append(key, String(value));
+      formData.append(key, value as string);
     }
   }
 

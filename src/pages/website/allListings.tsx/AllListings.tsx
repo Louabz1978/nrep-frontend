@@ -242,11 +242,11 @@ function AllListings() {
         searchKey: "max_price",
       },
       {
-        id: "status",
+        id: "status_filter",
         type: "select",
         label: "الحالة",
         title: "الحالة",
-        searchKey: "status",
+        searchKey: "status_filter",
         options: STATUS,
       },
     ],
@@ -263,7 +263,7 @@ function AllListings() {
           data={(allListings ?? []) as Listing[]}
           query={allListingsQuery}
           totalPageCount={totalPages}
-          searchKey="mls"
+          searchKey="mls_num"
           searchPlaceholder="بحث عن MLS ..."
           searchType="number"
         />

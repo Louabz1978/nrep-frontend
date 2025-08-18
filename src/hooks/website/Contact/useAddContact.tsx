@@ -30,19 +30,18 @@ export const useAddContact = () => {
   });
 
   // handle submit add contact form
-  async function handleAddContact(
-    submitData: ContactFormType
-  ) {
+  async function handleAddContact(submitData: ContactFormType) {
     // Convert ContactFormType (with possible undefineds) to ContactFormData (with string | null, number | null)
     const data: ContactFormData = {
       name: submitData?.name ?? null,
       father_name: submitData?.father_name ?? null,
       surname: submitData?.surname ?? null,
       mother_name_and_surname: submitData?.mother_name_and_surname ?? null,
-      place_of_birth: submitData?.place_of_birth ?? null,
-      date_of_birth: submitData?.date_of_birth ?? null,
+      place_birth: submitData?.place_birth ?? null,
+      date_birth: submitData?.date_birth ?? null,
       registry: submitData?.registry ?? null,
       national_number: submitData?.national_number ?? null,
+      mother_name_surname: "sdlfkj",
     };
 
     // toaster
