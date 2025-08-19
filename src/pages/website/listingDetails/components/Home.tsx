@@ -260,9 +260,11 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   "gap-y-4 sm:gap-y-6 lg:gap-y-8",
                   "p-2 sm:p-4 lg:p-6",
                   // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
-                  colIdx < detailsRows2.length - 1
-                    ? "lg:border-l-1 border-b-1"
+                  colIdx < detailsRows2.length -1
+                    ? "border-b-1"
                     : "",
+                    colIdx < detailsRows2.length -2
+                    ? "lg:border-l-1" : ""
                 ].join(" ")}
               >
                 {column.map((item, itemIdx) => (
@@ -332,7 +334,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   "p-2 sm:p-4 lg:p-6",
                   // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
                   colIdx < detailsRows4.length - 1
-                    ? "lg:border-l-1 border-b-1"
+                    ? "lg:border-l-1"
                     : "",
                 ].join(" ")}
               >
