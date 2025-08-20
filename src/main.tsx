@@ -9,10 +9,10 @@ import router from "./router";
 import "@/styles/global/index.css";
 import { AnimatePresence } from "framer-motion";
 import { ColorPaletteProvider } from "./providers/ColorPaletteProvider";
-import { ColorPaletteEditor } from "./components/global/form/colorInput/ColorPaletteEditor";
 import NuqsProvider from "./providers/NuqsProvider";
 import "swiper/css/navigation";
 import "swiper/swiper-bundle.css";
+import { SessionManager } from "./components/global/sessionManager/SessionManager";
 
 // build query client that every useQuery and useMutation use it
 const queryClient = new QueryClient();
@@ -25,7 +25,8 @@ createRoot(document.getElementById("root")!).render(
           <QueryClientProvider client={queryClient}>
             <SonnerToast />
             <AnimatePresence mode="wait">
-              <RouterProvider router={router} />
+              <SessionManager />
+              <RouterProvider router={router}></RouterProvider>
               {/* <ColorPaletteEditor /> */}
             </AnimatePresence>
             <ReactQueryDevtools />

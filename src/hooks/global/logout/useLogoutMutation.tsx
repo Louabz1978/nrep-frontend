@@ -20,6 +20,7 @@ function useLogoutMutation() {
     onSuccess: async () => {
       secureLocalStorage.removeItem("ACCESS_TOKEN");
       secureLocalStorage.removeItem("USER");
+      secureLocalStorage.removeItem("LOGIN_TIME"); // Clear timestamp
       setUser(null);
       navigate("/login");
     },
