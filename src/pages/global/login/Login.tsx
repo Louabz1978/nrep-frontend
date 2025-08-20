@@ -59,13 +59,13 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
             {/* logo */}
             <div className="flex flex-col items-center gap-[15px]">
               {/* logo image */}
-              <Link to={"/"} className="size-[68px] rounded-xl overflow-hidden">
+              <Link to={"/"} className="size-9xl rounded-3xl overflow-hidden">
                 <img src={logo} alt="NREP" className="size-full object-cover" />
               </Link>
 
               {/* logo title */}
               <div className="font-bold text-size24 text-primary">
-                منصة العقارات الوطنية
+                المنصة الوطنية للعقارات - حمص
               </div>
             </div>
 

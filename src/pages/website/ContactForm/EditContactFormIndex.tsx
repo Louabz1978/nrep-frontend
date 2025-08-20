@@ -23,9 +23,9 @@ const EditContactFormIndex = () => {
               contactDetails.father_name ||
               contactFormInitialValues.father_name,
             surname: contactDetails.surname || contactFormInitialValues.surname,
-            mother_name_and_surname:
-              contactDetails.mother_name_and_surname ||
-              contactFormInitialValues.mother_name_and_surname,
+            mother_name_surname:
+              contactDetails.mother_name_surname ||
+              contactFormInitialValues.mother_name_surname,
             place_of_birth:
               contactDetails.place_of_birth ||
               contactFormInitialValues.place_of_birth,

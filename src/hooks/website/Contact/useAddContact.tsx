@@ -36,12 +36,11 @@ export const useAddContact = () => {
       name: submitData?.name ?? null,
       father_name: submitData?.father_name ?? null,
       surname: submitData?.surname ?? null,
-      mother_name_and_surname: submitData?.mother_name_and_surname ?? null,
+      mother_name_surname: submitData?.mother_name_surname ?? null,
       place_birth: submitData?.place_birth ?? null,
       date_birth: submitData?.date_birth ?? null,
       registry: submitData?.registry ?? null,
       national_number: submitData?.national_number ?? null,
-      mother_name_surname: "sdlfkj",
     };
 
     // toaster

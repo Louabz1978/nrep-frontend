@@ -7,7 +7,7 @@ export type ContactFormType = {
   name: TString;
   father_name: TString;
   surname: TString;
-  mother_name_and_surname: TString;
+  mother_name_surname: TString;
   place_birth: TString;
   date_birth: TString;
   registry: TString;
@@ -24,7 +24,7 @@ export const ContactFormSchema = Joi.object<ContactFormType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("النسبة"),
-  mother_name_and_surname: Joi.string()
+  mother_name_surname: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم و نسة الأم"),
@@ -50,7 +50,7 @@ export const contactFormInitialValues: ContactFormType = {
   name: null,
   father_name: null,
   surname: null,
-  mother_name_and_surname: null,
+  mother_name_surname: null,
   place_birth: null,
   date_birth: null,
   registry: null,

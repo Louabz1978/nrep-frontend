@@ -10,7 +10,7 @@ export interface ContactFormData
   name: string | null;
   father_name: string | null;
   surname: string | null;
-  mother_name_and_surname: string | null;
+  mother_name_surname: string | null;
   place_birth: string | null;
   date_birth: string | null;
   registry: string | null;
@@ -23,7 +23,7 @@ export interface Contact {
   name: string;
   father_name: string;
   surname: string;
-  mother_name_and_surname: string;
+  mother_name_surname: string;
   place_of_birth: string;
   date_of_birth: string;
   registry: string;

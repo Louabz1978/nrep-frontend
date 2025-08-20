@@ -39,7 +39,7 @@ export const useEditContact = () => {
       name: submitData?.name ?? null,
       father_name: submitData?.father_name ?? null,
       surname: submitData?.surname ?? null,
-      mother_name_and_surname: submitData?.mother_name_and_surname ?? null,
+      mother_name_surname: submitData?.mother_name_surname ?? null,
       place_of_birth: submitData?.place_of_birth ?? null,
       date_of_birth: submitData?.date_of_birth ?? null,
       registry: submitData?.registry ?? null,

@@ -123,7 +123,10 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
         {/* Image/Slider Section */}
         <div className="w-full lg:w-1/2 flex flex-col">
           <div className="mb-4 sm:mb-6">
-            <div className="h-[220px] relative xs:h-[260px] sm:h-[320px] no-print md:h-[360px] lg:h-[400px] w-full">
+            <div
+              data-html2canvas-ignore={true}
+              className="h-[220px] relative xs:h-[260px] sm:h-[320px] no-print md:h-[360px] lg:h-[400px] w-full"
+            >
               <Swiper
                 data-html2canvas-ignore={true}
                 modules={[Navigation]}
@@ -260,11 +263,8 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   "gap-y-4 sm:gap-y-6 lg:gap-y-8",
                   "p-2 sm:p-4 lg:p-6",
                   // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
-                  colIdx < detailsRows2.length -1
-                    ? "border-b-1"
-                    : "",
-                    colIdx < detailsRows2.length -2
-                    ? "lg:border-l-1" : ""
+                  colIdx < detailsRows2.length - 1 ? "border-b-1" : "",
+                  colIdx < detailsRows2.length - 2 ? "lg:border-l-1" : "",
                 ].join(" ")}
               >
                 {column.map((item, itemIdx) => (
@@ -333,9 +333,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   "gap-y-4 sm:gap-y-6 lg:gap-y-8",
                   "p-2 sm:p-4 lg:p-6",
                   // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
-                  colIdx < detailsRows4.length - 1
-                    ? "lg:border-l-1"
-                    : "",
+                  colIdx < detailsRows4.length - 1 ? "lg:border-l-1" : "",
                 ].join(" ")}
               >
                 {column.map((item, itemIdx) => (

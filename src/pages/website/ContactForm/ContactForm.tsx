@@ -59,7 +59,7 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
     <AnimateContainer>
       <PageContainer>
         <FormSectionHeader>
-          {id ? "تعديل بيانات المشتري" : "إضافة مشتري جديد"}
+          {id ? "تعديل بيانات المشتري" : "إضافة جهة اتصال"}
         </FormSectionHeader>
         <form
           id="cotact_form"
@@ -99,7 +99,7 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
               type="text"
               label="اسم و نسبة الأم"
               placeholder="أدخل اسم و نسبة الأم"
-              name="mother_name_and_surname"
+              name="mother_name_surname"
               info="يرجى إدخال اسم و نسبة الأم"
               required
             />
