@@ -25,25 +25,23 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
       : undefined;
 
   return (
-    <div className="w-full border-quaternary-border border-2">
-      <div className="p-3xl">
-        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3xl">
+    <div className="w-full border-quaternary-border border-2 h-full">
+      <div className="p-3xl h-full">
+        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3xl">
           {images?.map((img: ImageType, index: number) => {
             const url = img?.url;
             return (
               <div
                 key={index}
-                className="flex flex-col cursor-pointer"
+                className="flex rounded-2xl overflow-auto h-[250px] justify-center items-center border cursor-pointer"
                 onClick={() => handleOpen(index)}
               >
-                <div className="w-full border rounded-2xl overflow-hidden">
-                  <img
-                    src={url}
-                    alt={`${index}`}
-                    className="w-full h-full"
-                    loading="lazy"
-                  />
-                </div>
+                <img
+                  src={url}
+                  alt={`${index}`}
+                  className="size-full object-cover"
+                  loading="lazy"
+                />
               </div>
             );
           })}
@@ -51,7 +49,7 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
       </div>
 
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <div className="w-full max-w-[1200px] min-h-[300px] max-h-[600px] bg-white rounded-2xl flex flex-col">
+        <div className="w-full max-w-[80vw] md:w-[80vw] min-h-[300px] max-h-[80svh] bg-tertiary-bg rounded-2xl flex flex-col">
           <div className="py-lg px-4xl flex justify-end border-b ">
             <FaXmark
               onClick={() => setIsOpen(false)}
@@ -59,21 +57,23 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
             />
           </div>
 
-          <div className="flex justify-end p-4xl gap-4xl overflow-hidden">
-            <div className="max-w-[220px] flex flex-col gap-lg ">
+          <div className="flex justify-between md:flex-row flex-col-reverse md:p-4xl p-md md:gap-4xl gap-2xl h-[calc(100%_-_45px)]">
+            <div className="flex-1 grid xl:grid-cols-3 lg:grid-cols-2 gap-xl overflow-auto h-full">
               {images?.map((img: ImageType, index: number) => {
                 const url = img?.url;
                 const isActive = index === activeIndex;
                 return (
                   <button
                     key={index}
-                    className={`w-full rounded-lg overflow-hidden border transition min-h-[200px] ${isActive ? "border-primary" :""}}`}
+                    className={` rounded-lg overflow-hidden border transition w-full h-[200px] ${
+                      isActive ? "border-primary" : ""
+                    }}`}
                     onClick={() => setActiveIndex(index)}
                   >
                     <img
                       src={url}
                       alt={`${index}`}
-                      className="w-full h-full"
+                      className="size-full object-cover"
                       loading="lazy"
                     />
                   </button>
@@ -81,19 +81,18 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
               })}
             </div>
 
-            <div className=" rounded-2xl overflow-hidden border">
+            <div className=" rounded-2xl md:size-[400px] w-full aspect-square overflow-hidden border">
               {activeImageUrl ? (
                 <img
                   src={activeImageUrl}
                   alt={`${activeIndex}`}
-                  className="w-full h-full"
+                  className="size-full object-cover"
                 />
               ) : null}
             </div>
           </div>
         </div>
       </Modal>
-
     </div>
   );
 };

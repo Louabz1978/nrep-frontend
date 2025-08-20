@@ -111,9 +111,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             to={item.to}
             onClick={() => setOpenPopovers([])}
             className={`flex items-center border-b border-secondary-border last:border-b-0 justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
-              isCurrentPath
-                ? "text-primary"
-                : "text-primary"
+              isCurrentPath ? "text-primary" : "text-primary"
             }`}
           >
             {item.label}
@@ -122,9 +120,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
           <span
             key={index}
             className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer  ${
-              isCurrentPath
-                ? "text-primary"
-                : "text-primary"
+              isCurrentPath ? "text-primary" : "text-primary"
             }`}
           >
             {item.label}
@@ -178,7 +174,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                     }`}
                   >
                     <div className="flex items-center gap-md">
-                      <span className="transition-colors duration-[0.3s]">
+                      <span className="transition-colors duration-[0.3s] text-nowrap">
                         {tab.label}
                       </span>
                       <LuChevronDown
@@ -187,7 +183,6 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                         }`}
                       />
                     </div>
-
                   </button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -219,7 +214,6 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                   {tab.label}
                 </span>
               </div>
-
             </Link>
           ) : (
             <span

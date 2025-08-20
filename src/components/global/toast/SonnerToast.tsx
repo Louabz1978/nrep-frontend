@@ -1,6 +1,6 @@
 import { Toaster } from "sonner";
 import { FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
-import { PiSpinner } from "react-icons/pi";
+import { PiInfo, PiSpinner } from "react-icons/pi";
 import { LuX } from "react-icons/lu";
 
 function SonnerToast() {
@@ -15,6 +15,7 @@ function SonnerToast() {
         loading: (
           <PiSpinner className="!size-[22px] animate-spin !text-primary" />
         ),
+        info: <PiInfo className="!size-[22px] !text-yellow" />,
         close: (
           <LuX className="!size-[16px] !text-primary-icon hover:!text-primary-fg transition-all duration-[0.2s]" />
         ),

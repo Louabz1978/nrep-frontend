@@ -24,6 +24,11 @@ function useLoginMutation() {
       const data: User = jwtDecode(user.access_token);
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
       secureLocalStorage.setItem("USER", { data: data });
+
+      // Store login timestamp
+      const loginTime = Date.now();
+      secureLocalStorage.setItem("LOGIN_TIME", { data: loginTime.toString() });
+
       setUser(data);
       navigate(HOME_PAGE[data?.roles?.[0] as UserType]);
     },
