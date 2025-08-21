@@ -2,7 +2,6 @@ import updateContact from "@/api/website/contact/updateContact";
 import MESSAGES from "@/data/global/messages";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import type { ContactFormType } from "@/data/website/schema/ContactFormSchema";
-import type { ContactFormData } from "@/types/website/contact";
 import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +17,13 @@ export const useEditContact = () => {
   // handle edit contact
   const editContact = useMutation({
     mutationFn: updateContact,
-    onSuccess: (data) => {
+    onSuccess: (res) => {
       // invalidate contact query
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.contact.query] })
+        .catch(console.error);
+      queryClient
+        .invalidateQueries({ queryKey: [QUERY_KEYS.contact.details, res?.id] })
         .catch(console.error);
 
       // navigate to contact page
@@ -35,15 +37,17 @@ export const useEditContact = () => {
     contactId: number
   ) {
     // Convert ContactFormType (with possible undefineds) to ContactFormData (with string | null, number | null)
-    const data: ContactFormData = {
-      name: submitData?.name ?? null,
-      father_name: submitData?.father_name ?? null,
-      surname: submitData?.surname ?? null,
-      mother_name_surname: submitData?.mother_name_surname ?? null,
-      place_of_birth: submitData?.place_of_birth ?? null,
-      date_of_birth: submitData?.date_of_birth ?? null,
-      registry: submitData?.registry ?? null,
-      national_number: submitData?.national_number ?? null,
+    const data = {
+      name: submitData?.name ?? "",
+      father_name: submitData?.father_name ?? "",
+      surname: submitData?.surname ?? "",
+      mother_name_surname: submitData?.mother_name_surname ?? "",
+      place_birth: submitData?.place_birth ?? "",
+      date_birth: submitData?.date_birth ?? "",
+      registry: submitData?.registry ?? "",
+      national_number: submitData?.national_number ?? 0,
+      email: submitData?.email ?? null,
+      phone_number: submitData?.phone_number ?? null,
     };
 
     // toaster

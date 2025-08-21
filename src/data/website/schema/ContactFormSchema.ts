@@ -12,6 +12,8 @@ export type ContactFormType = {
   date_birth: TString;
   registry: TString;
   national_number: TNumber;
+  email: TString;
+  phone_number: TString;
 };
 
 export const ContactFormSchema = Joi.object<ContactFormType>({
@@ -44,6 +46,26 @@ export const ContactFormSchema = Joi.object<ContactFormType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الرقم الوطني"),
+  email: Joi.string()
+    .trim()
+    // Updated pattern to allow any valid domain, not just gmail.com
+    .pattern(/^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    .allow(null)
+    .messages({
+      ...VALIDATION_MESSAGES,
+      "string.pattern.base": `الحقل {{#label}} يجب أن يطابق النمط المطلوب , مثل: example@domain.com.`,
+      "string.email": `الحقل {{#label}} يجب أن يكون بريدًا إلكترونيًا صالحًا , مثل: example@domain.com.`, // New message for the .email() rule
+    })
+    .label("البريد الإلكتروني"),
+  phone_number: Joi.string()
+    .trim()
+    .required()
+    .pattern(/^(09)(\d{8})$/)
+    .messages({
+      ...VALIDATION_MESSAGES,
+      "string.pattern.base": `الحقل {{#label}} يجب أن يطابق النمط المطلوب , مثل: 09XXXXXXXX.`,
+    })
+    .label("رقم الهاتف"),
 });
 
 export const contactFormInitialValues: ContactFormType = {
@@ -55,4 +77,6 @@ export const contactFormInitialValues: ContactFormType = {
   date_birth: null,
   registry: null,
   national_number: null,
+  email: null,
+  phone_number: null,
 };

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
-import logo from "@/assets/images/logo.jpg";
+import logo from "@/assets/images/logo.svg";
 import { useUser } from "@/stores/useUser";
 import { useState } from "react";
 import { LuLogIn, LuSearch } from "react-icons/lu";

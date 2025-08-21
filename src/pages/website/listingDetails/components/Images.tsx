@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ImageType } from "@/types/website/listings";
-import Modal from "@/components/global/modal/Modal";
-import { FaXmark } from "react-icons/fa6";
+import { AnimatePresence } from "framer-motion";
+import PopupContainer from "@/components/global/popupContainer/PopupContainer";
 
 type RenderImagesTabProps = {
   dummyProperty: {
@@ -11,17 +11,15 @@ type RenderImagesTabProps = {
 
 const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const images = dummyProperty?.image ?? [];
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleOpen = (index: number) => {
     setActiveIndex(index);
-    setIsOpen(true);
   };
 
   const activeImageUrl =
-    typeof images?.[activeIndex]?.url === "string"
-      ? images?.[activeIndex]?.url
+    typeof images?.[activeIndex as number]?.url === "string"
+      ? images?.[activeIndex as number]?.url
       : undefined;
 
   return (
@@ -48,7 +46,7 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
         </div>
       </div>
 
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+      {/* <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="w-full max-w-[80vw] md:w-[80vw] min-h-[300px] max-h-[80svh] bg-tertiary-bg rounded-2xl flex flex-col">
           <div className="py-lg px-4xl flex justify-end border-b ">
             <FaXmark
@@ -92,7 +90,23 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
+
+      <AnimatePresence>
+        {activeIndex !== null ? (
+          <PopupContainer setIsOpen={setActiveIndex}>
+            <div className="w-[100vw] h-[100svh] flex justify-center items-center pointer-events-none">
+              <div className="w-[90vw] h-[90svh]">
+                <img
+                  src={activeImageUrl}
+                  alt={`${activeIndex}`}
+                  className="size-full object-contain"
+                />
+              </div>
+            </div>
+          </PopupContainer>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };

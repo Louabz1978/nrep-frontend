@@ -8,9 +8,9 @@ import type {
 // gets: id of contact
 // returns: details of contact
 async function getContact({ id }: GetContactProps): GetContactResult {
-  const res = await axiosClient.get(`/contacts/${id}`);
+  const res = await axiosClient.get(`consumers/${id}`);
 
-  return res?.data?.contact;
+  return res?.data;
 }
 
 export default getContact;

@@ -151,7 +151,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
-            label="عمولة وكيل البائع ($)"
+            label="عمولة وكيل البائع (%)"
             placeholder="أدخل عمولة وكيل البائع"
             name="property_realtor_commission"
             info="يرجى إدخال قيمة عمولة وكيل البائع بالدولار"
@@ -160,7 +160,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           <Input
             form={form}
             type="number"
-            label="عمولة وكيل المشتري ($)"
+            label="عمولة وكيل المشتري (%)"
             placeholder="أدخل عمولة وكيل المشتري"
             name="buyer_realtor_commission"
             info="يرجى إدخال قيمة عمولة وكيل المشتري بالدولار"

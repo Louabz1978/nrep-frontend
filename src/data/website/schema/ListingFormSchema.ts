@@ -263,8 +263,8 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
             if (value.path.size < 256 * 1024) {
               return helpers.error("file.minSize", { limit: "256KB" });
             }
-            if (value.path.size > 1024 * 1024) {
-              return helpers.error("file.maxSize", { limit: "1MB" });
+            if (value.path.size > 5 * 1024 * 1024) {
+              return helpers.error("file.maxSize", { limit: "5MB" });
             }
             if (!value.path.type.startsWith("image/")) {
               return helpers.error("file.invalidType");

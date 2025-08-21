@@ -37,8 +37,6 @@ const TABS = [
 ];
 
 function ListingDetails({ data }: ListingDetailsProps) {
-  console.log(data);
-
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
@@ -55,12 +53,37 @@ function ListingDetails({ data }: ListingDetailsProps) {
     }
   }, [activeTab]);
 
-  const handleDownloadPDF = async () => {
-    if (!pdfRef.current || !taxesRef.current || !mapRef.current) return;
+  // Helper function to apply print styles to the CLONED elements only
+  const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
+    // Hide elements with data-print-hidden=true - query from the CLONED element
+    const hiddenElements = clonedElement.querySelectorAll(
+      '[data-print-hidden="true"]'
+    );
+    hiddenElements.forEach((el) => {
+      (el as HTMLElement).style.display = "none";
+    });
 
-    // Show preparing toast with loading state
+    // Show elements with data-print-visible=true - query from the CLONED element
+    const visibleElements = clonedElement.querySelectorAll(
+      '[data-print-visible="true"]'
+    );
+    visibleElements.forEach((el) => {
+      (el as HTMLElement).style.display = "block";
+      (el as HTMLElement).style.position = "static";
+      (el as HTMLElement).style.opacity = "1";
+      (el as HTMLElement).style.pointerEvents = "auto";
+      (el as HTMLElement).style.visibility = "visible";
+      (el as HTMLElement).style.gridColumn = "span 3";
+      (el as HTMLElement).style.textAlign = "center";
+      (el as HTMLElement).style.margin = "15px 0";
+    });
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!pdfRef.current || !taxesRef.current) return;
+
     const toastId = toast.loading("جار تجهيز ملف PDF...", {
-      duration: Infinity, // Don't auto-dismiss
+      duration: Infinity,
     });
 
     try {
@@ -71,12 +94,15 @@ function ListingDetails({ data }: ListingDetailsProps) {
       container.style.width = "100%";
       container.style.position = "absolute";
       container.style.left = "-9999px";
+      container.id = "print-container";
       document.body.appendChild(container);
 
       // 2. Clone and modify both sections
       const detailsClone = pdfRef.current.cloneNode(true) as HTMLElement;
       const taxesClone = taxesRef.current.cloneNode(true) as HTMLElement;
-      const mapClone = mapRef.current?.cloneNode(true) as HTMLElement;
+
+      // 3. Apply print styles to the CLONED elements, not the live DOM
+      applyPrintStylesToClone(detailsClone);
 
       // Remove unnecessary margins/padding
       detailsClone.style.display = "block";
@@ -87,58 +113,59 @@ function ListingDetails({ data }: ListingDetailsProps) {
       taxesClone.style.pageBreakAfter = "always";
       taxesClone.style.margin = "0";
       taxesClone.style.padding = "0";
-      mapClone.style.display = "block";
-      mapClone.style.pageBreakAfter = "always";
-      mapClone.style.margin = "0";
-      mapClone.style.padding = "0";
 
       // Add section headers
       const detailsHeader = document.createElement("h2");
       detailsHeader.textContent = "تفاصيل العقار";
       detailsHeader.style.textAlign = "center";
-      detailsHeader.style.marginBottom = "10px";
+      detailsHeader.style.marginBottom = "20px";
+      detailsHeader.style.fontSize = "18px";
+      detailsHeader.style.fontWeight = "bold";
 
       const taxesHeader = document.createElement("h2");
       taxesHeader.textContent = "الضرائب";
       taxesHeader.style.textAlign = "center";
-      taxesHeader.style.margin = "20px 0 10px 0";
-      const mapHeader = document.createElement("h2");
-      mapHeader.textContent = "الموقع";
-      mapHeader.style.textAlign = "center";
-      mapHeader.style.margin = "20px 0 10px 0";
+      taxesHeader.style.margin = "20px 0 15px 0";
+      taxesHeader.style.fontSize = "18px";
+      taxesHeader.style.fontWeight = "bold";
 
-      // 3. Build the combined content
+      // Build the combined content
       container.appendChild(detailsHeader);
       container.appendChild(detailsClone);
       container.appendChild(taxesHeader);
       container.appendChild(taxesClone);
-      container.appendChild(mapHeader);
-      container.appendChild(mapClone);
 
       // 4. Capture as single image
       const canvas = await html2canvas(container, {
         scale: 2,
         useCORS: true,
-        allowTaint: true, // Required for some external images
-        logging: true,
+        allowTaint: true,
+        logging: false,
         scrollX: 0,
         scrollY: -window.scrollY,
-        windowWidth: 1280,
+        windowWidth: 1200,
         windowHeight: container.scrollHeight,
         onclone: (clonedDoc, element) => {
           element.style.display = "block";
           clonedDoc.body.style.overflow = "visible";
+
+          // Apply styles to the cloned document as well
+          const clonedDetails = clonedDoc.querySelector(
+            '[data-tab-content="details"]'
+          );
+          if (clonedDetails) {
+            applyPrintStylesToClone(clonedDetails as HTMLElement);
+          }
         },
       });
 
       // 5. Generate PDF
       const pdf = new jsPDF("p", "mm", "a4");
       const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 210; // A4 width in mm
+      const imgWidth = 210;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      // Scale to fit page height if needed
-      const maxHeight = 297; // A4 height in mm
+      const maxHeight = 297;
       const finalHeight = Math.min(imgHeight, maxHeight);
 
       pdf.addImage(
@@ -152,7 +179,6 @@ function ListingDetails({ data }: ListingDetailsProps) {
         "FAST"
       );
 
-      // Show success message and download
       toast.success("جار تنزيل ملف PDF...", {
         id: toastId,
         duration: 2000,
