@@ -16,7 +16,7 @@ import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
+import { PiInfoBold, PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 function ContactTable() {
@@ -167,16 +167,14 @@ function ContactTable() {
               ) : null}
 
               {/* details */}
-              {/* <Tooltip>
+              <Tooltip>
                 <TooltipTrigger>
-                  <Link to={`/listing/details/${row?.original?.consumer_id}`}>
                     <Button size={"icon"}>
                       <PiInfoBold />
                     </Button>
-                  </Link>
                 </TooltipTrigger>
                 <TooltipContent>تفاصيل</TooltipContent>
-              </Tooltip> */}
+              </Tooltip>
             </div>
           );
         },
@@ -191,20 +189,20 @@ function ContactTable() {
   // filter config
   const filter: Filters = useMemo(
     () => [
-      // {
-      //   id: "1",
-      //   type: "text",
-      //   label: "الاسم",
-      //   title: "الاسم",
-      //   searchKey: "name",
-      // },
-      // {
-      //   id: "2",
-      //   type: "number",
-      //   label: "الرقم الوطني",
-      //   title: "الرقم الوطني",
-      //   searchKey: "national_number",
-      // },
+      {
+        id: "1",
+        type: "text",
+        label: "الاسم",
+        title: "الاسم",
+        searchKey: "name",
+      },
+      {
+        id: "2",
+        type: "number",
+        label: "الرقم الوطني",
+        title: "الرقم الوطني",
+        searchKey: "national_number",
+      },
     ],
     []
   );
