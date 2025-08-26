@@ -86,7 +86,7 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
                 <img
                   src={activeImageUrl}
                   alt={`${activeIndex}`}
-                  className="size-full object-cover"
+                  className="size-full object-contain"
                 />
               ) : null}
             </div>
