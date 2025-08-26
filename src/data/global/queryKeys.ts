@@ -5,6 +5,8 @@ const QUERY_KEYS = {
     details: "listings-details",
     predictPrice: "listings-predictP-price",
     resources: "listings-resources",
+    status: "listings-status",
+    type: "listings-type",
   },
   contact: {
     query: "contact-query",

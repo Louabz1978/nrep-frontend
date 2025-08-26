@@ -46,6 +46,23 @@ export const tabs: TabsType = [
         permission: [],
         to: "/listing/my-listings",
       },
+    
     ],
   },
+  {
+    label:"العقود",
+    permission: ["Add Item"],
+    submenu: [
+      {
+        label: "عقد بيع/شراء/ايجار ",
+        permission: [],
+        to: "/Contracts",
+      },
+      {
+        label: "تعديل عقد",
+        permission: [],
+        to: "/Contract/edit",
+      }
+    ],
+  }
 ];
