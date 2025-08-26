@@ -9,6 +9,8 @@ import TestTable from "./pages/website/testTable/TestTable";
 import AddListingIndex from "./pages/website/listingForm/AddListingIndex";
 import EditListingIndex from "./pages/website/listingForm/EditListingIndex";
 import AllListings from "./pages/website/allListings.tsx/AllListings";
+import ContractsList from "./pages/website/contracts/ContractsList";
+import EditContract from "./pages/website/contracts/EditContract";
 import Home from "./pages/website/home/Home";
 import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
 import MyListings from "./pages/website/myListings/MyListing";
@@ -35,7 +37,7 @@ const router = createBrowserRouter([
       {
         path: "input",
         element: <InputLogic />,
-      },
+      },  
       {
         path: "listing/all-listings",
         element: <AllListings />,
@@ -55,6 +57,15 @@ const router = createBrowserRouter([
       {
         path: "listing/edit/:id",
         element: <EditListingIndex />,
+      },
+      {
+        path: "contracts",
+        element: <ContractsList />,
+      },
+    
+      {
+        path: "contracts/edit/:id",
+        element: <EditContract />,
       },
       {
         path: "contact",

@@ -8,6 +8,8 @@ const searches = [
   { name: "عقاراتي", link: "listing/my-listings" },
   { name: "عقود البيع و الشراء و الإيجار", link: "/" },
   { name: "التواصل مع مجلس الوسطاء العقاريين في حمص", link: "/" },
+  {name:"كتابة عقد بيع/شراء/ايجار",link:"contracts"},
+  {name:"تعديل عقد ",link:"contracts/edit"}
 ];
 const RelatedLinks = () => {
   const navigate = useNavigate();

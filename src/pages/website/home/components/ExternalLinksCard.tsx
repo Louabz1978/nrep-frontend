@@ -4,9 +4,9 @@ const ExternalLinksCard = () => {
   const users = [
     { name: "بلال الصابوني", time: "11:00pm" },
     { name: "عبد الله بحلاق", time: "12:00AM" },
+    { name: "عبد الله دعاس", time: "1:30pm" },
     { name: "همام صافي", time: "8:00pm" },
     { name: "احمد قيسون", time: "7:00pm" },
-    { name: "عبد الله دعاس", time: "3:30pm" },
   ];
 
   return (
