@@ -16,12 +16,12 @@ import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { PiInfoBold, PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
+import { PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 function ContactTable() {
   // user information
-  const { user, hasPermissions } = useUser();
+  const { hasPermissions } = useUser();
 
   // get all contact
   const { allContacts, allContactsQuery, totalPages } = useGetAllContacts();
@@ -115,29 +115,21 @@ function ContactTable() {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
-          const isSameUser = row?.original?.created_by == user?.user_id;
-
           return (
             <div className="flex items-center gap-md">
               {/* edit */}
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    to={`/contact/edit/${row?.original?.consumer_id}`}
-                    className={`${isSameUser ? "" : "pointer-events-none"}`}
-                    aria-disabled={!isSameUser}
-                  >
-                    <Button
-                      size={"icon"}
-                      className="bg-green"
-                      disabled={!isSameUser}
-                    >
-                      <PiPencilSimpleBold />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>تعديل</TooltipContent>
-              </Tooltip>
+              {hasPermissions(["admin"]) ? (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Link to={`/contact/edit/${row?.original?.consumer_id}`}>
+                      <Button size={"icon"} className="bg-green">
+                        <PiPencilSimpleBold />
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>تعديل</TooltipContent>
+                </Tooltip>
+              ) : null}
 
               {/* delete */}
               {hasPermissions(["admin"]) ? (
@@ -148,10 +140,9 @@ function ContactTable() {
                         size={"icon"}
                         className="bg-red"
                         disabled={
-                          (deleteContact?.isPending &&
-                            deleteContact?.variables?.id ==
-                              row?.original?.consumer_id) ||
-                          !isSameUser
+                          deleteContact?.isPending &&
+                          deleteContact?.variables?.id ==
+                            row?.original?.consumer_id
                         }
                         onClick={(e) => {
                           e.preventDefault();
@@ -167,14 +158,14 @@ function ContactTable() {
               ) : null}
 
               {/* details */}
-              <Tooltip>
+              {/* <Tooltip>
                 <TooltipTrigger>
                     <Button size={"icon"}>
                       <PiInfoBold />
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent>تفاصيل</TooltipContent>
-              </Tooltip>
+              </Tooltip> */}
             </div>
           );
         },
@@ -189,20 +180,20 @@ function ContactTable() {
   // filter config
   const filter: Filters = useMemo(
     () => [
-      {
-        id: "1",
-        type: "text",
-        label: "الاسم",
-        title: "الاسم",
-        searchKey: "name",
-      },
-      {
-        id: "2",
-        type: "number",
-        label: "الرقم الوطني",
-        title: "الرقم الوطني",
-        searchKey: "national_number",
-      },
+      // {
+      //   id: "1",
+      //   type: "text",
+      //   label: "الاسم",
+      //   title: "الاسم",
+      //   searchKey: "name",
+      // },
+      // {
+      //   id: "2",
+      //   type: "number",
+      //   label: "الرقم الوطني",
+      //   title: "الرقم الوطني",
+      //   searchKey: "national_number",
+      // },
     ],
     []
   );
@@ -212,7 +203,10 @@ function ContactTable() {
       <PageContainer>
         <DataTable
           prefix={TABLE_PREFIXES.contact}
-          columns={ContactColumns}
+          columns={ContactColumns?.filter((ele) => {
+            if (ele?.id == "action" && !hasPermissions(["admin"])) return false;
+            else return true;
+          })}
           filters={filter}
           data={(allContacts ?? []) as ContactWithUser[]}
           query={allContactsQuery}

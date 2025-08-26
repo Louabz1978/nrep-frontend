@@ -90,6 +90,8 @@ export const useSessionManager = () => {
     const timeSinceLogin = now - loginTime;
     const fiftyFiveMinutes = 55 * 60 * 1000;
     const sixtyMinutes = 60 * 60 * 1000;
+    // const fiftyFiveMinutes = 0.25 * 60 * 1000;
+    // const sixtyMinutes = 0.5 * 60 * 1000;
 
     // Calculate remaining time
     const timeUntilRefresh = Math.max(0, fiftyFiveMinutes - timeSinceLogin);

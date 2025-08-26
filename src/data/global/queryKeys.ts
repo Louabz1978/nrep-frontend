@@ -5,6 +5,9 @@ const QUERY_KEYS = {
     details: "listings-details",
     predictPrice: "listings-predictP-price",
     resources: "listings-resources",
+    cities: "listings-cities",
+    countries: "listings-countries",
+    area: "listings-area",
   },
   contact: {
     query: "contact-query",

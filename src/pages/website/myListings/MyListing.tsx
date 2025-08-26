@@ -1,10 +1,9 @@
-import Badge from "@/components/global/badge/Badge";
 import { Button } from "@/components/global/form/button/Button";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable, type Filters } from "@/components/global/table2/table";
 import { Checkbox } from "@/components/global/ui/checkbox";
-import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
+import { cityChoices, STATUS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
 import useMyListings from "@/hooks/website/listing/useMyListings";

@@ -18,23 +18,28 @@ export const tabs: TabsType = [
   },
   {
     label: "قائمة الاسماء",
-    permission: ["Add Item"],
+    permission: [],
     submenu: [
       {
         label: "جهات الاتصال",
         permission: [],
         to: "/contact",
       },
+      {
+        label: "إدخال",
+        permission: [],
+        to: "/contact/add",
+      },
     ],
   },
   {
     label: "إدخال",
     to: "/input",
-    permission: ["Add Item"],
+    permission: [],
   },
   {
     label: "العقارات",
-    permission: ["Add Item"],
+    permission: [],
     submenu: [
       {
         label: "كل العقارات",

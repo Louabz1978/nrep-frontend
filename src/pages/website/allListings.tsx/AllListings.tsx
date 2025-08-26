@@ -1,4 +1,3 @@
-import Badge from "@/components/global/badge/Badge";
 import { Button } from "@/components/global/form/button/Button";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
@@ -9,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
-import { cityChoices, STATUS, STATUS_COLORS } from "@/data/global/select";
+import { cityChoices, STATUS } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import useAllListings from "@/hooks/website/listing/useAllListings";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
@@ -170,10 +169,9 @@ function AllListings() {
                         size={"icon"}
                         className="bg-red"
                         disabled={
-                          (deleteListing?.isPending &&
-                            deleteListing?.variables?.id ==
-                              row?.original?.property_id) ||
-                          !isSameUser
+                          deleteListing?.isPending &&
+                          deleteListing?.variables?.id ==
+                            row?.original?.property_id
                         }
                         onClick={(e) => {
                           e.preventDefault();
