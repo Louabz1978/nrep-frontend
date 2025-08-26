@@ -5,14 +5,11 @@ const QUERY_KEYS = {
     details: "listings-details",
     predictPrice: "listings-predictP-price",
     resources: "listings-resources",
-<<<<<<< HEAD
     cities: "listings-cities",
     countries: "listings-countries",
     area: "listings-area",
-=======
     status: "listings-status",
     type: "listings-type",
->>>>>>> daas
   },
   contact: {
     query: "contact-query",
