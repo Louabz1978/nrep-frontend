@@ -21,7 +21,7 @@ const AddButton = ({ to }: Props) => {
           </Button>
         </Link>
       </TooltipTrigger>
-      <TooltipContent>إضافة بائع جديد</TooltipContent>
+      <TooltipContent>إضافة جهة اتصال</TooltipContent>
     </Tooltip>
   );
 };

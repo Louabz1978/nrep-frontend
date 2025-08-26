@@ -7,11 +7,13 @@ export type ContactFormType = {
   name: TString;
   father_name: TString;
   surname: TString;
-  mother_name_and_surname: TString;
+  mother_name_surname: TString;
   place_birth: TString;
   date_birth: TString;
   registry: TString;
   national_number: TNumber;
+  email: TString;
+  phone_number: TString;
 };
 
 export const ContactFormSchema = Joi.object<ContactFormType>({
@@ -24,7 +26,7 @@ export const ContactFormSchema = Joi.object<ContactFormType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("النسبة"),
-  mother_name_and_surname: Joi.string()
+  mother_name_surname: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم و نسة الأم"),
@@ -44,15 +46,37 @@ export const ContactFormSchema = Joi.object<ContactFormType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الرقم الوطني"),
+  email: Joi.string()
+    .trim()
+    // Updated pattern to allow any valid domain, not just gmail.com
+    .pattern(/^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    .allow(null)
+    .messages({
+      ...VALIDATION_MESSAGES,
+      "string.pattern.base": `الحقل {{#label}} يجب أن يطابق النمط المطلوب , مثل: example@domain.com.`,
+      "string.email": `الحقل {{#label}} يجب أن يكون بريدًا إلكترونيًا صالحًا , مثل: example@domain.com.`, // New message for the .email() rule
+    })
+    .label("البريد الإلكتروني"),
+  phone_number: Joi.string()
+    .trim()
+    .required()
+    .pattern(/^(09)(\d{8})$/)
+    .messages({
+      ...VALIDATION_MESSAGES,
+      "string.pattern.base": `الحقل {{#label}} يجب أن يطابق النمط المطلوب , مثل: 09XXXXXXXX.`,
+    })
+    .label("رقم الهاتف"),
 });
 
 export const contactFormInitialValues: ContactFormType = {
   name: null,
   father_name: null,
   surname: null,
-  mother_name_and_surname: null,
+  mother_name_surname: null,
   place_birth: null,
   date_birth: null,
   registry: null,
   national_number: null,
+  email: null,
+  phone_number: null,
 };

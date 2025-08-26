@@ -28,22 +28,26 @@ export const useEditListingsPartial = () => {
       queryClient
         .invalidateQueries({ queryKey: [QUERY_KEYS.listings.details, res?.id] })
         .catch(console.error);
-
-      // navigate to all listings page
-      navigate("/listing/all-listings");
     },
   });
 
   // handle submit edit listing form
   async function handleEditListingPartial(
     data: Record<string, string>,
-    id: number
+    id: number,
+    preventRoute?: boolean
+
     // forms:
   ) {
     // toaster
     toast.promise(editListingPartial.mutateAsync({ data, id }), {
       loading: MESSAGES?.listing?.edit?.loading,
-      success: MESSAGES?.listing?.edit?.success,
+      success: () => {
+        if (!preventRoute)
+          // navigate to all listings page
+          navigate("/listing/all-listings");
+        return MESSAGES?.listing?.edit?.success;
+      },
       error: (error) => {
         return showApiErrors(error);
       },

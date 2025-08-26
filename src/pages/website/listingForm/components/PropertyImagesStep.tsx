@@ -59,7 +59,7 @@ const PropertyImagesStep = ({
                 </p>
               )}
               <p className="text-start">
-                ملاحظة : الحد الأدنى لحجم الصورة 256KB , و الحد الأعلى 1MB .
+                ملاحظة : الحد الأدنى لحجم الصورة 256KB , و الحد الأعلى 5MB .
               </p>
             </div>
           </div>

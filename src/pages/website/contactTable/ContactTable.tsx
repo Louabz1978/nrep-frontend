@@ -13,18 +13,13 @@ import { useDeleteContact } from "@/hooks/website/Contact/useDeleteContact";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import { useUser } from "@/stores/useUser";
 
-import type {  ContactWithUser} from "@/types/website/contact";
+import type { ContactWithUser } from "@/types/website/contact";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useMemo} from "react";
-import {
-  PiInfoBold,
-  PiPencilSimpleBold,
-  PiTrashSimpleBold,
-} from "react-icons/pi";
+import { useMemo } from "react";
+import { PiInfoBold, PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 function ContactTable() {
-
   // user information
   const { user, hasPermissions } = useUser();
 
@@ -33,7 +28,6 @@ function ContactTable() {
 
   // handle delete contact methods
   const { deleteContact, handleDeleteContact } = useDeleteContact();
-
 
   // contact item columns
   const ContactColumns: ColumnDef<ContactWithUser>[] = useMemo(
@@ -63,51 +57,65 @@ function ContactTable() {
         ),
         enableSorting: false,
         enableHiding: false,
-        size: 8,
-        minSize: 8,
+        size: 4,
+        minSize: 4,
       },
       {
         id: "name",
         accessorKey: "name",
         header: "الاسم",
-        size: 25,
+        size: 15,
+        minSize: 15,
       },
       {
         id: "surname",
         header: "النسبة",
         accessorKey: "surname",
-        size: 20,
+        size: 15,
+        minSize: 15,
       },
       {
-        id: "place_of_birth",
-        header: "مكان الولادة",
-        accessorKey: "place_of_birth",
-        size: 20,
+        id: "father_name",
+        header: "اسم الأب",
+        accessorKey: "father_name",
+        size: 15,
+        minSize: 15,
       },
       {
-        id: "date_of_birth",
+        id: "phone_number",
+        header: "رقم الهاتف",
+        accessorKey: "phone_number",
+        size: 15,
+        minSize: 15,
+      },
+      {
+        id: "email",
+        header: "البريد الإلكتروني",
+        accessorKey: "email",
+        size: 25,
+      },
+      {
+        id: "date_birth",
         header: "تاريخ الولادة",
-        accessorKey: "date_of_birth",
-        size: 20,
-      },
-      {
-        id: "registry",
-        header: "القيد",
-        accessorKey: "registry",
-        size: 20,
+        accessorKey: "date_birth",
+        cell: ({ row }) => {
+          return new Date(row?.original?.date_birth)?.toLocaleDateString();
+        },
+        size: 15,
+        minSize: 15,
       },
       {
         id: "national_number",
         header: "الرقم الوطني",
         accessorKey: "national_number",
-        size: 20,
+        size: 15,
+        minSize: 15,
       },
       {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
-          const isSameUser =
-            row?.original?.created_by_user?.user_id == user?.user_id;
+          const isSameUser = row?.original?.created_by == user?.user_id;
 
           return (
             <div className="flex items-center gap-md">
@@ -115,7 +123,7 @@ function ContactTable() {
               <Tooltip>
                 <TooltipTrigger>
                   <Link
-                    to={`/contact/edit/${row?.original?.contact_id}`}
+                    to={`/contact/edit/${row?.original?.consumer_id}`}
                     className={`${isSameUser ? "" : "pointer-events-none"}`}
                     aria-disabled={!isSameUser}
                   >
@@ -142,12 +150,12 @@ function ContactTable() {
                         disabled={
                           (deleteContact?.isPending &&
                             deleteContact?.variables?.id ==
-                              row?.original?.contact_id) ||
+                              row?.original?.consumer_id) ||
                           !isSameUser
                         }
                         onClick={(e) => {
                           e.preventDefault();
-                          handleDeleteContact(row?.original?.contact_id);
+                          handleDeleteContact(row?.original?.consumer_id);
                         }}
                       >
                         <PiTrashSimpleBold />
@@ -161,18 +169,17 @@ function ContactTable() {
               {/* details */}
               <Tooltip>
                 <TooltipTrigger>
-                  <Link to={`/listing/details/${row?.original?.contact_id}`}>
                     <Button size={"icon"}>
                       <PiInfoBold />
                     </Button>
-                  </Link>
                 </TooltipTrigger>
                 <TooltipContent>تفاصيل</TooltipContent>
               </Tooltip>
             </div>
           );
         },
-        size: 25,
+        size: 10,
+        minSize: 10,
         enableSorting: false,
       },
     ],
@@ -189,7 +196,6 @@ function ContactTable() {
         title: "الاسم",
         searchKey: "name",
       },
-
       {
         id: "2",
         type: "number",

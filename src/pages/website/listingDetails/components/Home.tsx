@@ -121,7 +121,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
         style={{ direction: "ltr" }}
       >
         {/* Image/Slider Section */}
-        <div className="w-full lg:w-1/2 flex flex-col">
+        <div data-print-hidden={true} className="w-full lg:w-1/2 flex flex-col">
           <div className="mb-4 sm:mb-6">
             <div className="h-[220px] relative xs:h-[260px] sm:h-[320px] no-print md:h-[360px] lg:h-[400px] w-full">
               <Swiper
@@ -202,8 +202,12 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
             </div>
           </div>
         </div>
+
         {/* Details Section */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center">
+        <div
+          data-print-hidden={true}
+          className="w-full lg:w-1/2 flex flex-col justify-center"
+        >
           <div className="flex items-center justify-center text-size18 sm:text-size20 md:text-size24 font-bold mb-2">
             <h1 className="flex">
               MLS # :{" "}
@@ -242,6 +246,71 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
             </div>
           </div>
         </div>
+
+        <div
+          data-print-visible={true}
+          className="w-full flex flex-col justify-center absolute opacity-0 pointer-event-none flex flex-col"
+        >
+          <div className="flex items-center justify-center text-size18 sm:text-size20 md:text-size24 font-bold mb-2">
+            <h1 className="flex">
+              MLS # :{" "}
+              <p className="font-bold text-primary underline">
+                {dummyProperty.mls}
+              </p>
+            </h1>
+          </div>
+          <div className="flex flex-col w-full flex-1 p-2 sm:p-4 lg:p-6 gap-3 sm:gap-4 lg:gap-6 justify-center">
+            <div
+              className="grid grid-cols-4 gap-x-8 gap-y-8 w-full text-right rtl"
+              dir="rtl"
+            >
+              {detailsRows1.map((row, rowIdx) =>
+                row.map((item, colIdx) => (
+                  <div
+                    key={rowIdx + "-" + colIdx}
+                    className={`flex gap-x-2 min-w-0 ${
+                      colIdx == 1
+                        ? STATUS_TEXT?.[
+                            dummyProperty?.status
+                              ?.value as keyof typeof STATUS_TEXT
+                          ]
+                        : ""
+                    }`}
+                  >
+                    <span className="text-size14 sm:text-size15 font-bold">
+                      {item.label}
+                    </span>
+                    <span className="text-size13 sm:text-size14  break-words ml-2">
+                      {item.value}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="text-center mt-2">
+            <div
+              className="text-digital-green-bg text-size16 sm:text-size18 md:text-size20 font-bold flex flex-col sm:flex-row items-center justify-center gap-1"
+              dir="rtl"
+            >
+              <div>القيمة التقديرية للعقار :</div>
+              {/* <StatusManager
+                  Loader={() => "loading"}
+                  query={listingPredictPriceQuery}
+                  ErrorHandler={() =>
+                    ((dummyProperty?.price * 80) / 100).toFixed(2)
+                  }
+                >
+                  <span>
+                    {listingPredictPrice?.predicted_price ||
+                      dummyProperty.approximatePrice}
+                  </span>
+                </StatusManager> */}
+              <span>${((dummyProperty?.price * 80) / 100).toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Second Section: More Details */}
@@ -260,11 +329,8 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   "gap-y-4 sm:gap-y-6 lg:gap-y-8",
                   "p-2 sm:p-4 lg:p-6",
                   // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
-                  colIdx < detailsRows2.length -1
-                    ? "border-b-1"
-                    : "",
-                    colIdx < detailsRows2.length -2
-                    ? "lg:border-l-1" : ""
+                  colIdx < detailsRows2.length - 1 ? "border-b-1" : "",
+                  colIdx < detailsRows2.length - 2 ? "lg:border-l-1" : "",
                 ].join(" ")}
               >
                 {column.map((item, itemIdx) => (
@@ -333,9 +399,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
                   "gap-y-4 sm:gap-y-6 lg:gap-y-8",
                   "p-2 sm:p-4 lg:p-6",
                   // Responsive border: only show left border on col 0/1 in lg, bottom border always except last row
-                  colIdx < detailsRows4.length - 1
-                    ? "lg:border-l-1"
-                    : "",
+                  colIdx < detailsRows4.length - 1 ? "lg:border-l-1" : "",
                 ].join(" ")}
               >
                 {column.map((item, itemIdx) => (

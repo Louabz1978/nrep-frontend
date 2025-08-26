@@ -23,20 +23,24 @@ const EditContactFormIndex = () => {
               contactDetails.father_name ||
               contactFormInitialValues.father_name,
             surname: contactDetails.surname || contactFormInitialValues.surname,
-            mother_name_and_surname:
-              contactDetails.mother_name_and_surname ||
-              contactFormInitialValues.mother_name_and_surname,
-            place_of_birth:
-              contactDetails.place_of_birth ||
-              contactFormInitialValues.place_of_birth,
-            date_of_birth:
-              contactDetails.date_of_birth ||
-              contactFormInitialValues.date_of_birth,
+            mother_name_surname:
+              contactDetails.mother_name_surname ||
+              contactFormInitialValues.mother_name_surname,
+            place_birth:
+              contactDetails.place_birth ||
+              contactFormInitialValues.place_birth,
+            date_birth: contactDetails.date_birth
+              ? contactDetails?.date_birth?.split("T")?.[0]
+              : contactFormInitialValues.date_birth,
             registry:
               contactDetails.registry || contactFormInitialValues.registry,
             national_number:
               contactDetails.national_number ||
               contactFormInitialValues.national_number,
+            phone_number:
+              contactDetails.phone_number ||
+              contactFormInitialValues.phone_number,
+            email: contactDetails.email || contactFormInitialValues.email,
           }}
           id={contactId}
         />

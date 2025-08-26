@@ -7,7 +7,7 @@ export const ContactFormSkeleton = () => {
   return (
     <AnimateContainer>
       <PageContainer>
-        <FormSectionHeader>تعديل بيانات المشتري</FormSectionHeader>
+        <FormSectionHeader>تعديل بيانات جهة الاتصال</FormSectionHeader>
         <div className="flex flex-col gap-6xl mt-10">
           <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-x-8xl gap-y-4xl">
             {Array.from({ length: 8 }).map((_, index) => (

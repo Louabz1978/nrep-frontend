@@ -18,6 +18,7 @@ import { PiPaperPlaneRightFill } from "react-icons/pi";
 interface ContactFormProps {
   defaultValues: ContactFormType;
   id?: number;
+  changed?: string;
 }
 
 const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
@@ -26,10 +27,12 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
   // Edit contact hook
   const { handleEditContact, editContact } = useEditContact();
 
+  // initial values
+  const initialValues = cleanValues(contactFormInitialValues, defaultValues);
   // Contact form
   const form = useForm({
     resolver: joiResolver(ContactFormSchema),
-    defaultValues: cleanValues(contactFormInitialValues, defaultValues),
+    defaultValues: initialValues,
     mode: "onChange",
   });
 
@@ -48,6 +51,8 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
     }
   };
 
+  console.log(form.watch());
+
   const { handleSubmit } = form;
 
   // handle submit form
@@ -59,7 +64,7 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
     <AnimateContainer>
       <PageContainer>
         <FormSectionHeader>
-          {id ? "تعديل بيانات المشتري" : "إضافة مشتري جديد"}
+          {id ? "تعديل بيانات جهة الاتصال" : "إضافة جهة اتصال"}
         </FormSectionHeader>
         <form
           id="cotact_form"
@@ -99,7 +104,7 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
               type="text"
               label="اسم و نسبة الأم"
               placeholder="أدخل اسم و نسبة الأم"
-              name="mother_name_and_surname"
+              name="mother_name_surname"
               info="يرجى إدخال اسم و نسبة الأم"
               required
             />
@@ -137,6 +142,24 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
               placeholder="أدخل الرقم الوطني"
               name="national_number"
               info="يرجى إدخال الرقم الوطني"
+              required
+            />
+            <Input
+              form={form}
+              type="email"
+              label="البريد الإلكتروني"
+              placeholder="أدخل البريد الإلكتروني"
+              name="email"
+              info="يرجى إدخال البريد الإلكتروني"
+              required
+            />
+            <Input
+              form={form}
+              type="string"
+              label="رقم الهاتف"
+              placeholder="أدخل رقم الهاتف"
+              name="phone_number"
+              info="يرجى إدخال رقم الهاتف"
               required
             />
           </div>

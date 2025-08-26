@@ -7,32 +7,38 @@ export interface ContactFormData
     string,
     string | string[] | undefined | null | number | boolean
   > {
-  name: string | null;
-  father_name: string | null;
-  surname: string | null;
-  mother_name_and_surname: string | null;
-  place_birth: string | null;
-  date_birth: string | null;
-  registry: string | null;
-  national_number: number | null;
+  consumer_id: number;
+  created_at: string;
+  created_by: number;
+  created_by_type: UserType;
+  date_birth: string;
+  email: string;
+  father_name: string;
+  mother_name_surname: string;
+  name: string;
+  national_number: number;
+  phone_number: string;
+  place_birth: string;
+  registry: string;
+  surname: string;
 }
 
 // Contact Entity Type (for database/API responses)
 export interface Contact {
-  contact_id: number;
-  name: string;
-  father_name: string;
-  surname: string;
-  mother_name_and_surname: string;
-  place_of_birth: string;
-  date_of_birth: string;
-  registry: string;
-  national_number: number;
-  created_at: string;
-  updated_at: string;
-  created_by: number;
-  updated_by: number;
-  status: "active" | "inactive" | "deleted";
+  consumer_id: 2;
+  created_at: "2025-08-20T22:57:22.291155";
+  created_by: 20;
+  created_by_type: "realtor";
+  date_birth: "2025-08-20T00:00:00";
+  email: "user@example.com";
+  father_name: "string";
+  mother_name_surname: "string";
+  name: "string";
+  national_number: 0;
+  phone_number: "string";
+  place_birth: "string";
+  registry: "string";
+  surname: "string";
 }
 
 // Contact with User Information
@@ -61,7 +67,7 @@ export interface ContactWithUser extends Contact {
 
 // API Request/Response Types
 export interface CreateContactProps {
-  data: ContactFormData;
+  data: Record<string, string | string[] | undefined | null | number | boolean>;
 }
 
 export type CreateContactResult = Promise<{
@@ -70,7 +76,7 @@ export type CreateContactResult = Promise<{
 }>;
 
 export interface UpdateContactProps {
-  data: Partial<ContactFormData>;
+  data: Record<string, string | string[] | undefined | null | number | boolean>;
   id: number;
 }
 
