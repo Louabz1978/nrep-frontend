@@ -2,14 +2,14 @@ import { GoLinkExternal } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 
 const searches = [
+  { name: "كتابة عقد بيع/شراء/ايجار", link: "contracts/add" },
+  { name: "تعديل عقد ", link: "contracts/edit" },
   { name: "الحساب الشخصي", link: "/profile" },
   { name: "إضافة عقار", link: "/listing/add" },
   { name: "كل العقارات", link: "listing/all-listings" },
   { name: "عقاراتي", link: "listing/my-listings" },
   { name: "عقود البيع و الشراء و الإيجار", link: "/" },
   { name: "التواصل مع مجلس الوسطاء العقاريين في حمص", link: "/" },
-  {name:"كتابة عقد بيع/شراء/ايجار",link:"contracts"},
-  {name:"تعديل عقد ",link:"contracts/edit"}
 ];
 const RelatedLinks = () => {
   const navigate = useNavigate();

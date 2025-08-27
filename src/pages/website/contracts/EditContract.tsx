@@ -1,13 +1,4 @@
-function EditContract(){
-
-
-
-
-
-
-
-
-
-
+function EditContract() {
+  return null;
 }
-export default EditContract
+export default EditContract;

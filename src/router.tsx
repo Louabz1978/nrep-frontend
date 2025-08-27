@@ -37,7 +37,7 @@ const router = createBrowserRouter([
       {
         path: "input",
         element: <InputLogic />,
-      },  
+      },
       {
         path: "listing/all-listings",
         element: <AllListings />,
@@ -59,25 +59,25 @@ const router = createBrowserRouter([
         element: <EditListingIndex />,
       },
       {
-        path: "contracts",
+        path: "contracts/add",
         element: <ContractsList />,
       },
-    
+
       {
         path: "contracts/edit",
         element: <EditContract />,
       },
       {
         path: "contact",
-        element: <ContactTable  />,
+        element: <ContactTable />,
       },
       {
         path: "contact/add",
-        element: <AddContactFormIndex  />,
+        element: <AddContactFormIndex />,
       },
       {
         path: "contact/edit/:id",
-        element: <EditContactFormIndex  />,
+        element: <EditContactFormIndex />,
       },
     ],
   },
