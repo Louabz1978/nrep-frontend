@@ -3,8 +3,10 @@
 import axiosClient from "@/libs/axios/axios-client";
 
 // returns: select options for listing form
-async function getListingsType() {
-  const res = await axiosClient.get(`listings/type`);
+async function getListingsType({ queryParams }: { queryParams?: Record<string, string> } = {}) {
+  const res = await axiosClient.get(`propertytypes_option`, {
+    params: queryParams
+  });
 
   return res?.data?.data;
 }

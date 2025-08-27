@@ -64,7 +64,7 @@ const router = createBrowserRouter([
       },
     
       {
-        path: "contracts/edit/:id",
+        path: "contracts/edit",
         element: <EditContract />,
       },
       {

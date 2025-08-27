@@ -59,14 +59,14 @@ export const tabs: TabsType = [
     permission: ["Add Item"],
     submenu: [
       {
-        label: "عقد بيع/شراء/ايجار ",
+        label: "كتابة عقد",
         permission: [],
-        to: "/Contracts",
+        to: "/contracts",
       },
       {
         label: "تعديل عقد",
         permission: [],
-        to: "/Contract/edit",
+        to: "/contracts/edit",
       }
     ],
   }
