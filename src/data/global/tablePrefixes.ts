@@ -3,7 +3,10 @@ const TABLE_PREFIXES = {
   myListings: "myListings",
   contact : "contact",
   listingStatus: "listingStatus",
-  listingType: "listingType"
+  listingType: "listingType",
+  governorates : "governorates",
+  cities:"cities",
+  areas:"areas",
 };
 
 export default TABLE_PREFIXES;

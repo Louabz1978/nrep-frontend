@@ -10,6 +10,10 @@ export interface getListingsDetailsProps {
   id: number;
 }
 
+export interface getPropertyByMlsProps {
+  mls: number;
+}
+
 interface User {
   user_id: number;
   first_name: string;
@@ -110,6 +114,8 @@ export interface ListingDetailsType {
 // }>;
 
 export type getListingsDetailsResult = Promise<ListingDetailsType>;
+
+export type getPropertyByMlsResult = Promise<ListingDetailsType>;
 
 export type ListingsPredictPriceRequestData = {
   num_bedrooms: number;

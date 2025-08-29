@@ -10,6 +10,7 @@ const QUERY_KEYS = {
     area: "listings-area",
     status: "listings-status",
     type: "listings-type",
+    byMls: "listings-by-mls",
   },
   contact: {
     query: "contact-query",

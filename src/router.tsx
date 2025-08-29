@@ -9,7 +9,7 @@ import TestTable from "./pages/website/testTable/TestTable";
 import AddListingIndex from "./pages/website/listingForm/AddListingIndex";
 import EditListingIndex from "./pages/website/listingForm/EditListingIndex";
 import AllListings from "./pages/website/allListings.tsx/AllListings";
-import ContractsList from "./pages/website/contracts/ContractsList";
+import ContractsList from "./pages/website/contracts/addContract/ContractsList";
 import EditContract from "./pages/website/contracts/EditContract";
 import Home from "./pages/website/home/Home";
 import ListingDetailsIndex from "./pages/website/listingDetails/ListingDetailsIndex";
