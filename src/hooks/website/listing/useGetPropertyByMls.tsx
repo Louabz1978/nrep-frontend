@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import getPropertyByMls from "@/api/website/listings/getPropertyByMls";
 
-function useGetPropertyByMls(mls: number | null) {
+function useGetPropertyByMls(mls: number | string | undefined | null) {
   // get property by MLS
   const propertyByMlsQuery = useQuery({
     queryKey: [QUERY_KEYS?.listings?.byMls, mls],

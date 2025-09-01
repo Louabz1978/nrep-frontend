@@ -11,7 +11,7 @@ export interface getListingsDetailsProps {
 }
 
 export interface getPropertyByMlsProps {
-  mls: number;
+  mls: number | string | undefined;
 }
 
 interface User {
