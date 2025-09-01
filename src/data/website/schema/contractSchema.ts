@@ -49,6 +49,7 @@ export type ContractFormType = {
   others: TString;
   balance: TNumber;
   effective_date: TString;
+  agent_signature: TString;
 };
 
 export const ContractFormSchema = Joi.object<ContractFormType>({
@@ -136,6 +137,7 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   others: Joi.any().messages(VALIDATION_MESSAGES).label("أخرى"),
   balance: Joi.any().messages(VALIDATION_MESSAGES).label("الرصيد"),
   effective_date: Joi.any().messages(VALIDATION_MESSAGES).label("تاريخ النفاذ"),
+  agent_signature: Joi.any().messages(VALIDATION_MESSAGES).label("توقيع الوكيل"),
 });
 
 export const contractFormInitialValues: ContractFormType = {
@@ -185,4 +187,5 @@ export const contractFormInitialValues: ContractFormType = {
   others: null,
   balance: null,
   effective_date: null,
+  agent_signature: null,
 };
