@@ -12,7 +12,7 @@ import useGetPropertyByMls from "@/hooks/website/listing/useGetPropertyByMls";
 import cleanValues from "@/utils/cleanValues";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 
 function ContractsList() {
@@ -63,7 +63,112 @@ function ContractsList() {
         </form>
       </div>
       {/* Contract Form */}
-      <div></div>
+      <div className="mt-8">
+        <div className="mb-6">
+          <h3 className="text-xl font-bold text-primary-fg mb-4 text-right">
+            الأطراف:
+          </h3>
+
+          <div className="flex items-center gap-4 mb-4">
+            <Input
+              form={form}
+              name="sellerName"
+              label="البائع"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="sellerMother"
+              label="والدته"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="sellerBirth"
+              label="تولد"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="sellerNationalId"
+              label="الرقم الوطني"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Input
+              form={form}
+              name="buyerName"
+              label="المشتري"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="buyerMother"
+              label="والدته"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="buyerBirth"
+              label="تولد"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="buyerNationalId"
+              label="الرقم الوطني"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <h3 className="text-xl font-bold text-primary-fg mb-4 text-right">
+            1. وصف العقار
+          </h3>
+
+          <div className="flex items-center gap-4">
+            <Input
+              form={form}
+              name="buildingNumber"
+              label="رقم البناء"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="streetName"
+              label="اسم الشارع"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="floor"
+              label="الطابق"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+            <Input
+              form={form}
+              name="apartment"
+              label="الشقة"
+              variant="contract"
+              addingStyle="flex-1"
+            />
+          </div>
+        </div>
+      </div>
     </PageContainer>
   );
 }
