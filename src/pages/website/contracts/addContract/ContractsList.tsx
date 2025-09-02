@@ -41,7 +41,7 @@ function ContractsList() {
       {/* MLS Input */}
       <form id="contract_form" className="flex flex-col">
         <div
-          className="w-full flex items-center justify-between gap-4"
+          className="w-full flex items-center justify-between gap-4 p-3xl"
           id="contract_form"
           onSubmit={handleSubmit(onSubmit)}
         >
@@ -134,6 +134,83 @@ function ContractsList() {
               السكني "كما هو" هذا وأي ملاحق أو إضافات (ويشار إليه باسم "العقد").
             </p>
           </div>
+        </div>
+        {/* Property Description Section */}
+        <div className="pt-3xl">
+          <h1 className="text-size25 font-bold mb-3xl">1. وصف العقار</h1>
+
+          {/* First Row */}
+          <div className="flex items-center justify-between gap-4 mb-3xl">
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">
+                رقم البناء :
+              </span>
+              <Input variant="contract" form={form} name="building_num" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">اسم الشارع</span>
+              <Input variant="contract" form={form} name="street" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">الطابق</span>
+              <Input variant="contract" form={form} name="floor" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">الشقة</span>
+              <Input variant="contract" form={form} name="apt" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">الحي</span>
+              <Input variant="contract" form={form} name="area" />
+            </div>
+          </div>
+
+          {/* Second Row */}
+          <div className="flex items-center  gap-9xl mb-3xl">
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">المدينة</span>
+              <Input variant="contract" form={form} name="city" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-size16 whitespace-nowrap">المحافظة</span>
+              <Input variant="contract" form={form} name="country" />
+            </div>
+          </div>
+
+          {/* Legal Description Field */}
+          <div className="mb-3xl">
+            <div className="flex items-start gap-2">
+              <span className="text-size16 whitespace-nowrap">
+                الوصف القانوني للعقار :
+              </span>
+              <Input variant="contract" form={form} name="legal_description" />
+            </div>
+          </div>
+          <div className="text-size18">
+            <p className="mb-3xl">
+              مع جميع التحسينات والتجهيزات القائمة، بما في ذلك الأجهزة المدمجة،
+              والأثاث المثبت بشكل دائم، والسجاد المثبت من الجدار إلى الجدار
+              والأرضيات ("العقار") ما لم يُستثنَ صراحةً في الفقرة 1(هـ) أو بموجب
+              شروط أخرى من هذا العقد.
+            </p>
+            <p className="mb-3xl">
+              الممتلكات الشخصية: ما لم يُستثنَ في الفقرة 1(هـ) أو بموجب شروط
+              أخرى من هذا العقد، فإن العناصر التالية المملوكة للبائع والموجودة
+              في العقار بتاريخ تقديم العرض الأولي تعتبر مشمولة في البيع:
+              فرن/أفران، ثلاجة/ثلاجات، غسالة صحون، جهاز التخلص من النفايات،
+              مروحة سقف/مراوح سقف، مصابيح إضاءة، قضبان ستائر وستائر، ستائر،
+              معالجات نوافذ، أجهزة كشف دخان، جهاز/أجهزة فتح باب المرآب، منظم
+              حرارة/منظمات حرارة، جرس باب/أجراس أبواب، حوامل تثبيت التلفاز على
+              الحائط ومعداتها، بوابة أمان وأجهزة دخول أخرى، مفاتيح صندوق البريد،
+              مصاريع عواصف/أدوات حماية من العواصف ولوازمها (“الممتلكات
+              الشخصية”).
+            </p>
+            <p className="mb-3xl">
+              تُعتبر الممتلكات الشخصية مشمولة في سعر الشراء، وليس لها قيمة
+              إضافية مستقلة، ويجب تركها للمشتري.
+            </p>
+          </div>
+          
         </div>
       </div>
     </PageContainer>
