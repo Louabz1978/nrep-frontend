@@ -20,8 +20,7 @@ function SignatureInput<T extends FieldValues>({
 
   const clearSignature = () => {
     sigRef.current?.clear();
-    form.setValue(name, "");
-    form.trigger(name);
+    form.setValue(name, "", { shouldValidate: true });
   };
 
   return (
@@ -44,13 +43,18 @@ function SignatureInput<T extends FieldValues>({
               backgroundColor="white"
               canvasProps={{
                 className:
-                  "sigCanvas border rounded-lg w-full h-[200px] w-[200px]",
+                  "sigCanvas border  w-full h-[200px]",
               }}
               onEnd={() => {
-                const signatureData = sigRef.current?.toDataURL() ?? "";
-                field.onChange(signatureData);
+                if (sigRef.current?.isEmpty()) {
+                  field.onChange("");
+                } else {
+                  const signatureData = sigRef.current?.toDataURL() ?? "";
+                  field.onChange(signatureData);
+                }
               }}
             />
+
             <div className="mt-2 flex justify-end">
               <Button
                 variant="outline"

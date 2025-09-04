@@ -35,6 +35,20 @@ const MESSAGES = {
       success: "تم حذف جهة الاتصال بنجاح!",
     },
   },
+  contract: {
+    add: {
+      loading: "جار إضافة العقد...",
+      success: "تمت إضافة العقد بنجاح!",
+    },
+    edit: {
+      loading: "جار تعديل العقد...",
+      success: "تم تعديل العقد بنجاح!",
+    },
+    delete: {
+      loading: "جار حذف العقد...",
+      success: "تم حذف العقد بنجاح!",
+    },
+  },
 };
 
 export default MESSAGES;
