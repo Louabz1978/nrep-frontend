@@ -46,10 +46,24 @@ export type ContractFormType = {
   addtion_batch_days: TNumber;
   addtion_batch_date: TString;
   financing: TNumber;
+  days: TNumber;
   others: TString;
   balance: TNumber;
+  days_batch: TNumber;
   effective_date: TString;
   agent_signature: TString;
+  sller_agent_name: TString;
+  seller_agent_license: TString;
+  seller_agent_broker: TString;
+  seller_agent_broker_license: TString;
+  seller_company_address: TString;
+  seller_company_phone: TNumber;
+  buyer_agent: TString;
+  buyer_agent_license: TString;
+  buyer_agent_broker: TString;
+  buyer_agent_broker_license: TString;
+  buyer_company_address: TString;
+  buyer_company_phone: TNumber;
 };
 
 export const ContractFormSchema = Joi.object<ContractFormType>({
@@ -93,15 +107,15 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   balconies: Joi.any().messages(VALIDATION_MESSAGES).label("عدد الشرفات"),
   fan_number: Joi.any().messages(VALIDATION_MESSAGES).label("عدد المراوح"),
   water: Joi.any().messages(VALIDATION_MESSAGES).label("خط المياه"),
-  elevator: Joi.any().messages(VALIDATION_MESSAGES).label("مصعد"),
-  ac: Joi.any().messages(VALIDATION_MESSAGES).label("مكيف هواء"),
-  garage: Joi.any().messages(VALIDATION_MESSAGES).label("كراج"),
-  garden: Joi.any().messages(VALIDATION_MESSAGES).label("حديقة"),
-  jacuzzi: Joi.any().messages(VALIDATION_MESSAGES).label("جاكوزي"),
-  solar_system: Joi.any()
+  elevator: Joi.boolean().messages(VALIDATION_MESSAGES).label("مصعد"),
+  ac: Joi.boolean().messages(VALIDATION_MESSAGES).label("مكيف هواء"),
+  garage: Joi.boolean().messages(VALIDATION_MESSAGES).label("كراج"),
+  garden: Joi.boolean().messages(VALIDATION_MESSAGES).label("حديقة"),
+  jacuzzi: Joi.boolean().messages(VALIDATION_MESSAGES).label("جاكوزي"),
+  solar_system: Joi.boolean()
     .messages(VALIDATION_MESSAGES)
     .label("نظام طاقة شمسية"),
-  pool: Joi.any().messages(VALIDATION_MESSAGES).label("مسبح"),
+  pool: Joi.boolean().messages(VALIDATION_MESSAGES).label("مسبح"),
   price: Joi.any().messages(VALIDATION_MESSAGES).label("السعر"),
   deposit: Joi.any().messages(VALIDATION_MESSAGES).label("الدفعة المقدمة"),
   deposit_date: Joi.any()
@@ -133,11 +147,49 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   addtion_batch_date: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("تاريخ الدفعة الإضافية"),
+  days: Joi.any().messages(VALIDATION_MESSAGES).label("أيام"),
+  days_batch: Joi.any().messages(VALIDATION_MESSAGES).label("أيام"),
   financing: Joi.any().messages(VALIDATION_MESSAGES).label("التمويل"),
   others: Joi.any().messages(VALIDATION_MESSAGES).label("أخرى"),
   balance: Joi.any().messages(VALIDATION_MESSAGES).label("الرصيد"),
   effective_date: Joi.any().messages(VALIDATION_MESSAGES).label("تاريخ النفاذ"),
-  agent_signature: Joi.any().messages(VALIDATION_MESSAGES).label("توقيع الوكيل"),
+  agent_signature: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("توقيع الوكيل"),
+  sller_agent_name: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("وكيل البائع"),
+  seller_agent_license: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("رخصة وكيل البائع"),
+  seller_agent_broker_license: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("رخصة البروكر"),
+  seller_agent_broker: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("سمسار وكيل البائع"),
+  seller_company_address: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("عنوان شركة البائع"),
+  seller_company_phone: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("هاتف شركة البائع"),
+  buyer_agent: Joi.any().messages(VALIDATION_MESSAGES).label("وكيل المشتري"),
+  buyer_agent_license: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("رخصة وكيل المشتري"),
+  buyer_agent_broker_license: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("رخصة البروكر"),
+  buyer_agent_broker: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("سمسار وكيل المشتري"),
+  buyer_company_address: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("عنوان شركة المشتري"),
+  buyer_company_phone: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("هاتف شركة المشتري"),
 });
 
 export const contractFormInitialValues: ContractFormType = {
@@ -183,9 +235,23 @@ export const contractFormInitialValues: ContractFormType = {
   warranty_agent_fax: null,
   addtion_batch_days: null,
   addtion_batch_date: null,
+  days: null,
+  days_batch: null,
   financing: null,
   others: null,
   balance: null,
   effective_date: null,
   agent_signature: null,
+  sller_agent_name: null,
+  seller_agent_license: null,
+  seller_agent_broker: null,
+  seller_agent_broker_license: null,
+  seller_company_address: null,
+  seller_company_phone: null,
+  buyer_agent: null,
+  buyer_agent_license: null,
+  buyer_agent_broker: null,
+  buyer_agent_broker_license: null,
+  buyer_company_address: null,
+  buyer_company_phone: null,
 };

@@ -26,6 +26,8 @@ import PropertyImagesStep from "./components/PropertyImagesStep";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { useAddListings } from "@/hooks/website/listing/useAddListing";
 import { useEditListings } from "@/hooks/website/listing/useEditListing";
+import useListingType from "@/hooks/website/listing/useListingType";
+import useListingStatus from "@/hooks/website/listing/useListingStatus";
 
 interface ListingFormProps {
   defaultValues: {
@@ -137,6 +139,11 @@ function ListingForm({ defaultValues, id }: ListingFormProps) {
         ...propertyImagesStep.watch(),
       }).catch(console.error);
   };
+
+  const { listingType } = useListingType();
+  console.log({ listingType });
+  const { listingStatus } = useListingStatus();
+  console.log({ listingStatus });
 
   return (
     <AnimateContainer>

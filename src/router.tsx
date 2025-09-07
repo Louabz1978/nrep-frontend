@@ -61,6 +61,7 @@ const router = createBrowserRouter([
       {
         path: "contracts/add",
         element: <ContractsList />,
+        handle: { whiteBg: true },
       },
 
       {
