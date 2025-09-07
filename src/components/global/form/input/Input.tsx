@@ -217,7 +217,7 @@ function Input<T extends FieldValues>({
 
           <div
             className={`${
-              variant == "contract" ? "flex-1" : "w-full flex flex-col gap-xs"
+              variant == "contract" ? "flex-1" : "w-full flex flex-col"
             }`}
           >
             {/* input container to link icon to its position */}
@@ -225,7 +225,7 @@ function Input<T extends FieldValues>({
               className={`${
                 variant == "contract"
                   ? "relative flex items-center"
-                  : "relative flex items-center gap-lg"
+                  : "relative flex items-center "
               }`}
             >
               <div
@@ -247,7 +247,7 @@ function Input<T extends FieldValues>({
                     disabled={isDisabled}
                     className={
                       variant == "contract"
-                        ? `w-full h-8 text-size15  border-b-1  rounded-none  duration-[0.3s]  ${addingInputStyle}`
+                        ? `w-full h-8 text-size15  border-b-1  rounded-none pt-3.5  duration-[0.3s]  ${addingInputStyle}`
                         : `flex-1 h-5xl text-size16 ${
                             isDisabled
                               ? "bg-secondary-background"
@@ -295,7 +295,7 @@ function Input<T extends FieldValues>({
                     disabled={isDisabled}
                     className={
                       variant == "contract"
-                        ? `w-full h-8 text-size15  border-b-1  rounded-none outline-none  duration-[0.3s]  ${
+                        ? `w-full h-8 text-size15  border-b-1 pt-3.5  rounded-none outline-none  duration-[0.3s]  ${
                             type == "password" ? "!pl-[56px]" : ""
                           } ${addingInputStyle}`
                         : `flex-1 h-5xl text-size16 ${
