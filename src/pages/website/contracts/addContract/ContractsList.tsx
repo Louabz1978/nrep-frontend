@@ -11,13 +11,18 @@ import {
 
 import useGetPropertyByMls from "@/hooks/website/listing/useGetPropertyByMls";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas-pro";
+import { toast } from "sonner";
 
 function ContractsList() {
   const [disabled1, setDisabled1] = useState(true);
   const [disabled2, setDisabled2] = useState(true);
+  const [checkbox1, setCheckBox1] = useState(false);
+  const [checkbox2, setCheckBox2] = useState(false);
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
@@ -28,12 +33,160 @@ function ContractsList() {
   const { handleSubmit } = form;
   const [currentMLS, setCurrentMLS] = useState<TNumber>();
   const watchMLS = useWatch({ control: form.control, name: "mls" });
+  const contractRef = useRef<HTMLDivElement>(null);
 
-  const { propertyByMls, propertyByMlsQuery } = useGetPropertyByMls(currentMLS);
+  useGetPropertyByMls(currentMLS);
+
+  // Helper function to apply print styles to the CLONED elements only
+  const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
+    // Hide elements with data-print-hidden=true - query from the CLONED element
+    const hiddenElements = clonedElement.querySelectorAll(
+      '[data-print-hidden="true"]'
+    );
+    hiddenElements.forEach((el) => {
+      (el as HTMLElement).style.display = "none";
+    });
+
+    // Show elements with data-print-visible=true - query from the CLONED element
+    const visibleElements = clonedElement.querySelectorAll(
+      '[data-print-visible="true"]'
+    );
+    visibleElements.forEach((el) => {
+      (el as HTMLElement).style.display = "block";
+      (el as HTMLElement).style.position = "static";
+      (el as HTMLElement).style.opacity = "1";
+      (el as HTMLElement).style.pointerEvents = "auto";
+      (el as HTMLElement).style.visibility = "visible";
+      (el as HTMLElement).style.gridColumn = "span 3";
+      (el as HTMLElement).style.textAlign = "center";
+      (el as HTMLElement).style.margin = "15px 0";
+    });
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!contractRef.current) return;
+
+    const toastId = toast.loading("جار تجهيز ملف PDF...", {
+      duration: Infinity,
+    });
+
+    try {
+      document.body.classList.add("printing");
+
+      // 1. Create a container for the content
+      const container = document.createElement("div");
+      container.style.width = "100%";
+      container.style.position = "absolute";
+      container.style.left = "-9999px";
+      container.style.direction = "rtl";
+      container.style.textAlign = "right";
+      container.style.padding = "20px";
+      container.style.fontFamily = "Arial, sans-serif";
+      container.id = "print-container";
+      document.body.appendChild(container);
+
+      // 2. Clone and modify the contract content
+      const contractClone = contractRef.current.cloneNode(true) as HTMLElement;
+
+      // 3. Apply print styles to the CLONED element
+      applyPrintStylesToClone(contractClone);
+
+      // Apply RTL and padding styles to the cloned content
+      contractClone.style.display = "block";
+      contractClone.style.direction = "rtl";
+      contractClone.style.textAlign = "right";
+      contractClone.style.padding = "20px";
+      contractClone.style.margin = "0";
+      contractClone.style.fontFamily = "Arial, sans-serif";
+
+      // Add section header
+      const contractHeader = document.createElement("h2");
+      contractHeader.textContent = "عقد بيع وشراء سكني";
+      contractHeader.style.textAlign = "center";
+      contractHeader.style.marginBottom = "20px";
+      contractHeader.style.fontSize = "18px";
+      contractHeader.style.fontWeight = "bold";
+      contractHeader.style.direction = "rtl";
+
+      // Build the content
+      container.appendChild(contractHeader);
+      container.appendChild(contractClone);
+
+      // 4. Capture as single image
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: 1200,
+        windowHeight: container.scrollHeight,
+        onclone: (clonedDoc, element) => {
+          element.style.display = "block";
+          element.style.direction = "rtl";
+          element.style.textAlign = "right";
+          element.style.padding = "20px";
+          clonedDoc.body.style.overflow = "visible";
+          clonedDoc.body.style.direction = "rtl";
+          clonedDoc.body.style.textAlign = "right";
+
+          // Apply styles to the cloned document as well
+          const clonedContract = clonedDoc.querySelector(
+            '[data-contract-content="contract"]'
+          );
+          if (clonedContract) {
+            applyPrintStylesToClone(clonedContract as HTMLElement);
+            (clonedContract as HTMLElement).style.direction = "rtl";
+            (clonedContract as HTMLElement).style.textAlign = "right";
+            (clonedContract as HTMLElement).style.padding = "20px";
+          }
+        },
+      });
+
+      // 5. Generate PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/png");
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      const maxHeight = 297;
+      const finalHeight = Math.min(imgHeight, maxHeight);
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        imgWidth,
+        finalHeight,
+        undefined,
+        "FAST"
+      );
+
+      toast.success("جار تنزيل ملف PDF...", {
+        id: toastId,
+        duration: 2000,
+      });
+      pdf.save("contract.pdf");
+    } catch (error) {
+      toast.error("فشل إنشاء ملف PDF", {
+        id: toastId,
+        description: "حدث خطأ أثناء محاولة إنشاء الملف",
+        duration: 3000,
+      });
+      console.error("Error generating PDF:", error);
+    } finally {
+      document.body.classList.remove("printing");
+      const containers = document.querySelectorAll("#print-container");
+      containers.forEach((container) => container.remove());
+    }
+  };
 
   // handle submit form
   const onSubmit = (submitData: ContractFormType) => {
     console.log(submitData);
+    handleDownloadPDF();
   };
 
   return (
@@ -47,6 +200,7 @@ function ContractsList() {
           className="w-full flex items-center justify-between gap-xl p-3xl"
           id="contract_form"
           onSubmit={handleSubmit(onSubmit)}
+          data-print-hidden="true"
         >
           <Input
             form={form}
@@ -69,7 +223,7 @@ function ContractsList() {
         </div>
       </form>
       {/* Contract Form */}
-      <div className="">
+      <div ref={contractRef} data-contract-content="contract" className="">
         <div className="flex items-center justify-center p-xl text-size22 ">
           <h1>تمت الموافقة على هذا النموذج من قبل رابطة السماسرة العقاريين</h1>
         </div>
@@ -77,7 +231,7 @@ function ContractsList() {
           <div>
             <h1 className="text-size25 font-bold">الأطراف:</h1>
           </div>
-          <div className="flex items-center justify-between  pt-3xl">
+          <div className="flex items-center flex-wrap gap-4xl pt-3xl">
             <div className="flex items-center gap-1">
               <span className="whitespace-nowrap text-size18">البائع:</span>
 
@@ -127,7 +281,7 @@ function ContractsList() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-between gap-lg pt-3xl">
+          <div className="flex items-center flex-wrap gap-3xl pt-3xl">
             <div className="flex items-center gap-2">
               <span className="whitespace-nowrap text-size18">المشتري:</span>
               <Input
@@ -190,7 +344,7 @@ function ContractsList() {
           <h1 className="text-size25 font-bold mb-3xl">1. وصف العقار</h1>
 
           {/* First Row */}
-          <div className="flex items-center justify-between gap-4 mb-3xl">
+          <div className="flex items-center  flex-wrap gap-4xl mb-3xl">
             <div className="flex items-center gap-2">
               <span className="text-size18 whitespace-nowrap">
                 رقم البناء :
@@ -244,7 +398,7 @@ function ContractsList() {
           </div>
 
           {/* Second Row */}
-          <div className="flex items-center  gap-9xl mb-3xl">
+          <div className="flex items-center  gap-5xl mb-3xl">
             <div className="flex items-center gap-2">
               <span className="text-size18 whitespace-nowrap">المدينة :</span>
               <Input
@@ -308,7 +462,7 @@ function ContractsList() {
             </span>
           </div>
           <div>
-            <div className="flex items-center justify-center mt-2xl mb-3xl">
+            <div className="flex items-center justify-center flex-wrap mt-2xl mb-3xl">
               <FormSectionHeader>سعر الشراء والإغلاق</FormSectionHeader>
             </div>
             <div className="flex items-center gap-md ">
@@ -327,14 +481,16 @@ function ContractsList() {
             </div>
             <div className="flex items-center gap-lg">
               <input
-                onClick={() => setDisabled1((prev) => !prev)}
+                id="checkbox1"
+                checked={!disabled1}
+                onChange={() => setDisabled1((prev) => !prev)}
                 type="checkbox"
               />
               <label
                 className={`${
                   disabled1 ? "text-quinary-bg" : "text-black"
-                } text-size20 `}
-                htmlFor=""
+                } text-size20 cursor-pointer `}
+                htmlFor="checkbox1"
               >
                 قيمة الرعبون و تاريخ الدفع : {".".repeat(155)}
               </label>
@@ -348,14 +504,16 @@ function ContractsList() {
             </div>
             <div className="flex items-center gap-lg">
               <input
-                onClick={() => setDisabled2((prev) => !prev)}
+                id="checkbox2"
+                checked={!disabled2}
+                onChange={() => setDisabled2((prev) => !prev)}
                 type="checkbox"
               />
               <label
                 className={`${
                   disabled2 ? "text-quinary-bg" : "text-black"
-                } text-size20 `}
-                htmlFor=""
+                } text-size20 cursor-pointer`}
+                htmlFor="checkbox2"
               >
                 قيمة الدفعة و تاريخ الدفع : {".".repeat(156)}
               </label>
@@ -386,14 +544,35 @@ function ContractsList() {
             <div className="flex items-center gap-xl">
               <span className="text-size20 font-bold ">(اختر واحداً):</span>
               <div className="flex items-center gap-lg">
-                <input type="checkbox" />
-                <label className="text-size18">شركات المحاماة أو</label>
+                <input
+                  id="choise1"
+                  checked={checkbox1}
+                  onClick={() => {
+                    setCheckBox1((prev) => !prev);
+                    setCheckBox2(false);
+                  }}
+                  type="checkbox"
+                />
+                <label htmlFor="choise1" className="text-size18">
+                  شركات المحاماة أو
+                </label>
               </div>
               <div className="flex items-center gap-lg">
-                <input type="checkbox" />
-                <label className="text-size18">يجب أن تكون مدفوعة خلال </label>
+                <input
+                  checked={checkbox2}
+                  onClick={() => {
+                    setCheckBox2((prev) => !prev);
+                    setCheckBox1(false);
+                  }}
+                  id="choise2"
+                  type="checkbox"
+                />
+                <label htmlFor="choise2" className="text-size18">
+                  يجب أن تكون مدفوعة خلال{" "}
+                </label>
               </div>
               <Input
+                disabled={!checkbox2}
                 addingStyle="pb-2xl "
                 variant="contract"
                 form={form}
@@ -407,7 +586,7 @@ function ContractsList() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between gap-sm">
+            <div className="flex items-center justify-between  gap-sm">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-size18">
                   وكيل البائع :
@@ -746,6 +925,11 @@ function ContractsList() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex items-center justify-center mt-6xl ">
+          <Button className="w-[200px]" onClick={handleSubmit(onSubmit)}>
+            تأكيد
+          </Button>
         </div>
       </div>
     </PageContainer>
