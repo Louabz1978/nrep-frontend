@@ -168,6 +168,8 @@ function ContractsList() {
         id: toastId,
         duration: 2000,
       });
+
+      console.log({ pdf });
       pdf.save("contract.pdf");
     } catch (error) {
       toast.error("فشل إنشاء ملف PDF", {
