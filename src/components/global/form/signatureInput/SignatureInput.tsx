@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { Controller, type FieldValues, type Path, type UseFormReturn } from "react-hook-form";
-import { Button } from "../button/Button";
 
 interface SignatureInputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -18,10 +17,7 @@ function SignatureInput<T extends FieldValues>({
 }: SignatureInputProps<T>) {
   const sigRef = useRef<SignatureCanvas>(null);
 
-  const clearSignature = () => {
-    sigRef.current?.clear();
-    form.setValue(name, "", { shouldValidate: true });
-  };
+
 
   return (
     <div className="flex flex-col gap-2">
@@ -55,15 +51,7 @@ function SignatureInput<T extends FieldValues>({
               }}
             />
 
-            <div className="mt-2 flex justify-end">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={clearSignature}
-              >
-                Clear
-              </Button>
-            </div>
+          
           </>
         )}
       />

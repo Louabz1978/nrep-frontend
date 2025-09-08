@@ -2,6 +2,7 @@ import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
+import { Select } from "@/components/global/ui/select";
 import type { TNumber } from "@/data/global/schema";
 import {
   contractFormInitialValues,

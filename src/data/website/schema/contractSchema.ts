@@ -51,10 +51,12 @@ export type ContractFormType = {
   effective_date: TString;
   agent_signature: TString;
   contract_file: File | null;
+  editcontract_file: File | null;
 };
 
 export const ContractFormSchema = Joi.object<ContractFormType>({
   contract_file: Joi.any().messages(VALIDATION_MESSAGES).label("ملف العقد"),
+  editcontract_file: Joi.any().messages(VALIDATION_MESSAGES).label("تعديل ملف العقد"),
   mls: Joi.number().messages(VALIDATION_MESSAGES).label("mls"),
   seller_name: Joi.any().messages(VALIDATION_MESSAGES).label("البائع"),
   seller_mothor_name: Joi.any()
@@ -144,6 +146,7 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
 
 export const contractFormInitialValues: ContractFormType = {
   contract_file: null,
+  editcontract_file:null,
   mls: null,
   seller_name: null,
   seller_mothor_name: null,
