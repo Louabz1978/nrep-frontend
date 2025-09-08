@@ -18,7 +18,7 @@ const SelectValue = SelectPrimitive.Value;
 interface SelectTriggerProps
   extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
   Icon?: IconType;
-  variant?: "white" | "default";
+  variant?: "white" | "default" | "contract";
   hasError?: boolean;
   clear?: () => void;
   currentValue: string | undefined | null | number | boolean;

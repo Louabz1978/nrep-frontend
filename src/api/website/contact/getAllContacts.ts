@@ -15,7 +15,7 @@ async function getAllContacts({
 }: GetAllContactsProps): GetAllContactsResult {
   const res = await axiosClient.get<
     AxiosRes<PaginationData<ContactWithUser[]>>
-  >(`consumers/consumers`, {
+  >(`consumers/`, {
     params: {
       ...queryParams,
       page: queryParams?.page ?? 1,
