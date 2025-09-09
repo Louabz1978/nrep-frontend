@@ -7,14 +7,19 @@ import {
   contractFormInitialValues,
   ContractFormSchema,
   type ContractFormType,
+  sellerInitialValues,
+  buyerInitialValues,
 } from "@/data/website/schema/contractSchema";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { FaSearch } from "react-icons/fa";
+import { useForm, useWatch, useFieldArray } from "react-hook-form";
+import { FaSearch, FaPlus } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 import useListingDetails from "@/hooks/website/listing/useListingDetails";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import type { ContactWithUser } from "@/types/website/contact";
 import useAddContract from "@/hooks/website/contract/useAddContract";
+import Select from "@/components/global/form/select/Select";
 
 function ContractsList() {
   const [disabled1, setDisabled1] = useState(true);
@@ -27,13 +32,53 @@ function ContractsList() {
   const { allContacts } = useGetAllContacts();
   const { handleAddContract, isPending: isSubmitting } = useAddContract();
 
-  console.log(allContacts);
+  const contacts =
+    allContacts?.map((contact: ContactWithUser) => ({ value: contact.name })) ||
+    [];
+  console.log(contacts);
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
     defaultValues: contractFormInitialValues,
     mode: "onChange",
   });
+
+  // Field arrays for sellers and buyers
+  const sellers = useFieldArray({
+    name: "sellers",
+    control: form.control,
+    keyName: "id",
+  });
+
+  const buyers = useFieldArray({
+    name: "buyers",
+    control: form.control,
+    keyName: "id",
+  });
+
+  const controlledSellers = form.watch("sellers");
+  const controlledBuyers = form.watch("buyers");
+
+  // Add/Remove button components
+  const AddButton = ({ onClick }: { onClick: () => void }) => (
+    <button
+      type="button"
+      className="flex items-center justify-center w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-full"
+      onClick={onClick}
+    >
+      <FaPlus className="text-sm" />
+    </button>
+  );
+
+  const RemoveButton = ({ onClick }: { onClick: () => void }) => (
+    <button
+      type="button"
+      className="flex items-center justify-center w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full"
+      onClick={onClick}
+    >
+      <FaXmark className="text-sm" />
+    </button>
+  );
 
   const flags = {
     pool: listingDetails?.additional.pool,
@@ -49,15 +94,34 @@ function ContractsList() {
   const populateFormWithListingData = useCallback(() => {
     if (!listingDetails) return;
 
-    // Seller information
-    form.setValue("seller_name", listingDetails.owner.name);
+    // Seller information - populate the first seller in the array
+    const sellerData = {
+      id: `seller-${Date.now()}`,
+      seller_name: (listingDetails.owner as any).name,
+      seller_mothor_name: (listingDetails.owner as any).mother_name_surname,
+      seller_birth_place: (listingDetails.owner as any).place_birth,
+      seller_nation_number: (listingDetails.owner as any).national_number,
+      seller_registry: (listingDetails.owner as any).registry,
+    };
+
+    // Set the first seller in the array
+    form.setValue("sellers.0", sellerData);
+
+    // Keep backward compatibility with original fields
+    form.setValue("seller_name", (listingDetails.owner as any).name);
     form.setValue(
       "seller_mothor_name",
-      listingDetails.owner.mother_name_surname
+      (listingDetails.owner as any).mother_name_surname
     );
-    form.setValue("seller_birth_place", listingDetails.owner.place_birth);
-    form.setValue("seller_nation_number", listingDetails.owner.national_number);
-    form.setValue("seller_registry", listingDetails.owner.registry);
+    form.setValue(
+      "seller_birth_place",
+      (listingDetails.owner as any).place_birth
+    );
+    form.setValue(
+      "seller_nation_number",
+      (listingDetails.owner as any).national_number
+    );
+    form.setValue("seller_registry", (listingDetails.owner as any).registry);
 
     // Property information
     form.setValue(
@@ -70,7 +134,7 @@ function ContractsList() {
     form.setValue("area", listingDetails.address?.area || "");
     form.setValue("city", listingDetails.address?.city || "");
     form.setValue("country", listingDetails.address?.county || "");
-    form.setValue("legal_description", listingDetails.mls_num || null);
+    form.setValue("legal_description", String(listingDetails.mls_num ?? ""));
 
     // Property features
     if (listingDetails.additional) {
@@ -116,6 +180,10 @@ function ContractsList() {
 
   const { handleSubmit } = form;
   const watchMLS = useWatch({ control: form.control, name: "mls" });
+  const watchBuyerName = useWatch({
+    control: form.control,
+    name: "buyer_name",
+  });
   const contractRef = useRef<HTMLDivElement>(null);
 
   // Populate form when listingDetails changes
@@ -124,6 +192,93 @@ function ContractsList() {
       populateFormWithListingData();
     }
   }, [listingDetails, populateFormWithListingData]);
+
+  // Populate buyer fields when buyer is selected from contacts
+  useEffect(() => {
+    if (!watchBuyerName || !allContacts?.length) return;
+
+    const selectedName =
+      typeof watchBuyerName === "string"
+        ? watchBuyerName
+        : (watchBuyerName as { value?: string })?.value;
+
+    if (!selectedName) return;
+
+    const selectedContact = (allContacts as ContactWithUser[]).find(
+      (contact: ContactWithUser) => contact?.name === selectedName
+    );
+
+    if (selectedContact) {
+      // Update the first buyer in the array
+      const buyerData = {
+        id: `buyer-${Date.now()}`,
+        buyer_name: watchBuyerName,
+        buyer_mothor_name: selectedContact?.mother_name_surname || "",
+        buyer_birth_place: selectedContact?.place_birth || "",
+        buyer_nation_number: Number(selectedContact?.national_number),
+        buyer_registry: selectedContact?.registry || "",
+      };
+      form.setValue("buyers.0", buyerData);
+
+      // Keep backward compatibility with original fields
+      form.setValue(
+        "buyer_mothor_name",
+        selectedContact?.mother_name_surname || ""
+      );
+      form.setValue("buyer_birth_place", selectedContact?.place_birth || "");
+      form.setValue(
+        "buyer_nation_number",
+        Number(selectedContact?.national_number)
+      );
+      form.setValue("buyer_registry", selectedContact?.registry || "");
+    } else {
+      // Clear fields if no contact is selected
+      form.setValue("buyer_mothor_name", "");
+      form.setValue("buyer_birth_place", "");
+      form.setValue("buyer_nation_number", null);
+      form.setValue("buyer_registry", "");
+    }
+  }, [watchBuyerName, allContacts, form]);
+
+  // Handle buyer selection for all buyers in the array
+  useEffect(() => {
+    if (!allContacts?.length) return;
+
+    controlledBuyers?.forEach((buyer, index) => {
+      if (!buyer?.buyer_name) return;
+
+      const selectedName =
+        typeof buyer.buyer_name === "string"
+          ? buyer.buyer_name
+          : (buyer.buyer_name as { value?: string })?.value;
+
+      if (!selectedName) return;
+
+      const selectedContact = (allContacts as ContactWithUser[]).find(
+        (contact: ContactWithUser) => contact?.name === selectedName
+      );
+
+      if (selectedContact) {
+        // Update individual fields to ensure proper form state update
+        form.setValue(
+          `buyers.${index}.buyer_mothor_name`,
+          selectedContact?.mother_name_surname || ""
+        );
+        form.setValue(
+          `buyers.${index}.buyer_birth_place`,
+          selectedContact?.place_birth || ""
+        );
+        form.setValue(
+          `buyers.${index}.buyer_nation_number`,
+          Number(selectedContact?.national_number)
+        );
+        form.setValue(
+          `buyers.${index}.buyer_registry`,
+          selectedContact?.registry || ""
+        );
+      }
+    });
+  }, [controlledBuyers, allContacts, form]);
 
   return (
     <PageContainer>
@@ -167,113 +322,176 @@ function ContractsList() {
           <div>
             <h1 className="text-size25 font-bold">الأطراف:</h1>
           </div>
+          {/* Dynamic Sellers Section */}
           <div className="flex items-center flex-wrap gap-4xl pt-3xl">
-            <div className="flex items-center gap-1">
-              <span className="whitespace-nowrap text-size18">البائع:</span>
-
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="seller_name"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">والدته:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="seller_mothor_name"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">تولد:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="seller_birth_place"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">
-                الرقم الوطني:
-              </span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="seller_nation_number"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">القيد:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="seller_registry"
-                disabled={true}
-              />
-            </div>
+            {controlledSellers?.map((_, index) => (
+              <div
+                key={sellers.fields?.[index]?.id}
+                className="flex items-center gap-2"
+              >
+                <div className="flex items-center gap-1">
+                  <span className="whitespace-nowrap text-size18">البائع:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`sellers.${index}.seller_name`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">والدته:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`sellers.${index}.seller_mothor_name`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">تولد:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`sellers.${index}.seller_birth_place`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">
+                    الرقم الوطني:
+                  </span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`sellers.${index}.seller_nation_number`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">القيد:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`sellers.${index}.seller_registry`}
+                    disabled={true}
+                  />
+                </div>
+                {controlledSellers.length > 1 && (
+                  <RemoveButton onClick={() => sellers.remove(index)} />
+                )}
+              </div>
+            ))}
+            <AddButton onClick={() => sellers.append(sellerInitialValues)} />
           </div>
+          {/* Dynamic Buyers Section */}
           <div className="flex items-center flex-wrap gap-3xl pt-3xl">
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">المشتري:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="buyer_name"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">والدته:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="buyer_mothor_name"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">تولد:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="buyer_birth_place"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">
-                الرقم الوطني:
-              </span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="buyer_nation_number"
-                disabled={true}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="whitespace-nowrap text-size18">القيد:</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="buyer_registry"
-                disabled={true}
-              />
-            </div>
+            {controlledBuyers?.map((_, index) => (
+              <div
+                key={buyers.fields?.[index]?.id}
+                className="flex items-center gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">
+                    المشتري:
+                  </span>
+                  <Select
+                    choices={contacts}
+                    showValue="value"
+                    addingStyle="pb-4 w-full"
+                    variant="contract"
+                    form={form}
+                    name={`buyers.${index}.buyer_name`}
+                    onChange={(selectedValue) => {
+                      if (!allContacts?.length) return;
+
+                      const selectedName =
+                        typeof selectedValue === "string"
+                          ? selectedValue
+                          : (selectedValue as { value?: string })?.value;
+
+                      if (!selectedName) return;
+
+                      const selectedContact = (
+                        allContacts as ContactWithUser[]
+                      ).find(
+                        (contact: ContactWithUser) =>
+                          contact?.name === selectedName
+                      );
+
+                      if (selectedContact) {
+                        form.setValue(
+                          `buyers.${index}.buyer_mothor_name`,
+                          selectedContact?.mother_name_surname || ""
+                        );
+                        form.setValue(
+                          `buyers.${index}.buyer_birth_place`,
+                          selectedContact?.place_birth || ""
+                        );
+                        form.setValue(
+                          `buyers.${index}.buyer_nation_number`,
+                          Number(selectedContact?.national_number)
+                        );
+                        form.setValue(
+                          `buyers.${index}.buyer_registry`,
+                          selectedContact?.registry || ""
+                        );
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">والدته:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`buyers.${index}.buyer_mothor_name`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">تولد:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`buyers.${index}.buyer_birth_place`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">
+                    الرقم الوطني:
+                  </span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`buyers.${index}.buyer_nation_number`}
+                    disabled={true}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="whitespace-nowrap text-size18">القيد:</span>
+                  <Input
+                    addingStyle="pb-4"
+                    variant="contract"
+                    form={form}
+                    name={`buyers.${index}.buyer_registry`}
+                    disabled={true}
+                  />
+                </div>
+                {controlledBuyers.length > 1 && (
+                  <RemoveButton onClick={() => buyers.remove(index)} />
+                )}
+              </div>
+            ))}
+            <AddButton onClick={() => buyers.append(buyerInitialValues)} />
           </div>
           <div className="pt-3xl">
             <p>
