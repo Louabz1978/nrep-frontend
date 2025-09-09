@@ -58,12 +58,14 @@ export type ContractFormType = {
   seller_agent_broker_license: TString;
   seller_company_address: TString;
   seller_company_phone: TNumber;
+  seller_commission: TNumber;
   buyer_agent: TString;
   buyer_agent_license: TString;
   buyer_agent_broker: TString;
   buyer_agent_broker_license: TString;
   buyer_company_address: TString;
   buyer_company_phone: TNumber;
+  buyer_commission: TNumber;
   contract_file: File | null;
   editcontract_file: File | null;
 };
@@ -178,6 +180,9 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   seller_company_phone: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("هاتف شركة البائع"),
+  seller_commission: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("عمولة وكيل البائع"),
   buyer_agent: Joi.any().messages(VALIDATION_MESSAGES).label("وكيل المشتري"),
   buyer_agent_license: Joi.any()
     .messages(VALIDATION_MESSAGES)
@@ -194,11 +199,14 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   buyer_company_phone: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("هاتف شركة المشتري"),
+  buyer_commission: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("عمولة وكيل المشتري"),
 });
 
 export const contractFormInitialValues: ContractFormType = {
   contract_file: null,
-  editcontract_file:null,
+  editcontract_file: null,
   mls: null,
   seller_name: null,
   seller_mothor_name: null,
@@ -254,10 +262,12 @@ export const contractFormInitialValues: ContractFormType = {
   seller_agent_broker_license: null,
   seller_company_address: null,
   seller_company_phone: null,
+  seller_commission: null,
   buyer_agent: null,
   buyer_agent_license: null,
   buyer_agent_broker: null,
   buyer_agent_broker_license: null,
   buyer_company_address: null,
   buyer_company_phone: null,
+  buyer_commission: null,
 };

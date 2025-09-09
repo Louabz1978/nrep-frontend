@@ -8,15 +8,13 @@ import {
   ContractFormSchema,
   type ContractFormType,
 } from "@/data/website/schema/contractSchema";
-
-import useGetPropertyByMls from "@/hooks/website/listing/useGetPropertyByMls";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas-pro";
-import { toast } from "sonner";
+import useListingDetails from "@/hooks/website/listing/useListingDetails";
+import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import useAddContract from "@/hooks/website/contract/useAddContract";
 
 function ContractsList() {
   const [disabled1, setDisabled1] = useState(true);
@@ -24,170 +22,108 @@ function ContractsList() {
   const [checkbox1, setCheckBox1] = useState(false);
   const [checkbox2, setCheckBox2] = useState(false);
 
+  const [currentMLS, setCurrentMLS] = useState<TNumber>();
+  const { listingDetails } = useListingDetails(Number(currentMLS));
+  const { allContacts } = useGetAllContacts();
+  const { handleAddContract, isPending: isSubmitting } = useAddContract();
+
+  console.log(allContacts);
+
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
     defaultValues: contractFormInitialValues,
     mode: "onChange",
   });
 
+  const flags = {
+    pool: listingDetails?.additional.pool,
+    ac: listingDetails?.additional.ac,
+    garden: listingDetails?.additional.garden,
+    garage: listingDetails?.additional.garage,
+    jacuzzi: listingDetails?.additional.jacuzzi,
+    solra_system: listingDetails?.additional.solar_system,
+    elevetor: listingDetails?.additional.elevator,
+  };
+
+  // Function to populate form with listing details
+  const populateFormWithListingData = useCallback(() => {
+    if (!listingDetails) return;
+
+    // Seller information
+    form.setValue("seller_name", listingDetails.owner.name);
+    form.setValue(
+      "seller_mothor_name",
+      listingDetails.owner.mother_name_surname
+    );
+    form.setValue("seller_birth_place", listingDetails.owner.place_birth);
+    form.setValue("seller_nation_number", listingDetails.owner.national_number);
+    form.setValue("seller_registry", listingDetails.owner.registry);
+
+    // Property information
+    form.setValue(
+      "building_num",
+      listingDetails.address?.building_num?.toString() || ""
+    );
+    form.setValue("street", listingDetails.address?.street || "");
+    form.setValue("floor", listingDetails.address?.floor || null);
+    form.setValue("apt", Number(listingDetails.address?.apt) || null);
+    form.setValue("area", listingDetails.address?.area || "");
+    form.setValue("city", listingDetails.address?.city || "");
+    form.setValue("country", listingDetails.address?.county || "");
+    form.setValue("legal_description", listingDetails.mls_num || null);
+
+    // Property features
+    if (listingDetails.additional) {
+      form.setValue("elevator", listingDetails.additional.elevator || false);
+      form.setValue("ac", listingDetails.additional.ac || false);
+      form.setValue("garage", listingDetails.additional.garage || false);
+      form.setValue("garden", listingDetails.additional.garden || false);
+      form.setValue("jacuzzi", listingDetails.additional.jacuzzi || false);
+      form.setValue(
+        "solar_system",
+        listingDetails.additional.solar_system || false
+      );
+      form.setValue("pool", listingDetails.additional.pool || false);
+      form.setValue("balconies", listingDetails.additional.balcony || null);
+      form.setValue("fan_number", listingDetails.additional.fan_number || null);
+      form.setValue("water", listingDetails.additional.water || "");
+    }
+
+    // Price information
+    form.setValue("price", listingDetails.price || null);
+
+    // Agent information
+    form.setValue(
+      "sller_agent_name",
+      listingDetails.created_by_user?.first_name +
+        " " +
+        listingDetails.created_by_user?.last_name || ""
+    );
+    form.setValue(
+      "seller_company_address",
+      listingDetails.created_by_user?.address || ""
+    );
+    form.setValue(
+      "seller_company_phone",
+      Number(listingDetails.created_by_user?.phone_number) || null
+    );
+    form.setValue(
+      "seller_commission",
+      listingDetails.property_realtor_commission
+    );
+    form.setValue("buyer_commission", listingDetails.buyer_realtor_commission);
+  }, [listingDetails, form]);
+
   const { handleSubmit } = form;
-  const [currentMLS, setCurrentMLS] = useState<TNumber>();
   const watchMLS = useWatch({ control: form.control, name: "mls" });
   const contractRef = useRef<HTMLDivElement>(null);
 
-  useGetPropertyByMls(currentMLS);
-
-  // Helper function to apply print styles to the CLONED elements only
-  const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
-    // Hide elements with data-print-hidden=true - query from the CLONED element
-    const hiddenElements = clonedElement.querySelectorAll(
-      '[data-print-hidden="true"]'
-    );
-    hiddenElements.forEach((el) => {
-      (el as HTMLElement).style.display = "none";
-    });
-
-    // Show elements with data-print-visible=true - query from the CLONED element
-    const visibleElements = clonedElement.querySelectorAll(
-      '[data-print-visible="true"]'
-    );
-    visibleElements.forEach((el) => {
-      (el as HTMLElement).style.display = "block";
-      (el as HTMLElement).style.position = "static";
-      (el as HTMLElement).style.opacity = "1";
-      (el as HTMLElement).style.pointerEvents = "auto";
-      (el as HTMLElement).style.visibility = "visible";
-      (el as HTMLElement).style.gridColumn = "span 3";
-      (el as HTMLElement).style.textAlign = "center";
-      (el as HTMLElement).style.margin = "15px 0";
-    });
-  };
-
-  const handleDownloadPDF = async () => {
-    if (!contractRef.current) return;
-
-    const toastId = toast.loading("جار تجهيز ملف PDF...", {
-      duration: Infinity,
-    });
-
-    try {
-      document.body.classList.add("printing");
-
-      // 1. Create a container for the content
-      const container = document.createElement("div");
-      container.style.width = "100%";
-      container.style.position = "absolute";
-      container.style.left = "-9999px";
-      container.style.direction = "rtl";
-      container.style.textAlign = "right";
-      container.style.padding = "20px";
-      container.style.fontFamily = "Arial, sans-serif";
-      container.id = "print-container";
-      document.body.appendChild(container);
-
-      // 2. Clone and modify the contract content
-      const contractClone = contractRef.current.cloneNode(true) as HTMLElement;
-
-      // 3. Apply print styles to the CLONED element
-      applyPrintStylesToClone(contractClone);
-
-      // Apply RTL and padding styles to the cloned content
-      contractClone.style.display = "block";
-      contractClone.style.direction = "rtl";
-      contractClone.style.textAlign = "right";
-      contractClone.style.padding = "20px";
-      contractClone.style.margin = "0";
-      contractClone.style.fontFamily = "Arial, sans-serif";
-
-      // Add section header
-      const contractHeader = document.createElement("h2");
-      contractHeader.textContent = "عقد بيع وشراء سكني";
-      contractHeader.style.textAlign = "center";
-      contractHeader.style.marginBottom = "20px";
-      contractHeader.style.fontSize = "18px";
-      contractHeader.style.fontWeight = "bold";
-      contractHeader.style.direction = "rtl";
-
-      // Build the content
-      container.appendChild(contractHeader);
-      container.appendChild(contractClone);
-
-      // 4. Capture as single image
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        windowWidth: 1200,
-        windowHeight: container.scrollHeight,
-        onclone: (clonedDoc, element) => {
-          element.style.display = "block";
-          element.style.direction = "rtl";
-          element.style.textAlign = "right";
-          element.style.padding = "20px";
-          clonedDoc.body.style.overflow = "visible";
-          clonedDoc.body.style.direction = "rtl";
-          clonedDoc.body.style.textAlign = "right";
-
-          // Apply styles to the cloned document as well
-          const clonedContract = clonedDoc.querySelector(
-            '[data-contract-content="contract"]'
-          );
-          if (clonedContract) {
-            applyPrintStylesToClone(clonedContract as HTMLElement);
-            (clonedContract as HTMLElement).style.direction = "rtl";
-            (clonedContract as HTMLElement).style.textAlign = "right";
-            (clonedContract as HTMLElement).style.padding = "20px";
-          }
-        },
-      });
-
-      // 5. Generate PDF
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      const maxHeight = 297;
-      const finalHeight = Math.min(imgHeight, maxHeight);
-
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        0,
-        imgWidth,
-        finalHeight,
-        undefined,
-        "FAST"
-      );
-
-      toast.success("جار تنزيل ملف PDF...", {
-        id: toastId,
-        duration: 2000,
-      });
-      pdf.save("contract.pdf");
-    } catch (error) {
-      toast.error("فشل إنشاء ملف PDF", {
-        id: toastId,
-        description: "حدث خطأ أثناء محاولة إنشاء الملف",
-        duration: 3000,
-      });
-      console.error("Error generating PDF:", error);
-    } finally {
-      document.body.classList.remove("printing");
-      const containers = document.querySelectorAll("#print-container");
-      containers.forEach((container) => container.remove());
+  // Populate form when listingDetails changes
+  useEffect(() => {
+    if (listingDetails) {
+      populateFormWithListingData();
     }
-  };
-
-  // handle submit form
-  const onSubmit = (submitData: ContractFormType) => {
-    console.log(submitData);
-    handleDownloadPDF();
-  };
+  }, [listingDetails, populateFormWithListingData]);
 
   return (
     <PageContainer>
@@ -199,7 +135,6 @@ function ContractsList() {
         <div
           className="w-full flex items-center justify-between gap-xl p-3xl"
           id="contract_form"
-          onSubmit={handleSubmit(onSubmit)}
           data-print-hidden="true"
         >
           <Input
@@ -215,6 +150,7 @@ function ContractsList() {
               e.preventDefault();
               e.stopPropagation();
               setCurrentMLS(watchMLS);
+              // Populate form after setting MLS (will be called when listingDetails updates)
             }}
             className="p-3 bg-primary  rounded-lg cursor-pointer mt-0 ml-3"
           >
@@ -240,6 +176,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="seller_name"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -249,6 +186,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="seller_mothor_name"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -258,6 +196,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="seller_birth_place"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -269,6 +208,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="seller_nation_number"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -278,6 +218,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="seller_registry"
+                disabled={true}
               />
             </div>
           </div>
@@ -298,6 +239,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="buyer_mothor_name"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -307,6 +249,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="buyer_birth_place"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -318,6 +261,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="buyer_nation_number"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -327,6 +271,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="buyer_registry"
+                disabled={true}
               />
             </div>
           </div>
@@ -354,6 +299,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="building_num"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -366,6 +312,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="street"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -375,6 +322,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="floor"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -384,6 +332,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="apt"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -393,6 +342,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="area"
+                disabled={true}
               />
             </div>
           </div>
@@ -406,6 +356,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="city"
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -415,6 +366,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="country"
+                disabled={true}
               />
             </div>
           </div>
@@ -428,6 +380,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="legal_description"
+                disabled={true}
               />
             </div>
           </div>
@@ -458,7 +411,11 @@ function ContractsList() {
           <div className="flex items-center gap-md  text-size18">
             <p className="mb-3xl">العناصر التالية مستثناة من عملية الشراء:</p>
             <span className="font-bold pb-2xl text-size18">
-              المصعد , الكراج , المكيف , جاكوزي , حديقة , طاقة شمسية , مسبح{" "}
+              {flags.elevetor && "المصعد"} {flags.garage && "الكراج،"}{" "}
+              {flags.ac && "المكيف،"} {flags.jacuzzi && "الجاكوزي،"}{" "}
+              {flags.garden && "الحديقة،"}{" "}
+              {flags.solra_system && "الطاقة الشمسية"}{" "}
+              {flags.pool && "، المسبح"}
             </span>
           </div>
           <div>
@@ -477,9 +434,13 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="price"
+                disabled={true}
               />
             </div>
-            <div className="flex items-center gap-lg">
+            <div
+              className="flex items-center gap-lg"
+              data-print-hidden={disabled1 ? "true" : "false"}
+            >
               <input
                 id="checkbox1"
                 checked={!disabled1}
@@ -502,7 +463,10 @@ function ContractsList() {
                 disabled={disabled1}
               />
             </div>
-            <div className="flex items-center gap-lg">
+            <div
+              className="flex items-center gap-lg"
+              data-print-hidden={disabled2 ? "true" : "false"}
+            >
               <input
                 id="checkbox2"
                 checked={!disabled2}
@@ -543,7 +507,10 @@ function ContractsList() {
 
             <div className="flex items-center gap-xl">
               <span className="text-size20 font-bold ">(اختر واحداً):</span>
-              <div className="flex items-center gap-lg">
+              <div
+                className="flex items-center gap-lg"
+                data-print-hidden={!checkbox1 ? "true" : "false"}
+              >
                 <input
                   id="choise1"
                   checked={checkbox1}
@@ -557,7 +524,10 @@ function ContractsList() {
                   شركات المحاماة أو
                 </label>
               </div>
-              <div className="flex items-center gap-lg">
+              <div
+                className="flex items-center gap-lg"
+                data-print-hidden={!checkbox2 ? "true" : "false"}
+              >
                 <input
                   checked={checkbox2}
                   onClick={() => {
@@ -577,8 +547,12 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="days"
+                data-print-hidden={!checkbox2 ? "true" : "false"}
               />
-              <span className="text-size18">
+              <span
+                className="text-size18"
+                data-print-hidden={!checkbox2 ? "true" : "false"}
+              >
                 (إذا ترك فارغاً, يتم اعتبار 3 أيام تلقائياً) من الأيام بعد
                 التاريخ الفعال.
               </span>
@@ -597,6 +571,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="sller_agent_name"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -651,6 +626,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="seller_company_phone"
+                  disabled={true}
                 />
               </div>
             </div>
@@ -664,7 +640,8 @@ function ContractsList() {
                   addingStyle="pb-4"
                   variant="contract"
                   form={form}
-                  name="seller_company_phone"
+                  name="seller_commission"
+                  disabled={true}
                 />
               </div>
             </div>
@@ -746,7 +723,8 @@ function ContractsList() {
                   addingStyle="pb-4"
                   variant="contract"
                   form={form}
-                  name="seller_company_phone"
+                  name="buyer_commission"
+                  disabled={true}
                 />
               </div>
             </div>
@@ -926,9 +904,18 @@ function ContractsList() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center mt-6xl ">
-          <Button className="w-[200px]" onClick={handleSubmit(onSubmit)}>
-            تأكيد
+        <div
+          className="flex items-center justify-center mt-6xl "
+          data-print-hidden="true"
+        >
+          <Button
+            className="w-[200px]"
+            onClick={handleSubmit((data) =>
+              handleAddContract(data, contractRef)
+            )}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "جار الإرسال..." : "تأكيد"}
           </Button>
         </div>
       </div>
