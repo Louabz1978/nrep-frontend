@@ -2,7 +2,6 @@ import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import { Select } from "@/components/global/ui/select";
 import type { TNumber } from "@/data/global/schema";
 import {
   contractFormInitialValues,
@@ -169,8 +168,6 @@ function ContractsList() {
         id: toastId,
         duration: 2000,
       });
-
-      console.log({ pdf });
       pdf.save("contract.pdf");
     } catch (error) {
       toast.error("فشل إنشاء ملف PDF", {

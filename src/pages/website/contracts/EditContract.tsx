@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import { Button } from "@/components/global/form/button/Button";
 import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
 import FileInput from "@/components/global/form/fileInput/FileInput";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import {
-  contractFormInitialValues,
-  ContractFormSchema,
-  type ContractFormType,
-} from "@/data/website/schema/contractSchema";
+  editContractFormInitialValues,
+  EditContractFormSchema,
+  type EditContractFormType,
+} from "@/data/website/schema/editContractSchema";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 
@@ -18,10 +17,9 @@ function EditContract() {
   const [file, setFile] = useState<File | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
 
-
-  const form = useForm<ContractFormType>({
-    resolver: joiResolver(ContractFormSchema),
-    defaultValues: contractFormInitialValues,
+  const form = useForm<EditContractFormType>({
+    resolver: joiResolver(EditContractFormSchema),
+    defaultValues: editContractFormInitialValues,
     mode: "onChange",
   });
 
@@ -34,34 +32,30 @@ function EditContract() {
     setPageNumber(1);
   }
 
-
-
   return (
     <PageContainer>
-      <form
-        id="editcontract_form"
-        className="flex flex-col gap-6xl"
-        onSubmit={form.handleSubmit((data) =>
-          console.log("Form submitted with data:", data)
-        )}
-      >
+      <div>
         {!file && (
-          <div className="flex justify-between gap-6xl mt-12 max-w-[1000px]">
-            <FileInput
-              form={form}
-              name="editcontract_file"
-              label="ادخل ملف العقد في المكان المخصص"
-              placeholder="أدخل ملف العقد"
-              secondaryText="أو اسحب و أسقط الملف هنا"
-              onChange={handleFileChange}
-              required
-            />
+          <div className="flex justify-between gap-12 mt-12 flex-1 max-w-[1100px] wrap">
+            <div>
+              <FileInput
+                form={form}
+                name="contract_file"
+                placeholder="أدخل ملف العقد"
+                secondaryText="أو اسحب و أسقط الملف هنا"
+                onChange={handleFileChange}
+                required
+              />
+            </div>
 
-            <div className="flex flex-col gap-2xl w-[300px]">
-              <label htmlFor="agent" className="font-semibold">
+            <div className="flex flex-col gap-2xl w-[400px]">
+              <label htmlFor="agent_id" className="font-semibold text-gray-700">
                 الوكيل العقاري
               </label>
-              <select id="agent" className="border rounded-lg p-3">
+              <select
+                id="agent_id"
+                className="border border-gray-300 rounded-lg p-3 w-full h-12 bg-white text-gray-700 focus:border-blue-500 focus:outline-none"
+              >
                 <option value="">اختر الوكيل</option>
                 <option value="1">وكيل 1</option>
                 <option value="2">وكيل 2</option>
@@ -72,8 +66,8 @@ function EditContract() {
 
         {file && (
           <>
-            <div className="flex justify-between gap-8 mt-12">
-              <div className="w-[500px]">
+            <div className="flex justify-between   mt-12 max-w-[1400px] ">
+              <div className="flex flex-col items-center gap-4xl">
                 <div className="w-[200px] flex flex-col gap-4xl text-center relative mb-3">
                   <SignatureInput
                     form={form}
@@ -81,15 +75,14 @@ function EditContract() {
                     label="البائع"
                   />
                 </div>
-                <span className="max-w-[350px] text-center">
+                <span className="max-w-[400px] text-center">
                   ضع توقيعك ثم اسحبه للمكان المخصص اسفل الصفحة
                 </span>
               </div>
-
               <div
-                className="rounded-lg overflow-hidden border-2 border-black border-dashed cursor-pointer w-[300px]"
+                className="rounded-lg overflow-hidden border-2  border-dashed cursor-pointer w-[304px] h-[304px] "
                 onClick={() => {
-                  const inputEl = document.getElementById("file-editcontract_file") as HTMLInputElement | null;
+                  const inputEl = document.getElementById("file-contract_file") as HTMLInputElement | null;
                   inputEl?.click();
                 }}
               >
@@ -98,56 +91,51 @@ function EditContract() {
                   onLoadSuccess={onDocumentLoadSuccess}
                   loading={<p>جاري تحميل الملف...</p>}
                 >
-                  <Page pageNumber={1} width={300} />
+                  <Page pageNumber={1} width={600} />
                 </Document>
               </div>
-            </div>
 
-            <div
-              className="mt-8 rounded-lg mx-auto w-full h-[100vh]"
-            >
+
+            </div>
+            <p className="text-center m-12 ">تمت الموافقة على هذا النموذج من قبل رابطة السماسرة العقاريين</p>
+
+            <div >
               <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
-                loading={<p>جاري تحميل الملف...</p>}
-                className="mx-auto w-full h-full"
+                loading={<p className="text-center mt-20">جاري تحميل الملف...</p>}
               >
                 <Page
                   pageNumber={pageNumber}
-                  className="w-full h-full flex justify-center"
+                  width={1000}
+                  height={1000}
                 />
               </Document>
             </div>
           </>
         )}
+
         <div className="hidden">
           <FileInput
-           form={form}
-           name="editcontract_file"
-           onChange={handleFileChange}
+            form={form}
+            name="contract_file"
+            onChange={handleFileChange}
           />
         </div>
-
-        <div className="flex justify-end pt-4xl">
-          <Button
-            type="submit"
-            id="editcontract_form_submit"
-            className="px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            حفظ التعديلات
-          </Button>
-        </div>
-      </form>
+      </div>
 
       <style>{`
         .react-pdf__Page__canvas {
           width: 100% !important;
           height: 100% !important;
+          max-width: 100% !important;
+          max-height: 100% !important;
         }
         .react-pdf__Page__textContent,
         .react-pdf__Page__annotations {
           display: none;
         }
+        
       `}</style>
     </PageContainer>
   );

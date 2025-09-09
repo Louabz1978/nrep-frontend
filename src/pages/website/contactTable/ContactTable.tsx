@@ -174,26 +174,54 @@ function ContactTable() {
         enableSorting: false,
       },
     ],
-    [handleDeleteContact, deleteContact]
+    [handleDeleteContact, deleteContact, hasPermissions]
   );
 
   // filter config
   const filter: Filters = useMemo(
     () => [
-      // {
-      //   id: "1",
-      //   type: "text",
-      //   label: "الاسم",
-      //   title: "الاسم",
-      //   searchKey: "name",
-      // },
-      // {
-      //   id: "2",
-      //   type: "number",
-      //   label: "الرقم الوطني",
-      //   title: "الرقم الوطني",
-      //   searchKey: "national_number",
-      // },
+      {
+        id: "1",
+        type: "text",
+        label: "الاسم",
+        title: "الاسم",
+        searchKey: "name",
+      },
+      {
+        id: "2",
+        type: "text",
+        label: "النسبة",
+        title: "النسبة",
+        searchKey: "surname",
+      },
+      {
+        id: "3",
+        type: "text",
+        label: "اسم الأب",
+        title: "اسم الأب",
+        searchKey: "father_name",
+      },
+      {
+        id: "4",
+        type: "text",
+        label: "رقم الهاتف",
+        title: "رقم الهاتف",
+        searchKey: "phone_number",
+      },
+      {
+        id: "5",
+        type: "text",
+        label: "البريد الإلكتروني",
+        title: "البريد الإلكتروني",
+        searchKey: "email",
+      },
+      {
+        id: "6",
+        type: "number",
+        label: "الرقم الوطني",
+        title: "الرقم الوطني",
+        searchKey: "national_number",
+      },
     ],
     []
   );
@@ -213,6 +241,9 @@ function ContactTable() {
           totalPageCount={totalPages}
           to="/contact/add"
           show={true}
+          searchKey="name"
+          searchPlaceholder="البحث عن طريق الاسم..."
+          searchType="text"
         />
       </PageContainer>
     </AnimateContainer>

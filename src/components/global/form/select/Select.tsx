@@ -41,6 +41,7 @@ interface SelectProps<T extends FieldValues> {
   addingStyle?: string;
   addingInputStyle?: string;
   addingSelectStyle?: string;
+  variant?: "default" | "contract";
   customTrigger?: ({
     setIsOpen,
     isOpen,
@@ -80,6 +81,7 @@ function Select<T extends FieldValues>({
   addingStyle = "",
   addingInputStyle = "",
   addingSelectStyle = "",
+  variant = "default",
   addingElement = () => null,
   choiceElement = () => null,
   multiple = false,
@@ -283,13 +285,25 @@ function Select<T extends FieldValues>({
           ) : (
             <button
               type="button"
-              className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto h-5xl text-size16 ${
-                isDisabled ? "bg-transparent" : "bg-input-bg"
-              } px-lg border-[1.5px] text-primary-fg rounded-lg outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+              className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto ${
+                variant === "contract" ? "h-12 max-w-[200px]" : "h-5xl"
+              } text-size16 ${
+                isDisabled ? "bg-transparent" : variant === "contract" ? "bg-transparent" : "bg-input-bg"
+              } ${
+                variant === "contract" ? "px-0" : "px-lg"
+              } ${
+                variant === "contract" ? "border-0 border-b " : "border-[1.5px]"
+              } text-primary-fg ${
+                variant === "contract" ? "rounded-none" : "rounded-lg"
+              } outline-none ${
+                variant === "contract" ? "focus-visible:border-b-2 focus-visible:border-blue-500" : "focus-visible:border-[3px]"
+              } focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                 isDisabled
                   ? "border-placeholder !cursor-not-allowed"
                   : getError(errors, name)
                   ? "border-error"
+                  : variant === "contract"
+                  ? `border-b `
                   : `border-secondary-border ${
                       isValid(form)
                         ? "focus-visible:border-success"
@@ -418,27 +432,29 @@ function Select<T extends FieldValues>({
                 : "h-0 overflow-hidden"
             } transition-all flex flex-col gap-xs px-xs shadow-md `}
           >
-            <div className="bg-tertiary-bg/65 backdrop-blur-[15px] pt-md z-[2] sticky top-0">
-              <input
-                type="text"
-                id={`select_${name}_search_${formId}`}
-                // autoFocus={true}
-                className="w-full text-size16 outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-sm px-lg border-solid border border-border text-primary-fg/90 rounded-sm"
-                placeholder="بحث..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                }}
-                autoComplete={"off"}
-                onKeyDown={(e) => {
-                  if (e.key == "ArrowDown") {
-                    e.preventDefault();
-                  } else if (e.key == "ArrowUp") {
-                    e.preventDefault();
-                  }
-                }}
-              />
-            </div>
+            {variant !== "contract" && (
+              <div className="bg-tertiary-bg/65 backdrop-blur-[15px] pt-md z-[2] sticky top-0">
+                <input
+                  type="text"
+                  id={`select_${name}_search_${formId}`}
+                  // autoFocus={true}
+                  className="w-full text-size16 outline-none focus:outline-none focus-visible:outline-none bg-tertiary-bg backdrop-blur-[15px] py-sm px-lg border-solid border border-border text-primary-fg/90 rounded-sm"
+                  placeholder="بحث..."
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                  }}
+                  autoComplete={"off"}
+                  onKeyDown={(e) => {
+                    if (e.key == "ArrowDown") {
+                      e.preventDefault();
+                    } else if (e.key == "ArrowUp") {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+              </div>
+            )}
 
             <div className="h-full overflow-auto  text-size16 flex flex-col gap-md">
               {isError ? (
@@ -476,6 +492,7 @@ function Select<T extends FieldValues>({
                       : finalChoice == watch(name);
 
                     if (
+                      variant === "contract" ||
                       !searchTerm ||
                       (!showValue &&
                         (finalChoice as string)?.includes(searchTerm)) ||
@@ -497,13 +514,13 @@ function Select<T extends FieldValues>({
                                 key
                               );
                           }}
-                          className={`py-md px-lg flex items-center cursor-pointer group relative ${
+                          className={`py-md px-lg flex  items-center cursor-pointer group relative ${
                             focusedChoose == key
-                              ? "border-solid border border-primary"
+                              ? variant ? "border border-gray-300":"border-solid border border-primary"
                               : "border-solid border border-transparent"
                           } ${
                             isChoosen
-                              ? "bg-secondary/50 rounded-md text-primary-fg"
+                              ? variant ? "bg-[#A3D3F5]":"bg-secondary/50 rounded-md text-primary-fg"
                               : "hover:bg-secondary/20 rounded-md text-primary-fg/80"
                           } transition-all duration-[0.1s]`}
                           id={`option_${name}_${key}_${formId}`}
