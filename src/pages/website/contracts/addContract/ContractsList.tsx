@@ -66,7 +66,7 @@ function ContractsList() {
     <button
       data-print-hidden={true}
       type="button"
-      className="flex items-center justify-center w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-full"
+      className="flex items-center justify-center w-8 h-8 bg-blue-500 hover:bg-blue-600 cursor-pointer text-white rounded-full"
       onClick={onClick}
     >
       <FaPlus className="text-sm" />

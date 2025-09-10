@@ -137,7 +137,6 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
             />
             <Input
               form={form}
-              type="number"
               label="الرقم الوطني"
               placeholder="أدخل الرقم الوطني"
               name="national_number"
