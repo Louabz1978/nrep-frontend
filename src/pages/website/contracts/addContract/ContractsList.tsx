@@ -20,6 +20,7 @@ import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import type { ContactWithUser } from "@/types/website/contact";
 import useAddContract from "@/hooks/website/contract/useAddContract";
 import Select from "@/components/global/form/select/Select";
+import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
 
 function ContractsList() {
   const [disabled1, setDisabled1] = useState(true);
@@ -384,12 +385,8 @@ function ContractsList() {
                     disabled={true}
                   />
                 </div>
-                {controlledSellers.length > 1 && (
-                  <RemoveButton onClick={() => sellers.remove(index)} />
-                )}
               </div>
             ))}
-            <AddButton onClick={() => sellers.append(sellerInitialValues)} />
           </div>
           {/* Dynamic Buyers Section */}
           <div className="flex items-center flex-wrap gap-3xl pt-3xl">
@@ -1101,26 +1098,147 @@ function ContractsList() {
           </div>
           <div className="mt-3xl">
             <FormSectionHeader>التواقيع</FormSectionHeader>
-            <div className="flex items-center justify-around mt-3xl">
+
+            {/* <div className="flex flex-col gap-[40px] items-center justify-center mt-3xl">
               <div className="flex flex-col items-center">
                 <span className="text-center mb-lg text-size18">البائع</span>
-                <div className="w-[150px] h-[100px] border-2 border-tertiary-border flex items-center justify-center mb-2"></div>
+                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                  {controlledSellers?.map((item) => {
+                    return (
+                      <div
+                        key={item?.id}
+                        className="flex items-center gap-[4px]"
+                      >
+                        {item?.seller_name ? (
+                          <span className="text-center mb-lg text-size18">
+                            {`${item?.seller_name}`}:
+                          </span>
+                        ) : null}
+                        <SignatureInput form={form} name="agent_signature" />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-center mb-lg text-size18">
                   وكيل البائع
                 </span>
-                <div className="w-[150px] h-[100px] border-2 border-tertiary-border flex items-center justify-center mb-2"></div>
+                <div className="flex items-center gap-[4px]">
+                  {form.watch("sller_agent_name") ? (
+                    <span className="text-center mb-lg text-size18">
+                      {`${form.watch("sller_agent_name")}`}:
+                    </span>
+                  ) : null}
+                  <SignatureInput form={form} name="agent_signature" />
+                </div>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-center mb-lg text-size18">المشتري</span>
-                <div className="w-[150px] h-[100px] border-2 border-tertiary-border flex items-center justify-center mb-2"></div>
+                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                  {controlledBuyers?.map((item) => {
+                    return (
+                      <div
+                        key={item?.id}
+                        className="flex items-center gap-[4px]"
+                      >
+                        {item?.buyer_name?.value ? (
+                          <span className="text-center mb-lg text-size18">
+                            {item?.buyer_name?.value}:
+                          </span>
+                        ) : null}
+                        <SignatureInput form={form} name="agent_signature" />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-center mb-lg text-size18">
                   وكيل المشتري
                 </span>
-                <div className="w-[150px] h-[100px] border-2 border-tertiary-border flex items-center justify-center mb-2"></div>
+                <div className="flex items-center gap-[4px]">
+                  {form.watch("buyer_agent") ? (
+                    <span className="text-center mb-lg text-size18">
+                      {`${form.watch("buyer_agent")}`}:
+                    </span>
+                  ) : null}
+                  <SignatureInput form={form} name="agent_signature" />
+                </div>
+              </div>
+            </div> */}
+
+            {/* remove comment */}
+            <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
+              <div className="flex gap-[30px] items-start">
+                <span className=" mb-lg text-size18 w-[130px] text-start">
+                  البائع:
+                </span>
+                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                  {controlledSellers?.map((item) => {
+                    return (
+                      <div
+                        key={item?.id}
+                        className="flex flex-col items-center gap-[4px]"
+                      >
+                        {item?.seller_name ? (
+                          <span className="text-center mb-lg text-size18">
+                            {`${item?.seller_name}`}
+                          </span>
+                        ) : null}
+                        <SignatureInput form={form} name="agent_signature" />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex gap-[30px] items-start">
+                <span className="mb-lg text-size18 w-[130px] text-start">
+                  وكيل البائع:
+                </span>
+                <div className="flex flex-col items-center gap-[4px]">
+                  {form.watch("sller_agent_name") ? (
+                    <span className="text-center mb-lg text-size18">
+                      {`${form.watch("sller_agent_name")}`}
+                    </span>
+                  ) : null}
+                  <SignatureInput form={form} name="agent_signature" />
+                </div>
+              </div>
+              <div className="flex gap-[30px] items-start">
+                <span className="mb-lg text-size18 w-[130px] text-start">
+                  المشتري:
+                </span>
+                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                  {controlledBuyers?.map((item) => {
+                    return (
+                      <div
+                        key={item?.id}
+                        className="flex flex-col items-center gap-[4px]"
+                      >
+                        {item?.buyer_name?.value ? (
+                          <span className="text-center mb-lg text-size18">
+                            {item?.buyer_name?.value}
+                          </span>
+                        ) : null}
+                        <SignatureInput form={form} name="agent_signature" />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex gap-[30px] items-start">
+                <span className="mb-lg text-size18 w-[130px] text-start">
+                  وكيل المشتري:
+                </span>
+                <div className="flex flex-col items-center gap-[4px]">
+                  {form.watch("buyer_agent") ? (
+                    <span className="text-center mb-lg text-size18">
+                      {`${form.watch("buyer_agent")}`}
+                    </span>
+                  ) : null}
+                  <SignatureInput form={form} name="agent_signature" />
+                </div>
               </div>
             </div>
           </div>

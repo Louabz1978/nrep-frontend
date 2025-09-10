@@ -12,6 +12,10 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { FaHand } from "react-icons/fa6";
+import { Button } from "@/components/global/form/button/Button";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas-pro";
+import { toast } from "sonner";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -36,6 +40,160 @@ function EditContract() {
 
   const constraintsRef = useRef(null);
   const [enableDrag, setEnableDrag] = useState(true);
+
+  const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
+    // Hide elements with data-print-hidden=true - query from the CLONED element
+    const hiddenElements = clonedElement.querySelectorAll(
+      '[data-print-hidden="true"]'
+    );
+    hiddenElements.forEach((el) => {
+      (el as HTMLElement).style.display = "none";
+    });
+
+    // Show elements with data-print-visible=true - query from the CLONED element
+    const visibleElements = clonedElement.querySelectorAll(
+      '[data-print-visible="true"]'
+    );
+    visibleElements.forEach((el) => {
+      (el as HTMLElement).style.display = "block";
+      (el as HTMLElement).style.position = "static";
+      (el as HTMLElement).style.opacity = "1";
+      (el as HTMLElement).style.pointerEvents = "auto";
+      (el as HTMLElement).style.visibility = "visible";
+      (el as HTMLElement).style.gridColumn = "span 3";
+      (el as HTMLElement).style.textAlign = "center";
+      (el as HTMLElement).style.margin = "15px 0";
+    });
+  };
+
+  const generatePDFBlob = async (
+    contractRef: React.RefObject<HTMLDivElement | null>
+  ): Promise<Blob> => {
+    if (!contractRef.current) {
+      throw new Error("Contract reference not found");
+    }
+
+    document.body.classList.add("printing");
+
+    try {
+      // 1. Create a container for the content
+      const container = document.createElement("div");
+      container.style.width = "100%";
+      container.style.position = "absolute";
+      container.style.left = "-9999px";
+      container.style.direction = "rtl";
+      container.style.textAlign = "right";
+      container.style.padding = "20px";
+      container.style.fontFamily = "Arial, sans-serif";
+      container.id = "print-container";
+      document.body.appendChild(container);
+
+      // 2. Clone and modify the contract content
+      const contractClone = contractRef.current.cloneNode(true) as HTMLElement;
+
+      // 3. Apply print styles to the CLONED element
+      applyPrintStylesToClone(contractClone);
+
+      // Apply RTL and padding styles to the cloned content
+      contractClone.style.display = "block";
+      contractClone.style.direction = "rtl";
+      contractClone.style.textAlign = "right";
+      contractClone.style.padding = "20px";
+      contractClone.style.margin = "0";
+      contractClone.style.fontFamily = "Arial, sans-serif";
+
+      // Add section header
+      const contractHeader = document.createElement("h2");
+      contractHeader.textContent = "عقد بيع وشراء سكني";
+      contractHeader.style.textAlign = "center";
+      contractHeader.style.marginBottom = "20px";
+      contractHeader.style.fontSize = "18px";
+      contractHeader.style.fontWeight = "bold";
+      contractHeader.style.direction = "rtl";
+
+      // Build the content
+      container.appendChild(contractHeader);
+      container.appendChild(contractClone);
+
+      // 4. Capture as single image
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: 1200,
+        windowHeight: container.scrollHeight,
+        onclone: (clonedDoc, element) => {
+          element.style.display = "block";
+          element.style.direction = "rtl";
+          element.style.textAlign = "right";
+          element.style.padding = "20px";
+          clonedDoc.body.style.overflow = "visible";
+          clonedDoc.body.style.direction = "rtl";
+          clonedDoc.body.style.textAlign = "right";
+
+          // Apply styles to the cloned document as well
+          const clonedContract = clonedDoc.querySelector(
+            '[data-contract-content="contract"]'
+          );
+          if (clonedContract) {
+            applyPrintStylesToClone(clonedContract as HTMLElement);
+            (clonedContract as HTMLElement).style.direction = "rtl";
+            (clonedContract as HTMLElement).style.textAlign = "right";
+            (clonedContract as HTMLElement).style.padding = "20px";
+          }
+        },
+      });
+
+      // 5. Generate PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/png");
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      const maxHeight = 297;
+      const finalHeight = Math.min(imgHeight, maxHeight);
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        imgWidth,
+        finalHeight,
+        undefined,
+        "FAST"
+      );
+
+      // Convert PDF to blob
+      const pdfBlob = pdf.output("blob");
+      return pdfBlob;
+    } finally {
+      document.body.classList.remove("printing");
+      const containers = document.querySelectorAll("#print-container");
+      containers.forEach((container) => container.remove());
+    }
+  };
+
+  const handleSubmit = () => {
+    const toastId = toast.loading("جار إنشاء العقد وإرساله...", {
+      duration: Infinity,
+    });
+    try {
+      generatePDFBlob(contractRef);
+    } catch (error) {
+      toast.error("فشل في إنشاء ملف PDF", {
+        id: toastId,
+        description: "حدث خطأ أثناء إنشاء ملف PDF",
+        duration: 3000,
+      });
+      console.error("Error generating PDF:", error);
+    }
+  };
+
+  const contractRef = useRef(null);
 
   return (
     <PageContainer>
@@ -132,7 +290,7 @@ function EditContract() {
               تمت الموافقة على هذا النموذج من قبل رابطة السماسرة العقاريين
             </p>
 
-            <div>
+            <div ref={contractRef}>
               <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
@@ -140,8 +298,20 @@ function EditContract() {
                   <p className="text-center mt-20">جاري تحميل الملف...</p>
                 }
               >
-                <Page pageNumber={pageNumber} width={1000} height={1000} />
+                <Page pageNumber={pageNumber} width={1000} height={1400} />
               </Document>
+            </div>
+
+            <div className="flex items-center justify-center mt-[30px]">
+              <Button
+                className="!px-[40px]"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
+                إرسال
+              </Button>
             </div>
           </>
         )}
