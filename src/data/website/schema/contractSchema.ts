@@ -2,8 +2,29 @@ import type { TNumber, TOption, TString } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
+export type SellerType = {
+  id?: string;
+  seller_name: TString;
+  seller_mothor_name: TString;
+  seller_birth_place: TString;
+  seller_nation_number: TNumber;
+  seller_registry: TString;
+};
+
+export type BuyerType = {
+  id?: string;
+  buyer_name: TOption;
+  buyer_mothor_name: TString;
+  buyer_birth_place: TString;
+  buyer_nation_number: TNumber;
+  buyer_registry: TString;
+};
+
 export type ContractFormType = {
   mls: TNumber;
+  sellers: SellerType[];
+  buyers: BuyerType[];
+  // Keep original fields for backward compatibility
   seller_name: TString;
   seller_mothor_name: TString;
   seller_birth_place: TString;
@@ -70,10 +91,54 @@ export type ContractFormType = {
   editcontract_file: File | null;
 };
 
+const SellerSchema = Joi.object<SellerType>({
+  id: Joi.string().optional(),
+  seller_name: Joi.any().messages(VALIDATION_MESSAGES).label("البائع"),
+  seller_mothor_name: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم والدة البائع"),
+  seller_birth_place: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("مكان ولادة البائع"),
+  seller_nation_number: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("الرقم الوطني للبائع"),
+  seller_registry: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم قيد البائع"),
+});
+
+const BuyerSchema = Joi.object<BuyerType>({
+  id: Joi.string().optional(),
+  buyer_name: Joi.any().messages(VALIDATION_MESSAGES).label("المشتري"),
+  buyer_mothor_name: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم والدة المشتري"),
+  buyer_birth_place: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("مكان ولادة المشتري"),
+  buyer_nation_number: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("الرقم الوطني للمشتري"),
+  buyer_registry: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("رقم قيد المشتري"),
+});
+
 export const ContractFormSchema = Joi.object<ContractFormType>({
   contract_file: Joi.any().messages(VALIDATION_MESSAGES).label("ملف العقد"),
-  editcontract_file: Joi.any().messages(VALIDATION_MESSAGES).label("تعديل ملف العقد"),
+  editcontract_file: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("تعديل ملف العقد"),
   mls: Joi.number().messages(VALIDATION_MESSAGES).label("mls"),
+  sellers: Joi.array()
+    .items(SellerSchema)
+    .messages(VALIDATION_MESSAGES)
+    .label("البائعون"),
+  buyers: Joi.array()
+    .items(BuyerSchema)
+    .messages(VALIDATION_MESSAGES)
+    .label("المشترون"),
   seller_name: Joi.any().messages(VALIDATION_MESSAGES).label("البائع"),
   seller_mothor_name: Joi.any()
     .messages(VALIDATION_MESSAGES)
@@ -204,10 +269,31 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
     .label("عمولة وكيل المشتري"),
 });
 
+export const sellerInitialValues: SellerType = {
+  id: undefined,
+  seller_name: null,
+  seller_mothor_name: null,
+  seller_birth_place: null,
+  seller_nation_number: null,
+  seller_registry: null,
+};
+
+export const buyerInitialValues: BuyerType = {
+  id: undefined,
+  buyer_name: null,
+  buyer_mothor_name: null,
+  buyer_birth_place: null,
+  buyer_nation_number: null,
+  buyer_registry: null,
+};
+
 export const contractFormInitialValues: ContractFormType = {
   contract_file: null,
   editcontract_file: null,
   mls: null,
+  sellers: [sellerInitialValues],
+  buyers: [buyerInitialValues],
+  // Keep original fields for backward compatibility
   seller_name: null,
   seller_mothor_name: null,
   seller_birth_place: null,
