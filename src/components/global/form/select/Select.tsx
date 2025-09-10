@@ -288,15 +288,21 @@ function Select<T extends FieldValues>({
               className={`cursor-pointer flex items-center gap-[8px] flex-1 overflow-auto ${
                 variant === "contract" ? "h-12 max-w-[200px]" : "h-5xl"
               } text-size16 ${
-                isDisabled ? "bg-transparent" : variant === "contract" ? "bg-transparent" : "bg-input-bg"
-              } ${
-                variant === "contract" ? "px-0" : "px-lg"
-              } ${
+                isDisabled
+                  ? "bg-transparent"
+                  : variant === "contract"
+                  ? "bg-transparent"
+                  : "bg-input-bg"
+              } ${variant === "contract" ? "px-0" : "px-lg"} ${
                 variant === "contract" ? "border-0 border-b " : "border-[1.5px]"
               } text-primary-fg ${
-                variant === "contract" ? "rounded-none" : "rounded-lg"
+                variant === "contract"
+                  ? "rounded-none min-w-[150px] !h-[32px]"
+                  : "rounded-lg"
               } outline-none ${
-                variant === "contract" ? "focus-visible:border-b-2 focus-visible:border-blue-500" : "focus-visible:border-[3px]"
+                variant === "contract"
+                  ? "focus-visible:border-b-2 focus-visible:border-blue-500"
+                  : "focus-visible:border-[3px]"
               } focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
                 isDisabled
                   ? "border-placeholder !cursor-not-allowed"
@@ -516,11 +522,15 @@ function Select<T extends FieldValues>({
                           }}
                           className={`py-md px-lg flex  items-center cursor-pointer group relative ${
                             focusedChoose == key
-                              ? variant ? "border border-gray-300":"border-solid border border-primary"
+                              ? variant
+                                ? "border border-gray-300"
+                                : "border-solid border border-primary"
                               : "border-solid border border-transparent"
                           } ${
                             isChoosen
-                              ? variant ? "bg-[#A3D3F5]":"bg-secondary/50 rounded-md text-primary-fg"
+                              ? variant
+                                ? "bg-[#A3D3F5]"
+                                : "bg-secondary/50 rounded-md text-primary-fg"
                               : "hover:bg-secondary/20 rounded-md text-primary-fg/80"
                           } transition-all duration-[0.1s]`}
                           id={`option_${name}_${key}_${formId}`}

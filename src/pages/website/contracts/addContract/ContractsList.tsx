@@ -33,8 +33,9 @@ function ContractsList() {
   const { handleAddContract, isPending: isSubmitting } = useAddContract();
 
   const contacts =
-    allContacts?.map((contact: ContactWithUser) => ({ value: contact.name })) ||
-    [];
+    allContacts?.map((contact: ContactWithUser) => ({
+      value: contact?.name,
+    })) || [];
   console.log(contacts);
 
   const form = useForm<ContractFormType>({
@@ -62,6 +63,7 @@ function ContractsList() {
   // Add/Remove button components
   const AddButton = ({ onClick }: { onClick: () => void }) => (
     <button
+      data-print-hidden={true}
       type="button"
       className="flex items-center justify-center w-8 h-8 bg-green-500 hover:bg-green-600 text-white rounded-full"
       onClick={onClick}
@@ -72,6 +74,7 @@ function ContractsList() {
 
   const RemoveButton = ({ onClick }: { onClick: () => void }) => (
     <button
+      data-print-hidden={true}
       type="button"
       className="flex items-center justify-center w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full"
       onClick={onClick}
@@ -97,31 +100,31 @@ function ContractsList() {
     // Seller information - populate the first seller in the array
     const sellerData = {
       id: `seller-${Date.now()}`,
-      seller_name: (listingDetails.owner as any).name,
-      seller_mothor_name: (listingDetails.owner as any).mother_name_surname,
-      seller_birth_place: (listingDetails.owner as any).place_birth,
-      seller_nation_number: (listingDetails.owner as any).national_number,
-      seller_registry: (listingDetails.owner as any).registry,
+      seller_name: (listingDetails.owner as any)?.name,
+      seller_mothor_name: (listingDetails.owner as any)?.mother_name_surname,
+      seller_birth_place: (listingDetails.owner as any)?.place_birth,
+      seller_nation_number: (listingDetails.owner as any)?.national_number,
+      seller_registry: (listingDetails.owner as any)?.registry,
     };
 
     // Set the first seller in the array
     form.setValue("sellers.0", sellerData);
 
     // Keep backward compatibility with original fields
-    form.setValue("seller_name", (listingDetails.owner as any).name);
+    form.setValue("seller_name", (listingDetails.owner as any)?.name);
     form.setValue(
       "seller_mothor_name",
-      (listingDetails.owner as any).mother_name_surname
+      (listingDetails.owner as any)?.mother_name_surname
     );
     form.setValue(
       "seller_birth_place",
-      (listingDetails.owner as any).place_birth
+      (listingDetails.owner as any)?.place_birth
     );
     form.setValue(
       "seller_nation_number",
-      (listingDetails.owner as any).national_number
+      (listingDetails.owner as any)?.national_number
     );
-    form.setValue("seller_registry", (listingDetails.owner as any).registry);
+    form.setValue("seller_registry", (listingDetails.owner as any)?.registry);
 
     // Property information
     form.setValue(

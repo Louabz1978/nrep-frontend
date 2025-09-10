@@ -1,6 +1,11 @@
 import { useRef } from "react";
 import SignatureCanvas from "react-signature-canvas";
-import { Controller, type FieldValues, type Path, type UseFormReturn } from "react-hook-form";
+import {
+  Controller,
+  type FieldValues,
+  type Path,
+  type UseFormReturn,
+} from "react-hook-form";
 
 interface SignatureInputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -16,8 +21,6 @@ function SignatureInput<T extends FieldValues>({
   required,
 }: SignatureInputProps<T>) {
   const sigRef = useRef<SignatureCanvas>(null);
-
-
 
   return (
     <div className="flex flex-col gap-2">
@@ -38,8 +41,7 @@ function SignatureInput<T extends FieldValues>({
               penColor="black"
               backgroundColor="white"
               canvasProps={{
-                className:
-                  "sigCanvas border  w-full h-[200px]",
+                className: "sigCanvas border  w-full h-[100px] ",
               }}
               onEnd={() => {
                 if (sigRef.current?.isEmpty()) {
@@ -50,8 +52,6 @@ function SignatureInput<T extends FieldValues>({
                 }
               }}
             />
-
-          
           </>
         )}
       />

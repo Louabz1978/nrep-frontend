@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
 import FileInput from "@/components/global/form/fileInput/FileInput";
@@ -10,6 +10,8 @@ import {
 } from "@/data/website/schema/editContractSchema";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
+import { FaHand } from "react-icons/fa6";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -32,9 +34,12 @@ function EditContract() {
     setPageNumber(1);
   }
 
+  const constraintsRef = useRef(null);
+  const [enableDrag, setEnableDrag] = useState(true);
+
   return (
     <PageContainer>
-      <div>
+      <div className="relative">
         {!file && (
           <div className="flex justify-between gap-12 mt-12 flex-1 max-w-[1100px] wrap">
             <div>
@@ -68,13 +73,39 @@ function EditContract() {
           <>
             <div className="flex justify-between   mt-12 max-w-[1400px] ">
               <div className="flex flex-col items-center gap-4xl">
-                <div className="w-[200px] flex flex-col gap-4xl text-center relative mb-3">
-                  <SignatureInput
-                    form={form}
-                    name="agent_signature"
-                    label="البائع"
-                  />
+                <div className="text-size18 font-medium text-primary-fg">
+                  البائع
                 </div>
+                <motion.div
+                  ref={constraintsRef}
+                  className={`
+           absolute top-0 right-0 w-full z-[26] h-full min-h-[2500px]
+         pointer-events-none`}
+                >
+                  <motion.div
+                    drag={enableDrag}
+                    dragConstraints={constraintsRef}
+                    dragMomentum={false}
+                    className="w-[200px] !h-[100px] top-[130px] right-[85px] flex flex-col gap-4xl text-center relative mb-3 pointer-events-auto group"
+                  >
+                    <div
+                      className={`${
+                        enableDrag ? "pointer-events-none" : ""
+                      } relative`}
+                    >
+                      <SignatureInput form={form} name="agent_signature" />
+                      <FaHand
+                        className={` ${
+                          enableDrag
+                            ? "text-opacity-80 text-primary hover:text-opacity-30"
+                            : "text-opacity-30 text-primary-fg hover:text-opacity-80"
+                        } text-size14 cursor-pointer transition-all !pointer-events-auto absolute top-[4px] right-[4px] opacity-0 group-hover:opacity-100`}
+                        onClick={() => setEnableDrag((prev) => !prev)}
+                      />
+                    </div>
+                  </motion.div>
+                </motion.div>
+                <div className="w-[200px] h-[200px]"></div>
                 <span className="max-w-[400px] text-center">
                   ضع توقيعك ثم اسحبه للمكان المخصص اسفل الصفحة
                 </span>
@@ -82,7 +113,9 @@ function EditContract() {
               <div
                 className="rounded-lg overflow-hidden border-2  border-dashed cursor-pointer w-[304px] h-[304px] "
                 onClick={() => {
-                  const inputEl = document.getElementById("file-contract_file") as HTMLInputElement | null;
+                  const inputEl = document.getElementById(
+                    "file-contract_file"
+                  ) as HTMLInputElement | null;
                   inputEl?.click();
                 }}
               >
@@ -94,22 +127,20 @@ function EditContract() {
                   <Page pageNumber={1} width={600} />
                 </Document>
               </div>
-
-
             </div>
-            <p className="text-center m-12 ">تمت الموافقة على هذا النموذج من قبل رابطة السماسرة العقاريين</p>
+            <p className="text-center m-12 ">
+              تمت الموافقة على هذا النموذج من قبل رابطة السماسرة العقاريين
+            </p>
 
-            <div >
+            <div>
               <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
-                loading={<p className="text-center mt-20">جاري تحميل الملف...</p>}
+                loading={
+                  <p className="text-center mt-20">جاري تحميل الملف...</p>
+                }
               >
-                <Page
-                  pageNumber={pageNumber}
-                  width={1000}
-                  height={1000}
-                />
+                <Page pageNumber={pageNumber} width={1000} height={1000} />
               </Document>
             </div>
           </>
