@@ -3,7 +3,7 @@ import axiosClient from "@/libs/axios/axios-client";
 async function getArea({
   queryParams,
 }: { queryParams?: Record<string, string> } = {}) {
-  const res = await axiosClient.get(`property/areas`, {
+  const res = await axiosClient.get(`areas/areas`, {
     params: queryParams,
   });
   return res?.data?.data;

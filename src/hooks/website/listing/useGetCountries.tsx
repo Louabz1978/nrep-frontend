@@ -21,7 +21,7 @@ function useGetCountries({ search = "", perPage = 20 } = {}) {
     ],
     queryFn: () => getCountries({ queryParams: queryParams }),
     getNextPageParam: (lastPage) => {
-      const { current_page, total_pages } = lastPage.pagination;
+      const { current_page, total_pages } = lastPage?.pagination ?? {};
       return current_page < total_pages ? current_page + 1 : undefined;
     },
     initialPageParam: 1,
@@ -30,7 +30,6 @@ function useGetCountries({ search = "", perPage = 20 } = {}) {
   });
 
   const countries = query.data?.pages?.flatMap((p) => p.data) || [];
-  const hasMore = !!query.hasNextPage;
 
   return {
     countriesQuery: query,

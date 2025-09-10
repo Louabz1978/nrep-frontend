@@ -24,9 +24,9 @@ createRoot(document.getElementById("root")!).render(
         <AppInitializer>
           <QueryClientProvider client={queryClient}>
             <SonnerToast />
+            <SessionManager key="session-manager" />
             <AnimatePresence mode="wait">
-              <SessionManager />
-              <RouterProvider router={router}></RouterProvider>
+              <RouterProvider key="router-provider" router={router} />
               {/* <ColorPaletteEditor /> */}
             </AnimatePresence>
             <ReactQueryDevtools />

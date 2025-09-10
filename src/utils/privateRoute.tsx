@@ -17,19 +17,21 @@ const hasPermission = (userRole: UserType[], requiredRole: UserType) => {
 
 // Prevent user from accessing other user type pages
 const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
+  console.log("enter");
   const location = useLocation();
   const currentPath = location.pathname;
 
   const isThereToken = secureLocalStorage.getItem("ACCESS_TOKEN");
-  const userType = (
-    jsonParse(secureLocalStorage.getItem("USER") as string) as {
-      [key: string]: unknown;
-    }
-  )?.roles as UserType;
+  const user = jsonParse(secureLocalStorage.getItem("USER") as string) as {
+    [key: string]: unknown;
+  };
+  const userType = (user?.roles ?? user?.data?.roles) as UserType[];
   const userRoles = userType as unknown as UserType[];
 
   // allow all users to enter this page
   if (role == "allow") return element;
+
+  console.log({ role, userRoles, isThereToken });
 
   // user logged in and his role fit with required role
   if (isThereToken && hasPermission(userRoles, role)) return element;
@@ -64,7 +66,7 @@ const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
   }
 
   // user logged in but navigate to another role page
-  if (isThereToken && userType !== role) return <NotFound />;
+  if (isThereToken && !userRoles?.includes(role)) return <NotFound />;
 
   // otherwise
   return element;

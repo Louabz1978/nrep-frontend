@@ -19,3 +19,19 @@ export const FEATURES = [
   "صفن",
   "شغلة اخيرة",
 ];
+
+export enum PropertyStatus {
+  ACTIVE = "active",
+  PENDING = "pending",
+  CLOSED = "closed",
+  OUT_OF_MARKET = "out_of_market",
+}
+
+export enum PropertyTypes {
+  APARTMENT = "apartment",
+  VILLA = "villa",
+  FARM = "farm",
+  STORE = "store",
+  LAND = "land",
+  BUILDING = "building",
+}
