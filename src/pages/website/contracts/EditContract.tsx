@@ -244,7 +244,7 @@ function EditContract() {
                     drag={enableDrag}
                     dragConstraints={constraintsRef}
                     dragMomentum={false}
-                    className="w-[200px] !h-[100px] top-[130px] right-[85px] flex flex-col gap-4xl text-center relative mb-3 pointer-events-auto group"
+                    className="w-[220px] !h-[100px] top-[130px] right-[85px] flex flex-col gap-4xl text-center relative mb-3 pointer-events-auto group"
                   >
                     <div
                       className={`${
