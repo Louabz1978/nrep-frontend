@@ -1,324 +1,117 @@
-import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
+import Select from "@/components/global/form/select/Select";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import type { TNumber } from "@/data/global/schema";
 import {
-  contractFormInitialValues,
   ContractFormSchema,
   type ContractFormType,
-  buyerInitialValues,
 } from "@/data/website/schema/contractSchema";
-import { joiResolver } from "@hookform/resolvers/joi";
-import { useState, useRef, useEffect, useCallback } from "react";
-import { useForm, useWatch, useFieldArray } from "react-hook-form";
-import { FaSearch, FaPlus } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
-import useListingDetails from "@/hooks/website/listing/useListingDetails";
+import useGetConrtactById from "@/hooks/website/contract/useGetContractById";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
-import type { ContactWithUser } from "@/types/website/contact";
-import useAddContract from "@/hooks/website/contract/useAddContract";
-import Select from "@/components/global/form/select/Select";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { useForm, useFieldArray } from "react-hook-form";
+import { useParams } from "react-router-dom";
+
 import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
 
-function ContractsList() {
-  const [disabled1, setDisabled1] = useState(true);
-  const [disabled2, setDisabled2] = useState(true);
-  const [checkbox1, setCheckBox1] = useState(false);
-  const [checkbox2, setCheckBox2] = useState(false);
+import type { ContactWithUser } from "@/types/website/contact";
+import {
+  buyerInitialValues,
+  sellerInitialValues,
+} from "@/data/website/schema/contractSchema";
 
-  const [currentMLS, setCurrentMLS] = useState<TNumber>();
-  const { listingDetails } = useListingDetails(Number(currentMLS));
+const ContractSignature = () => {
+  const { id } = useParams<{ id: string }>();
+
+  const { contactDetails } = useGetConrtactById(Number(id));
   const { allContacts } = useGetAllContacts();
-  const { handleAddContract, isPending: isSubmitting } = useAddContract();
 
+  // Transform contactDetails for Select component
   const contacts =
     allContacts?.map((contact: ContactWithUser) => ({
-      value: contact?.name,
+      label: contact.name,
+      value: contact.name,
     })) || [];
-  console.log(contacts);
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
-    defaultValues: contractFormInitialValues,
+    defaultValues: contactDetails
+      ? {
+          ...contactDetails,
+          sellers: [
+            {
+              id: contactDetails.id?.toString(),
+              seller_name: contactDetails.seller_name,
+              seller_mothor_name: contactDetails.seller_mothor_name,
+              seller_birth_place: contactDetails.seller_birth_place,
+              seller_nation_number: contactDetails.seller_nation_number,
+              seller_registry: contactDetails.seller_registry,
+            },
+          ],
+          buyers: [
+            {
+              id: contactDetails.id?.toString(),
+              buyer_name: {
+                label: contactDetails.buyer_name,
+                value: contactDetails.buyer_name,
+              },
+              buyer_mothor_name: contactDetails.buyer_mothor_name,
+              buyer_birth_place: contactDetails.buyer_birth_place,
+              buyer_nation_number: contactDetails.buyer_nation_number,
+              buyer_registry: contactDetails.buyer_registry,
+            },
+          ],
+          // Also populate top-level fields for backward compatibility
+          seller_name: contactDetails.seller_name,
+          seller_mothor_name: contactDetails.seller_mothor_name,
+          seller_birth_place: contactDetails.seller_birth_place,
+          seller_nation_number: contactDetails.seller_nation_number,
+          seller_registry: contactDetails.seller_registry,
+          buyer_name: {
+            label: contactDetails.buyer_name,
+            value: contactDetails.buyer_name,
+          },
+          buyer_mothor_name: contactDetails.buyer_mothor_name,
+          buyer_birth_place: contactDetails.buyer_birth_place,
+          buyer_nation_number: contactDetails.buyer_nation_number,
+          buyer_registry: contactDetails.buyer_registry,
+        }
+      : {
+          sellers: [sellerInitialValues],
+          buyers: [buyerInitialValues],
+        },
     mode: "onChange",
   });
 
-
-
-  // Field arrays for sellers and buyers
-  const sellers = useFieldArray({
+  const { fields: sellersFields } = useFieldArray({
+    control: form.control,
     name: "sellers",
-    control: form.control,
-    keyName: "id",
   });
 
-  const buyers = useFieldArray({
+  const { fields: buyersFields } = useFieldArray({
+    control: form.control,
     name: "buyers",
-    control: form.control,
-    keyName: "id",
   });
 
-  const controlledSellers = form.watch("sellers");
-  const controlledBuyers = form.watch("buyers");
-
-  // Add/Remove button components
-  const AddButton = ({ onClick }: { onClick: () => void }) => (
-    <button
-      data-print-hidden={true}
-      type="button"
-      className="flex items-center justify-center w-8 h-8 bg-blue-500 hover:bg-blue-600 cursor-pointer text-white rounded-full"
-      onClick={onClick}
-    >
-      <FaPlus className="text-sm" />
-    </button>
-  );
-
-  const RemoveButton = ({ onClick }: { onClick: () => void }) => (
-    <button
-      data-print-hidden={true}
-      type="button"
-      className="flex items-center justify-center w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full"
-      onClick={onClick}
-    >
-      <FaXmark className="text-sm" />
-    </button>
-  );
-
+  // Extract flags from contractDetails for excluded items
   const flags = {
-    pool: listingDetails?.additional.pool,
-    ac: listingDetails?.additional.ac,
-    garden: listingDetails?.additional.garden,
-    garage: listingDetails?.additional.garage,
-    jacuzzi: listingDetails?.additional.jacuzzi,
-    solra_system: listingDetails?.additional.solar_system,
-    elevetor: listingDetails?.additional.elevator,
+    elevator: contactDetails?.elevator || false,
+    garage: contactDetails?.garage || false,
+    ac: contactDetails?.ac || false,
+    jacuzzi: contactDetails?.jacuzzi || false,
+    garden: contactDetails?.garden || false,
+    solar_system: contactDetails?.solar_system || false,
+    pool: contactDetails?.pool || false,
   };
-
-  // Function to populate form with listing details
-  const populateFormWithListingData = useCallback(() => {
-    if (!listingDetails) return;
-
-    // Seller information - populate the first seller in the array
-    const sellerData = {
-      id: `seller-${Date.now()}`,
-      seller_name: (listingDetails.owner as any)?.name,
-      seller_mothor_name: (listingDetails.owner as any)?.mother_name_surname,
-      seller_birth_place: (listingDetails.owner as any)?.place_birth,
-      seller_nation_number: (listingDetails.owner as any)?.national_number,
-      seller_registry: (listingDetails.owner as any)?.registry,
-    };
-
-    // Set the first seller in the array
-    form.setValue("sellers.0", sellerData);
-
-    // Keep backward compatibility with original fields
-    form.setValue("seller_name", (listingDetails.owner as any)?.name);
-    form.setValue(
-      "seller_mothor_name",
-      (listingDetails.owner as any)?.mother_name_surname
-    );
-    form.setValue(
-      "seller_birth_place",
-      (listingDetails.owner as any)?.place_birth
-    );
-    form.setValue(
-      "seller_nation_number",
-      (listingDetails.owner as any)?.national_number
-    );
-    form.setValue("seller_registry", (listingDetails.owner as any)?.registry);
-
-    // Property information
-    form.setValue(
-      "building_num",
-      listingDetails.address?.building_num?.toString() || ""
-    );
-    form.setValue("street", listingDetails.address?.street || "");
-    form.setValue("floor", listingDetails.address?.floor || null);
-    form.setValue("apt", Number(listingDetails.address?.apt) || null);
-    form.setValue("area", listingDetails.address?.area || "");
-    form.setValue("city", listingDetails.address?.city || "");
-    form.setValue("country", listingDetails.address?.county || "");
-    form.setValue("legal_description", String(listingDetails.mls_num ?? ""));
-
-    // Property features
-    if (listingDetails.additional) {
-      form.setValue("elevator", listingDetails.additional.elevator || false);
-      form.setValue("ac", listingDetails.additional.ac || false);
-      form.setValue("garage", listingDetails.additional.garage || false);
-      form.setValue("garden", listingDetails.additional.garden || false);
-      form.setValue("jacuzzi", listingDetails.additional.jacuzzi || false);
-      form.setValue(
-        "solar_system",
-        listingDetails.additional.solar_system || false
-      );
-      form.setValue("pool", listingDetails.additional.pool || false);
-      form.setValue("balconies", listingDetails.additional.balcony || null);
-      form.setValue("fan_number", listingDetails.additional.fan_number || null);
-      form.setValue("water", listingDetails.additional.water || "");
-    }
-
-
-    // Agent information
-    form.setValue(
-      "sller_agent_name",
-      listingDetails.created_by_user?.first_name +
-        " " +
-        listingDetails.created_by_user?.last_name || ""
-    );
-    form.setValue(
-      "seller_company_address",
-      listingDetails.created_by_user?.address || ""
-    );
-    form.setValue(
-      "seller_company_phone",
-      Number(listingDetails.created_by_user?.phone_number) || null
-    );
-    form.setValue(
-      "seller_commission",
-      listingDetails.property_realtor_commission
-    );
-    form.setValue("buyer_commission", listingDetails.buyer_realtor_commission);
-  }, [listingDetails, form]);
-
-  const { handleSubmit } = form;
-  const watchMLS = useWatch({ control: form.control, name: "mls" });
-  const watchBuyerName = useWatch({
-    control: form.control,
-    name: "buyer_name",
-  });
-  const contractRef = useRef<HTMLDivElement>(null);
-
-  // Populate form when listingDetails changes
-  useEffect(() => {
-    if (listingDetails) {
-      populateFormWithListingData();
-    }
-  }, [listingDetails, populateFormWithListingData]);
-
-  // Populate buyer fields when buyer is selected from contacts
-  useEffect(() => {
-    if (!watchBuyerName || !allContacts?.length) return;
-
-    const selectedName =
-      typeof watchBuyerName === "string"
-        ? watchBuyerName
-        : (watchBuyerName as { value?: string })?.value;
-
-    if (!selectedName) return;
-
-    const selectedContact = (allContacts as ContactWithUser[]).find(
-      (contact: ContactWithUser) => contact?.name === selectedName
-    );
-
-    if (selectedContact) {
-      // Update the first buyer in the array
-      const buyerData = {
-        id: `buyer-${Date.now()}`,
-        buyer_name: watchBuyerName,
-        buyer_mothor_name: selectedContact?.mother_name_surname || "",
-        buyer_birth_place: selectedContact?.place_birth || "",
-        buyer_nation_number: Number(selectedContact?.national_number),
-        buyer_registry: selectedContact?.registry || "",
-      };
-      form.setValue("buyers.0", buyerData);
-
-      // Keep backward compatibility with original fields
-      form.setValue(
-        "buyer_mothor_name",
-        selectedContact?.mother_name_surname || ""
-      );
-      form.setValue("buyer_birth_place", selectedContact?.place_birth || "");
-      form.setValue(
-        "buyer_nation_number",
-        Number(selectedContact?.national_number)
-      );
-      form.setValue("buyer_registry", selectedContact?.registry || "");
-    } else {
-      // Clear fields if no contact is selected
-      form.setValue("buyer_mothor_name", "");
-      form.setValue("buyer_birth_place", "");
-      form.setValue("buyer_nation_number", null);
-      form.setValue("buyer_registry", "");
-    }
-  }, [watchBuyerName, allContacts, form]);
-
-  // Handle buyer selection for all buyers in the array
-  useEffect(() => {
-    if (!allContacts?.length) return;
-
-    controlledBuyers?.forEach((buyer, index) => {
-      if (!buyer?.buyer_name) return;
-
-      const selectedName =
-        typeof buyer.buyer_name === "string"
-          ? buyer.buyer_name
-          : (buyer.buyer_name as { value?: string })?.value;
-
-      if (!selectedName) return;
-
-      const selectedContact = (allContacts as ContactWithUser[]).find(
-        (contact: ContactWithUser) => contact?.name === selectedName
-      );
-
-      if (selectedContact) {
-        // Update individual fields to ensure proper form state update
-        form.setValue(
-          `buyers.${index}.buyer_mothor_name`,
-          selectedContact?.mother_name_surname || ""
-        );
-        form.setValue(
-          `buyers.${index}.buyer_birth_place`,
-          selectedContact?.place_birth || ""
-        );
-        form.setValue(
-          `buyers.${index}.buyer_nation_number`,
-          Number(selectedContact?.national_number)
-        );
-        form.setValue(
-          `buyers.${index}.buyer_registry`,
-          selectedContact?.registry || ""
-        );
-      }
-    });
-  }, [controlledBuyers, allContacts, form]);
 
   return (
     <PageContainer>
       {/* Header */}
       <FormSectionHeader>عقد بيع وشراء سكني</FormSectionHeader>
 
-      {/* MLS Input */}
-      <form id="contract_form" className="flex flex-col">
-        <div
-          className="w-full flex items-center justify-between gap-xl p-3xl"
-          id="contract_form"
-          data-print-hidden="true"
-        >
-          <Input
-            form={form}
-            name="mls"
-            placeholder="ادخل mls"
-            type="number"
-            addingInputStyle="h-[38px] w-full text-primary-fg bg-tertiary-bg text-size16 placeholder:text-size16 placeholder:text-placeholder-secondary rounded-lg px-xl py-sm pl-4xl text-primary-foreground focus:outline-none"
-          />
-          <Button
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setCurrentMLS(watchMLS);
-              // Populate form after setting MLS (will be called when listingDetails updates)
-            }}
-            className="p-3 bg-primary  rounded-lg cursor-pointer mt-0 ml-3"
-          >
-            <FaSearch className="text-tertiary-bg  text-size20 " />
-          </Button>
-        </div>
-      </form>
       {/* Contract Form */}
-      <div ref={contractRef} data-contract-content="contract" className="">
-        <div className="flex items-center justify-center p-xl text-size22 ">
+      <div data-contract-content="contract" className="">
+        <div className="flex items-center justify-center p-xl text-size22">
           <h1>تمت الموافقة على هذا النموذج من قبل رابطة السماسرة العقاريين</h1>
         </div>
         <div>
@@ -327,9 +120,9 @@ function ContractsList() {
           </div>
           {/* Dynamic Sellers Section */}
           <div className="flex items-center flex-wrap gap-4xl pt-3xl">
-            {controlledSellers?.map((_, index) => (
+            {sellersFields?.map((_, index) => (
               <div
-                key={sellers.fields?.[index]?.id}
+                key={sellersFields?.[index]?.id}
                 className="flex items-center gap-2"
               >
                 <div className="flex items-center gap-1">
@@ -389,9 +182,9 @@ function ContractsList() {
           </div>
           {/* Dynamic Buyers Section */}
           <div className="flex items-center flex-wrap gap-3xl pt-3xl">
-            {controlledBuyers?.map((_, index) => (
+            {buyersFields?.map((_, index) => (
               <div
-                key={buyers.fields?.[index]?.id}
+                key={buyersFields?.[index]?.id}
                 className="flex items-center gap-2"
               >
                 <div className="flex items-center gap-2">
@@ -405,42 +198,7 @@ function ContractsList() {
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_name`}
-                    onChange={(selectedValue) => {
-                      if (!allContacts?.length) return;
-
-                      const selectedName =
-                        typeof selectedValue === "string"
-                          ? selectedValue
-                          : (selectedValue as { value?: string })?.value;
-
-                      if (!selectedName) return;
-
-                      const selectedContact = (
-                        allContacts as ContactWithUser[]
-                      ).find(
-                        (contact: ContactWithUser) =>
-                          contact?.name === selectedName
-                      );
-
-                      if (selectedContact) {
-                        form.setValue(
-                          `buyers.${index}.buyer_mothor_name`,
-                          selectedContact?.mother_name_surname || ""
-                        );
-                        form.setValue(
-                          `buyers.${index}.buyer_birth_place`,
-                          selectedContact?.place_birth || ""
-                        );
-                        form.setValue(
-                          `buyers.${index}.buyer_nation_number`,
-                          Number(selectedContact?.national_number)
-                        );
-                        form.setValue(
-                          `buyers.${index}.buyer_registry`,
-                          selectedContact?.registry || ""
-                        );
-                      }
-                    }}
+                    disabled={true}
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -485,12 +243,8 @@ function ContractsList() {
                     disabled={true}
                   />
                 </div>
-                {controlledBuyers.length > 1 && (
-                  <RemoveButton onClick={() => buyers.remove(index)} />
-                )}
               </div>
             ))}
-            <AddButton onClick={() => buyers.append(buyerInitialValues)} />
           </div>
           <div className="pt-3xl">
             <p>
@@ -506,7 +260,7 @@ function ContractsList() {
           <h1 className="text-size25 font-bold mb-3xl">1. وصف العقار</h1>
 
           {/* First Row */}
-          <div className="flex items-center  flex-wrap gap-4xl mb-3xl">
+          <div className="flex items-center flex-wrap gap-4xl mb-3xl">
             <div className="flex items-center gap-2">
               <span className="text-size18 whitespace-nowrap">
                 رقم البناء :
@@ -521,7 +275,6 @@ function ContractsList() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-size18 whitespace-nowrap">
-                {" "}
                 اسم الشارع :
               </span>
               <Input
@@ -565,7 +318,7 @@ function ContractsList() {
           </div>
 
           {/* Second Row */}
-          <div className="flex items-center  gap-5xl mb-3xl">
+          <div className="flex items-center gap-5xl mb-3xl">
             <div className="flex items-center gap-2">
               <span className="text-size18 whitespace-nowrap">المدينة :</span>
               <Input
@@ -591,7 +344,7 @@ function ContractsList() {
           {/* Legal Description Field */}
           <div className="mb-3xl">
             <div className="flex items-center gap-md">
-              <span className=" text-size18">الوصف القانوني للعقار :</span>
+              <span className="text-size18">الوصف القانوني للعقار :</span>
               <Input
                 addingStyle="pb-4"
                 variant="contract"
@@ -617,21 +370,21 @@ function ContractsList() {
               معالجات نوافذ، أجهزة كشف دخان، جهاز/أجهزة فتح باب المرآب، منظم
               حرارة/منظمات حرارة، جرس باب/أجراس أبواب، حوامل تثبيت التلفاز على
               الحائط ومعداتها، بوابة أمان وأجهزة دخول أخرى، مفاتيح صندوق البريد،
-              مصاريع عواصف/أدوات حماية من العواصف ولوازمها (“الممتلكات
-              الشخصية”).
+              مصاريع عواصف/أدوات حماية من العواصف ولوازمها ("الممتلكات
+              الشخصية").
             </p>
             <p className="mb-3xl">
               تُعتبر الممتلكات الشخصية مشمولة في سعر الشراء، وليس لها قيمة
               إضافية مستقلة، ويجب تركها للمشتري.
             </p>
           </div>
-          <div className="flex items-center gap-md  text-size18">
+          <div className="flex items-center gap-md text-size18">
             <p className="mb-3xl">العناصر التالية مستثناة من عملية الشراء:</p>
             <span className="font-bold pb-2xl text-size18">
-              {flags.elevetor && "المصعد"} {flags.garage && "الكراج،"}{" "}
+              {flags.elevator && "المصعد"} {flags.garage && "الكراج،"}{" "}
               {flags.ac && "المكيف،"} {flags.jacuzzi && "الجاكوزي،"}{" "}
               {flags.garden && "الحديقة،"}{" "}
-              {flags.solra_system && "الطاقة الشمسية"}{" "}
+              {flags.solar_system && "الطاقة الشمسية"}{" "}
               {flags.pool && "، المسبح"}
             </span>
           </div>
@@ -639,7 +392,7 @@ function ContractsList() {
             <div className="flex items-center justify-center flex-wrap mt-2xl mb-3xl">
               <FormSectionHeader>سعر الشراء والإغلاق</FormSectionHeader>
             </div>
-            <div className="flex items-center gap-md ">
+            <div className="flex items-center gap-md">
               <h1 className="text-size25 font-bold whitespace-nowrap">
                 2.سعر الشراء
               </h1>
@@ -651,58 +404,59 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="price"
+                disabled={true}
               />
             </div>
             <div
               className="flex items-center gap-lg"
-              data-print-hidden={disabled1 ? "true" : "false"}
+              data-print-hidden={!contactDetails?.deposit ? "true" : "false"}
             >
               <input
                 id="checkbox1"
-                checked={!disabled1}
-                onChange={() => setDisabled1((prev) => !prev)}
+                checked={!!contactDetails?.deposit}
                 type="checkbox"
+                disabled={true}
               />
               <label
                 className={`${
-                  disabled1 ? "text-quinary-bg" : "text-black"
-                } text-size20 cursor-pointer `}
+                  !contactDetails?.deposit ? "text-quinary-bg" : "text-black"
+                } text-size20 cursor-pointer`}
                 htmlFor="checkbox1"
               >
                 قيمة الرعبون و تاريخ الدفع : {".".repeat(155)}
               </label>
               <Input
-                addingStyle="pb-2xl "
+                addingStyle="pb-2xl"
                 variant="contract"
                 form={form}
                 name="deposit"
-                disabled={disabled1}
+                disabled={true}
               />
             </div>
             <div
               className="flex items-center gap-lg"
-              data-print-hidden={disabled2 ? "true" : "false"}
+              data-print-hidden={!contactDetails?.batch ? "true" : "false"}
             >
               <input
                 id="checkbox2"
-                checked={!disabled2}
-                onChange={() => setDisabled2((prev) => !prev)}
+                checked={!!contactDetails?.batch}
                 type="checkbox"
+                disabled={true}
               />
               <label
                 className={`${
-                  disabled2 ? "text-quinary-bg" : "text-black"
+                  !contactDetails?.batch ? "text-quinary-bg" : "text-black"
                 } text-size20 cursor-pointer`}
                 htmlFor="checkbox2"
               >
                 قيمة الدفعة و تاريخ الدفع : {".".repeat(156)}
               </label>
               <Input
-                addingStyle="pb-2xl "
+                addingStyle="pb-2xl"
                 variant="contract"
                 form={form}
                 name="batch"
-                disabled={disabled2}
+                disabled={true}
               />
             </div>
             <div className="flex items-center gap-lg">
@@ -710,11 +464,11 @@ function ContractsList() {
                 السعر النهائي : {".".repeat(202)}{" "}
               </h2>
               <Input
-                addingStyle="pb-2xl "
+                addingStyle="pb-2xl"
                 variant="contract"
                 form={form}
-                name="deposit"
-                disabled={disabled2}
+                name="final_price"
+                disabled={true}
               />
             </div>
             <p className="mb-lg text-size19">
@@ -722,19 +476,18 @@ function ContractsList() {
             </p>
 
             <div className="flex items-center gap-xl">
-              <span className="text-size20 font-bold ">(اختر واحداً):</span>
+              <span className="text-size20 font-bold">(اختر واحداً):</span>
               <div
                 className="flex items-center gap-lg"
-                data-print-hidden={!checkbox1 ? "true" : "false"}
+                data-print-hidden={
+                  !contactDetails?.warranty_agent ? "true" : "false"
+                }
               >
                 <input
                   id="choise1"
-                  checked={checkbox1}
-                  onClick={() => {
-                    setCheckBox1((prev) => !prev);
-                    setCheckBox2(false);
-                  }}
+                  checked={!!contactDetails?.warranty_agent}
                   type="checkbox"
+                  disabled={true}
                 />
                 <label htmlFor="choise1" className="text-size18">
                   شركات المحاماة أو
@@ -742,32 +495,29 @@ function ContractsList() {
               </div>
               <div
                 className="flex items-center gap-lg"
-                data-print-hidden={!checkbox2 ? "true" : "false"}
+                data-print-hidden={!contactDetails?.days ? "true" : "false"}
               >
                 <input
-                  checked={checkbox2}
-                  onClick={() => {
-                    setCheckBox2((prev) => !prev);
-                    setCheckBox1(false);
-                  }}
+                  checked={!!contactDetails?.days}
                   id="choise2"
                   type="checkbox"
+                  disabled={true}
                 />
                 <label htmlFor="choise2" className="text-size18">
                   يجب أن تكون مدفوعة خلال{" "}
                 </label>
               </div>
               <Input
-                disabled={!checkbox2}
-                addingStyle="pb-2xl "
+                disabled={true}
+                addingStyle="pb-2xl"
                 variant="contract"
                 form={form}
                 name="days"
-                data-print-hidden={!checkbox2 ? "true" : "false"}
+                data-print-hidden={!contactDetails?.days ? "true" : "false"}
               />
               <span
                 className="text-size18"
-                data-print-hidden={!checkbox2 ? "true" : "false"}
+                data-print-hidden={!contactDetails?.days ? "true" : "false"}
               >
                 (إذا ترك فارغاً, يتم اعتبار 3 أيام تلقائياً) من الأيام بعد
                 التاريخ الفعال.
@@ -776,7 +526,7 @@ function ContractsList() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between  gap-sm">
+            <div className="flex items-center justify-between gap-sm">
               <div className="flex items-center gap-1">
                 <span className="whitespace-nowrap text-size18">
                   وكيل البائع :
@@ -797,6 +547,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="seller_agent_license"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -808,6 +559,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="seller_agent_broker"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -819,6 +571,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="seller_agent_broker_license"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -830,6 +583,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="seller_company_address"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -872,6 +626,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="buyer_agent"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -881,6 +636,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="buyer_agent_license"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -892,6 +648,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="buyer_agent_broker"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -903,6 +660,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="buyer_agent_broker_license"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -914,6 +672,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="buyer_company_address"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -926,6 +685,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="buyer_company_phone"
+                  disabled={true}
                 />
               </div>
             </div>
@@ -952,6 +712,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="warranty_agent_address"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -962,6 +723,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="warranty_agent_phone"
+                  disabled={true}
                 />
               </div>
             </div>
@@ -975,6 +737,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="warranty_agent_email"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -984,6 +747,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="warranty_agent_fax"
+                  disabled={true}
                 />
               </div>
             </div>
@@ -998,6 +762,7 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="days_batch"
+                  disabled={true}
                 />
                 <span className="whitespace-nowrap text-size18">
                   {" "}
@@ -1010,18 +775,19 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="effective_date"
+                  disabled={true}
                 />
               </div>
             </div>
             <div className="text-size18">
               <p>
                 ( كل الدفعات التي دُفعت, أو اتفق على دفعها, سوف تُجمع و يُشار
-                إليها باسم “ الدفعات “ )
+                إليها باسم " الدفعات " )
               </p>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="whitespace-nowrap text-size18 ">
+                <span className="whitespace-nowrap text-size18">
                   التمويل: (تُعبر كنسبة مئوية أو مبلغ محدد "قيمة القرض"){" "}
                   {".".repeat(157)}
                 </span>
@@ -1030,10 +796,11 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="financing"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
-                <span className="whitespace-nowrap text-size18 ">
+                <span className="whitespace-nowrap text-size18">
                   أخرى : {".".repeat(234)}
                 </span>
                 <Input
@@ -1041,10 +808,11 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="others"
+                  disabled={true}
                 />
               </div>
               <div className="flex items-center gap-2">
-                <span className="whitespace-nowrap text-size18 ">
+                <span className="whitespace-nowrap text-size18">
                   الرصيد المستحق (باستثناء تكاليف إغلاق المشتري، المدفوعات
                   المسبقة والتسويات) عن طريق التحويل أو طرق جمع أخرى
                   {".".repeat(60)}{" "}
@@ -1054,13 +822,14 @@ function ContractsList() {
                   variant="contract"
                   form={form}
                   name="balance"
+                  disabled={true}
                 />
               </div>
             </div>
           </div>
 
           <div className="mt-2xl">
-            <h1 className="text-size25 font-bold whitespace-nowrap ">
+            <h1 className="text-size25 font-bold whitespace-nowrap">
               3.وقت قبول العرض والعروض المضادة؛ تاريخ النفاذ:
             </h1>
             <div className="flex items-center gap-2">
@@ -1073,6 +842,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="balance"
+                disabled={true}
               />
             </div>
             <p className="text-size18">
@@ -1084,7 +854,7 @@ function ContractsList() {
             </p>
           </div>
           <div className="mt-2xl">
-            <h1 className="text-size25 font-bold whitespace-nowrap ">
+            <h1 className="text-size25 font-bold whitespace-nowrap">
               4.الإغلاق؛ تاريخ الإغلاق:
             </h1>
             <p className="text-size18">
@@ -1096,84 +866,14 @@ function ContractsList() {
           </div>
           <div className="mt-3xl">
             <FormSectionHeader>التواقيع</FormSectionHeader>
-
-            {/* <div className="flex flex-col gap-[40px] items-center justify-center mt-3xl">
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">البائع</span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
-                  {controlledSellers?.map((item) => {
-                    return (
-                      <div
-                        key={item?.id}
-                        className="flex items-center gap-[4px]"
-                      >
-                        {item?.seller_name ? (
-                          <span className="text-center mb-lg text-size18">
-                            {`${item?.seller_name}`}:
-                          </span>
-                        ) : null}
-                        <SignatureInput form={form} name="agent_signature" />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">
-                  وكيل البائع
-                </span>
-                <div className="flex items-center gap-[4px]">
-                  {form.watch("sller_agent_name") ? (
-                    <span className="text-center mb-lg text-size18">
-                      {`${form.watch("sller_agent_name")}`}:
-                    </span>
-                  ) : null}
-                  <SignatureInput form={form} name="agent_signature" />
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">المشتري</span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
-                  {controlledBuyers?.map((item) => {
-                    return (
-                      <div
-                        key={item?.id}
-                        className="flex items-center gap-[4px]"
-                      >
-                        {item?.buyer_name?.value ? (
-                          <span className="text-center mb-lg text-size18">
-                            {item?.buyer_name?.value}:
-                          </span>
-                        ) : null}
-                        <SignatureInput form={form} name="agent_signature" />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">
-                  وكيل المشتري
-                </span>
-                <div className="flex items-center gap-[4px]">
-                  {form.watch("buyer_agent") ? (
-                    <span className="text-center mb-lg text-size18">
-                      {`${form.watch("buyer_agent")}`}:
-                    </span>
-                  ) : null}
-                  <SignatureInput form={form} name="agent_signature" />
-                </div>
-              </div>
-            </div> */}
-
             {/* remove comment */}
             <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
               <div className="flex gap-[30px] items-start">
-                <span className=" mb-lg text-size18 w-[130px] text-start">
+                <span className="mb-lg text-size18 w-[130px] text-start">
                   البائع:
                 </span>
                 <div className="flex items-center justify-center flex-wrap gap-[20px]">
-                  {controlledSellers?.map((item) => {
+                  {sellersFields?.map((item) => {
                     return (
                       <div
                         key={item?.id}
@@ -1208,7 +908,7 @@ function ContractsList() {
                   المشتري:
                 </span>
                 <div className="flex items-center justify-center flex-wrap gap-[20px]">
-                  {controlledBuyers?.map((item) => {
+                  {buyersFields?.map((item) => {
                     return (
                       <div
                         key={item?.id}
@@ -1241,23 +941,9 @@ function ContractsList() {
             </div>
           </div>
         </div>
-        <div
-          className="flex items-center justify-center mt-6xl "
-          data-print-hidden="true"
-        >
-          <Button
-            className="w-[200px]"
-            onClick={handleSubmit((data) =>
-              handleAddContract(data, contractRef)
-            )}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "جار الإرسال..." : "تأكيد"}
-          </Button>
-        </div>
       </div>
     </PageContainer>
   );
-}
+};
 
-export default ContractsList;
+export default ContractSignature;
