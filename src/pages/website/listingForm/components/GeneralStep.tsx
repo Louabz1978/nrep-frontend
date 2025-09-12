@@ -6,8 +6,15 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import { cityChoices, PROPERTY_TYPE, STATUS } from "@/data/global/select";
+import {
+  cityChoices,
+  PROPERTY_TYPE,
+  STATUS,
+  TransType,
+} from "@/data/global/select";
 import Textarea from "@/components/global/form/textarea/Textarea";
+import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import type { ContactWithUser } from "@/types/website/contact";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -19,10 +26,18 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // extract form utils
   const { handleSubmit } = form;
 
+
   // handle submit form
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
   };
+
+  const { allContacts } = useGetAllContacts();
+  const contactOptions =
+    allContacts?.map((contact: ContactWithUser) => ({
+      value: String(contact.consumer_id),
+      label: contact.name,
+    })) || [];
 
   return (
     <AnimateContainer>
@@ -148,6 +163,18 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             info="يرجى إدخال سعر العقار بالدولار الأمريكي"
             required
           />
+          <Select
+            form={form}
+            label="البائعون"
+            placeholder="اختر البائعون"
+            choices={contactOptions}
+            keyValue="value"
+            showValue="label"
+            multiple={true}
+            name="sellers"
+            info="يرجى اختيار البائعون"
+            required
+          />
           <Input
             form={form}
             type="number"
@@ -176,6 +203,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             info="يرجى إدخال سنة بناء العقار"
             required
           />
+
           <Select
             form={form}
             label="الحالة"
@@ -187,6 +215,17 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             info="يرجى اختيار حالة العقار (جديد، مستخدم، ...)"
             required
           />
+          <Select
+            form={form}
+            label="نوع العقد"
+            placeholder="اختر نوع العقد"
+            choices={TransType}
+            keyValue="value"
+            showValue="label"
+            name="trans_type"
+            info="يرجى اختيار حالة العقار (بيع، إيجار)"
+            required
+          />
           <Input
             form={form}
             type="date"
@@ -194,6 +233,16 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             placeholder="أدخل تاريخ انتهاء العقد"
             name="exp_date"
             info="يرجى إدخال تاريخ انتهاء العقد"
+            required
+          />
+          <Input
+            form={form}
+            type="checkbox"
+            label="قابل للسكن"
+            placeholder="أختر قابلية السكن"
+            name="livable"
+            info="يرجى إختيار قابلية السكن"
+            addingStyle="col-span-full"
             required
           />
           <Textarea

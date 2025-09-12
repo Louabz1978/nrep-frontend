@@ -88,6 +88,13 @@ export const WATERLINE: WaterLineOption[] = [
   { value: "tank", label: "خزان" },
   { value: "well", label: "بئر" },
 ];
+// Trans type options
+type TransTypeValue = "sale" | "rent" ;
+export type TransTypeOption = SelectOption<TransTypeValue>;
+export const TransType: TransTypeOption[] = [
+  { value: "sale", label: "بيع" },
+  { value: "rent", label: "إيجار" },
+];
 
 // Additional property features (e.g., amenities in a building)
 export const additionOptions = [

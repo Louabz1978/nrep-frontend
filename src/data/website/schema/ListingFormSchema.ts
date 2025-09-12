@@ -28,6 +28,9 @@ export type GeneralStepType = {
   description: TString;
   exp_date: TString;
   show_inst: TString;
+  sellers: TOption[];
+  livable: boolean;
+  trans_type: TOption;
 };
 
 export const generalStepSchema = Joi.object<GeneralStepType>({
@@ -92,6 +95,20 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("تاريخ انتهاء العقد"),
+  sellers: Joi.array()
+    .items(optionSchema)
+    .min(1)
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("البائعون"),
+  livable: Joi.boolean()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("العقار قابل للسكن"),
+  trans_type: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("نوع العقد"),
 });
 
 export const generalStepInitialValues: GeneralStepType = {
@@ -114,6 +131,9 @@ export const generalStepInitialValues: GeneralStepType = {
   description: null,
   exp_date: null,
   show_inst: null,
+  sellers: [],
+  livable: false,
+  trans_type: null,
 };
 
 // additional info step -----------------------------------------------------------

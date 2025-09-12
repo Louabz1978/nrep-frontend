@@ -100,11 +100,11 @@ function Input<T extends FieldValues>({
         <div className={`flex flex-col ${addingStyle}`}>
           <label
             htmlFor={name}
-            className={`flex items-center gap-2 cursor-pointer ${addingInputStyle}`}
+            className={`flex items-center gap-1 cursor-pointer text-size20 ${addingInputStyle}`}
           >
             <input
               type={type}
-              className="peer hidden"
+              className=""
               id={name}
               {...(register ? register(name) : {})}
               disabled={isDisabled}

@@ -47,6 +47,8 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       { label: "المدينة / القرية :", value: dummyProperty.city },
       { label: "نوع العقار : ", value: dummyProperty.propertyType },
       { label: "المحافظة :", value: dummyProperty.governorate },
+      { label: "نوع العقد :", value: dummyProperty.trans_type || "بيع" },
+      { label: "قابل للسكن :", value: dummyProperty.livable ? "لا" : "نعم"  },
     ],
   ];
 
@@ -78,6 +80,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       { label: "رقم الهاتف :", value: dummyProperty.phoneNumber },
       { label: "البريد الالكتروني :", value: dummyProperty.email },
       { label: "رقم الرخصة :", value: dummyProperty.licenseNumber },
+      { label: "البائعون :", value: dummyProperty.sellers?.map((seller: string) => seller.label).join(", ") || "---" },
     ],
     [
       { label: "الشركة العقارية :", value: dummyProperty.realEstateCompany },
