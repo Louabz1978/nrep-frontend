@@ -9,15 +9,15 @@ function useGetConrtactById(id: number) {
     queryFn: () => getContractById({ id }),
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!id, 
+    enabled: !!id,
   });
 
   // final data
-  const contactDetails = contractDetailsQuery?.data;
+  const contractDetails = contractDetailsQuery?.data;
 
   return {
     contractDetailsQuery,
-    contactDetails,
+    contractDetails,
   };
 }
 

@@ -3,30 +3,26 @@ import Select from "@/components/global/form/select/Select";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import {
+  buyerInitialValues,
   ContractFormSchema,
+  sellerInitialValues,
   type ContractFormType,
 } from "@/data/website/schema/contractSchema";
-import useGetConrtactById from "@/hooks/website/contract/useGetContractById";
-import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useParams } from "react-router-dom";
-
 import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
-
 import type { ContactWithUser } from "@/types/website/contact";
-import {
-  buyerInitialValues,
-  sellerInitialValues,
-} from "@/data/website/schema/contractSchema";
 
-const ContractSignature = () => {
-  const { id } = useParams<{ id: string }>();
+type ContractSignatureProps = {
+  allContacts: ContactWithUser[] | undefined;
+  contractDetails: ContractFormType | undefined;
+};
 
-  const { contactDetails } = useGetConrtactById(Number(id));
-  const { allContacts } = useGetAllContacts();
-
-  // Transform contactDetails for Select component
+const ContractSignature = ({
+  allContacts,
+  contractDetails,
+}: ContractSignatureProps) => {
+  // Transform contractDetails for Select component
   const contacts =
     allContacts?.map((contact: ContactWithUser) => ({
       label: contact.name,
@@ -35,51 +31,51 @@ const ContractSignature = () => {
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
-    defaultValues: contactDetails
-      ? {
-          ...contactDetails,
-          sellers: [
-            {
-              id: contactDetails.id?.toString(),
-              seller_name: contactDetails.seller_name,
-              seller_mothor_name: contactDetails.seller_mothor_name,
-              seller_birth_place: contactDetails.seller_birth_place,
-              seller_nation_number: contactDetails.seller_nation_number,
-              seller_registry: contactDetails.seller_registry,
-            },
-          ],
-          buyers: [
-            {
-              id: contactDetails.id?.toString(),
-              buyer_name: {
-                label: contactDetails.buyer_name,
-                value: contactDetails.buyer_name,
-              },
-              buyer_mothor_name: contactDetails.buyer_mothor_name,
-              buyer_birth_place: contactDetails.buyer_birth_place,
-              buyer_nation_number: contactDetails.buyer_nation_number,
-              buyer_registry: contactDetails.buyer_registry,
-            },
-          ],
-          // Also populate top-level fields for backward compatibility
-          seller_name: contactDetails.seller_name,
-          seller_mothor_name: contactDetails.seller_mothor_name,
-          seller_birth_place: contactDetails.seller_birth_place,
-          seller_nation_number: contactDetails.seller_nation_number,
-          seller_registry: contactDetails.seller_registry,
-          buyer_name: {
-            label: contactDetails.buyer_name,
-            value: contactDetails.buyer_name,
-          },
-          buyer_mothor_name: contactDetails.buyer_mothor_name,
-          buyer_birth_place: contactDetails.buyer_birth_place,
-          buyer_nation_number: contactDetails.buyer_nation_number,
-          buyer_registry: contactDetails.buyer_registry,
-        }
-      : {
-          sellers: [sellerInitialValues],
-          buyers: [buyerInitialValues],
+    defaultValues: contractDetails
+    ? {
+      ...contractDetails,
+      sellers: [
+        {
+          id: contractDetails.id?.toString(),
+          seller_name: contractDetails.seller_name,
+          seller_mothor_name: contractDetails.seller_mothor_name,
+          seller_birth_place: contractDetails.seller_birth_place,
+          seller_nation_number: contractDetails.seller_nation_number,
+          seller_registry: contractDetails.seller_registry,
         },
+      ],
+      buyers: [
+        {
+          id: contractDetails.id?.toString(),
+          buyer_name: {
+            label: contractDetails.buyer_name,
+            value: contractDetails.buyer_name,
+          },
+          buyer_mothor_name: contractDetails.buyer_mothor_name,
+          buyer_birth_place: contractDetails.buyer_birth_place,
+          buyer_nation_number: contractDetails.buyer_nation_number,
+          buyer_registry: contractDetails.buyer_registry,
+        },
+      ],
+      // Also populate top-level fields for backward compatibility
+      seller_name: contractDetails.seller_name,
+      seller_mothor_name: contractDetails.seller_mothor_name,
+      seller_birth_place: contractDetails.seller_birth_place,
+      seller_nation_number: contractDetails.seller_nation_number,
+      seller_registry: contractDetails.seller_registry,
+      buyer_name: {
+        label: contractDetails.buyer_name,
+        value: contractDetails.buyer_name,
+      },
+      buyer_mothor_name: contractDetails.buyer_mothor_name,
+      buyer_birth_place: contractDetails.buyer_birth_place,
+      buyer_nation_number: contractDetails.buyer_nation_number,
+      buyer_registry: contractDetails.buyer_registry,
+    }
+  : {
+      sellers: [sellerInitialValues],
+      buyers: [buyerInitialValues],
+    },
     mode: "onChange",
   });
 
@@ -95,13 +91,13 @@ const ContractSignature = () => {
 
   // Extract flags from contractDetails for excluded items
   const flags = {
-    elevator: contactDetails?.elevator || false,
-    garage: contactDetails?.garage || false,
-    ac: contactDetails?.ac || false,
-    jacuzzi: contactDetails?.jacuzzi || false,
-    garden: contactDetails?.garden || false,
-    solar_system: contactDetails?.solar_system || false,
-    pool: contactDetails?.pool || false,
+    elevator: contractDetails?.elevator || false,
+    garage: contractDetails?.garage || false,
+    ac: contractDetails?.ac || false,
+    jacuzzi: contractDetails?.jacuzzi || false,
+    garden: contractDetails?.garden || false,
+    solar_system: contractDetails?.solar_system || false,
+    pool: contractDetails?.pool || false,
   };
 
   return (
@@ -409,17 +405,17 @@ const ContractSignature = () => {
             </div>
             <div
               className="flex items-center gap-lg"
-              data-print-hidden={!contactDetails?.deposit ? "true" : "false"}
+              data-print-hidden={!contractDetails?.deposit ? "true" : "false"}
             >
               <input
                 id="checkbox1"
-                checked={!!contactDetails?.deposit}
+                checked={!!contractDetails?.deposit}
                 type="checkbox"
                 disabled={true}
               />
               <label
                 className={`${
-                  !contactDetails?.deposit ? "text-quinary-bg" : "text-black"
+                  !contractDetails?.deposit ? "text-quinary-bg" : "text-black"
                 } text-size20 cursor-pointer`}
                 htmlFor="checkbox1"
               >
@@ -435,17 +431,17 @@ const ContractSignature = () => {
             </div>
             <div
               className="flex items-center gap-lg"
-              data-print-hidden={!contactDetails?.batch ? "true" : "false"}
+              data-print-hidden={!contractDetails?.batch ? "true" : "false"}
             >
               <input
                 id="checkbox2"
-                checked={!!contactDetails?.batch}
+                checked={!!contractDetails?.batch}
                 type="checkbox"
                 disabled={true}
               />
               <label
                 className={`${
-                  !contactDetails?.batch ? "text-quinary-bg" : "text-black"
+                  !contractDetails?.batch ? "text-quinary-bg" : "text-black"
                 } text-size20 cursor-pointer`}
                 htmlFor="checkbox2"
               >
@@ -480,12 +476,12 @@ const ContractSignature = () => {
               <div
                 className="flex items-center gap-lg"
                 data-print-hidden={
-                  !contactDetails?.warranty_agent ? "true" : "false"
+                  !contractDetails?.warranty_agent ? "true" : "false"
                 }
               >
                 <input
                   id="choise1"
-                  checked={!!contactDetails?.warranty_agent}
+                  checked={!!contractDetails?.warranty_agent}
                   type="checkbox"
                   disabled={true}
                 />
@@ -495,10 +491,10 @@ const ContractSignature = () => {
               </div>
               <div
                 className="flex items-center gap-lg"
-                data-print-hidden={!contactDetails?.days ? "true" : "false"}
+                data-print-hidden={!contractDetails?.days ? "true" : "false"}
               >
                 <input
-                  checked={!!contactDetails?.days}
+                  checked={!!contractDetails?.days}
                   id="choise2"
                   type="checkbox"
                   disabled={true}
@@ -513,11 +509,11 @@ const ContractSignature = () => {
                 variant="contract"
                 form={form}
                 name="days"
-                data-print-hidden={!contactDetails?.days ? "true" : "false"}
+                data-print-hidden={!contractDetails?.days ? "true" : "false"}
               />
               <span
                 className="text-size18"
-                data-print-hidden={!contactDetails?.days ? "true" : "false"}
+                data-print-hidden={!contractDetails?.days ? "true" : "false"}
               >
                 (إذا ترك فارغاً, يتم اعتبار 3 أيام تلقائياً) من الأيام بعد
                 التاريخ الفعال.
