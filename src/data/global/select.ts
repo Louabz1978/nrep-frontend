@@ -89,10 +89,10 @@ export const WATERLINE: WaterLineOption[] = [
   { value: "well", label: "بئر" },
 ];
 // Trans type options
-type TransTypeValue = "sale" | "rent" ;
+type TransTypeValue = "sell" | "rent";
 export type TransTypeOption = SelectOption<TransTypeValue>;
 export const TransType: TransTypeOption[] = [
-  { value: "sale", label: "بيع" },
+  { value: "sell", label: "بيع" },
   { value: "rent", label: "إيجار" },
 ];
 

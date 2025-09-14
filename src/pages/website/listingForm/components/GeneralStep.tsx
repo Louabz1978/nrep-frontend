@@ -26,7 +26,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // extract form utils
   const { handleSubmit } = form;
 
-
   // handle submit form
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);

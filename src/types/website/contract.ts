@@ -129,7 +129,6 @@ export type DeleteContractResult = Promise<{
   message: string;
 }>;
 
-
 export interface GetAllContractsProps {
   queryParams: Record<string, string>;
 }
@@ -250,7 +249,7 @@ export interface GetContractProps {
   id: number;
 }
 
-export type GetContractResult = Promise<ContractWithUser>;
+export type GetContractResult = Promise<ContractFormType>;
 
 // Contract Bulk Operations Types
 export interface ContractBulkUpdateProps {

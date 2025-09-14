@@ -15,7 +15,7 @@ import type { ContactWithUser } from "@/types/website/contact";
 
 type ContractSignatureProps = {
   allContacts: ContactWithUser[] | undefined;
-  contractDetails: ContractFormType | undefined;
+  contractDetails: ContractFormType;
 };
 
 const ContractSignature = ({
@@ -31,48 +31,7 @@ const ContractSignature = ({
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
-    defaultValues: contractDetails
-    ? {
-      ...contractDetails,
-      sellers: [
-        {
-          id: contractDetails.id?.toString(),
-          seller_name: contractDetails.seller_name,
-          seller_mothor_name: contractDetails.seller_mothor_name,
-          seller_birth_place: contractDetails.seller_birth_place,
-          seller_nation_number: contractDetails.seller_nation_number,
-          seller_registry: contractDetails.seller_registry,
-        },
-      ],
-      buyers: [
-        {
-          id: contractDetails.id?.toString(),
-          buyer_name: {
-            label: contractDetails.buyer_name,
-            value: contractDetails.buyer_name,
-          },
-          buyer_mothor_name: contractDetails.buyer_mothor_name,
-          buyer_birth_place: contractDetails.buyer_birth_place,
-          buyer_nation_number: contractDetails.buyer_nation_number,
-          buyer_registry: contractDetails.buyer_registry,
-        },
-      ],
-      // Also populate top-level fields for backward compatibility
-      seller_name: contractDetails.seller_name,
-      seller_mothor_name: contractDetails.seller_mothor_name,
-      seller_birth_place: contractDetails.seller_birth_place,
-      seller_nation_number: contractDetails.seller_nation_number,
-      seller_registry: contractDetails.seller_registry,
-      buyer_name: {
-        label: contractDetails.buyer_name,
-        value: contractDetails.buyer_name,
-      },
-      buyer_mothor_name: contractDetails.buyer_mothor_name,
-      buyer_birth_place: contractDetails.buyer_birth_place,
-      buyer_nation_number: contractDetails.buyer_nation_number,
-      buyer_registry: contractDetails.buyer_registry,
-    }
-  : {
+    defaultValues: contractDetails ?? {
       sellers: [sellerInitialValues],
       buyers: [buyerInitialValues],
     },

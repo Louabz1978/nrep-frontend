@@ -18,7 +18,7 @@ import OtherUserHome from "./pages/global/OtherUserHome";
 import AddContactFormIndex from "./pages/website/ContactForm/AddContactFormIndex";
 import ContactTable from "./pages/website/contactTable/ContactTable";
 import EditContactFormIndex from "./pages/website/ContactForm/EditContactFormIndex";
-import ContractSignature from "./pages/website/contracts/contractSignature/ContractSignature";
+import ContractSignatureIndex from "./pages/website/contracts/contractSignature/ContractSignatureIndex";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
       },
       {
         path: "contracts/signature/:id",
-        element: <ContractSignature />,
+        element: <ContractSignatureIndex />,
         handle: { whiteBg: true },
       },
       {

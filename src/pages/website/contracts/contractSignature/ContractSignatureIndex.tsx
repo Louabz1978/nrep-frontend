@@ -4,6 +4,7 @@ import useGetConrtactById from "@/hooks/website/contract/useGetContractById";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import StatusManager from "@/components/global/statusManager/StatusManager";
 import ContractSignatureSkeleton from "./ContractSignatureSkeleton";
+import type { ContractFormType } from "@/data/website/schema/contractSchema";
 
 const ContractSignatureIndex = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,15 +14,14 @@ const ContractSignatureIndex = () => {
   );
   const { allContacts } = useGetAllContacts();
 
-  if (contractDetailsQuery.isLoading) {
-    return <ContractSignatureSkeleton />;
-  }
-
   return (
-    <StatusManager query={contractDetailsQuery} Loader={ContractSignatureSkeleton}>
+    <StatusManager
+      query={contractDetailsQuery}
+      Loader={ContractSignatureSkeleton}
+    >
       <ContractSignature
         allContacts={allContacts}
-        contractDetails={contractDetails}
+        contractDetails={contractDetails as ContractFormType}
       />
     </StatusManager>
   );
