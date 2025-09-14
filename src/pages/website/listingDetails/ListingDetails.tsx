@@ -10,6 +10,7 @@ import {
   cityChoices,
   PROPERTY_TYPE,
   STATUS,
+  TransType,
   WATERLINE,
 } from "@/data/global/select";
 import { FaMap } from "react-icons/fa";
@@ -206,6 +207,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
   const city = cityChoices?.find((item) => item?.value == data?.address?.city)
     ?.label;
   const status = STATUS?.find((item) => item?.value == data?.status);
+  const transType = TransType?.find((item) => item?.value == data?.trans_type);
   const propertyType = PROPERTY_TYPE?.find(
     (item) => item?.value == data?.property_type
   )?.label;
@@ -224,6 +226,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
   }`.trim();
 
   const dummyProperty = {
+    trans_type: transType?.label,
     ac: data.additional?.ac ? "يوجد" : "لا يوجد",
     apartmentNumber: data.address?.apt || "2",
     area: data.address?.area || "النص هنا",

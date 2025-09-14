@@ -109,9 +109,8 @@ function AllListings() {
         id: "trans_type",
         header: "نوع العقد",
         accessorKey: "trans_type",
-        cell:({ row }) => {
-          const transTypeValue =
-            row?.original?.trans_type
+        cell: ({ row }) => {
+          const transTypeValue = row?.original?.trans_type;
           const trans_type = TransType?.find(
             (item) => item?.value == transTypeValue
           )?.label;
@@ -149,8 +148,10 @@ function AllListings() {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
+          console.log({ user });
           const isSameUser =
-            row?.original?.created_by_user?.user_id == user?.user_id;
+            row?.original?.created_by_user?.user_id ==
+            (user?.user_id ?? user?.data?.user_id);
 
           return (
             <div className="flex items-center gap-md">

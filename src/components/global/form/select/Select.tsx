@@ -121,7 +121,7 @@ function Select<T extends FieldValues>({
 
     const isChoosen = multiple
       ? keyValue
-        ? (watch(name) ?? []).filter(
+        ? (watch(name) ?? [])?.filter(
             (ele: Record<string, ReactNode>) =>
               ele?.[showValue as string] ==
               (finalChoice as Record<string, ReactNode>)?.[showValue as string]
@@ -482,7 +482,7 @@ function Select<T extends FieldValues>({
 
                     const isChoosen = multiple
                       ? keyValue
-                        ? (watch(name) as Record<string, ReactNode>[]).filter(
+                        ? (watch(name) as Record<string, ReactNode>[])?.filter(
                             (ele: Record<string, ReactNode>) =>
                               ele[showValue as string] ==
                               (finalChoice as Record<string, ReactNode>)[

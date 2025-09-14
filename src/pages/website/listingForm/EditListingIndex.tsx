@@ -30,7 +30,7 @@ function EditListingIndex() {
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingFormSkeleton}>
       {!listingDetails ? null : listingDetails?.created_by_user?.user_id ==
-        user?.user_id ? (
+        (user?.user_id ?? user?.data?.user_id) ? (
         <ListingForm
           key={listingId}
           id={listingId}
