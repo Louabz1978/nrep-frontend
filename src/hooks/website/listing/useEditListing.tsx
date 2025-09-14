@@ -58,6 +58,8 @@ export const useEditListings = () => {
 
     const data = {
       ...(submitData ?? {}),
+      trans_type: submitData?.trans_type?.value,
+      sellers: submitData?.sellers?.map((item) => item?.id as string),
       country: submitData?.country?.value,
       county: submitData?.country?.value,
       city: submitData?.city?.value,
@@ -73,6 +75,7 @@ export const useEditListings = () => {
       metadata: JSON.stringify([]),
       longitude: Number(submitData?.longitude),
       latitude: Number(submitData?.latitude),
+      livable : submitData.livable,
       main_photo: mainImageName ?? "",
       owner_id: 1,
     };

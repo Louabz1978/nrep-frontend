@@ -3,7 +3,7 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable, type Filters } from "@/components/global/table2/table";
 import { Checkbox } from "@/components/global/ui/checkbox";
-import { cityChoices, STATUS } from "@/data/global/select";
+import { cityChoices, STATUS, TransType } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
 import useMyListings from "@/hooks/website/listing/useMyListings";
@@ -104,6 +104,19 @@ function MyListings() {
         header: "السعر",
         accessorKey: "price",
         size: 20,
+      },
+      {
+        id: "trans_type",
+        header: "نوع العقد",
+        accessorKey: "trans_type",
+        cell: ({ row }) => {
+          const transTypeValue = row?.original?.trans_type;
+          const trans_type = TransType?.find(
+            (item) => item?.value == transTypeValue
+          )?.label;
+          return trans_type;
+        },
+        size: 10,
       },
       {
         id: "area",

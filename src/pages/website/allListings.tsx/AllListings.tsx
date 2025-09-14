@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
-import { cityChoices, STATUS } from "@/data/global/select";
+import { cityChoices, STATUS, TransType } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import useAllListings from "@/hooks/website/listing/useAllListings";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
@@ -104,6 +104,20 @@ function AllListings() {
         header: "السعر",
         accessorKey: "price",
         size: 20,
+      },
+      {
+        id: "trans_type",
+        header: "نوع العقد",
+        accessorKey: "trans_type",
+        cell:({ row }) => {
+          const transTypeValue =
+            row?.original?.trans_type
+          const trans_type = TransType?.find(
+            (item) => item?.value == transTypeValue
+          )?.label;
+          return trans_type;
+        },
+        size: 10,
       },
       {
         id: "area",

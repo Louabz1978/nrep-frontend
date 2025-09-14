@@ -32,11 +32,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   };
 
   const { allContacts } = useGetAllContacts();
-  const contactOptions =
-    allContacts?.map((contact: ContactWithUser) => ({
-      value: String(contact.consumer_id),
-      label: contact.name,
-    })) || [];
+
 
   return (
     <AnimateContainer>
@@ -166,9 +162,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="البائعون"
             placeholder="اختر البائعون"
-            choices={contactOptions}
-            keyValue="value"
-            showValue="label"
+            choices={allContacts}
+            keyValue="consumer_id"
+            showValue="name"
             multiple={true}
             name="sellers"
             info="يرجى اختيار البائعون"
