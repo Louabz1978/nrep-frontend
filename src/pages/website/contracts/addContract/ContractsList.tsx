@@ -1101,10 +1101,10 @@ function ContractsList() {
 
             <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
               <div className="flex gap-[30px] items-start">
-                <span className=" mb-lg text-size18 w-[130px] text-start">
+                <span className=" mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                   البائع:
                 </span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledSellers?.map((item) => {
                     return (
                       <div
@@ -1123,7 +1123,7 @@ function ContractsList() {
                 </div>
               </div>
               <div className="flex gap-[30px] items-start">
-                <span className="mb-lg text-size18 w-[130px] text-start">
+                <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                   وكيل البائع:
                 </span>
                 <div className="flex flex-col items-center gap-[4px]">
@@ -1136,10 +1136,10 @@ function ContractsList() {
                 </div>
               </div>
               <div className="flex gap-[30px] items-start">
-                <span className="mb-lg text-size18 w-[130px] text-start">
+                <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                   المشتري:
                 </span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledBuyers?.map((item) => {
                     return (
                       <div
@@ -1158,7 +1158,7 @@ function ContractsList() {
                 </div>
               </div>
               <div className="flex gap-[30px] items-start">
-                <span className="mb-lg text-size18 w-[130px] text-start">
+                <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                   وكيل المشتري:
                 </span>
                 <div className="flex flex-col items-center gap-[4px]">
