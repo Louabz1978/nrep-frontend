@@ -327,54 +327,54 @@ function ContractsList() {
             {controlledSellers?.map((_, index) => (
               <div
                 key={sellers.fields?.[index]?.id}
-                className="flex items-center gap-2"
+                className="flex items-end flex-wrap gap-2"
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">البائع:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`sellers.${index}.seller_name`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">والدته:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`sellers.${index}.seller_mothor_name`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">تولد:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`sellers.${index}.seller_birth_place`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">
                     الرقم الوطني:
                   </span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`sellers.${index}.seller_nation_number`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">القيد:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`sellers.${index}.seller_registry`}
@@ -389,16 +389,16 @@ function ContractsList() {
             {controlledBuyers?.map((_, index) => (
               <div
                 key={buyers.fields?.[index]?.id}
-                className="flex items-center gap-2"
+                className="flex items-end flex-wrap gap-2"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">
                     المشتري:
                   </span>
                   <Select
                     choices={contacts}
                     showValue="value"
-                    addingStyle="pb-4 w-full"
+                    addingStyle="pb-[5px] w-full"
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_name`}
@@ -440,42 +440,42 @@ function ContractsList() {
                     }}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">والدته:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_mothor_name`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">تولد:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_birth_place`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">
                     الرقم الوطني:
                   </span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_nation_number`}
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">القيد:</span>
                   <Input
-                    addingStyle="pb-4"
+                    flexibleWidth
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_registry`}
@@ -503,56 +503,56 @@ function ContractsList() {
           <h1 className="text-size25 font-bold mb-3xl">1. وصف العقار</h1>
 
           {/* First Row */}
-          <div className="flex items-center  flex-wrap gap-4xl mb-3xl">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center  flex-wrap gap-md mb-3xl">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">
                 رقم البناء :
               </span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="building_num"
                 disabled={true}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">
                 {" "}
                 اسم الشارع :
               </span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="street"
                 disabled={true}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">الطابق : </span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="floor"
                 disabled={true}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">الشقة :</span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="apt"
                 disabled={true}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">الحي :</span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="area"
@@ -562,21 +562,21 @@ function ContractsList() {
           </div>
 
           {/* Second Row */}
-          <div className="flex items-center  gap-5xl mb-3xl">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center  gap-md mb-3xl">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">المدينة :</span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="city"
                 disabled={true}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end gap-2">
               <span className="text-size18 whitespace-nowrap">المحافظة :</span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="country"
@@ -587,10 +587,10 @@ function ContractsList() {
 
           {/* Legal Description Field */}
           <div className="mb-3xl">
-            <div className="flex items-center gap-md">
+            <div className="flex items-end gap-md">
               <span className=" text-size18">الوصف القانوني للعقار :</span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="legal_description"
@@ -636,22 +636,24 @@ function ContractsList() {
             <div className="flex items-center justify-center flex-wrap mt-2xl mb-3xl">
               <FormSectionHeader>سعر الشراء والإغلاق</FormSectionHeader>
             </div>
-            <div className="flex items-center gap-md ">
+            <div className="flex items-end gap-md ">
               <h1 className="text-size25 font-bold whitespace-nowrap">
                 2.سعر الشراء
               </h1>
               <span className="text-size18 whitespace-nowrap">
-                (الدولار الاميركي): {".".repeat(165)}
+                (الدولار الاميركي):
               </span>
+              <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
-                addingStyle="pb-2xl w-[500px]"
+                flexibleWidth
+                addingStyle="min-w-[500px]"
                 variant="contract"
                 form={form}
                 name="price"
               />
             </div>
             <div
-              className="flex items-center gap-lg"
+              className="flex items-end gap-lg"
               data-print-hidden={disabled1 ? "true" : "false"}
             >
               <input
@@ -666,10 +668,11 @@ function ContractsList() {
                 } text-size20 cursor-pointer `}
                 htmlFor="checkbox1"
               >
-                قيمة الرعبون و تاريخ الدفع : {".".repeat(155)}
+                قيمة الرعبون و تاريخ الدفع :
               </label>
+              <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
-                addingStyle="pb-2xl "
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="deposit"
@@ -677,7 +680,7 @@ function ContractsList() {
               />
             </div>
             <div
-              className="flex items-center gap-lg"
+              className="flex items-end gap-lg"
               data-print-hidden={disabled2 ? "true" : "false"}
             >
               <input
@@ -692,22 +695,22 @@ function ContractsList() {
                 } text-size20 cursor-pointer`}
                 htmlFor="checkbox2"
               >
-                قيمة الدفعة و تاريخ الدفع : {".".repeat(156)}
+                قيمة الدفعة و تاريخ الدفع :
               </label>
+              <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
-                addingStyle="pb-2xl "
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="batch"
                 disabled={disabled2}
               />
             </div>
-            <div className="flex items-center gap-lg">
-              <h2 className="text-size18">
-                السعر النهائي : {".".repeat(202)}{" "}
-              </h2>
+            <div className="flex items-end gap-lg">
+              <h2 className="text-size18">السعر النهائي :</h2>
+              <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
-                addingStyle="pb-2xl "
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="deposit"
@@ -718,7 +721,7 @@ function ContractsList() {
               تدفع الشيكات لأمر "وكيل الضمان" المسمى أدناه.
             </p>
 
-            <div className="flex items-center gap-xl">
+            <div className="flex items-end gap-xl">
               <span className="text-size20 font-bold ">(اختر واحداً):</span>
               <div
                 className="flex items-center gap-lg"
@@ -755,8 +758,8 @@ function ContractsList() {
                 </label>
               </div>
               <Input
+                flexibleWidth
                 disabled={!checkbox2}
-                addingStyle="pb-2xl "
                 variant="contract"
                 form={form}
                 name="days"
@@ -773,69 +776,69 @@ function ContractsList() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between  gap-sm">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-md flex-wrap">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   وكيل البائع :
                 </span>
 
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="sller_agent_name"
                   disabled={true}
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">الرخصة : </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="seller_agent_license"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   اسم البروكر :
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="seller_agent_broker"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   رخصة البروكر :{" "}
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="seller_agent_broker_license"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   عنوان الشركة :{" "}
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="seller_company_address"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   هاتف الشركة :
                 </span>
                 <Input
+                  flexibleWidth
                   type="number"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="seller_company_phone"
@@ -844,13 +847,13 @@ function ContractsList() {
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   عمولة وكيل البائع :
                 </span>
                 <Input
+                  flexibleWidth
                   type="number"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="seller_commission"
@@ -858,68 +861,68 @@ function ContractsList() {
                 />
               </div>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-md flex-wrap">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   وكيل المشتري :
                 </span>
 
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="buyer_agent"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">الرخصة : </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="buyer_agent_license"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   اسم البروكر :
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="buyer_agent_broker"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   رخصة البروكر :{" "}
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="buyer_agent_broker_license"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   عنوان الشركة :{" "}
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="buyer_company_address"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   هاتف الشركة :
                 </span>
                 <Input
+                  flexibleWidth
                   type="number"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="buyer_company_phone"
@@ -927,13 +930,13 @@ function ContractsList() {
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   عمولة وكيل المشتري :
                 </span>
                 <Input
+                  flexibleWidth
                   type="number"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="buyer_commission"
@@ -942,20 +945,20 @@ function ContractsList() {
               </div>
             </div>
             <div className="flex items-center gap-2xl">
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">العنوان :</span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="warranty_agent_address"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">الهاتف :</span>
                 <Input
+                  flexibleWidth
                   type="number"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="warranty_agent_phone"
@@ -963,21 +966,21 @@ function ContractsList() {
               </div>
             </div>
             <div className="flex items-center gap-2xl">
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
                   البريد الإلكتروني :
                 </span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="warranty_agent_email"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">الفاكس :</span>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="warranty_agent_fax"
@@ -985,13 +988,13 @@ function ContractsList() {
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-2 text-size18">
+              <div className="flex items-end gap-2 text-size18">
                 <span className="whitespace-nowrap text-size18">
                   دفعة إضافية لإيداعها في حساب الضمان خلال{" "}
                 </span>
                 <Input
+                  flexibleWidth
                   type="number"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="days_batch"
@@ -999,11 +1002,12 @@ function ContractsList() {
                 <span className="whitespace-nowrap text-size18">
                   {" "}
                   (إذا ترك فارغاً, يتم اعتبار 10 أيام تلقائيا ) من الأيام بعد
-                  التاريخ الفعال...............
+                  التاريخ الفعال
                 </span>
+                <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>{" "}
                 <Input
+                  flexibleWidth
                   type="date"
-                  addingStyle="pb-4"
                   variant="contract"
                   form={form}
                   name="effective_date"
@@ -1017,37 +1021,36 @@ function ContractsList() {
               </p>
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end flex-wrap gap-2">
                 <span className="whitespace-nowrap text-size18 ">
                   التمويل: (تُعبر كنسبة مئوية أو مبلغ محدد "قيمة القرض"){" "}
-                  {".".repeat(157)}
                 </span>
+                <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="financing"
                 />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="whitespace-nowrap text-size18 ">
-                  أخرى : {".".repeat(234)}
-                </span>
+              <div className="flex items-end flex-wrap gap-2">
+                <span className="whitespace-nowrap text-size18 ">أخرى :</span>
+                <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>{" "}
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="others"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-end flex-wrap gap-2">
                 <span className="whitespace-nowrap text-size18 ">
                   الرصيد المستحق (باستثناء تكاليف إغلاق المشتري، المدفوعات
                   المسبقة والتسويات) عن طريق التحويل أو طرق جمع أخرى
-                  {".".repeat(60)}{" "}
                 </span>
+                <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>{" "}
                 <Input
-                  addingStyle="pb-4"
+                  flexibleWidth
                   variant="contract"
                   form={form}
                   name="balance"
@@ -1060,13 +1063,13 @@ function ContractsList() {
             <h1 className="text-size25 font-bold whitespace-nowrap ">
               3.وقت قبول العرض والعروض المضادة؛ تاريخ النفاذ:
             </h1>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end gap-2">
               <span className="whitespace-nowrap text-size18">
                 إذا لم يوقع كل من البائع والمشتري ولم يتم تسليم نسخة موقعة لجميع
                 الأطراف في أو قبل
               </span>
               <Input
-                addingStyle="pb-4"
+                flexibleWidth
                 variant="contract"
                 form={form}
                 name="balance"
@@ -1094,76 +1097,6 @@ function ContractsList() {
           <div className="mt-3xl">
             <FormSectionHeader>التواقيع</FormSectionHeader>
 
-            {/* <div className="flex flex-col gap-[40px] items-center justify-center mt-3xl">
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">البائع</span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
-                  {controlledSellers?.map((item) => {
-                    return (
-                      <div
-                        key={item?.id}
-                        className="flex items-center gap-[4px]"
-                      >
-                        {item?.seller_name ? (
-                          <span className="text-center mb-lg text-size18">
-                            {`${item?.seller_name}`}:
-                          </span>
-                        ) : null}
-                        <SignatureInput form={form} name="agent_signature" />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">
-                  وكيل البائع
-                </span>
-                <div className="flex items-center gap-[4px]">
-                  {form.watch("sller_agent_name") ? (
-                    <span className="text-center mb-lg text-size18">
-                      {`${form.watch("sller_agent_name")}`}:
-                    </span>
-                  ) : null}
-                  <SignatureInput form={form} name="agent_signature" />
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">المشتري</span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
-                  {controlledBuyers?.map((item) => {
-                    return (
-                      <div
-                        key={item?.id}
-                        className="flex items-center gap-[4px]"
-                      >
-                        {item?.buyer_name?.value ? (
-                          <span className="text-center mb-lg text-size18">
-                            {item?.buyer_name?.value}:
-                          </span>
-                        ) : null}
-                        <SignatureInput form={form} name="agent_signature" />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-center mb-lg text-size18">
-                  وكيل المشتري
-                </span>
-                <div className="flex items-center gap-[4px]">
-                  {form.watch("buyer_agent") ? (
-                    <span className="text-center mb-lg text-size18">
-                      {`${form.watch("buyer_agent")}`}:
-                    </span>
-                  ) : null}
-                  <SignatureInput form={form} name="agent_signature" />
-                </div>
-              </div>
-            </div> */}
-
-            {/* remove comment */}
             <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
               <div className="flex gap-[30px] items-start">
                 <span className=" mb-lg text-size18 w-[130px] text-start">
