@@ -2,6 +2,7 @@ import { useRef } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import {
   Controller,
+  useWatch,
   type FieldValues,
   type Path,
   type UseFormReturn,
@@ -21,6 +22,8 @@ function SignatureInput<T extends FieldValues>({
   required,
 }: SignatureInputProps<T>) {
   const sigRef = useRef<SignatureCanvas>(null);
+  const value = useWatch({ control: form.control, name: name });
+  console.log({ value });
 
   return (
     <div className="flex flex-col gap-2">
@@ -35,7 +38,12 @@ function SignatureInput<T extends FieldValues>({
         control={form.control}
         name={name}
         render={({ field }) => (
-          <>
+          <div className="h-max w-max relative">
+            <div className="h-full w-full absolute top-0 right-0 pointer-events-none z-[-1] ">
+              {value ? (
+                <img src={value} className="size-full object-contain " />
+              ) : null}
+            </div>
             <SignatureCanvas
               ref={sigRef}
               penColor="black"
@@ -52,7 +60,7 @@ function SignatureInput<T extends FieldValues>({
                 }
               }}
             />
-          </>
+          </div>
         )}
       />
     </div>

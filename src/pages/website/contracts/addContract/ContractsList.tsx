@@ -44,8 +44,6 @@ function ContractsList() {
     mode: "onChange",
   });
 
-
-
   // Field arrays for sellers and buyers
   const sellers = useFieldArray({
     name: "sellers",
@@ -157,7 +155,6 @@ function ContractsList() {
       form.setValue("fan_number", listingDetails.additional.fan_number || null);
       form.setValue("water", listingDetails.additional.water || "");
     }
-
 
     // Agent information
     form.setValue(
