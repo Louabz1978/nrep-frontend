@@ -17,7 +17,9 @@ import { FaAngleDown } from "react-icons/fa6";
 function StatusForm({ row }: { row: Row<Listing> }) {
   const { user } = useUser();
 
-  const isSameUser = row?.original?.created_by_user?.user_id == user?.user_id;
+  const isSameUser =
+    row?.original?.created_by_user?.user_id ==
+    (user?.user_id ?? user?.data?.user_id);
 
   const { handleEditListingPartial } = useEditListingsPartial();
 

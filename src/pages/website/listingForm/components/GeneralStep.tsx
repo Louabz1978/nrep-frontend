@@ -34,7 +34,6 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
 
   const { allContacts } = useGetAllContacts();
 
-
   return (
     <AnimateContainer>
       <form
@@ -163,7 +162,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="البائعون"
             placeholder="اختر البائعون"
-            choices={allContacts}
+            choices={allContacts ?? []}
             keyValue="consumer_id"
             showValue="name"
             multiple={true}

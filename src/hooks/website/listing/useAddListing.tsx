@@ -41,9 +41,9 @@ export const useAddListings = () => {
     const data = {
       ...(submitData ?? {}),
       trans_type: submitData?.trans_type?.value,
-      sellers: submitData?.sellers?.map((item) => item?.id as string),
+      sellers: submitData?.sellers?.map((item) => item?.consumer_id as string),
       country: submitData?.country?.value,
-      livable : submitData?.livable,
+      livable: submitData?.livable,
       county: submitData?.country?.value,
       city: submitData?.city?.value,
       property_type: submitData?.property_type?.value,

@@ -63,7 +63,8 @@ const checkPermissionsAtom = atom(
 
       requiredPermissions.forEach((permission) => {
         permissionStatus =
-          permissionStatus || (user?.roles?.includes(permission) ?? false);
+          permissionStatus ||
+          ((user?.roles ?? user?.data?.roles)?.includes(permission) ?? false);
       });
 
       // return permissionStatus;
@@ -80,7 +81,8 @@ const hasPermissionsAtom = atom(
 
       requiredPermissions.forEach((permission) => {
         permissionStatus =
-          permissionStatus || (user?.roles?.includes(permission) ?? false);
+          permissionStatus ||
+          ((user?.roles ?? user?.data?.roles)?.includes(permission) ?? false);
       });
 
       return permissionStatus;
