@@ -29,6 +29,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // handle submit form
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
+    console.log(form.watch())
   };
 
   const { allContacts } = useGetAllContacts();

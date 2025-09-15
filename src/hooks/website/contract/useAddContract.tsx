@@ -93,6 +93,8 @@ export default function useAddContract() {
       container.style.textAlign = "right";
       container.style.padding = "20px";
       container.style.fontFamily = "Arial, sans-serif";
+      container.style.fontSize = "26px"; // Increased font size
+      container.style.lineHeight = "2.6"; // Increased line spacing
       container.id = "print-container";
       document.body.appendChild(container);
 
@@ -109,14 +111,16 @@ export default function useAddContract() {
       contractClone.style.padding = "20px";
       contractClone.style.margin = "0";
       contractClone.style.fontFamily = "Arial, sans-serif";
+      contractClone.style.fontSize = "20px"; // Increased font size
+      contractClone.style.lineHeight = "2"; // Increased line spacing
 
       // Add section header
-      const contractHeader = document.createElement("h2");
+      const contractHeader = document.createElement("h1");
       contractHeader.textContent = "عقد بيع وشراء سكني";
       contractHeader.style.textAlign = "center";
       contractHeader.style.marginBottom = "20px";
-      contractHeader.style.fontSize = "18px";
-      contractHeader.style.fontWeight = "bold";
+      contractHeader.style.fontSize = "22px";
+      contractHeader.style.fontWeight = "bolder";
       contractHeader.style.direction = "rtl";
 
       // Build the content
@@ -131,13 +135,11 @@ export default function useAddContract() {
         logging: false,
         scrollX: 0,
         scrollY: -window.scrollY,
-        windowWidth: 1200,
-        windowHeight: container.scrollHeight,
         onclone: (clonedDoc, element) => {
           element.style.display = "block";
           element.style.direction = "rtl";
           element.style.textAlign = "right";
-          element.style.padding = "20px";
+          element.style.padding = "30px";
           clonedDoc.body.style.overflow = "visible";
           clonedDoc.body.style.direction = "rtl";
           clonedDoc.body.style.textAlign = "right";
@@ -150,30 +152,68 @@ export default function useAddContract() {
             applyPrintStylesToClone(clonedContract as HTMLElement);
             (clonedContract as HTMLElement).style.direction = "rtl";
             (clonedContract as HTMLElement).style.textAlign = "right";
-            (clonedContract as HTMLElement).style.padding = "20px";
+            (clonedContract as HTMLElement).style.padding = "30px";
+            (clonedContract as HTMLElement).style.fontSize = "30px"; // Increased font size
+            (clonedContract as HTMLElement).style.lineHeight = "2.4"; // Increased line spacing
           }
         },
       });
 
       // 5. Generate PDF
       const pdf = new jsPDF("p", "mm", "a4");
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgWidth = 210; // A4 width in mm
 
-      const maxHeight = 297;
-      const finalHeight = Math.min(imgHeight, maxHeight);
+      // Calculate A4 page height in pixels based on the canvas's scale
+      const A4_HEIGHT_MM = 295; // A4 height in mm
+      const pixelsPerMm = canvas.width / imgWidth; // Pixels per mm based on how the canvas width maps to PDF width
+      const pageHeightInPixels = A4_HEIGHT_MM * pixelsPerMm;
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        0,
-        imgWidth,
-        finalHeight,
-        undefined,
-        "FAST"
-      );
+      let position = 0;
+      let pageNumber = 0;
+
+      while (position < canvas.height) {
+        if (pageNumber > 0) {
+          pdf.addPage();
+        }
+
+        const currentImageHeight = Math.min(
+          pageHeightInPixels,
+          canvas.height - position
+        );
+        const imgCanvas = document.createElement("canvas");
+        imgCanvas.width = canvas.width;
+        imgCanvas.height = currentImageHeight;
+
+        const imgContext = imgCanvas.getContext("2d");
+        if (imgContext) {
+          imgContext.drawImage(
+            canvas,
+            0,
+            position,
+            canvas.width,
+            currentImageHeight,
+            0,
+            0,
+            canvas.width,
+            currentImageHeight
+          );
+        }
+
+        const imgDataSlice = imgCanvas.toDataURL("image/png");
+        pdf.addImage(
+          imgDataSlice,
+          "PNG",
+          0,
+          0,
+          imgWidth,
+          (currentImageHeight * imgWidth) / canvas.width,
+          undefined,
+          "FAST"
+        );
+
+        position += pageHeightInPixels;
+        pageNumber++;
+      }
 
       // Convert PDF to blob
       const pdfBlob = pdf.output("blob");

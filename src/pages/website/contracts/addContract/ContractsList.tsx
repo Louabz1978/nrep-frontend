@@ -20,6 +20,7 @@ import type { ContactWithUser } from "@/types/website/contact";
 import useAddContract from "@/hooks/website/contract/useAddContract";
 import Select from "@/components/global/form/select/Select";
 import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
+import useGetPropertyByMls from "@/hooks/website/listing/useGetPropertyByMls";
 
 function ContractsList() {
   const [disabled1, setDisabled1] = useState(true);
@@ -29,8 +30,10 @@ function ContractsList() {
 
   const [currentMLS, setCurrentMLS] = useState<TNumber>();
   const { listingDetails } = useListingDetails(Number(currentMLS));
+  const { propertyByMls } = useGetPropertyByMls(Number(currentMLS));
   const { allContacts } = useGetAllContacts();
   const { handleAddContract, isPending: isSubmitting } = useAddContract();
+  console.log(propertyByMls)
 
   const contacts =
     allContacts?.map((contact: ContactWithUser) => ({
@@ -714,7 +717,6 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="deposit"
-                disabled={disabled2}
               />
             </div>
             <p className="mb-lg text-size19">

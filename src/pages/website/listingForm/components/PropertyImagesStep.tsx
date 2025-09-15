@@ -30,6 +30,7 @@ const PropertyImagesStep = ({
   // handle submit form
   const onSubmit = () => {
     handleSubmitForm();
+    console.log(form.watch())
   };
 
   return (
