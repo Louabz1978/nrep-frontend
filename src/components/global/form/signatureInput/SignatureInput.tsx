@@ -38,7 +38,7 @@ function SignatureInput<T extends FieldValues>({
         control={form.control}
         name={name}
         render={({ field }) => (
-          <div className="h-max w-max relative">
+          <div className="h-[100px] w-[180px] relative">
             <div className="h-full w-full absolute top-0 right-0 pointer-events-none z-[-1] ">
               {value ? (
                 <img src={value} className="size-full object-contain " />

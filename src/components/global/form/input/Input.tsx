@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 import {
   type UseFormTrigger,
@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 import Info from "../../modal/Info";
 import getError, { isValid } from "@/utils/getErrors";
-import Toggle from "../toggle/Toggle"; // <-- add Toggle import
+import Toggle from "../toggle/Toggle";
 
 interface InputProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -37,10 +37,12 @@ interface InputProps<T extends FieldValues> {
   required?: boolean;
   toggle?: Path<T>;
   variant?: string;
+  // Flexible width props
+  flexibleWidth?: boolean;
+  minWidth?: string;
+  maxWidth?: string;
 }
 
-// gets: input type, input placeholder, register method of react hook form, key name of input field in schema, input label, validation errors from react hook form, custom element beside checkbox input, and flag to specify if the input is disabled or not
-// returns: input component controlled by react hook form
 function Input<T extends FieldValues>({
   form,
   type = "text",
@@ -67,9 +69,14 @@ function Input<T extends FieldValues>({
   required,
   toggle,
   variant,
+  flexibleWidth = false,
+  minWidth = "150px",
+  maxWidth = "700px",
 }: InputProps<T>) {
-  // to show password
   const [show, setShow] = useState(false);
+  const [dynamicWidth, setDynamicWidth] = useState("max-content");
+  const flexibleWidthRef = useRef<HTMLSpanElement>(null);
+
   const {
     watch,
     register,
@@ -78,25 +85,247 @@ function Input<T extends FieldValues>({
     trigger,
   } = form;
 
-  // Compute isDisabled so that it updates when toggle changes
   const toggleValue = toggle ? watch(toggle) : undefined;
   const isDisabled = disabled || (toggle && !watch(toggle));
 
-  // Handler to update toggle and force re-render
+  // Get the text to measure for flexible width
+  const measureText = watch?.(name) || placeholder || "";
+
+  // Update width when measureText changes
+  useEffect(() => {
+    if (flexibleWidth && flexibleWidthRef.current) {
+      const newWidth = flexibleWidthRef.current.offsetWidth;
+      setDynamicWidth(`${newWidth + 8}px`);
+    }
+  }, [measureText, flexibleWidth]);
+
   const handleToggleChange = () => {
-    // If toggle is provided, flip its value
     if (toggle) {
       setValue(toggle, !toggleValue as PathValue<T, Path<T>>);
       trigger?.(toggle);
     }
-    // Also trigger the main input for validation
     trigger?.(name);
   };
 
+  // Base input classes for different variants
+  const getBaseInputClasses = () => {
+    if (variant === "contract") {
+      return `w-full h-8 text-size15 border-b-1 pt-3.5 rounded-none outline-none duration-[0.3s] ${
+        type === "password" ? "!pl-[56px]" : ""
+      }`;
+    }
+
+    return `flex-1 h-5xl text-size16 ${
+      isDisabled ? "bg-secondary-background" : "bg-input-bg"
+    } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
+      getError(errors, name)
+        ? "border-error"
+        : `${
+            isValid(form)
+              ? "focus-visible:border-success"
+              : "focus-visible:border-secondary"
+          } hover:border-secondary ${
+            addingValidStyle ? addingValidStyle : "border-secondary-border"
+          }`
+    } ${type === "password" ? "!pl-[56px]" : ""}`;
+  };
+
+  // Render flexible text input
+  const renderFlexibleInput = () => {
+    const baseClasses = getBaseInputClasses();
+
+    return (
+      <div
+        className={`${
+          variant === "contract"
+            ? "relative flex items-center"
+            : "relative flex items-center"
+        }`}
+      >
+        <div
+          className={`${
+            variant === "contract"
+              ? "relative overflow-hidden"
+              : "relative flex-1 overflow-hidden"
+          }`}
+        >
+          {/* Grid container for flexible width */}
+          <div
+            className="inline-grid grid-cols-1 items-center"
+            style={{
+              width: "max-content",
+            }}
+          >
+            {/* Hidden measuring span */}
+            <span
+              ref={flexibleWidthRef}
+              className={`invisible pointer-events-none !w-max whitespace-pre col-start-1 row-start-1 ${
+                variant === "contract"
+                  ? "h-8 text-size15 pt-3.5"
+                  : "h-5xl text-size16 p-lg"
+              } ${type === "password" ? "pl-[56px]" : ""}`}
+              style={{
+                minWidth,
+                maxWidth,
+                border:
+                  variant === "contract"
+                    ? "1px solid transparent"
+                    : "1.5px solid transparent",
+              }}
+            >
+              {measureText}
+            </span>
+
+            {/* Actual input */}
+            {type === "custom" ? (
+              customInput
+            ) : type === "number" ? (
+              <input
+                type="number"
+                placeholder={placeholder}
+                id={name}
+                {...(register ? register(name) : {})}
+                disabled={isDisabled}
+                className={`${baseClasses} ${addingInputStyle} col-start-1 row-start-1`}
+                style={{
+                  width: dynamicWidth,
+                }}
+                onChange={(e) => {
+                  if (
+                    numberRegex.test(e.target.value) &&
+                    (!min || Number(e.target.value) >= min) &&
+                    (!max || Number(e.target.value) <= max)
+                  ) {
+                    if (e.target.value === "") {
+                      setValue(name, undefined as PathValue<T, Path<T>>);
+                    } else {
+                      setValue(
+                        name,
+                        Number(e.target.value) as PathValue<T, Path<T>>
+                      );
+                    }
+                    trigger?.(name);
+                  }
+                }}
+                value={watch?.(name) ?? undefined}
+                step={step}
+              />
+            ) : (
+              <input
+                type={show ? "text" : type}
+                placeholder={placeholder}
+                id={name}
+                {...(register ? register(name) : {})}
+                disabled={isDisabled}
+                className={`${baseClasses} ${addingInputStyle} col-start-1 row-start-1`}
+                style={{
+                  width: dynamicWidth,
+                }}
+                step={step}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
+            )}
+          </div>
+
+          {/* Password toggle icon */}
+          {type === "password" && (
+            <div
+              className="text-primary-fg/80 hover:text-primary-fg/100 transition-all absolute h-[calc(100%_-_3.28px)] rounded-l-[12.27px] aspect-square left-[1.64px] bg-transparent top-[50%] -translate-y-[50%] flex justify-center items-center cursor-pointer"
+              onClick={() => {
+                if (type === "password") setShow(!show);
+              }}
+            >
+              {show ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          )}
+        </div>
+
+        {info && <Info info={info} />}
+      </div>
+    );
+  };
+
+  // Render regular input (original implementation)
+  const renderRegularInput = () => (
+    <div
+      className={`${
+        variant === "contract"
+          ? "relative flex items-center"
+          : "relative flex items-center"
+      }`}
+    >
+      <div
+        className={`${
+          variant === "contract"
+            ? "relative w-32 flex items-center overflow-hidden"
+            : "relative flex-1 flex items-center overflow-hidden"
+        }`}
+      >
+        {type === "custom" ? (
+          customInput
+        ) : type === "number" ? (
+          <input
+            type="number"
+            placeholder={placeholder}
+            id={name}
+            {...(register ? register(name) : {})}
+            disabled={isDisabled}
+            className={`${getBaseInputClasses()} ${addingInputStyle}`}
+            onChange={(e) => {
+              if (
+                numberRegex.test(e.target.value) &&
+                (!min || Number(e.target.value) >= min) &&
+                (!max || Number(e.target.value) <= max)
+              ) {
+                if (e.target.value === "") {
+                  setValue(name, undefined as PathValue<T, Path<T>>);
+                } else {
+                  setValue(
+                    name,
+                    Number(e.target.value) as PathValue<T, Path<T>>
+                  );
+                }
+                trigger?.(name);
+              }
+            }}
+            value={watch?.(name) ?? undefined}
+            step={step}
+          />
+        ) : (
+          <input
+            type={show ? "text" : type}
+            placeholder={placeholder}
+            id={name}
+            {...(register ? register(name) : {})}
+            disabled={isDisabled}
+            className={`${getBaseInputClasses()} ${addingInputStyle}`}
+            step={step}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+        )}
+
+        {type === "password" && (
+          <div
+            className="text-primary-fg/80 hover:text-primary-fg/100 transition-all absolute h-[calc(100%_-_3.28px)] rounded-l-[12.27px] aspect-square left-[1.64px] bg-transparent top-[50%] -translate-y-[50%] flex justify-center items-center cursor-pointer"
+            onClick={() => {
+              if (type === "password") setShow(!show);
+            }}
+          >
+            {show ? <FaEyeSlash /> : <FaEye />}
+          </div>
+        )}
+      </div>
+
+      {info && <Info info={info} />}
+    </div>
+  );
+
   return (
     <>
-      {/* checkbox input with its style */}
-      {type == "checkbox" ? (
+      {/* Checkbox input */}
+      {type === "checkbox" ? (
         <div className={`flex flex-col ${addingStyle}`}>
           <label
             htmlFor={name}
@@ -118,7 +347,6 @@ function Input<T extends FieldValues>({
               }}
               checked={watch?.(name) ? true : false}
             />
-            {/* checkbox presentation */}
             <div className="w-[20px] max-w-[20px] min-w-[20px] h-[20px] max-h-[20px] min-h-[20px] bg-secondary-background rounded-sm right-[2px] peer-checked:bg-secondary-foreground transition-all duration-[0.1s]"></div>
 
             <div className="flex items-center gap-2">
@@ -126,26 +354,25 @@ function Input<T extends FieldValues>({
               {required && !isDisabled ? (
                 <span className="text-size22 text-error">{" *"}</span>
               ) : null}
-              {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
-              {toggle ? (
+              {toggle && (
                 <Toggle
                   form={form}
                   name={toggle}
                   label=""
                   onChange={handleToggleChange}
                 />
-              ) : null}
+              )}
             </div>
-            {element ? element : null}
+            {element}
           </label>
-          {getError(errors, name) ? (
+          {getError(errors, name) && (
             <span className="text-error text-size14">
               {(getError(errors, name) as { message: string })?.message}
             </span>
-          ) : null}
+          )}
         </div>
-      ) : // checkbox input with its style
-      type == "tags" ? (
+      ) : type === "tags" ? (
+        /* Tags input */
         <div className={`flex flex-col ${addingStyle}`}>
           <label
             htmlFor={name}
@@ -171,26 +398,26 @@ function Input<T extends FieldValues>({
             <div className="px-3xl py-xl bg-transparent rounded-md border border-secondary-border peer-checked:bg-primary/10 peer-checked:border-primary transition-colors duration-150 w-[200px] text-center select-none flex items-center justify-center text-secondary-border peer-checked:text-primary text-size14 h-[40px]">
               {label}
             </div>
-            {element ? element : null}
+            {element}
           </label>
-          {getError(errors, name) ? (
+          {getError(errors, name) && (
             <span className="text-error text-size14">
               {(getError(errors, name) as { message: string })?.message}
             </span>
-          ) : null}
+          )}
         </div>
       ) : (
-        // other normal inputs
+        /* Text inputs */
         <div
           className={`${
-            variant == "contract"
+            variant === "contract"
               ? "flex items-center gap-2"
               : "flex flex-col w-full gap-xs"
           } ${addingStyle}`}
           onClick={onClick}
         >
-          {/* input label  */}
-          {label ? (
+          {/* Input label */}
+          {label && (
             <label
               htmlFor={name}
               className={`text-size18 font-medium cursor-pointer ${labelStyle} ${
@@ -199,158 +426,38 @@ function Input<T extends FieldValues>({
             >
               <span className="flex items-center gap-sm">
                 {label}
-                {variant == "contract" ? " :" : ""}
+                {variant === "contract" ? " :" : ""}
                 {required && !isDisabled ? (
                   <span className="text-size18 text-error">{" *"}</span>
                 ) : null}
-                {/* Toggle switch for enabling/disabling input, if toggle prop is provided */}
-                {toggle ? (
+                {toggle && (
                   <Toggle
                     form={form}
                     name={toggle}
                     onChange={handleToggleChange}
                   />
-                ) : null}
+                )}
               </span>
             </label>
-          ) : null}
+          )}
 
           <div
             className={`${
-              variant == "contract" ? "flex-1" : "w-full flex flex-col"
+              variant === "contract" ? "flex-1" : "w-full flex flex-col"
             }`}
           >
-            {/* input container to link icon to its position */}
-            <div
-              className={`${
-                variant == "contract"
-                  ? "relative flex items-center"
-                  : "relative flex items-center "
-              }`}
-            >
-              <div
-                className={`${
-                  variant == "contract"
-                    ? "relative w-32 flex items-center overflow-hidden"
-                    : "relative flex-1 flex items-center overflow-hidden"
-                }`}
-              >
-                {/* input with react hook form register control  */}
-                {type == "custom" ? (
-                  customInput
-                ) : type == "number" ? (
-                  <input
-                    type={"number"}
-                    placeholder={placeholder}
-                    id={name}
-                    {...(register ? register(name) : {})}
-                    disabled={isDisabled}
-                    className={
-                      variant == "contract"
-                        ? `w-full h-8 text-size15  border-b-1  rounded-none pt-3.5  duration-[0.3s]  ${addingInputStyle}`
-                        : `flex-1 h-5xl text-size16 ${
-                            isDisabled
-                              ? "bg-secondary-background"
-                              : "bg-input-bg"
-                          } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
-                            getError(errors, name)
-                              ? "border-error"
-                              : `${
-                                  isValid(form)
-                                    ? "focus-visible:border-success"
-                                    : "focus-visible:border-secondary"
-                                } hover:border-secondary ${
-                                  addingValidStyle
-                                    ? addingValidStyle
-                                    : "border-secondary-border"
-                                }`
-                          } ${addingInputStyle}`
-                    }
-                    onChange={(e) => {
-                      if (
-                        numberRegex.test(e.target.value) &&
-                        (!min || Number(e.target.value) >= min) &&
-                        (!max || Number(e.target.value) <= max)
-                      ) {
-                        if (e.target.value === "") {
-                          setValue(name, undefined as PathValue<T, Path<T>>);
-                        } else {
-                          setValue(
-                            name,
-                            Number(e.target.value) as PathValue<T, Path<T>>
-                          );
-                        }
-                        trigger?.(name);
-                      }
-                    }}
-                    value={watch?.(name) ?? undefined}
-                    step={step}
-                  />
-                ) : (
-                  <input
-                    type={show ? "text" : type}
-                    placeholder={placeholder}
-                    id={name}
-                    {...(register ? register(name) : {})}
-                    disabled={isDisabled}
-                    className={
-                      variant == "contract"
-                        ? `w-full h-8 text-size15  border-b-1 pt-3.5  rounded-none outline-none  duration-[0.3s]  ${
-                            type == "password" ? "!pl-[56px]" : ""
-                          } ${addingInputStyle}`
-                        : `flex-1 h-5xl text-size16 ${
-                            isDisabled
-                              ? "bg-secondary-background"
-                              : "bg-input-bg"
-                          } p-lg border-[1.5px] text-primary-fg rounded-lg overflow-auto outline-none focus-visible:border-[3px] focus-visible:outline-none placeholder:text-placeholder transition-colors duration-[0.3s] ${
-                            getError(errors, name)
-                              ? "border-error"
-                              : `${
-                                  isValid(form)
-                                    ? "focus-visible:border-success"
-                                    : "focus-visible:border-secondary"
-                                } hover:border-secondary ${
-                                  addingValidStyle
-                                    ? addingValidStyle
-                                    : "border-secondary-border"
-                                }`
-                          } ${
-                            type == "password" ? "!pl-[56px]" : ""
-                          } ${addingInputStyle}`
-                    }
-                    // border-gold-background focus:ring-gold-background rounded-lg
-                    step={step}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                  />
-                )}
-                {/* show input content with password input type */}
-                {type == "password" ? (
-                  <div
-                    className="text-primary-fg/80 hover:text-primary-fg/100 transition-all absolute h-[calc(100%_-_3.28px)] rounded-l-[12.27px] aspect-square left-[1.64px] bg-transparent top-[50%] -translate-y-[50%] flex justify-center items-center cursor-pointer"
-                    onClick={() => {
-                      if (type == "password") setShow(!show);
-                    }}
-                  >
-                    {/* toggle icon depending on show value */}
-                    {show ? <FaEyeSlash /> : <FaEye />}
-                  </div>
-                ) : null}
-              </div>
+            {/* Render flexible or regular input based on flexibleWidth prop */}
+            {flexibleWidth ? renderFlexibleInput() : renderRegularInput()}
 
-              {/* beside element */}
-              {info ? <Info info={info} /> : null}
-            </div>
-
-            {/* validation errors  */}
-            {getError(errors, name) ? (
+            {/* Validation errors */}
+            {getError(errors, name) && (
               <span className="text-error font-medium text-size14">
                 {(getError(errors, name) as { message: string })?.message}
               </span>
-            ) : null}
+            )}
 
-            {/* bottom element */}
-            {bottomElement ? bottomElement : null}
+            {/* Bottom element */}
+            {bottomElement}
           </div>
         </div>
       )}
