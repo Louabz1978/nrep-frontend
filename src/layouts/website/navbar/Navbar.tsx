@@ -84,6 +84,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                       : "text-inverse-fg hover:text-secondary !text-size16"
                   }`}
                 >
+                  <span className="text-right flex-1">{item.label}</span>
                   <LuChevronDown
                     className={`size-[16px] mr-2 transition-transform duration-200 ${
                       isOpen ? "rotate-180" : ""
@@ -165,7 +166,9 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
               >
                 <PopoverTrigger asChild>
                   <button
-                    className={`group flex flex-col items-center gap-xxs transition-colors cursor-pointer text-size18 duration-[0.3s] focus:outline-none ${
+                    aria-label={`Toggle ${tab.label}`}
+                    title={tab.label}
+                    className={`group flex flex-col items-center gap-xxs transition-colors cursor-pointer text-size18 duration-[0.3s] focus:outline-none active:scale-[0.97] active:opacity-90 ${
                       isCurrentPath || hasCurrentChild
                         ? "p-sm bg-tertiary-bg rounded-lg text-primary"
                         : isOpen
@@ -200,7 +203,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             <Link
               key={index}
               to={tab.to}
-              className={`group flex flex-col gap-xxs items-center transition-colors text-size18 duration-[0.3s]] focus:outline-none ${
+              className={`group flex flex-col gap-xxs items-center transition-colors text-size18 duration-[0.3s]] focus:outline-none active:scale-[0.97] active:opacity-90 ${
                 isCurrentPath
                   ? "p-sm px-lg bg-tertiary-bg rounded-lg text-primary"
                   : "text-inverse-fg "
@@ -218,7 +221,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
           ) : (
             <span
               key={index}
-              className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer  ${
+              className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer active:scale-[0.97] active:opacity-90 ${
                 isCurrentPath ? "text-primary font-medium" : ""
               }`}
             >

@@ -1,10 +1,10 @@
-import { optionSchema, type TOption, type TString } from "@/data/global/schema";
+import { optionSchema, type TOption } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
 export type FilterChartsType = {
   area: TOption;
-  date : TString
+  date: TOption;
 };
 
 export const FilterChartsSchema = Joi.object<FilterChartsType>({
@@ -15,9 +15,9 @@ export const FilterChartsSchema = Joi.object<FilterChartsType>({
   date: optionSchema
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
-    .label("التاريح"),
+    .label("التاريخ"),
 });
 export const FilterChartsInitialValues: FilterChartsType = {
-  area: null,
-  date:null
+  area: { value: "المحطة", label: "المحطة" },
+  date: { value: "1 year", label: "سنة" }
 };
