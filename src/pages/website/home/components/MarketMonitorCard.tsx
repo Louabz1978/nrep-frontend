@@ -1,4 +1,5 @@
 // Filename: MarketMonitorCard.tsx
+import { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -7,248 +8,209 @@ import {
   BarElement,
   Title,
   Tooltip,
-  // ChartArea, // Removed: Not exported by chart.js
-  // ScriptableContext, // Removed: Not used directly here
 } from "chart.js";
+import type { ChartOptions, ScriptableContext } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import Select from "@/components/global/form/select/Select";
-import { useForm } from "react-hook-form";
+import { useForm, type UseFormReturn } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import cleanValues from "@/utils/cleanValues";
+import Select from "@/components/global/form/select/Select";
 import {
-  FilterChartsInitialValues,
   FilterChartsSchema,
+  FilterChartsInitialValues,
   type FilterChartsType,
 } from "@/data/website/schema/FilterCharts";
-import Input from "@/components/global/form/input/Input";
+import useMarketWatcher from "@/hooks/website/listing/useMarketWatcher";
+import Loader from "@/components/global/loader/Loader";
 
-// Register all necessary components and the datalabels plugin
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  ChartDataLabels
+// --- Types & Constants ---
+type ChartSeries = { label: string; value: number };
+
+const GRADIENT_COLORS = [
+  ["#6dd875", "#c8eac948"], // Green
+  ["#f8cd52", "#fceed54f"], // Yellow
+  ["#6caee0", "#c2dcf056"], // Blue
+];
+const BAR_THICKNESS = 42;
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, ChartDataLabels);
+
+// --- Utility Functions ---
+const translateLabelToArabic = (label: string): string => {
+  const translations: Record<string, string> = {
+    new_listings_count: "إعلانات جديدة",
+    pending_count: "قيد الانتظار",
+    closed_count: "مغلقة",
+    out_of_market: "خارج السوق",
+    return_the_market: "العودة إلى السوق",
+  };
+  const key = label?.toLowerCase().trim().replace(/ /g, "_") ?? "";
+  return translations[key] || label;
+};
+
+const normalizeMarketData = (data: unknown): ChartSeries[] => {
+  if (Array.isArray(data)) {
+    return (data as Array<{ label?: unknown; value?: unknown }>)
+      .filter((it) => typeof it?.label === "string" && typeof it?.value === "number")
+      .map((it) => ({ label: translateLabelToArabic(it.label as string), value: it.value as number }));
+  }
+  if (data && typeof data === "object") {
+    return Object.entries(data as Record<string, number>)
+      .filter(([, v]) => typeof v === "number")
+      .map(([k, v]) => ({ label: translateLabelToArabic(k), value: v }));
+  }
+  return [];
+};
+
+const getChartData = (series: ChartSeries[]) => ({
+  labels: series.map((item) => item.label),
+  datasets: [
+    {
+      data: series.map((item) => item.value),
+      backgroundColor: (context: ScriptableContext<"bar">) => {
+        const { chart: { ctx, chartArea }, dataIndex } = context;
+        if (!chartArea) return "transparent";
+        const gradient = ctx.createLinearGradient(chartArea.right, 0, chartArea.left, 0);
+        const colorPair = GRADIENT_COLORS[dataIndex % GRADIENT_COLORS.length];
+        if (colorPair) {
+          gradient.addColorStop(0, colorPair[0]);
+          gradient.addColorStop(1, colorPair[1]);
+        }
+        return gradient;
+      },
+      borderRadius: 10,
+      barThickness: BAR_THICKNESS,
+    },
+  ],
+});
+
+const getChartOptions = (hasData: boolean): ChartOptions<"bar"> => ({
+  indexAxis: "y",
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: { enabled: false },
+    datalabels: {
+      display: hasData,
+      labels: {
+        text: {
+          anchor: "end",
+          align: "end",
+          offset: -7,
+          color: "#333",
+          font: { weight: "bold", size: 15 },
+          formatter: (_, context) => context.chart.data.labels?.[context.dataIndex] ?? "",
+        },
+        value: {
+          anchor: "start",
+          align: "start",
+          offset: 90,
+          color: "#555",
+          font: { weight: "bold", size: 14 },
+          formatter: (value) => value ?? "",
+        },
+      },
+    },
+  },
+  scales: { x: { display: false, reverse: true }, y: { display: false } },
+  layout: { padding: { left: 200, right: 20 } },
+});
+
+// --- Component Parts ---
+const ChartContainer: React.FC<{
+  isLoading: boolean;
+  isError: boolean;
+  hasData: boolean;
+  isFetched: boolean;
+  children: React.ReactNode;
+}> = ({ isLoading, hasData, isFetched, children }) => {
+  return (
+    <div className="relative w-full h-[500px]">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Loader size={8} />
+        </div>
+      )}
+      {!isLoading && isFetched && !hasData && <StatusMessage>لا توجد بيانات مطابقة</StatusMessage>}
+      {!isLoading && hasData && children}
+    </div>
+  );
+};
+
+const StatusMessage: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => (
+  <div className={`absolute inset-0 flex items-center justify-center text-secondary-fg/70 ${className}`}>
+    {children}
+  </div>
 );
 
-// --- Correct Chart Data ---
-// This data now matches the image exactly, in the correct top-to-bottom order.
-const chartData = [
-  { label: "اعلان جديد", value: 500 },
-  { label: "العودة الى السوق", value: 320 },
-  { label: "تغير السعر", value: 190 },
-  { label: "نشط بموجب عقد", value: 350 },
-  { label: "معلق", value: 430 },
-  { label: "منتهي الصلاحية", value: 390 },
-  { label: "مسحوب", value: 110 },
-  { label: "ملغي", value: 275},
-];
-
-const gradientColors = [
-  ["#6dd875", "#c8eac9"], // Green
-  ["#f8cd52", "#fceed5"], // Yellow
-  ["#6caee0", "#c2dcf0"], // Blue
-  ["#a5d6a7", "#e8f5e9"], // Light Green
-  ["#aad1f1", "#dbeaf5"], // Light Blue
-  ["#f9a46c", "#fde8d8"], // Orange
-  ["#d8d8d8", "#f0f0f0"], // Grey
-  ["#e67a7a", "#f7c3c3"], // Red
-];
+const FilterForm = ({ form }: { form: UseFormReturn<FilterChartsType> }) => (
+  <form>
+    <div className="flex items-center justify-between gap-2">
+      <Select
+        form={form}
+        label="التاريخ"
+        name="date"
+        placeholder="التاريخ"
+        choices={[
+          { value: "1 month", label: "شهر" },
+          { value: "3 months", label: "ثلاثة أشهر" },
+          { value: "6 months", label: "ستة أشهر" },
+          { value: "1 year", label: "سنة" },
+        ]}
+        showValue="label"
+        keyValue="value"
+      />
+      <Select
+        form={form}
+        label="المنطقة"
+        name="area"
+        placeholder="المنطقة"
+        choices={[
+          { value: "الانشاءات", label: "الانشاءات" },
+          { value: "الغوطة", label: "الغوطة" },
+          { value: "الحمراء", label: "الحمراء" },
+          { value: "المحطة", label: "المحطة" },
+          { value: "الدبلان", label: "الدبلان" },
+        ]}
+        showValue="label"
+        keyValue="value"
+      />
+    </div>
+  </form>
+);
 
 // --- Main Component ---
 const MarketMonitorCard = () => {
-  const form = useForm({
+  const form = useForm<FilterChartsType>({
     resolver: joiResolver(FilterChartsSchema),
-    defaultValues: cleanValues(
-      FilterChartsInitialValues,
-      FilterChartsInitialValues
-    ),
+    defaultValues: FilterChartsInitialValues,
     mode: "onChange",
   });
 
-  const onSubmit = (data: FilterChartsType) => {
-    console.log("Search data:", data);
-    // Handle search submission here
-  };
+  const { date, area } = form.watch();
 
-  const data = {
-    // Use the labels from our chartData object
-    labels: chartData.map((item) => item.label),
-    datasets: [
-      {
-        // Use the values from our chartData object
-        data: chartData.map((item) => item.value),
-        // We will generate gradients for the background color
-        backgroundColor: (context: any) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
+  const apiParams = useMemo(() => {
+    if (!date?.value || !area?.value) return null;
+    return { queryParams: { period: date.value, area: area.value } };
+  }, [date, area]);
 
-          if (!chartArea) {
-            // This case happens on initial render, return a fallback
-            return "transparent";
-          }
+  const { marketWatcher, isLoading, isError, isFetched } = useMarketWatcher(apiParams);
 
-          // Reverse the gradient direction for RTL
-          const gradient = ctx.createLinearGradient(
-            chartArea.right,
-            0,
-            chartArea.left,
-            0
-          );
-          const colors = gradientColors[context.dataIndex];
-          gradient.addColorStop(1, colors[1]); // Start color (lighter)
-          gradient.addColorStop(0, colors[0]); // End color (darker)
-          return gradient;
-        },
-        // Set the bar border radius
-        borderRadius: 5,
-        barThickness: 36, // Set a fixed thickness for the bars
-      },
-    ],
-  };
+  const displaySeries = useMemo(() => normalizeMarketData(marketWatcher), [marketWatcher]);
+  const hasData = displaySeries.length > 0;
 
-  const options = {
-    indexAxis: "y" as const, // This makes the bar chart horizontal
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      // Hide the default legend and tooltip
-      legend: { display: false },
-      tooltip: { enabled: false },
-
-      datalabels: {
-        text: {
-          anchor: "end", // Anchor to the left side of the bar (RTL)
-          align: "right", // Align text to the left (RTL)
-          offset: 8, // Add 8px padding from the end of the bar
-          color: "#333",
-          font: {
-            weight: "bold",
-            size: 16,
-          },
-          // Use a formatter to display the label text, not the value
-          formatter: (value: any, context: any) => {
-            return context.chart.data.labels[context.dataIndex];
-          },
-        },
-        // --- Configuration for the VALUE labels (e.g., 500) ---
-        // This block positions them INSIDE the bar on the right (RTL: left)
-        value: {
-          anchor: "start", // Anchor to the left side of the bar (RTL)
-          align: "start", // Align text to the left (RTL)
-          offset: 1, // Add 12px padding from the start of the bar
-          color: "#555",
-          font: {
-            weight: "600",
-            size: 14,
-          },
-          // Use a formatter to display the numeric value
-          formatter: (value: any) => {
-            return value;
-          },
-        },
-        // Set display order: show value label only, not the default value label
-        display: (context: any) => {
-          // Only show value label for the value, not for the text
-          return true;
-        },
-        // Use listeners to only show the value label on the right and text on the left
-        labels: {
-          text: {
-            anchor: "end",
-            align: "right",
-            offset: -10,
-            color: "#333",
-            font: {
-              weight: "bold",
-              size: 16,
-            },
-            formatter: (value: any, context: any) =>
-              context.chart.data.labels[context.dataIndex],
-          },
-          value: {
-            anchor: "start",
-            align: "start",
-            offset: -10,
-            color: "#555",
-            font: {
-              weight: "600",
-              size: 14,
-            },
-            formatter: (value: any) => value,
-          },
-        },
-      },
-    },
-    // Hide all scales (axes lines and labels)
-    scales: {
-      x: {
-        display: false,
-        max: 520, // Give some extra space for labels
-        reverse: true, // Reverse the x-axis for RTL
-      },
-      y: {
-        display: false,
-      },
-    },
-    layout: {
-      padding: {
-        left: 40, // Add padding on the left to ensure values are not cut off (RTL: left)
-        right: 0,
-      },
-    },
-  };
+  const chartData = useMemo(() => getChartData(displaySeries), [displaySeries]);
+  const chartOptions = useMemo(() => getChartOptions(hasData), [hasData]);
 
   return (
-    <div
-      className="h-[500px] shadow-primary-shadow bg-tertiary-bg rounded-[var(--spacing-2xl)] p-[var(--spacing-xl)] min-h-[420px] flex flex-col justify-between"
-      dir="rtl"
-    >
+    <div className="h-[500px] shadow-primary-shadow bg-tertiary-bg rounded-[var(--spacing-2xl)] p-[var(--spacing-xl)] min-h-[420px] flex flex-col justify-between" dir="rtl">
       <h2 className="text-size28 font-bold text-right mb-[var(--spacing-lg)] text-secondary-fg">
         مراقب السوق
       </h2>
-      {/* Changed height from 350 to 420 */}
-      <div style={{ height: 420, width: "100%", position: "relative" }}>
-        <Bar data={data} options={options} plugins={[ChartDataLabels]} />
-      </div>
-      <div>
-        <form>
-          <div className="flex items-center justify-between gap-2">
-
-            <Select
-              form={form}
-              label="التاريخ"
-              name="date"
-              placeholder="التاريخ"
-              choices={[
-                { value: "weak", label: "أسبوع" },
-                { value: "month", label: "شهر" },
-                { value: "three-month", label: "ثلاثة أشهر" },
-                { value: "six-month", label: "ستة أشهر" },
-                { value: "year", label: "سنة" },
-              ]}
-              showValue="label"
-              keyValue="value"
-            />
-            <Select
-              form={form}
-              label="المنطقة"
-              name="area"
-              placeholder="المنطقة"
-              choices={[
-                { value: "insha'at", label: "الإنشاءات" },
-                { value: "al-ghota", label: "الغوطة" },
-                { value: "al-hamra", label: "الحمراء" },
-                { value: "al-mahatah", label: "المحطة" },
-                { value: "al-dablan", label: "الدبلان" },
-              ]}
-              showValue="label"
-              keyValue="value"
-            />
-          </div>
-        </form>
-      </div>
+      <ChartContainer isLoading={isLoading} isError={isError} hasData={hasData} isFetched={isFetched}>
+        <Bar data={chartData} options={chartOptions} />
+      </ChartContainer>
+      <FilterForm form={form} />
     </div>
   );
 };

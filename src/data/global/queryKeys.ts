@@ -11,6 +11,7 @@ const QUERY_KEYS = {
     status: "listings-status",
     type: "listings-type",
     byMls: "listings-by-mls",
+    marketWatcher: "listings-market-watcher",
   },
   contact: {
     query: "contact-query",
