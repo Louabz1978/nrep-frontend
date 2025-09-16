@@ -9,6 +9,7 @@ export type SellerType = {
   seller_birth_place: TString;
   seller_nation_number: TNumber;
   seller_registry: TString;
+  seller_signature: TString;
 };
 
 export type BuyerType = {
@@ -18,6 +19,7 @@ export type BuyerType = {
   buyer_birth_place: TString;
   buyer_nation_number: TNumber;
   buyer_registry: TString;
+  buyer_signature: TString;
 };
 
 export type ContractFormType = {
@@ -106,6 +108,10 @@ const SellerSchema = Joi.object<SellerType>({
   seller_registry: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("رقم قيد البائع"),
+
+  seller_signature: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("توقيع البائع"),
 });
 
 const BuyerSchema = Joi.object<BuyerType>({
@@ -123,6 +129,9 @@ const BuyerSchema = Joi.object<BuyerType>({
   buyer_registry: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("رقم قيد المشتري"),
+    buyer_signature: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("توقيع المشتري"),
 });
 
 export const ContractFormSchema = Joi.object<ContractFormType>({
@@ -276,6 +285,7 @@ export const sellerInitialValues: SellerType = {
   seller_birth_place: null,
   seller_nation_number: null,
   seller_registry: null,
+  seller_signature: null,
 };
 
 export const buyerInitialValues: BuyerType = {
@@ -285,6 +295,7 @@ export const buyerInitialValues: BuyerType = {
   buyer_birth_place: null,
   buyer_nation_number: null,
   buyer_registry: null,
+  buyer_signature: null
 };
 
 export const contractFormInitialValues: ContractFormType = {

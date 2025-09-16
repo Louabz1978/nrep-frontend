@@ -145,7 +145,7 @@ function Input<T extends FieldValues>({
         <div
           className={`${
             variant === "contract"
-              ? "relative overflow-hidden"
+              ? "relative"
               : "relative flex-1 overflow-hidden"
           }`}
         >
@@ -159,9 +159,10 @@ function Input<T extends FieldValues>({
             {/* Hidden measuring span */}
             <span
               ref={flexibleWidthRef}
+              data-print-visible={true}
               className={`invisible pointer-events-none !w-max whitespace-pre col-start-1 row-start-1 ${
                 variant === "contract"
-                  ? "h-8 text-size15 pt-3.5"
+                  ? "h-8 text-size15 border-b-1 pt-3.5"
                   : "h-5xl text-size16 p-lg"
               } ${type === "password" ? "pl-[56px]" : ""}`}
               style={{
@@ -181,6 +182,7 @@ function Input<T extends FieldValues>({
               customInput
             ) : type === "number" ? (
               <input
+                data-print-hidden={true}
                 type="number"
                 placeholder={placeholder}
                 id={name}
@@ -213,6 +215,7 @@ function Input<T extends FieldValues>({
             ) : (
               <input
                 type={show ? "text" : type}
+                data-print-hidden={true}
                 placeholder={placeholder}
                 id={name}
                 {...(register ? register(name) : {})}

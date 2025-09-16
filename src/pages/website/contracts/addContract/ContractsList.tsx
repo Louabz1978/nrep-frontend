@@ -14,12 +14,12 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm, useWatch, useFieldArray } from "react-hook-form";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
-import useListingDetails from "@/hooks/website/listing/useListingDetails";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import type { ContactWithUser } from "@/types/website/contact";
 import useAddContract from "@/hooks/website/contract/useAddContract";
 import Select from "@/components/global/form/select/Select";
 import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
+import useGetPropertyByMls from "@/hooks/website/listing/useGetPropertyByMls";
 
 function ContractsList() {
   const [disabled1, setDisabled1] = useState(true);
@@ -28,7 +28,7 @@ function ContractsList() {
   const [checkbox2, setCheckBox2] = useState(false);
 
   const [currentMLS, setCurrentMLS] = useState<TNumber>();
-  const { listingDetails } = useListingDetails(Number(currentMLS));
+  const { propertyByMls } = useGetPropertyByMls(Number(currentMLS));
   const { allContacts } = useGetAllContacts();
   const { handleAddContract, isPending: isSubmitting } = useAddContract();
 
@@ -36,7 +36,6 @@ function ContractsList() {
     allContacts?.map((contact: ContactWithUser) => ({
       value: contact?.name,
     })) || [];
-  console.log(contacts);
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
@@ -84,99 +83,99 @@ function ContractsList() {
   );
 
   const flags = {
-    pool: listingDetails?.additional.pool,
-    ac: listingDetails?.additional.ac,
-    garden: listingDetails?.additional.garden,
-    garage: listingDetails?.additional.garage,
-    jacuzzi: listingDetails?.additional.jacuzzi,
-    solra_system: listingDetails?.additional.solar_system,
-    elevetor: listingDetails?.additional.elevator,
+    pool: propertyByMls?.additional.pool,
+    ac: propertyByMls?.additional.ac,
+    garden: propertyByMls?.additional.garden,
+    garage: propertyByMls?.additional.garage,
+    jacuzzi: propertyByMls?.additional.jacuzzi,
+    solra_system: propertyByMls?.additional.solar_system,
+    elevetor: propertyByMls?.additional.elevator,
   };
 
   // Function to populate form with listing details
   const populateFormWithListingData = useCallback(() => {
-    if (!listingDetails) return;
+    if (!propertyByMls) return;
 
     // Seller information - populate the first seller in the array
     const sellerData = {
       id: `seller-${Date.now()}`,
-      seller_name: (listingDetails.owner as any)?.name,
-      seller_mothor_name: (listingDetails.owner as any)?.mother_name_surname,
-      seller_birth_place: (listingDetails.owner as any)?.place_birth,
-      seller_nation_number: (listingDetails.owner as any)?.national_number,
-      seller_registry: (listingDetails.owner as any)?.registry,
+      seller_name: (propertyByMls.owner as any)?.name,
+      seller_mothor_name: (propertyByMls.owner as any)?.mother_name_surname,
+      seller_birth_place: (propertyByMls.owner as any)?.place_birth,
+      seller_nation_number: (propertyByMls.owner as any)?.national_number,
+      seller_registry: (propertyByMls.owner as any)?.registry,
     };
 
     // Set the first seller in the array
     form.setValue("sellers.0", sellerData);
 
     // Keep backward compatibility with original fields
-    form.setValue("seller_name", (listingDetails.owner as any)?.name);
+    form.setValue("seller_name", (propertyByMls.owner as any)?.name);
     form.setValue(
       "seller_mothor_name",
-      (listingDetails.owner as any)?.mother_name_surname
+      (propertyByMls.owner as any)?.mother_name_surname
     );
     form.setValue(
       "seller_birth_place",
-      (listingDetails.owner as any)?.place_birth
+      (propertyByMls.owner as any)?.place_birth
     );
     form.setValue(
       "seller_nation_number",
-      (listingDetails.owner as any)?.national_number
+      (propertyByMls.owner as any)?.national_number
     );
-    form.setValue("seller_registry", (listingDetails.owner as any)?.registry);
+    form.setValue("seller_registry", (propertyByMls.owner as any)?.registry);
 
     // Property information
     form.setValue(
       "building_num",
-      listingDetails.address?.building_num?.toString() || ""
+      propertyByMls.address?.building_num?.toString() || ""
     );
-    form.setValue("street", listingDetails.address?.street || "");
-    form.setValue("floor", listingDetails.address?.floor || null);
-    form.setValue("apt", Number(listingDetails.address?.apt) || null);
-    form.setValue("area", listingDetails.address?.area || "");
-    form.setValue("city", listingDetails.address?.city || "");
-    form.setValue("country", listingDetails.address?.county || "");
-    form.setValue("legal_description", String(listingDetails.mls_num ?? ""));
+    form.setValue("street", propertyByMls.address?.street || "");
+    form.setValue("floor", propertyByMls.address?.floor || null);
+    form.setValue("apt", Number(propertyByMls.address?.apt) || null);
+    form.setValue("area", propertyByMls.address?.area || "");
+    form.setValue("city", propertyByMls.address?.city || "");
+    form.setValue("country", propertyByMls.address?.county || "");
+    form.setValue("legal_description", String(propertyByMls.mls_num ?? ""));
 
     // Property features
-    if (listingDetails.additional) {
-      form.setValue("elevator", listingDetails.additional.elevator || false);
-      form.setValue("ac", listingDetails.additional.ac || false);
-      form.setValue("garage", listingDetails.additional.garage || false);
-      form.setValue("garden", listingDetails.additional.garden || false);
-      form.setValue("jacuzzi", listingDetails.additional.jacuzzi || false);
+    if (propertyByMls.additional) {
+      form.setValue("elevator", propertyByMls.additional.elevator || false);
+      form.setValue("ac", propertyByMls.additional.ac || false);
+      form.setValue("garage", propertyByMls.additional.garage || false);
+      form.setValue("garden", propertyByMls.additional.garden || false);
+      form.setValue("jacuzzi", propertyByMls.additional.jacuzzi || false);
       form.setValue(
         "solar_system",
-        listingDetails.additional.solar_system || false
+        propertyByMls.additional.solar_system || false
       );
-      form.setValue("pool", listingDetails.additional.pool || false);
-      form.setValue("balconies", listingDetails.additional.balcony || null);
-      form.setValue("fan_number", listingDetails.additional.fan_number || null);
-      form.setValue("water", listingDetails.additional.water || "");
+      form.setValue("pool", propertyByMls.additional.pool || false);
+      form.setValue("balconies", propertyByMls.additional.balcony || null);
+      form.setValue("fan_number", propertyByMls.additional.fan_number || null);
+      form.setValue("water", propertyByMls.additional.water || "");
     }
 
     // Agent information
     form.setValue(
       "sller_agent_name",
-      listingDetails.created_by_user?.first_name +
+      propertyByMls.created_by_user?.first_name +
         " " +
-        listingDetails.created_by_user?.last_name || ""
+        propertyByMls.created_by_user?.last_name || ""
     );
     form.setValue(
       "seller_company_address",
-      listingDetails.created_by_user?.address || ""
+      propertyByMls.created_by_user?.address || ""
     );
     form.setValue(
       "seller_company_phone",
-      Number(listingDetails.created_by_user?.phone_number) || null
+      Number(propertyByMls.created_by_user?.phone_number) || null
     );
     form.setValue(
       "seller_commission",
-      listingDetails.property_realtor_commission
+      propertyByMls.property_realtor_commission
     );
-    form.setValue("buyer_commission", listingDetails.buyer_realtor_commission);
-  }, [listingDetails, form]);
+    form.setValue("buyer_commission", propertyByMls.buyer_realtor_commission);
+  }, [propertyByMls, form]);
 
   const { handleSubmit } = form;
   const watchMLS = useWatch({ control: form.control, name: "mls" });
@@ -186,12 +185,12 @@ function ContractsList() {
   });
   const contractRef = useRef<HTMLDivElement>(null);
 
-  // Populate form when listingDetails changes
+  // Populate form when propertyByMls changes
   useEffect(() => {
-    if (listingDetails) {
+    if (propertyByMls) {
       populateFormWithListingData();
     }
-  }, [listingDetails, populateFormWithListingData]);
+  }, [propertyByMls, populateFormWithListingData]);
 
   // Populate buyer fields when buyer is selected from contacts
   useEffect(() => {
@@ -217,6 +216,7 @@ function ContractsList() {
         buyer_birth_place: selectedContact?.place_birth || "",
         buyer_nation_number: Number(selectedContact?.national_number),
         buyer_registry: selectedContact?.registry || "",
+        buyer_signature: "",
       };
       form.setValue("buyers.0", buyerData);
 
@@ -305,7 +305,7 @@ function ContractsList() {
               e.preventDefault();
               e.stopPropagation();
               setCurrentMLS(watchMLS);
-              // Populate form after setting MLS (will be called when listingDetails updates)
+              // Populate form after setting MLS (will be called when propertyByMls updates)
             }}
             className="p-3 bg-primary  rounded-lg cursor-pointer mt-0 ml-3"
           >
@@ -589,13 +589,9 @@ function ContractsList() {
           <div className="mb-3xl">
             <div className="flex items-end gap-md">
               <span className=" text-size18">الوصف القانوني للعقار :</span>
-              <Input
-                flexibleWidth
-                variant="contract"
-                form={form}
-                name="legal_description"
-                disabled={true}
-              />
+              <div className="mt-1 text-size19 text-primary font-bold">
+                {propertyByMls?.mls_num}
+              </div>
             </div>
           </div>
           <div className="text-size18">
@@ -716,7 +712,6 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="deposit"
-                disabled={disabled2}
               />
             </div>
             <p className="mb-lg text-size19">
@@ -1105,7 +1100,7 @@ function ContractsList() {
                   البائع:
                 </span>
                 <div className="flex items-center flex-wrap gap-[20px]">
-                  {controlledSellers?.map((item) => {
+                  {controlledSellers?.map((item, index) => {
                     return (
                       <div
                         key={item?.id}
@@ -1116,7 +1111,10 @@ function ContractsList() {
                             {`${item?.seller_name}`}
                           </span>
                         ) : null}
-                        <SignatureInput form={form} name="agent_signature" />
+                        <SignatureInput
+                          form={form}
+                          name={`sellers.${index}.seller_signature`}
+                        />
                       </div>
                     );
                   })}
@@ -1140,10 +1138,10 @@ function ContractsList() {
                   المشتري:
                 </span>
                 <div className="flex items-center flex-wrap gap-[20px]">
-                  {controlledBuyers?.map((item) => {
+                  {controlledBuyers?.map((item, index) => {
                     return (
                       <div
-                        key={item?.id}
+                        key={index}
                         className="flex flex-col items-center gap-[4px]"
                       >
                         {item?.buyer_name?.value ? (
@@ -1151,7 +1149,10 @@ function ContractsList() {
                             {item?.buyer_name?.value}
                           </span>
                         ) : null}
-                        <SignatureInput form={form} name="agent_signature" />
+                        <SignatureInput
+                          form={form}
+                          name={`buyers.${index}.buyer_signature`}
+                        />
                       </div>
                     );
                   })}
