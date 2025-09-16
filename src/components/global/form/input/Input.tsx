@@ -110,7 +110,7 @@ function Input<T extends FieldValues>({
   // Base input classes for different variants
   const getBaseInputClasses = () => {
     if (variant === "contract") {
-      return `w-full h-8 text-size15 border-b-1 pt-3.5 rounded-none outline-none duration-[0.3s] ${
+      return `w-full h-8 text-size15 pt-3.5 rounded-none outline-none duration-[0.3s] ${
         type === "password" ? "!pl-[56px]" : ""
       }`;
     }
@@ -151,7 +151,7 @@ function Input<T extends FieldValues>({
         >
           {/* Grid container for flexible width */}
           <div
-            className="inline-grid grid-cols-1 items-center"
+            className="inline-grid grid-cols-1 items-center border-b"
             style={{
               width: "max-content",
             }}
@@ -162,7 +162,7 @@ function Input<T extends FieldValues>({
               data-print-visible={true}
               className={`invisible pointer-events-none !w-max whitespace-pre col-start-1 row-start-1 ${
                 variant === "contract"
-                  ? "h-8 text-size15 border-b-1 pt-3.5"
+                  ? "h-8 text-size15 pt-3.5"
                   : "h-5xl text-size16 p-lg"
               } ${type === "password" ? "pl-[56px]" : ""}`}
               style={{
@@ -182,7 +182,6 @@ function Input<T extends FieldValues>({
               customInput
             ) : type === "number" ? (
               <input
-                data-print-hidden={true}
                 type="number"
                 placeholder={placeholder}
                 id={name}
@@ -211,11 +210,12 @@ function Input<T extends FieldValues>({
                 }}
                 value={watch?.(name) ?? undefined}
                 step={step}
+                data-print-hidden={true}
               />
             ) : (
               <input
-                type={show ? "text" : type}
                 data-print-hidden={true}
+                type={show ? "text" : type}
                 placeholder={placeholder}
                 id={name}
                 {...(register ? register(name) : {})}

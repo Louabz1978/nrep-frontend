@@ -69,9 +69,8 @@ export default function useAddContract() {
       (el as HTMLElement).style.pointerEvents = "auto";
       (el as HTMLElement).style.visibility = "visible";
       (el as HTMLElement).style.gridColumn = "span 3";
-      (el as HTMLElement).style.textAlign = "center";
+      (el as HTMLElement).style.textAlign = "start";
       (el as HTMLElement).style.visibility = "visible";
-      (el as HTMLElement).style.margin = "15px 0";
     });
   };
 
