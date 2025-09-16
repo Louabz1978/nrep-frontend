@@ -36,7 +36,6 @@ function ContractsList() {
     allContacts?.map((contact: ContactWithUser) => ({
       value: contact?.name,
     })) || [];
-  console.log(contacts);
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
@@ -105,7 +104,7 @@ function ContractsList() {
       seller_birth_place: (propertyByMls.owner as any)?.place_birth,
       seller_nation_number: (propertyByMls.owner as any)?.national_number,
       seller_registry: (propertyByMls.owner as any)?.registry,
-      seller_signature: (propertyByMls.owner as any)?.signature ||"",
+      seller_signature: (propertyByMls.owner as any)?.signature || "",
     };
 
     // Set the first seller in the array
@@ -181,6 +180,9 @@ function ContractsList() {
 
   const { handleSubmit } = form;
   const watchMLS = useWatch({ control: form.control, name: "mls" });
+  const watchPrice = useWatch({ control: form.control, name: "price" });
+  const watchDeposit = useWatch({ control: form.control, name: "deposit" });
+  const watchBatch = useWatch({ control: form.control, name: "batch" });
   const watchBuyerName = useWatch({
     control: form.control,
     name: "buyer_name",
@@ -193,6 +195,14 @@ function ContractsList() {
       populateFormWithListingData();
     }
   }, [propertyByMls, populateFormWithListingData]);
+
+  useEffect(() => {
+    const price = Number(watchPrice || 0);
+    const deposit = Number(watchDeposit || 0);
+    const batch = Number(watchBatch || 0);
+    const finalPrice = price - (deposit + batch);
+    form.setValue("final_price", finalPrice);
+  }, [watchPrice, watchDeposit, watchBatch, form]);
 
   // Populate buyer fields when buyer is selected from contacts
   useEffect(() => {
@@ -591,13 +601,10 @@ function ContractsList() {
           <div className="mb-3xl">
             <div className="flex items-end gap-md">
               <span className=" text-size18">الوصف القانوني للعقار :</span>
-              <Input
-                addingStyle="pb-4"
-                variant="contract"
-                form={form}
-                name="legal_description"
-                disabled={true}
-              />
+
+              <div className="mt-1 text-size19 text-primary font-bold">
+                {propertyByMls?.mls_num}
+              </div>
             </div>
           </div>
           <div className="text-size18">
@@ -652,6 +659,7 @@ function ContractsList() {
                 variant="contract"
                 form={form}
                 name="price"
+                type="number"
               />
             </div>
             <div
@@ -671,7 +679,7 @@ function ContractsList() {
                 } text-size20 cursor-pointer `}
                 htmlFor="checkbox1"
               >
-                قيمة الرعبون و تاريخ الدفع :
+                قيمة الرعبون :
               </label>
               <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
@@ -680,6 +688,7 @@ function ContractsList() {
                 form={form}
                 name="deposit"
                 disabled={disabled1}
+                type="number"
               />
             </div>
             <div
@@ -699,7 +708,7 @@ function ContractsList() {
                 } text-size20 cursor-pointer`}
                 htmlFor="checkbox2"
               >
-                قيمة الدفعة و تاريخ الدفع :
+                قيمة الدفعة :
               </label>
               <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
@@ -708,6 +717,7 @@ function ContractsList() {
                 form={form}
                 name="batch"
                 disabled={disabled2}
+                type="number"
               />
             </div>
             <div className="flex items-end gap-lg">
@@ -717,10 +727,12 @@ function ContractsList() {
                 flexibleWidth
                 variant="contract"
                 form={form}
-                name="deposit"
+                name="final_price"
+                type="number"
+                disabled={true}
               />
             </div>
-            <p className="mb-lg text-size19">
+            <p className="mt-xl text-size19">
               تدفع الشيكات لأمر "وكيل الضمان" المسمى أدناه.
             </p>
 
@@ -1017,7 +1029,7 @@ function ContractsList() {
                 />
               </div>
             </div>
-            <div className="text-size18">
+            <div className="text-size18 mt-xl">
               <p>
                 ( كل الدفعات التي دُفعت, أو اتفق على دفعها, سوف تُجمع و يُشار
                 إليها باسم “ الدفعات “ )
@@ -1105,7 +1117,7 @@ function ContractsList() {
                 <span className=" mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                   البائع:
                 </span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledSellers?.map((item, index) => {
                     return (
                       <div
@@ -1143,7 +1155,7 @@ function ContractsList() {
                 <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                   المشتري:
                 </span>
-                <div className="flex items-center justify-center flex-wrap gap-[20px]">
+                <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledBuyers?.map((item, index) => {
                     return (
                       <div

@@ -69,8 +69,8 @@ export default function useAddContract() {
       (el as HTMLElement).style.pointerEvents = "auto";
       (el as HTMLElement).style.visibility = "visible";
       (el as HTMLElement).style.gridColumn = "span 3";
-      (el as HTMLElement).style.textAlign = "center";
-      (el as HTMLElement).style.margin = "15px 0";
+      (el as HTMLElement).style.textAlign = "start";
+      (el as HTMLElement).style.visibility = "visible";
     });
   };
 
@@ -92,9 +92,7 @@ export default function useAddContract() {
       container.style.direction = "rtl";
       container.style.textAlign = "right";
       container.style.padding = "20px";
-      container.style.fontFamily = "Arial, sans-serif";
       container.style.fontSize = "26px"; // Increased font size
-      container.style.lineHeight = "2.6"; // Increased line spacing
       container.id = "print-container";
       document.body.appendChild(container);
 
@@ -110,9 +108,7 @@ export default function useAddContract() {
       contractClone.style.textAlign = "right";
       contractClone.style.padding = "20px";
       contractClone.style.margin = "0";
-      contractClone.style.fontFamily = "Arial, sans-serif";
       contractClone.style.fontSize = "20px"; // Increased font size
-      contractClone.style.lineHeight = "2"; // Increased line spacing
 
       // Add section header
       const contractHeader = document.createElement("h1");

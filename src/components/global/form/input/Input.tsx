@@ -110,7 +110,7 @@ function Input<T extends FieldValues>({
   // Base input classes for different variants
   const getBaseInputClasses = () => {
     if (variant === "contract") {
-      return `w-full h-8 text-size15 border-b-1 pt-3.5 rounded-none outline-none duration-[0.3s] ${
+      return `w-full h-8 text-size15 pt-3.5 rounded-none outline-none duration-[0.3s] ${
         type === "password" ? "!pl-[56px]" : ""
       }`;
     }
@@ -145,13 +145,13 @@ function Input<T extends FieldValues>({
         <div
           className={`${
             variant === "contract"
-              ? "relative overflow-hidden"
+              ? "relative"
               : "relative flex-1 overflow-hidden"
           }`}
         >
           {/* Grid container for flexible width */}
           <div
-            className="inline-grid grid-cols-1 items-center"
+            className="inline-grid grid-cols-1 items-center border-b"
             style={{
               width: "max-content",
             }}
@@ -159,6 +159,7 @@ function Input<T extends FieldValues>({
             {/* Hidden measuring span */}
             <span
               ref={flexibleWidthRef}
+              data-print-visible={true}
               className={`invisible pointer-events-none !w-max whitespace-pre col-start-1 row-start-1 ${
                 variant === "contract"
                   ? "h-8 text-size15 pt-3.5"
@@ -209,9 +210,11 @@ function Input<T extends FieldValues>({
                 }}
                 value={watch?.(name) ?? undefined}
                 step={step}
+                data-print-hidden={true}
               />
             ) : (
               <input
+                data-print-hidden={true}
                 type={show ? "text" : type}
                 placeholder={placeholder}
                 id={name}
