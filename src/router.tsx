@@ -19,6 +19,7 @@ import AddContactFormIndex from "./pages/website/ContactForm/AddContactFormIndex
 import ContactTable from "./pages/website/contactTable/ContactTable";
 import EditContactFormIndex from "./pages/website/ContactForm/EditContactFormIndex";
 import ContractSignatureIndex from "./pages/website/contracts/contractSignature/ContractSignatureIndex";
+import TopAgent from "./pages/website/reports/topAgent/TopAgent";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
         path: "contact/edit/:id",
         element: <EditContactFormIndex />,
       },
+      {
+        path: "reports/top-agent",
+        element: <TopAgent />,
+      },
+
     ],
   },
   // admin pages

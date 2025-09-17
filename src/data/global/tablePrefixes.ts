@@ -7,6 +7,7 @@ const TABLE_PREFIXES = {
   governorates : "governorates",
   cities:"cities",
   areas:"areas",
+  top_agent: "topAgent"
 };
 
 export default TABLE_PREFIXES;
