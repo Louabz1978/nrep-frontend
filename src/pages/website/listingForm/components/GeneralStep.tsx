@@ -14,7 +14,6 @@ import {
 } from "@/data/global/select";
 import Textarea from "@/components/global/form/textarea/Textarea";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
-import type { ContactWithUser } from "@/types/website/contact";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -29,7 +28,7 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   // handle submit form
   const onSubmit = () => {
     setCurrentStep((prev) => prev + 1);
-    console.log(form.watch())
+    console.log(form.watch());
   };
 
   const { allContacts } = useGetAllContacts();

@@ -13,6 +13,7 @@ interface SignatureInputProps<T extends FieldValues> {
   name: Path<T>;
   label?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 function SignatureInput<T extends FieldValues>({
@@ -20,10 +21,10 @@ function SignatureInput<T extends FieldValues>({
   name,
   label,
   required,
+  disabled,
 }: SignatureInputProps<T>) {
   const sigRef = useRef<SignatureCanvas>(null);
   const value = useWatch({ control: form.control, name: name });
-  console.log({ value });
 
   return (
     <div className="flex flex-col gap-2">
@@ -37,9 +38,10 @@ function SignatureInput<T extends FieldValues>({
       <Controller
         control={form.control}
         name={name}
+        disabled={disabled}
         render={({ field }) => (
           <div className="h-[100px] w-[180px] relative">
-            <div className="h-full w-full absolute top-0 right-0 pointer-events-none z-[-1] ">
+            <div className="h-full w-full absolute top-0 right-0 pointer-events-none z-[-1]  ">
               {value ? (
                 <img src={value} className="size-full object-contain " />
               ) : null}
@@ -49,7 +51,9 @@ function SignatureInput<T extends FieldValues>({
               penColor="black"
               backgroundColor="white"
               canvasProps={{
-                className: "sigCanvas border  w-full h-[100px] ",
+                className: `sigCanvas border  w-full h-[100px] ${
+                  disabled ? "pointer-events-none" : ""
+                }`,
               }}
               onEnd={() => {
                 if (sigRef.current?.isEmpty()) {
