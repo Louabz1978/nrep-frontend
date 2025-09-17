@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import createContract from "@/api/website/contract/creactContract";
-import type { CreateContractProps } from "@/types/website/contract";
 import { toast } from "sonner";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import type { ContractFormType } from "@/data/website/schema/contractSchema";
@@ -11,7 +10,8 @@ export default function useAddContract() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ data }: CreateContractProps) => createContract({ data }),
+    mutationFn: ({ json, file, mls, id }: any) =>
+      createContract({ json, file, mls, id }),
     onSuccess: (response) => {
       toast.success("تم إنشاء العقد بنجاح", {
         description: response.message,
@@ -223,7 +223,9 @@ export default function useAddContract() {
 
   const handleAddContract = async (
     submitData: ContractFormType,
-    contractRef: React.RefObject<HTMLDivElement | null>
+    contractRef: React.RefObject<HTMLDivElement | null>,
+    mls: string,
+    id: number
   ) => {
     const toastId = toast.loading("جار إنشاء العقد وإرساله...", {
       duration: Infinity,
@@ -245,44 +247,14 @@ export default function useAddContract() {
       document.body.removeChild(downloadLink);
       URL.revokeObjectURL(pdfUrl);
 
-      // Create FormData with contract data and PDF
-      const formData = new FormData();
-
-      // Convert contract data to FormData, handling TOption types
-      Object.entries(submitData).forEach(([key, value]) => {
-        if (value === undefined || value === null) {
-          return; // Skip undefined/null values
-        }
-
-        if (
-          key === "buyer_name" &&
-          typeof value === "object" &&
-          "value" in value
-        ) {
-          // Handle TOption type
-          formData.append(key, (value as { value: string }).value);
-        } else if (Array.isArray(value)) {
-          // Handle arrays
-          value.forEach((item) => {
-            if (item !== undefined && item !== null) {
-              formData.append(key, String(item));
-            }
-          });
-        } else {
-          // Handle primitives
-          formData.append(key, String(value));
-        }
-      });
-
       // Add PDF file to FormData
       const pdfFile = new File([pdfBlob], "contract.pdf", {
         type: "application/pdf",
       });
-      formData.append("contract_pdf", pdfFile);
 
       // Send to backend
       mutation.mutate(
-        { data: formData },
+        { json: JSON.stringify(submitData), file: pdfFile, mls: mls, id: id },
         {
           onSuccess: () => {
             toast.success("تم إنشاء العقد وإرساله بنجاح", {

@@ -1,15 +1,18 @@
 import axiosClient from "@/libs/axios/axios-client";
-import type {
-  CreateContractProps,
-  CreateContractResult,
-} from "@/types/website/contract";
+import type { CreateContractResult } from "@/types/website/contract";
 
 // create contract api call function,
 // gets: contract data with PDF file
 async function createContract({
-  data,
-}: CreateContractProps): CreateContractResult {
-  const res = await axiosClient.post(`contract`, data, {
+  json,
+  file,
+  mls,
+  id,
+}: any): CreateContractResult {
+  const formData = new FormData();
+  formData.append("contract_json", json);
+  formData.append("pdf_file", file);
+  const res = await axiosClient.post(`contracts/sign/${mls}/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

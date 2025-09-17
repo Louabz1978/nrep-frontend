@@ -94,7 +94,7 @@ export type ContractFormType = {
 };
 
 const SellerSchema = Joi.object<SellerType>({
-  id: Joi.string().optional(),
+  id: Joi.any(),
   seller_name: Joi.any().messages(VALIDATION_MESSAGES).label("البائع"),
   seller_mothor_name: Joi.any()
     .messages(VALIDATION_MESSAGES)
@@ -129,7 +129,7 @@ const BuyerSchema = Joi.object<BuyerType>({
   buyer_registry: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("رقم قيد المشتري"),
-    buyer_signature: Joi.any()
+  buyer_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("توقيع المشتري"),
 });
@@ -295,7 +295,7 @@ export const buyerInitialValues: BuyerType = {
   buyer_birth_place: null,
   buyer_nation_number: null,
   buyer_registry: null,
-  buyer_signature: null
+  buyer_signature: null,
 };
 
 export const contractFormInitialValues: ContractFormType = {

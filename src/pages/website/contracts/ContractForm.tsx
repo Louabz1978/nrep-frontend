@@ -120,7 +120,7 @@ function ContractForm({
     // Check if sellers data is an array and process it
     if (propertyByMls.sellers && Array.isArray(propertyByMls.sellers)) {
       const sellersData = propertyByMls.sellers.map((seller: any) => ({
-        id: `seller-${seller.consumer_id || Date.now()}`,
+        id: seller.consumer_id,
         seller_name: seller.name,
         seller_mothor_name: seller.mother_name_surname,
         seller_birth_place: seller.place_birth,
@@ -135,14 +135,8 @@ function ContractForm({
       // Keep backward compatibility with original non-array fields for the first seller
       if (sellersData.length > 0) {
         form.setValue("seller_name", sellersData[0].seller_name);
-        form.setValue(
-          "seller_mothor_name",
-          sellersData[0].seller_mothor_name
-        );
-        form.setValue(
-          "seller_birth_place",
-          sellersData[0].seller_birth_place
-        );
+        form.setValue("seller_mothor_name", sellersData[0].seller_mothor_name);
+        form.setValue("seller_birth_place", sellersData[0].seller_birth_place);
         form.setValue(
           "seller_nation_number",
           sellersData[0].seller_nation_number
@@ -1231,7 +1225,12 @@ function ContractForm({
           <Button
             className="w-[200px]"
             onClick={handleSubmit((data) =>
-              handleAddContract(data, contractRef)
+              handleAddContract(
+                data,
+                contractRef,
+                data?.mls,
+                data?.sellers?.[0]?.id
+              )
             )}
             disabled={isSubmitting}
           >
