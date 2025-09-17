@@ -32,7 +32,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
 
   const detailsRows1 = [
     [
-      { label: "السعر :", value: dummyProperty.price + "$"},
+      { label: "السعر :", value: dummyProperty.price?.toLocaleString?.() + " $" },
       {
         label: "الحالة : ",
         value: dummyProperty.status?.label ?? dummyProperty?.status,
