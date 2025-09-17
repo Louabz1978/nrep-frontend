@@ -1153,7 +1153,7 @@ function ContractForm({
               ("الإغلاق") ما لم يتم تعديله بأحكام أخرى.
             </p>
           </div>
-          <div className="mt-3xl">
+          <div className="mt-7xl">
             <FormSectionHeader>التواقيع</FormSectionHeader>
 
             <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
