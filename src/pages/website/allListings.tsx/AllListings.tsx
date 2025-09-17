@@ -122,11 +122,6 @@ function AllListings() {
         id: "city",
         header: "المدينة",
         accessorKey: "address.city",
-        cell: ({ row }) => {
-          return cityChoices?.find(
-            (item) => item?.value == row?.original?.address?.city
-          )?.label;
-        },
         size: 10,
       },
       {
