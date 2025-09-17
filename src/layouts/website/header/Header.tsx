@@ -27,16 +27,25 @@ const UserActions: React.FC<UserProps> = ({ user, onLogout, onLoginClick }) => (
     <div className="flex items-center gap-3">
       <CgProfile className="size-[26px]" />
       <span className="text-size18 font-semibold truncate max-w-[180px]">
-        {user ? `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() || user.email : "الضيف"}
+        {user
+          ? `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() ||
+            user.email
+          : "الضيف"}
       </span>
     </div>
     {user ? (
-      <button className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full" onClick={onLogout}>
+      <button
+        className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full"
+        onClick={onLogout}
+      >
         <PiSignOut className="size-[16px]" />
         خروج
       </button>
     ) : (
-      <button className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full" onClick={onLoginClick}>
+      <button
+        className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full"
+        onClick={onLoginClick}
+      >
         <LuLogIn className="size-[16px]" />
         دخول
       </button>
@@ -53,7 +62,14 @@ type NavProps = {
   onNavigate: () => void;
 };
 
-const Nav: React.FC<NavProps> = ({ navItems, openGroups, toggleGroup, navigate, locationPath, onNavigate }) => {
+const Nav: React.FC<NavProps> = ({
+  navItems,
+  openGroups,
+  toggleGroup,
+  navigate,
+  locationPath,
+  onNavigate,
+}) => {
   const isPathMatchLocal = (item: TabType): boolean => {
     if (item.to) {
       const itemPath = item.to.startsWith("/") ? item.to : `/${item.to}`;
@@ -68,14 +84,24 @@ const Nav: React.FC<NavProps> = ({ navItems, openGroups, toggleGroup, navigate, 
       {navItems.map((tab, idx) => {
         const isGroup = !!tab.submenu;
         const open = openGroups.includes(tab.label);
-        const isActive = tab.to ? ((tab.to.startsWith("/") ? tab.to : `/${tab.to}`) === locationPath) : false;
-        const hasCurrentChild = tab.submenu ? tab.submenu.some(isPathMatchLocal) : false;
+        const isActive = tab.to
+          ? (tab.to.startsWith("/") ? tab.to : `/${tab.to}`) === locationPath
+          : false;
+        const hasCurrentChild = tab.submenu
+          ? tab.submenu.some(isPathMatchLocal)
+          : false;
         return (
           <div key={idx} className="px-3">
             <button
-              onClick={() => (isGroup ? toggleGroup(tab.label) : (navigate(tab.to || "/"), onNavigate()))}
+              onClick={() =>
+                isGroup
+                  ? toggleGroup(tab.label)
+                  : (navigate(tab.to || "/"), onNavigate())
+              }
               className={`w-full flex items-center justify-between gap-3 text-right transition-colors rounded-full px-4 py-2 mt-3 ${
-                open || isActive || hasCurrentChild ? "bg-white text-primary" : "hover:bg-white/10 active:bg-white/15"
+                open || isActive || hasCurrentChild
+                  ? "bg-white text-primary"
+                  : "hover:bg-white/10 active:bg-white/15"
               }`}
             >
               <span className="flex items-center gap-2">
@@ -83,13 +109,22 @@ const Nav: React.FC<NavProps> = ({ navItems, openGroups, toggleGroup, navigate, 
                 <span className="text-size18">{tab.label}</span>
               </span>
               {isGroup ? (
-                <HiOutlineChevronDown title={tab.label} className={`${open || hasCurrentChild ? "rotate-180" : ""} transition-transform size-[18px]`} />
+                <HiOutlineChevronDown
+                  title={tab.label}
+                  className={`${
+                    open || hasCurrentChild ? "rotate-180" : ""
+                  } transition-transform size-[18px]`}
+                />
               ) : null}
             </button>
             {isGroup && open ? (
               <div className="mt-1 mb-1 pl-2 pr-2">
                 {tab.submenu?.map((sub: TabType, sidx) => {
-                  const subPath = sub.to ? (sub.to.startsWith("/") ? sub.to : `/${sub.to}`) : "";
+                  const subPath = sub.to
+                    ? sub.to.startsWith("/")
+                      ? sub.to
+                      : `/${sub.to}`
+                    : "";
                   const subActive = Boolean(sub.to) && subPath === locationPath;
                   return (
                     <Link
@@ -97,7 +132,9 @@ const Nav: React.FC<NavProps> = ({ navItems, openGroups, toggleGroup, navigate, 
                       to={sub.to || "/"}
                       onClick={onNavigate}
                       className={`block text-right text-size16 rounded-md px-4 py-2 mt-2 ${
-                        subActive ? "bg-white text-primary" : "text-white/90 bg-transparent hover:bg-white/10"
+                        subActive
+                          ? "bg-white text-primary"
+                          : "text-white/90 bg-transparent hover:bg-white/10"
                       }`}
                     >
                       {sub.label}
@@ -132,7 +169,6 @@ function Header() {
   const [openGroups, setOpenGroups] = useState<string[]>([]);
   const location = useLocation();
 
-
   const toggleGroup = (label: string) => {
     setOpenGroups((prev) =>
       prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
@@ -156,7 +192,7 @@ function Header() {
     <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
       {/* brand + inline nav */}
       <div className="flex items-center gap-4xl">
-        <Link to="/" className="w-11xl h-7xl">
+        <Link to="/" className="md:w-11xl w-7xl h-7xl">
           <img src={logo} alt="NREP" className="size-full object-contain" />
         </Link>
         <div className="max-md:hidden">
