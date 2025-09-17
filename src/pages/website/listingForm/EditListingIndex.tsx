@@ -6,6 +6,7 @@ import { ListingFormSkeleton } from "./components/ListingFormSkeleton";
 import {
   cityChoices,
   PROPERTY_TYPE,
+  PropertyStatus,
   STATUS,
   TransType,
   WATERLINE,
@@ -27,10 +28,13 @@ function EditListingIndex() {
 
   // get listing details
   const { listingDetails, listingDetailsQuery } = useListingDetails(listingId);
+  const isClosed = listingDetails?.status == PropertyStatus.CLOSED;
 
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingFormSkeleton}>
-      {!listingDetails ? null : listingDetails?.created_by_user?.user_id ==
+      {!listingDetails ? null : isClosed ? (
+        <NotAllowedPage message="لا يمكنك تعديل العقار بعد إغلاقه" />
+      ) : listingDetails?.created_by_user?.user_id ==
         (user?.user_id ?? user?.data?.user_id) ? (
         <ListingForm
           key={listingId}

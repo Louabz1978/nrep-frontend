@@ -23,6 +23,7 @@ import {
 } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import StatusForm from "./StatusForm";
+import { PropertyStatus } from "@/data/global/enums";
 
 function AllListings() {
   // user information
@@ -137,10 +138,10 @@ function AllListings() {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
-          console.log({ user });
           const isSameUser =
             row?.original?.created_by_user?.user_id ==
             (user?.user_id ?? user?.data?.user_id);
+          const isClosed = row?.original?.status == PropertyStatus.CLOSED;
 
           return (
             <div className="flex items-center gap-md">
@@ -149,13 +150,15 @@ function AllListings() {
                 <TooltipTrigger>
                   <Link
                     to={`/listing/edit/${row?.original?.property_id}`}
-                    className={`${isSameUser ? "" : "pointer-events-none"}`}
-                    aria-disabled={!isSameUser}
+                    className={`${
+                      isSameUser && !isClosed ? "" : "pointer-events-none"
+                    }`}
+                    aria-disabled={!isSameUser || isClosed}
                   >
                     <Button
                       size={"icon"}
                       className="bg-green"
-                      disabled={!isSameUser}
+                      disabled={!isSameUser || isClosed}
                     >
                       <PiPencilSimpleBold />
                     </Button>
@@ -173,9 +176,10 @@ function AllListings() {
                         size={"icon"}
                         className="bg-red"
                         disabled={
-                          deleteListing?.isPending &&
-                          deleteListing?.variables?.id ==
-                            row?.original?.property_id
+                          (deleteListing?.isPending &&
+                            deleteListing?.variables?.id ==
+                              row?.original?.property_id) ||
+                          isClosed
                         }
                         onClick={(e) => {
                           e.preventDefault();
