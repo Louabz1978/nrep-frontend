@@ -131,7 +131,7 @@ function AllListings() {
         cell: ({ row }) => {
           return <StatusForm row={row} />;
         },
-        size: 10,
+        size: 25,
       },
       {
         id: "action",
