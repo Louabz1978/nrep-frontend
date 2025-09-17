@@ -34,6 +34,9 @@ function ContractForm({
   isCreate,
   defaultData,
 }: ContractFormProps) {
+
+console.log(propertyByMls)
+
   const { user } = useUser();
   const [disabled1, setDisabled1] = useState(true);
   const [disabled2, setDisabled2] = useState(true);
@@ -210,9 +213,9 @@ function ContractForm({
     );
     form.setValue(
       "seller_commission",
-      propertyByMls.property_realtor_commission
+      propertyByMls.property_realtor_commission + " % "
     );
-    form.setValue("buyer_commission", propertyByMls.buyer_realtor_commission);
+    form.setValue("buyer_commission", propertyByMls.buyer_realtor_commission + " % ");
   }, [propertyByMls, form, sellers]);
 
   const { handleSubmit } = form;
@@ -896,7 +899,6 @@ function ContractForm({
                 </span>
                 <Input
                   flexibleWidth
-                  type="number"
                   variant="contract"
                   form={form}
                   name="seller_commission"
@@ -985,7 +987,6 @@ function ContractForm({
                 </span>
                 <Input
                   flexibleWidth
-                  type="number"
                   variant="contract"
                   form={form}
                   name="buyer_commission"

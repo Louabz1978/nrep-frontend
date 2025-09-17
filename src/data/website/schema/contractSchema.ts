@@ -85,14 +85,14 @@ export type ContractFormType = {
   seller_agent_broker_license: TString;
   seller_company_address: TString;
   seller_company_phone: TNumber;
-  seller_commission: TNumber;
+  seller_commission: TString;
   buyer_agent: TString;
   buyer_agent_license: TString;
   buyer_agent_broker: TString;
   buyer_agent_broker_license: TString;
   buyer_company_address: TString;
   buyer_company_phone: TNumber;
-  buyer_commission: TNumber;
+  buyer_commission: TString;
   contract_file: File | null;
   editcontract_file: File | null;
   ipAddress : TString
