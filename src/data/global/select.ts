@@ -38,46 +38,57 @@ export const cityChoices: CityOption[] = [
 ];
 
 // Property type options
-export type PropertyTypeValue =
-  | "apartment"
-  | "villa"
-  | "farm"
-  | "store"
-  | "house"
-  | "building";
+export enum PropertyTypeValue {
+  APARTMENT = "apartment",
+  VILLA = "villa",
+  FARM = "farm",
+  STORE = "store",
+  LAND = "land",
+  BUILDING = "building",
+}
 export type PropertyTypeOption = SelectOption<PropertyTypeValue>;
 export const PROPERTY_TYPE: PropertyTypeOption[] = [
-  { value: "apartment", label: "شقة" },
-  { value: "villa", label: "فيلا" },
-  { value: "farm", label: "مزرعة" },
-  { value: "store", label: "محل تجاري" },
-  { value: "house", label: "ارض" },
-  { value: "building", label: "بناء" },
+  { value: PropertyTypeValue.APARTMENT, label: "شقة" },
+  { value: PropertyTypeValue.VILLA, label: "فيلا" },
+  { value: PropertyTypeValue.FARM, label: "مزرعة" },
+  { value: PropertyTypeValue.STORE, label: "محل تجاري" },
+  { value: PropertyTypeValue.LAND, label: "ارض" },
+  { value: PropertyTypeValue.BUILDING, label: "بناء" },
 ];
 
 // Status options
-export type StatusValue = "active" | "pending" | "closed" | "out of market";
-export type StatusOption = SelectOption<StatusValue>;
+export enum PropertyStatus {
+  ACTIVE = "active",
+  PENDING = "pending",
+  CLOSED = "closed",
+  OUT_OF_MARKET = "out_of_market",
+}
+export type StatusOption = SelectOption<PropertyStatus>;
 export const STATUS: StatusOption[] = [
-  { value: "active", label: "نشط" },
-  { value: "pending", label: "قيد البيع" },
-  { value: "closed", label: "مباع" },
-  { value: "out of market", label: "غير معروض" },
+  { value: PropertyStatus.ACTIVE, label: "نشط" },
+  { value: PropertyStatus.PENDING, label: "قيد البيع" },
+  { value: PropertyStatus.OUT_OF_MARKET, label: "غير معروض" },
+];
+export const STATUS_WITH_CLOSED: StatusOption[] = [
+  { value: PropertyStatus.ACTIVE, label: "نشط" },
+  { value: PropertyStatus.PENDING, label: "قيد البيع" },
+  { value: PropertyStatus.CLOSED, label: "مباع" },
+  { value: PropertyStatus.OUT_OF_MARKET, label: "غير معروض" },
 ];
 
 // Status colors type
-export type StatusColorKey = StatusValue;
+export type StatusColorKey = PropertyStatus;
 export const STATUS_COLORS: Record<StatusColorKey, string> = {
-  active: "bg-green/70 border-green",
-  pending: "bg-yellow/70 border-yellow",
-  closed: "bg-red/70 border-red",
-  "out of market": "bg-grey/70 border-grey",
+  [PropertyStatus.ACTIVE]: "bg-green/70 border-green",
+  [PropertyStatus.PENDING]: "bg-yellow/70 border-yellow",
+  [PropertyStatus.CLOSED]: "bg-red/70 border-red",
+  [PropertyStatus.OUT_OF_MARKET]: "bg-grey/70 border-grey",
 };
 export const STATUS_TEXT: Record<StatusColorKey, string> = {
-  active: "text-green",
-  pending: "text-yellow",
-  closed: "text-red",
-  "out of market": "text-grey",
+  [PropertyStatus.ACTIVE]: "text-green",
+  [PropertyStatus.PENDING]: "text-yellow",
+  [PropertyStatus.CLOSED]: "text-red",
+  [PropertyStatus.OUT_OF_MARKET]: "text-grey",
 };
 
 // Water line options
@@ -89,7 +100,7 @@ export const WATERLINE: WaterLineOption[] = [
   { value: "well", label: "بئر" },
 ];
 // Trans type options
-type TransTypeValue = "sell" | "rent";
+export type TransTypeValue = "sell" | "rent";
 export type TransTypeOption = SelectOption<TransTypeValue>;
 export const TransType: TransTypeOption[] = [
   { value: "sell", label: "بيع" },

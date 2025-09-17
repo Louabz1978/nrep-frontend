@@ -3,15 +3,14 @@ import MESSAGES from "@/data/global/messages";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 
-export const useEditListingsPartial = () => {
+export const useCloseListings = () => {
   // query client to manage invalidating
   const queryClient = useQueryClient();
 
-  // handle edit listing
-  const editListingPartial = useMutation({
+  // handle close listing
+  const closeListing = useMutation({
     mutationFn: updateListing,
     onSuccess: (res) => {
       // invalidate listings query
@@ -27,15 +26,15 @@ export const useEditListingsPartial = () => {
     },
   });
 
-  // handle submit edit listing form
-  async function handleEditListingPartial(
-    data: Record<string, string>,
+  // handle submit close listing form
+  async function handleCloseListing(
+    data: Record<string, string | number | null>,
     id: number
   ) {
     // toaster
-    toast.promise(editListingPartial.mutateAsync({ data, id }), {
-      loading: MESSAGES?.listing?.edit?.loading,
-      success: MESSAGES?.listing?.edit?.success,
+    toast.promise(closeListing.mutateAsync({ data, id }), {
+      loading: MESSAGES?.listing?.close?.loading,
+      success: MESSAGES?.listing?.close?.success,
       error: (error) => {
         return showApiErrors(error);
       },
@@ -43,7 +42,7 @@ export const useEditListingsPartial = () => {
   }
 
   return {
-    handleEditListingPartial,
-    editListingPartial,
+    handleCloseListing,
+    closeListing,
   };
 };

@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         handle: { whiteBg: true },
       },
       {
-        path: "contracts/signature/:id",
+        path: "contracts/sign/:mls/:user_id",
         element: <ContractSignatureIndex />,
         handle: { whiteBg: true },
       },

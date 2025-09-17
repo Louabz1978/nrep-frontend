@@ -1,7 +1,8 @@
 import type {
   CityValue,
   PropertyTypeValue,
-  StatusValue,
+  PropertyStatus,
+  TransTypeValue,
 } from "@/data/global/select";
 import type { PaginationData } from "../global/pagination";
 import type { UserType } from "../global/user";
@@ -53,7 +54,7 @@ export interface Listing {
   year_built: number;
   latitude: number;
   longitude: number;
-  status: StatusValue;
+  status: PropertyStatus;
   created_at: string;
   last_updated: string;
   image_url: string;
@@ -83,6 +84,7 @@ export interface ImageType {
   is_main: boolean;
 }
 export interface ListingDetailsType {
+  trans_type: TransTypeValue;
   property_id: number;
   description: string;
   price: number;
@@ -95,7 +97,7 @@ export interface ListingDetailsType {
   year_built: number;
   latitude: number;
   longitude: number;
-  status: StatusValue;
+  status: PropertyStatus;
   created_at: string;
   last_updated: string;
   mls_num: number | null;

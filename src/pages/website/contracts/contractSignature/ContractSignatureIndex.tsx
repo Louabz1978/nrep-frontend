@@ -7,10 +7,10 @@ import ContractSignatureSkeleton from "./ContractSignatureSkeleton";
 import type { ContractFormType } from "@/data/website/schema/contractSchema";
 
 const ContractSignatureIndex = () => {
-  const { id } = useParams<{ id: string }>();
+  const { mls } = useParams<{ mls: string }>();
 
   const { contractDetails, contractDetailsQuery } = useGetConrtactById(
-    Number(id)
+    Number(mls)
   );
   const { allContacts } = useGetAllContacts();
 
