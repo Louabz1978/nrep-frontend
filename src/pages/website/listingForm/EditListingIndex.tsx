@@ -41,7 +41,7 @@ function EditListingIndex() {
           id={listingId}
           defaultValues={{
             general: {
-              livable: true,
+              livable: listingDetails?.livable,
               sellers: listingDetails?.sellers,
               trans_type: {
                 value: listingDetails.trans_type,

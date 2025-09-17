@@ -221,6 +221,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
   }`.trim();
 
   const dummyProperty = {
+    livable: data?.livable,
     sellers: data?.sellers ?? [],
     trans_type: transType?.label,
     ac: data.additional?.ac ? "يوجد" : "لا يوجد",
