@@ -216,8 +216,8 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
           />
           <Select
             form={form}
-            label="نوع العقد"
-            placeholder="اختر نوع العقد"
+            label="نوع العرض"
+            placeholder="اختر نوع العرض"
             choices={TransType}
             keyValue="value"
             showValue="label"

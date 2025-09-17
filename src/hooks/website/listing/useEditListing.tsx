@@ -56,7 +56,6 @@ export const useEditListings = () => {
           ]
       );
 
-    console.log({ s: submitData?.sellers });
     const data = {
       ...(submitData ?? {}),
       trans_type: submitData?.trans_type?.value,
@@ -64,6 +63,7 @@ export const useEditListings = () => {
       country: submitData?.country?.value,
       county: submitData?.country?.value,
       city: submitData?.city?.value,
+      area: submitData?.area?.title,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
       water: submitData?.water?.value || null,
