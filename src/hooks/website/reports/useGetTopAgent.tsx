@@ -5,7 +5,12 @@ import getSearchParams from "@/utils/getSearchParams";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import getTopAgent from "@/api/website/reports/getTopAgent";
 
-function useGetTopAgent() {
+interface IUseGetTopAgent {
+  month: string;
+  year: string;
+}
+
+function useGetTopAgent({ month, year }: IUseGetTopAgent) {
   const searchParams = useOptimisticSearchParams();
   const queryParams = getSearchParams(
     searchParams,
@@ -14,22 +19,26 @@ function useGetTopAgent() {
 
   // get listing details
   const getTopAgentQuery = useQuery({
-    queryKey: [QUERY_KEYS?.reports?.getTopAgent, JSON.stringify(queryParams)],
-    queryFn: () => getTopAgent({ queryParams }),
+    queryKey: [
+      QUERY_KEYS?.reports?.getTopAgent,
+      JSON.stringify(queryParams),
+      month,
+      year,
+    ],
+    queryFn: () =>
+      getTopAgent({ queryParams: { ...queryParams, month, year } }),
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   // final data
-  const topAgent = getTopAgentQuery?.data?.data;
+  const topAgent = getTopAgentQuery.data?.data;
 
-  // total pages
-  const totalPages = getTopAgentQuery?.data?.pagination?.total_pages;
+
 
   return {
     getTopAgentQuery,
     topAgent,
-    totalPages,
   };
 }
 

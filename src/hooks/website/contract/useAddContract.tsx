@@ -6,12 +6,37 @@ import type { ContractFormType } from "@/data/website/schema/contractSchema";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 
+interface CreateContractMutationProps {
+  json: string;
+  file: File;
+  mls: string;
+  id: number;
+  ipAddress: string | null;
+}
+
+async function getIpAddress() {
+  try {
+    const response = await fetch("https://api.ipify.org?format=json");
+    const data = await response.json();
+    return data.ip;
+  } catch (error) {
+    console.error("Error fetching IP address:", error);
+    return null;
+  }
+}
+
 export default function useAddContract() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ json, file, mls, id }: any) =>
-      createContract({ json, file, mls, id }),
+    mutationFn: ({
+      json,
+      file,
+      mls,
+      id,
+      ipAddress,
+    }: CreateContractMutationProps) =>
+      createContract({ json, file, mls, id, ipAddress }),
     onSuccess: (response) => {
       toast.success("تم إنشاء العقد بنجاح", {
         description: response.message,
@@ -232,6 +257,8 @@ export default function useAddContract() {
     });
 
     try {
+      const ipAddress = await getIpAddress();
+      console.log("User IP Address:", ipAddress);
       // Generate PDF blob
       const pdfBlob = await generatePDFBlob(contractRef);
 
@@ -254,7 +281,13 @@ export default function useAddContract() {
 
       // Send to backend
       mutation.mutate(
-        { json: JSON.stringify(submitData), file: pdfFile, mls: mls, id: id },
+        {
+          json: JSON.stringify(submitData),
+          file: pdfFile,
+          mls: mls,
+          id: id,
+          ipAddress: ipAddress,
+        },
         {
           onSuccess: () => {
             toast.success("تم إنشاء العقد وإرساله بنجاح", {
