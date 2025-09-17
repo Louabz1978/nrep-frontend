@@ -1,3 +1,4 @@
+import useGetPropertyByMls from "@/hooks/website/listing/useGetPropertyByMls";
 import ContractsList from "./ContractsList";
 
 const ContractListLogic = () => {
