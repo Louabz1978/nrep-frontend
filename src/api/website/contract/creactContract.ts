@@ -8,10 +8,12 @@ async function createContract({
   file,
   mls,
   id,
+  ipAddress,
 }: any): CreateContractResult {
   const formData = new FormData();
   formData.append("contract_json", json);
   formData.append("pdf_file", file);
+  formData.append("ip_address", ipAddress);
   const res = await axiosClient.post(`contracts/sign/${mls}/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
