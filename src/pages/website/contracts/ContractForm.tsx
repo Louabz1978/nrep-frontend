@@ -10,6 +10,7 @@ import {
   type ContractFormType,
 } from "@/data/website/schema/contractSchema";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -23,7 +24,6 @@ interface ContractFormProps {
   handleAddContract: any;
   isSubmitting: any;
   isCreate: any;
-  user_id?: any;
   defaultData: any;
 }
 function ContractForm({
@@ -33,8 +33,8 @@ function ContractForm({
   isSubmitting,
   isCreate,
   defaultData,
-  user_id,
 }: ContractFormProps) {
+  const { user } = useUser();
   const [disabled1, setDisabled1] = useState(true);
   const [disabled2, setDisabled2] = useState(true);
   const [checkbox1, setCheckBox1] = useState(false);
@@ -112,6 +112,23 @@ function ContractForm({
         pool: propertyByMls?.pool || false,
       };
 
+  const userId = user?.user_id ?? user?.data?.user_id;
+  const userData = user?.data ?? user;
+  const buyer_agent_id = useWatch({
+    control: form.control,
+    name: "buyer_agent_id",
+  });
+
+  useEffect(() => {
+    if (isCreate && !buyer_agent_id) {
+      form.setValue("buyer_agent_id", userId);
+      form.setValue(
+        "buyer_agent",
+        `${userData?.first_name ?? ""} ${userData?.last_name ?? ""}`
+      );
+    }
+  }, [isCreate, buyer_agent_id, userId]);
+
   // Function to populate form with listing details
   const populateFormWithListingData = useCallback(() => {
     if (!propertyByMls) return;
@@ -182,6 +199,7 @@ function ContractForm({
         propertyByMls.created_by_user?.last_name || ""
       }`.trim()
     );
+    form.setValue("seller_agent_id", propertyByMls.created_by_user?.id);
     form.setValue(
       "seller_company_address",
       propertyByMls.created_by_user?.address || ""
@@ -207,13 +225,17 @@ function ContractForm({
     name: "buyer_name",
   });
   const contractRef = useRef<HTMLDivElement>(null);
+  const seller_agent_id = useWatch({
+    control: form.control,
+    name: "seller_agent_id",
+  });
 
   // Populate form when propertyByMls changes
   useEffect(() => {
-    if (propertyByMls && isCreate) {
+    if (propertyByMls && isCreate && !seller_agent_id) {
       populateFormWithListingData();
     }
-  }, [propertyByMls, isCreate, populateFormWithListingData]);
+  }, [propertyByMls, isCreate]);
 
   useEffect(() => {
     const price = Number(watchPrice || 0);
@@ -271,6 +293,7 @@ function ContractForm({
     }
   }, [watchBuyerName, allContacts, form]);
 
+  const [renderBuyers, setRenderBuyers] = useState(0);
   // Handle buyer selection for all buyers in the array
   useEffect(() => {
     if (isCreate) {
@@ -311,7 +334,11 @@ function ContractForm({
         }
       });
     }
-  }, [controlledBuyers, allContacts, form, isCreate]);
+  }, [controlledBuyers, allContacts, form, isCreate, renderBuyers]);
+
+  // can sign
+  const canBuyerAgent = !isCreate && buyer_agent_id == userId;
+  const canSellerAgent = !isCreate && seller_agent_id == userId;
 
   return (
     <PageContainer>
@@ -437,6 +464,7 @@ function ContractForm({
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_name`}
+                    onChange={() => setRenderBuyers((prev) => prev + 1)}
                     disabled={!isCreate}
                   />
                 </div>
@@ -1135,6 +1163,8 @@ function ContractForm({
                 </span>
                 <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledSellers?.map((item, index) => {
+                    const canSign = !isCreate && item?.id == userId;
+
                     return (
                       <div
                         key={item?.id}
@@ -1146,7 +1176,12 @@ function ContractForm({
                           </span>
                         ) : null}
                         <SignatureInput
-                          disabled={!isCreate}
+                          disabled={!canSign}
+                          defaultValue={
+                            isCreate
+                              ? undefined
+                              : form.watch(`sellers.${index}.seller_signature`)
+                          }
                           form={form}
                           name={`sellers.${index}.seller_signature`}
                         />
@@ -1166,9 +1201,14 @@ function ContractForm({
                     </span>
                   ) : null}
                   <SignatureInput
-                    disabled={!isCreate}
                     form={form}
-                    name="agent_signature"
+                    disabled={!canSellerAgent}
+                    defaultValue={
+                      isCreate
+                        ? undefined
+                        : form.watch("seller_agent_signature")
+                    }
+                    name="seller_agent_signature"
                   />
                 </div>
               </div>
@@ -1178,6 +1218,7 @@ function ContractForm({
                 </span>
                 <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledBuyers?.map((item, index) => {
+                    const canSign = !isCreate && item?.id == userId;
                     return (
                       <div
                         key={index}
@@ -1189,9 +1230,14 @@ function ContractForm({
                           </span>
                         ) : null}
                         <SignatureInput
-                          disabled={!isCreate}
+                          disabled={!canSign}
                           form={form}
                           name={`buyers.${index}.buyer_signature`}
+                          defaultValue={
+                            isCreate
+                              ? undefined
+                              : form.watch(`buyers.${index}.buyer_signature`)
+                          }
                         />
                       </div>
                     );
@@ -1209,9 +1255,12 @@ function ContractForm({
                     </span>
                   ) : null}
                   <SignatureInput
-                    disabled={!isCreate}
+                    disabled={!canBuyerAgent}
                     form={form}
-                    name="agent_signature"
+                    defaultValue={
+                      isCreate ? undefined : form.watch("buyer_agent_signature")
+                    }
+                    name="buyer_agent_signature"
                   />
                 </div>
               </div>

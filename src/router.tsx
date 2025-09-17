@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         handle: { whiteBg: true },
       },
       {
-        path: "contracts/sign/:mls/:user_id",
+        path: "contracts/sign/:mls",
         element: <ContractSignatureIndex />,
         handle: { whiteBg: true },
       },
@@ -91,7 +91,6 @@ const router = createBrowserRouter([
         path: "reports/top-agent",
         element: <TopAgent />,
       },
-
     ],
   },
   // admin pages

@@ -59,7 +59,9 @@ export const useEditListings = () => {
     const data = {
       ...(submitData ?? {}),
       trans_type: submitData?.trans_type?.value,
-      sellers: submitData?.sellers?.map((item) => item?.consumer_id as string),
+      sellers: submitData?.sellers
+        ?.map((item) => item?.consumer_id as string)
+        ?.join(","),
       country: undefined,
       county: submitData?.country?.title,
       city: submitData?.city?.title,

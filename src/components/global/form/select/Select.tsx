@@ -343,6 +343,7 @@ function Select<T extends FieldValues>({
                               {ele[showValue]}
 
                               <FaXmark
+                                data-print-hidden={true}
                                 className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
                                 onClick={(e) => {
                                   e.preventDefault();
@@ -371,6 +372,7 @@ function Select<T extends FieldValues>({
                               {ele}
 
                               <FaXmark
+                                data-print-hidden={true}
                                 className="size-[16px] text-placeholder/60 w-0 group-hover:w-[16px] hover:text-placeholder transition-all duration-[0.2s]"
                                 onClick={(e) => {
                                   e.preventDefault();
@@ -397,6 +399,7 @@ function Select<T extends FieldValues>({
               {!multiple && !preventRemove && watch(name) ? (
                 <span
                   title="إفراغ"
+                  data-print-hidden={true}
                   className={`relative font-light text-size12 p-1 text-error rounded-full bg-error/30 opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
                 >
                   <FaXmark />
@@ -417,6 +420,7 @@ function Select<T extends FieldValues>({
 
               {/* select arrow */}
               <div
+                data-print-hidden={true}
                 className={`relative toggle-button ${
                   isDisabled
                     ? "text-placeholder"

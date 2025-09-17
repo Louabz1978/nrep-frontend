@@ -74,7 +74,10 @@ export type ContractFormType = {
   balance: TNumber;
   days_batch: TNumber;
   effective_date: TString;
-  agent_signature: TString;
+  buyer_agent_signature: TString;
+  seller_agent_signature: TString;
+  buyer_agent_id: TNumber;
+  seller_agent_id: TNumber;
   sller_agent_name: TString;
   seller_agent_license: TString;
   seller_agent_broker: TString;
@@ -233,9 +236,14 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   others: Joi.any().messages(VALIDATION_MESSAGES).label("أخرى"),
   balance: Joi.any().messages(VALIDATION_MESSAGES).label("الرصيد"),
   effective_date: Joi.any().messages(VALIDATION_MESSAGES).label("تاريخ النفاذ"),
-  agent_signature: Joi.any()
+  buyer_agent_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
-    .label("توقيع الوكيل"),
+    .label("توقيع وكيل المشتري"),
+  buyer_agent_id: Joi.any().messages(VALIDATION_MESSAGES),
+  seller_agent_id: Joi.any().messages(VALIDATION_MESSAGES),
+  seller_agent_signature: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("توقيع وكيل البائع"),
   sller_agent_name: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("وكيل البائع"),
@@ -352,7 +360,10 @@ export const contractFormInitialValues: ContractFormType = {
   others: null,
   balance: null,
   effective_date: null,
-  agent_signature: null,
+  buyer_agent_signature: null,
+  seller_agent_signature: null,
+  buyer_agent_id: null,
+  seller_agent_id: null,
   sller_agent_name: null,
   seller_agent_license: null,
   seller_agent_broker: null,
