@@ -674,7 +674,6 @@ function ContractForm({
               <div className="flex-1 border-b-2 border-primary-fg/70 border-dotted self-end mb-sm"></div>
               <Input
                 flexibleWidth
-                addingStyle="min-w-[500px]"
                 variant="contract"
                 form={form}
                 name="price"
@@ -1127,7 +1126,7 @@ function ContractForm({
                 الأطراف في أو قبل
               </span>
               <Input
-              type="date"
+                type="date"
                 flexibleWidth
                 variant="contract"
                 form={form}

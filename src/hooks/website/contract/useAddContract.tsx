@@ -37,7 +37,7 @@ export default function useAddContract() {
       ipAddress,
     }: CreateContractMutationProps) =>
       createContract({ json, file, mls, id, ipAddress }),
-    onSuccess: (response) => {
+    onSuccess: () => {
       toast.success("تم إنشاء العقد بنجاح", {
         duration: 3000,
       });
@@ -278,31 +278,13 @@ export default function useAddContract() {
         type: "application/pdf",
       });
 
-      mutation.mutate(
-        {
-          json: JSON.stringify(submitData),
-          file: pdfFile,
-          mls: mls,
-          id: id,
-          ipAddress: ipAddress,
-        },
-        {
-          onSuccess: () => {
-            toast.success("تم إنشاء العقد وإرساله بنجاح", {
-              id: toastId,
-              duration: 3000,
-            });
-          },
-          onError: (error) => {
-            toast.error("فشل في إرسال العقد", {
-              id: toastId,
-              description: "حدث خطأ أثناء إرسال العقد",
-              duration: 5000,
-            });
-            console.error("Error submitting contract:", error);
-          },
-        }
-      );
+      mutation.mutate({
+        json: JSON.stringify(submitData),
+        file: pdfFile,
+        mls: mls,
+        id: id,
+        ipAddress: ipAddress,
+      });
     } catch (error) {
       toast.error("فشل في إنشاء ملف PDF", {
         id: toastId,
