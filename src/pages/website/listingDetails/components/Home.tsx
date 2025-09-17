@@ -32,13 +32,13 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
 
   const detailsRows1 = [
     [
-      { label: "السعر :", value: dummyProperty.price },
+      { label: "السعر :", value: dummyProperty.price + "$"},
       {
         label: "الحالة : ",
         value: dummyProperty.status?.label ?? dummyProperty?.status,
       },
       { label: "رقم البناء :", value: dummyProperty.buildingNumber },
-      { label: "مساحة العقار : ", value: dummyProperty.propertyArea },
+      { label: "مساحة العقار : ", value: dummyProperty.propertyArea + "  م٢ " },
       { label: "اسم الشارع :", value: dummyProperty.streetName },
       { label: "سنة البناء : ", value: dummyProperty.buildYear },
       { label: "رقم الطابق :", value: dummyProperty.floorNumber },

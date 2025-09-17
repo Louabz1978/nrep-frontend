@@ -57,6 +57,7 @@ export type ContractFormType = {
   pool: boolean;
   price: TNumber;
   deposit: TNumber;
+  valid_date:TString;
   deposit_date: TString;
   batch: TNumber;
   batch_date: TString;
@@ -94,6 +95,7 @@ export type ContractFormType = {
   buyer_commission: TNumber;
   contract_file: File | null;
   editcontract_file: File | null;
+  ipAddress : TString
 };
 
 const SellerSchema = Joi.object<SellerType>({
@@ -236,6 +238,7 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   others: Joi.any().messages(VALIDATION_MESSAGES).label("أخرى"),
   balance: Joi.any().messages(VALIDATION_MESSAGES).label("الرصيد"),
   effective_date: Joi.any().messages(VALIDATION_MESSAGES).label("تاريخ النفاذ"),
+  valid_date: Joi.any().messages(VALIDATION_MESSAGES).label("تاريخ الفعال"),
   buyer_agent_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("توقيع وكيل المشتري"),
@@ -284,6 +287,10 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   buyer_commission: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("عمولة وكيل المشتري"),
+  ipAddress: Joi.any()
+    .messages(VALIDATION_MESSAGES)
+    .label("Ip الجهاز"),
+
 });
 
 export const sellerInitialValues: SellerType = {
@@ -378,4 +385,6 @@ export const contractFormInitialValues: ContractFormType = {
   buyer_company_address: null,
   buyer_company_phone: null,
   buyer_commission: null,
+  ipAddress:null,
+  valid_date:null
 };

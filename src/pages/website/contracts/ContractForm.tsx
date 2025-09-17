@@ -1064,7 +1064,7 @@ function ContractForm({
                   type="date"
                   variant="contract"
                   form={form}
-                  name="effective_date"
+                  name="valid_date"
                   disabled={!isCreate}
                 />
               </div>
@@ -1127,10 +1127,11 @@ function ContractForm({
                 الأطراف في أو قبل
               </span>
               <Input
+              type="date"
                 flexibleWidth
                 variant="contract"
                 form={form}
-                name="balance"
+                name="effective_date"
                 disabled={!isCreate}
               />
             </div>
