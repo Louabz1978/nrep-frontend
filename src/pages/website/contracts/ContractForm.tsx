@@ -199,7 +199,7 @@ function ContractForm({
         propertyByMls.created_by_user?.last_name || ""
       }`.trim()
     );
-    form.setValue("seller_agent_id", propertyByMls.created_by_user?.id);
+    form.setValue("seller_agent_id", propertyByMls.created_by_user?.user_id);
     form.setValue(
       "seller_company_address",
       propertyByMls.created_by_user?.address || ""

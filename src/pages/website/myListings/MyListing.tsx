@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/global/ui/checkbox";
 import {
   cityChoices,
   PropertyStatus,
-  STATUS,
+  STATUS_WITH_CLOSED,
   TransType,
 } from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
@@ -252,7 +252,7 @@ function MyListings() {
         label: "الحالة",
         title: "الحالة",
         searchKey: "status_filter",
-        options: STATUS,
+        options: STATUS_WITH_CLOSED,
       },
     ],
     []

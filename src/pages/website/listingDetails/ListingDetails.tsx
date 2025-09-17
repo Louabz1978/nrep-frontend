@@ -9,7 +9,7 @@ import { Button } from "@/components/global/form/button/Button";
 import {
   cityChoices,
   PROPERTY_TYPE,
-  STATUS,
+  STATUS_WITH_CLOSED,
   TransType,
   WATERLINE,
 } from "@/data/global/select";
@@ -201,7 +201,9 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   const handleNavigate = () => navigate(-1);
 
-  const status = STATUS?.find((item) => item?.value == data?.status);
+  const status = STATUS_WITH_CLOSED?.find(
+    (item) => item?.value == data?.status
+  );
   const transType = TransType?.find((item) => item?.value == data?.trans_type);
   const propertyType = PROPERTY_TYPE?.find(
     (item) => item?.value == data?.property_type
@@ -266,7 +268,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     latitude: data.latitude,
     longitude: data.longitude,
     DimensionsOfTheEarth: 170,
-    status: status || "قيد الانجاز",
+    status: status || "---",
     streetName: data.address?.street || "النص هنا",
     waterLine: waterLine || "لا يوجد",
   };

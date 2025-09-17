@@ -8,7 +8,12 @@ import {
   TooltipTrigger,
 } from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
-import { cityChoices, STATUS, TransType } from "@/data/global/select";
+import {
+  cityChoices,
+  STATUS,
+  STATUS_WITH_CLOSED,
+  TransType,
+} from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import useAllListings from "@/hooks/website/listing/useAllListings";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
@@ -253,7 +258,7 @@ function AllListings() {
         label: "الحالة",
         title: "الحالة",
         searchKey: "status_filter",
-        options: STATUS,
+        options: STATUS_WITH_CLOSED,
       },
     ],
     []
