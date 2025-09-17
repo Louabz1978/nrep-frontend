@@ -891,7 +891,7 @@ function ContractForm({
             <div>
               <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
-                  عمولة وكيل البائع :
+                  {`عمولة وكيل البائع (%) :`}
                 </span>
                 <Input
                   flexibleWidth
@@ -980,7 +980,7 @@ function ContractForm({
             <div>
               <div className="flex items-end gap-2">
                 <span className="whitespace-nowrap text-size18">
-                  عمولة وكيل المشتري :
+                  {`عمولة وكيل المشتري (%) :`}
                 </span>
                 <Input
                   flexibleWidth
