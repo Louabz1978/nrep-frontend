@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
 import FileInput from "@/components/global/form/fileInput/FileInput";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import {
@@ -10,12 +9,13 @@ import {
 } from "@/data/website/schema/editContractSchema";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
-import { FaHand } from "react-icons/fa6";
 import { Button } from "@/components/global/form/button/Button";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
+import Select from "@/components/global/form/select/Select";
+import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import type { ContactWithUser } from "@/types/website/contact";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -38,8 +38,10 @@ function EditContract() {
     setPageNumber(1);
   }
 
-  const constraintsRef = useRef(null);
-  const [enableDrag, setEnableDrag] = useState(true);
+  
+  const { allContacts } = useGetAllContacts();
+  const contacts =
+    allContacts?.map((contact: ContactWithUser) => ({ value: contact?.name })) || [];
 
   const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
     // Hide elements with data-print-hidden=true - query from the CLONED element
@@ -230,43 +232,21 @@ function EditContract() {
         {file && (
           <>
             <div className="flex justify-between   mt-12 max-w-[1400px] ">
-              <div className="flex flex-col items-center gap-4xl">
-                <div className="text-size18 font-medium text-primary-fg">
-                  البائع
-                </div>
-                <motion.div
-                  ref={constraintsRef}
-                  className={`
-           absolute top-0 right-0 w-full z-[26] h-full min-h-[2500px]
-         pointer-events-none`}
-                >
-                  <motion.div
-                    drag={enableDrag}
-                    dragConstraints={constraintsRef}
-                    dragMomentum={false}
-                    className="w-[220px] !h-[100px] top-[130px] right-[85px] flex flex-col gap-4xl text-center relative mb-3 pointer-events-auto group"
-                  >
-                    <div
-                      className={`${
-                        enableDrag ? "pointer-events-none" : ""
-                      } relative`}
-                    >
-                      <SignatureInput form={form} name="agent_signature" />
-                      <FaHand
-                        className={` ${
-                          enableDrag
-                            ? "text-opacity-80 text-primary hover:text-opacity-30"
-                            : "text-opacity-30 text-primary-fg hover:text-opacity-80"
-                        } text-size14 cursor-pointer transition-all !pointer-events-auto absolute top-[4px] right-[4px] opacity-0 group-hover:opacity-100`}
-                        onClick={() => setEnableDrag((prev) => !prev)}
-                      />
-                    </div>
-                  </motion.div>
-                </motion.div>
-                <div className="w-[200px] h-[200px]"></div>
-                <span className="max-w-[400px] text-center">
-                  ضع توقيعك ثم اسحبه للمكان المخصص اسفل الصفحة
-                </span>
+              <div className="flex flex-col items-start gap-2xl min-w-[320px]">
+                <Select
+                  form={form}
+                  name="seller_name"
+                  label="البائع"
+                  choices={contacts}
+                  showValue="value"
+                />
+                <Select
+                  form={form}
+                  name="buyer_name"
+                  label="المشتري"
+                  choices={contacts}
+                  showValue="value"
+                />
               </div>
               <div
                 className="rounded-lg overflow-hidden border-2  border-dashed cursor-pointer w-[304px] h-[304px] "
