@@ -8,6 +8,10 @@ const MESSAGES = {
     success: "تم تسجيل الخروج بنجاح!",
   },
   listing: {
+    close: {
+      loading: "جار إغلاق العقار...",
+      success: "تم إغلاق العقار بنجاح!",
+    },
     add: {
       loading: "جار إضافة العقار...",
       success: "تمت إضافة العقار بنجاح!",

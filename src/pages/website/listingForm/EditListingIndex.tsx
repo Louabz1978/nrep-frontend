@@ -7,6 +7,7 @@ import {
   cityChoices,
   PROPERTY_TYPE,
   STATUS,
+  TransType,
   WATERLINE,
 } from "@/data/global/select";
 import {
@@ -36,6 +37,14 @@ function EditListingIndex() {
           id={listingId}
           defaultValues={{
             general: {
+              livable: true,
+              sellers: [],
+              trans_type: {
+                value: listingDetails.trans_type,
+                label:
+                  TransType.find((s) => s.value === listingDetails.trans_type)
+                    ?.label || "",
+              },
               exp_date:
                 listingDetails?.exp_date || generalStepInitialValues?.exp_date,
               show_inst:
