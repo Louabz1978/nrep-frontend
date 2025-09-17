@@ -45,11 +45,11 @@ ChartJS.register(
 // --- Utility Functions ---
 const translateLabelToArabic = (label: string): string => {
   const translations: Record<string, string> = {
-    new_listings_count: "إعلانات جديدة",
-    pending_count: "قيد الانتظار",
-    closed_count: "مغلقة",
-    out_of_market: "خارج السوق",
-    return_the_market: "العودة إلى السوق",
+    new_listings_count: "عقارات معروضة للبيع",
+    pending_count: "عقارات قيد البيع",
+    closed_count: "عقارات مباعة",
+    out_of_market: "عقارات مسحوبة من السوق",
+    return_the_market: "عقارات معروضة مرة اخرى",
   };
   const key = label?.toLowerCase().trim().replace(/ /g, "_") ?? "";
   return translations[key] || label;
@@ -126,7 +126,7 @@ const getChartOptions = (hasData: boolean): ChartOptions<"bar"> => ({
         value: {
           anchor: "start",
           align: "start",
-          offset: 90,
+          offset: 150,
           color: "#555",
           font: { weight: "bold", size: 14 },
           formatter: (value) => value ?? "",
