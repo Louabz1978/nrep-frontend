@@ -38,7 +38,7 @@ function EditListingIndex() {
           defaultValues={{
             general: {
               livable: true,
-              sellers: [],
+              sellers: listingDetails?.sellers,
               trans_type: {
                 value: listingDetails.trans_type,
                 label:
@@ -56,7 +56,10 @@ function EditListingIndex() {
               apt: listingDetails?.address.apt
                 ? Number(listingDetails?.address.apt)
                 : undefined,
-              area: listingDetails?.address.area, // Assuming 'area' maps to 'district'
+              area: {
+                title: listingDetails?.address.area,
+                value: listingDetails?.address.area,
+              }, // Assuming 'area' maps to 'district'
               area_space: listingDetails?.area_space,
               bedrooms: listingDetails?.bedrooms,
               bathrooms: listingDetails?.bathrooms,
@@ -69,17 +72,11 @@ function EditListingIndex() {
               description: listingDetails?.description,
               country: {
                 value: listingDetails?.address.county,
-                label:
-                  cityChoices.find(
-                    (c) => c.value === listingDetails.address.county
-                  )?.label || "",
+                title: listingDetails?.address.county,
               },
               city: {
                 value: listingDetails.address.city,
-                label:
-                  cityChoices.find(
-                    (c) => c.value === listingDetails.address.city
-                  )?.label || "",
+                title: listingDetails.address.city,
               },
               property_type: {
                 value: listingDetails.property_type,

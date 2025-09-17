@@ -80,13 +80,6 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
       { label: "رقم الهاتف :", value: dummyProperty.phoneNumber },
       { label: "البريد الالكتروني :", value: dummyProperty.email },
       { label: "رقم الرخصة :", value: dummyProperty.licenseNumber },
-      {
-        label: "البائعون :",
-        value:
-          dummyProperty?.sellers
-            ?.map((seller: string) => seller?.name)
-            .join(", ") || "---",
-      },
     ],
     [
       { label: "الشركة العقارية :", value: dummyProperty.realEstateCompany },
@@ -97,7 +90,13 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
     [
       { label: "عمولة  البائع :", value: dummyProperty.buyerCommission },
       { label: "عمولة  المشتري :", value: dummyProperty.sellerCommission },
-      { label: "اسم صاحب العقار :", value: dummyProperty.propertyOwner },
+      {
+        label: "أصحاب العقار :",
+        value:
+          dummyProperty?.sellers
+            ?.map((seller: string) => seller?.name)
+            .join(", ") || "---",
+      },
       {
         label: "تاريخ انتهاء العقد :",
         value: dummyProperty.contractExpiration,

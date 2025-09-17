@@ -15,7 +15,7 @@ export type GeneralStepType = {
   apt: TNumber;
   country: TOption;
   city: TOption;
-  area: TString;
+  area: TOption;
   property_type: TOption;
   area_space: TNumber;
   bedrooms: TNumber;
@@ -49,7 +49,7 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
   city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
-  area: Joi.string()
+  area: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الحي/المنطقة"),

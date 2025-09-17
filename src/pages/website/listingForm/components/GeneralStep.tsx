@@ -6,14 +6,12 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import { type GeneralStepType } from "@/data/website/schema/ListingFormSchema";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
-import {
-  cityChoices,
-  PROPERTY_TYPE,
-  STATUS,
-  TransType,
-} from "@/data/global/select";
+import { PROPERTY_TYPE, STATUS, TransType } from "@/data/global/select";
 import Textarea from "@/components/global/form/textarea/Textarea";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import useGetCities from "@/hooks/website/listing/useGetCities";
+import useGetCountries from "@/hooks/website/listing/useGetCountries";
+import useGetArea from "@/hooks/website/listing/useGetArea";
 
 interface GeneralStepProps {
   form: UseFormReturn<GeneralStepType>;
@@ -32,6 +30,10 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
   };
 
   const { allContacts } = useGetAllContacts();
+  const { cities, citiesQuery } = useGetCities();
+  const { countries, countriesQuery } = useGetCountries();
+  const { Area, AreaQuery } = useGetArea();
+  console.log(cities, countries, Area);
 
   return (
     <AnimateContainer>
@@ -83,9 +85,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="المحافظة"
             placeholder="اختر المحافظة"
-            choices={cityChoices}
-            keyValue="value"
-            showValue="label"
+            choices={countries}
+            keyValue="title"
+            showValue="title"
             name="country"
             info="يرجى اختيار المحافظة التي يقع فيها العقار"
             required
@@ -94,17 +96,20 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             form={form}
             label="المدينة"
             placeholder="اختر المدينة"
-            choices={cityChoices}
-            keyValue="value"
-            showValue="label"
+            choices={cities}
+            keyValue="title"
+            showValue="title"
             name="city"
             info="يرجى اختيار المدينة التي يقع فيها العقار"
             required
           />
-          <Input
+          <Select
             form={form}
             label="الحي/المنطقة"
             placeholder="اختر الحي أو المنطقة"
+            choices={Area}
+            keyValue="title"
+            showValue="title"
             name="area"
             info="يرجى اختيار الحي أو المنطقة التي يقع فيها العقار"
             required

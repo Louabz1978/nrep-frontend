@@ -84,18 +84,12 @@ function AllListings() {
         header: "العنوان",
         accessorKey: "address.building_num",
         cell: ({ row }) => {
-          const county = cityChoices?.find(
-            (item) => item?.value == row?.original?.address?.county
-          )?.label;
-          const city = cityChoices?.find(
-            (item) => item?.value == row?.original?.address?.city
-          )?.label;
-
           return `${row?.original?.address?.building_num ?? ""} ${
             row?.original?.address?.street ?? ""
           } طابق ${row?.original?.address?.floor ?? ""} شقة ${
             row?.original?.address?.apt ?? ""
-          }, ${row?.original?.address?.area}, ${city}, ${county}`;
+          }, ${row?.original?.address?.area}, ${row?.original?.address
+            ?.city}, ${row?.original?.address?.county}`;
         },
         size: 50,
       },
