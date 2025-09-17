@@ -29,6 +29,8 @@ type ChartSeries = { label: string; value: number };
 const GRADIENT_COLORS = [
   ["#6dd875", "#c8eac948"], // Green
   ["#f8cd52", "#fceed54f"], // Yellow
+  ["#ff6b6b", "#ffc9c94f"], // Red
+  ["#94a3b8", "#e2e8f056"], // Grey
   ["#6caee0", "#c2dcf056"], // Blue
 ];
 const BAR_THICKNESS = 42;
