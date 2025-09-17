@@ -22,6 +22,9 @@ const QUERY_KEYS = {
     query: "contracts-query",
     details: "contracts-details",
   },
+  reports: {
+    getTopAgent: "reports-get-top-agent",
+  },
 };
 
 export default QUERY_KEYS;
