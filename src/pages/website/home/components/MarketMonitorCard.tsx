@@ -219,8 +219,8 @@ const MarketMonitorCard = () => {
   const { date, area } = form.watch();
 
   const apiParams = useMemo(() => {
-    if (!date?.value || !area?.value) return null;
-    return { queryParams: { period: date.value, area: area.value } };
+    if (!date?.value || !area?.title) return null;
+    return { queryParams: { period: date.value, area: area.title } };
   }, [date, area]);
 
   const { marketWatcher, isLoading, isError, isFetched } =
