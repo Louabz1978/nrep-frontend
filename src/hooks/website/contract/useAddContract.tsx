@@ -5,6 +5,7 @@ import QUERY_KEYS from "@/data/global/queryKeys";
 import type { ContractFormType } from "@/data/website/schema/contractSchema";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
+import { useNavigate } from "react-router-dom";
 
 interface CreateContractMutationProps {
   json: string;
@@ -28,6 +29,7 @@ async function getIpAddress() {
 
 export default function useAddContract() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: ({
@@ -47,10 +49,7 @@ export default function useAddContract() {
         }
       );
 
-      // Invalidate and refetch contracts list
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.contracts.query],
-      });
+      navigate("/");
     },
     onError: (error: unknown) => {
       console.error("Error creating contract:", error);
@@ -287,14 +286,24 @@ export default function useAddContract() {
         type: "application/pdf",
       });
 
-      mutation.mutate({
-        json: JSON.stringify(submitData),
-        file: pdfFile,
-        mls: mls,
-        id: id,
-        ipAddress: ipAddress,
-        isCreate: isCreate,
-      });
+      mutation.mutate(
+        {
+          json: JSON.stringify(submitData),
+          file: pdfFile,
+          mls: mls,
+          id: id,
+          ipAddress: ipAddress,
+          isCreate: isCreate,
+        },
+        {
+          onSuccess: () => {
+            toast.dismiss(toastId);
+          },
+          onError: () => {
+            toast.dismiss(toastId);
+          },
+        }
+      );
     } catch (error) {
       toast.error("فشل في إنشاء ملف PDF", {
         id: toastId,
