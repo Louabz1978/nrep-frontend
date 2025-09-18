@@ -127,7 +127,10 @@ function StatusForm({ row }: { row: Row<Listing> }) {
           );
         }}
         onContinue={() => {
-          handleCloseListing(row?.original?.mls_num);
+          handleCloseListing(
+            row?.original?.mls_num,
+            row?.original?.property_id
+          );
           setOpen(false);
         }}
         open={open}

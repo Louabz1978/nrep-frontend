@@ -23,27 +23,30 @@ const TopAgent = () => {
   const columns: ColumnDef<TopAgentReport>[] = useMemo(
     () => [
       {
-        accessorKey: "rank",
+        id: "rank",
         header: "#",
+        cell: ({ row }) => {
+          return row?.index + 1;
+        },
         size: 10,
       },
       {
-        accessorKey: "broker_license",
+        accessorKey: "license_number",
         header: "رخصة الوسيط العقاري",
         size: 20,
       },
       {
-        accessorKey: "broker_name",
+        accessorKey: "full_name",
         header: "اسم الوسيط العقاري",
         size: 30,
       },
       {
-        accessorKey: "closed_properties",
+        accessorKey: "closed_count",
         header: "عدد العقارات المغلقة",
         size: 10,
       },
       {
-        accessorKey: "sold_rented_total",
+        accessorKey: "total_price",
         header: "مجموع المباع و المؤجر",
         size: 10,
       },
@@ -52,15 +55,21 @@ const TopAgent = () => {
   );
 
   // Defensive: fallback to empty array if topAgent or its properties are missing
-  const currentResults =
-    (topAgent && "results" in topAgent && Array.isArray((topAgent as any).results)
+  const currentResults = (
+    topAgent &&
+    "results" in topAgent &&
+    Array.isArray((topAgent as any).results)
       ? (topAgent as any).results
-      : []) as TopAgentReport[];
+      : []
+  ) as TopAgentReport[];
 
-  const previousResults =
-    (topAgent && "previous_results" in topAgent && Array.isArray((topAgent as any).previous_results)
+  const previousResults = (
+    topAgent &&
+    "previous_results" in topAgent &&
+    Array.isArray((topAgent as any).previous_results)
       ? (topAgent as any).previous_results
-      : []) as TopAgentReport[];
+      : []
+  ) as TopAgentReport[];
 
   return (
     <AnimateContainer>
