@@ -178,6 +178,10 @@ export interface updateListingProps {
   id: number;
 }
 
+export interface closeContractProps {
+  mls: number | null;
+}
+
 export type updateListingResult = Promise<{
   data: ListingDetailsType;
   id: number;

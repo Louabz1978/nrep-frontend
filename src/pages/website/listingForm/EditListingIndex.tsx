@@ -6,6 +6,7 @@ import { ListingFormSkeleton } from "./components/ListingFormSkeleton";
 import {
   cityChoices,
   PROPERTY_TYPE,
+  PropertyStatus,
   STATUS,
   TransType,
   WATERLINE,
@@ -27,18 +28,21 @@ function EditListingIndex() {
 
   // get listing details
   const { listingDetails, listingDetailsQuery } = useListingDetails(listingId);
+  const isClosed = listingDetails?.status == PropertyStatus.CLOSED;
 
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingFormSkeleton}>
-      {!listingDetails ? null : listingDetails?.created_by_user?.user_id ==
+      {!listingDetails ? null : isClosed ? (
+        <NotAllowedPage message="لا يمكنك تعديل العقار بعد إغلاقه" />
+      ) : listingDetails?.created_by_user?.user_id ==
         (user?.user_id ?? user?.data?.user_id) ? (
         <ListingForm
           key={listingId}
           id={listingId}
           defaultValues={{
             general: {
-              livable: true,
-              sellers: [],
+              livable: listingDetails?.livable,
+              sellers: listingDetails?.sellers,
               trans_type: {
                 value: listingDetails.trans_type,
                 label:
@@ -56,7 +60,10 @@ function EditListingIndex() {
               apt: listingDetails?.address.apt
                 ? Number(listingDetails?.address.apt)
                 : undefined,
-              area: listingDetails?.address.area, // Assuming 'area' maps to 'district'
+              area: {
+                title: listingDetails?.address.area,
+                value: listingDetails?.address.area,
+              }, // Assuming 'area' maps to 'district'
               area_space: listingDetails?.area_space,
               bedrooms: listingDetails?.bedrooms,
               bathrooms: listingDetails?.bathrooms,
@@ -69,17 +76,11 @@ function EditListingIndex() {
               description: listingDetails?.description,
               country: {
                 value: listingDetails?.address.county,
-                label:
-                  cityChoices.find(
-                    (c) => c.value === listingDetails.address.county
-                  )?.label || "",
+                title: listingDetails?.address.county,
               },
               city: {
                 value: listingDetails.address.city,
-                label:
-                  cityChoices.find(
-                    (c) => c.value === listingDetails.address.city
-                  )?.label || "",
+                title: listingDetails.address.city,
               },
               property_type: {
                 value: listingDetails.property_type,

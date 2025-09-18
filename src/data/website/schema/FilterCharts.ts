@@ -18,6 +18,6 @@ export const FilterChartsSchema = Joi.object<FilterChartsType>({
     .label("التاريخ"),
 });
 export const FilterChartsInitialValues: FilterChartsType = {
-  area: { value: "المحطة", label: "المحطة" },
-  date: { value: "1 year", label: "سنة" }
+  area: { value: "باب السباع", title: "باب السباع" },
+  date: { value: "1 year", label: "سنة" },
 };

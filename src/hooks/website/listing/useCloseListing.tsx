@@ -1,4 +1,4 @@
-import updateListing from "@/api/website/listings/updateListing";
+import closeContract from "@/api/website/listings/closeContract";
 import MESSAGES from "@/data/global/messages";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import { showApiErrors } from "@/utils/showApiErrors";
@@ -11,7 +11,7 @@ export const useCloseListings = () => {
 
   // handle close listing
   const closeListing = useMutation({
-    mutationFn: updateListing,
+    mutationFn: closeContract,
     onSuccess: (res) => {
       // invalidate listings query
       queryClient
@@ -27,12 +27,9 @@ export const useCloseListings = () => {
   });
 
   // handle submit close listing form
-  async function handleCloseListing(
-    data: Record<string, string | number | null>,
-    id: number
-  ) {
+  async function handleCloseListing(mls: number | null) {
     // toaster
-    toast.promise(closeListing.mutateAsync({ data, id }), {
+    toast.promise(closeListing.mutateAsync({ mls }), {
       loading: MESSAGES?.listing?.close?.loading,
       success: MESSAGES?.listing?.close?.success,
       error: (error) => {

@@ -51,8 +51,6 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
     }
   };
 
-  console.log(form.watch());
-
   const { handleSubmit } = form;
 
   // handle submit form

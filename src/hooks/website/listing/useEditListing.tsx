@@ -56,14 +56,16 @@ export const useEditListings = () => {
           ]
       );
 
-    console.log({ s: submitData?.sellers });
     const data = {
       ...(submitData ?? {}),
       trans_type: submitData?.trans_type?.value,
-      sellers: submitData?.sellers?.map((item) => item?.consumer_id as string),
-      country: submitData?.country?.value,
-      county: submitData?.country?.value,
-      city: submitData?.city?.value,
+      sellers: submitData?.sellers
+        ?.map((item) => item?.consumer_id as string)
+        ?.join(","),
+      country: undefined,
+      county: submitData?.country?.title,
+      city: submitData?.city?.title,
+      area: submitData?.area?.title,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
       water: submitData?.water?.value || null,

@@ -3,7 +3,12 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable, type Filters } from "@/components/global/table2/table";
 import { Checkbox } from "@/components/global/ui/checkbox";
-import { cityChoices, STATUS, TransType } from "@/data/global/select";
+import {
+  cityChoices,
+  PropertyStatus,
+  STATUS,
+  TransType,
+} from "@/data/global/select";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { useDeleteListings } from "@/hooks/website/listing/useDeleteListing";
 import useMyListings from "@/hooks/website/listing/useMyListings";
@@ -84,18 +89,12 @@ function MyListings() {
         header: "العنوان",
         accessorKey: "address.building_num",
         cell: ({ row }) => {
-          const county = cityChoices?.find(
-            (item) => item?.value == row?.original?.address?.county
-          )?.label;
-          const city = cityChoices?.find(
-            (item) => item?.value == row?.original?.address?.city
-          )?.label;
-
           return `${row?.original?.address?.building_num ?? ""} ${
             row?.original?.address?.street ?? ""
           } طابق ${row?.original?.address?.floor ?? ""} شقة ${
             row?.original?.address?.apt ?? ""
-          }, ${row?.original?.address?.area}, ${city}, ${county}`;
+          }, ${row?.original?.address?.area}, ${row?.original?.address
+            ?.city}, ${row?.original?.address?.county}`;
         },
         size: 50,
       },
@@ -128,11 +127,6 @@ function MyListings() {
         id: "city",
         header: "المدينة",
         accessorKey: "address.city",
-        cell: ({ row }) => {
-          return cityChoices?.find(
-            (item) => item?.value == row?.original?.address?.city
-          )?.label;
-        },
         size: 10,
       },
       {
@@ -142,19 +136,29 @@ function MyListings() {
         cell: ({ row }) => {
           return <StatusForm row={row} />;
         },
-        size: 10,
+        size: 25,
       },
       {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
+          const isClosed = row?.original?.status == PropertyStatus.CLOSED;
+
           return (
             <div className="flex items-center gap-md">
               {/* edit */}
               <Tooltip>
                 <TooltipTrigger>
-                  <Link to={`/listing/edit/${row?.original?.property_id}`}>
-                    <Button size={"icon"} className="bg-green">
+                  <Link
+                    to={`/listing/edit/${row?.original?.property_id}`}
+                    className={`${!isClosed ? "" : "pointer-events-none"}`}
+                    aria-disabled={isClosed}
+                  >
+                    <Button
+                      size={"icon"}
+                      className="bg-green"
+                      disabled={isClosed}
+                    >
                       <PiPencilSimpleBold />
                     </Button>
                   </Link>
@@ -171,9 +175,10 @@ function MyListings() {
                         size={"icon"}
                         className="bg-red"
                         disabled={
-                          deleteListing?.isPending &&
-                          deleteListing?.variables?.id ==
-                            row?.original?.property_id
+                          (deleteListing?.isPending &&
+                            deleteListing?.variables?.id ==
+                              row?.original?.property_id) ||
+                          isClosed
                         }
                         onClick={(e) => {
                           e.preventDefault();

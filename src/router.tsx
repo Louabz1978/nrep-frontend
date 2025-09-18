@@ -19,6 +19,8 @@ import AddContactFormIndex from "./pages/website/ContactForm/AddContactFormIndex
 import ContactTable from "./pages/website/contactTable/ContactTable";
 import EditContactFormIndex from "./pages/website/ContactForm/EditContactFormIndex";
 import ContractSignatureIndex from "./pages/website/contracts/contractSignature/ContractSignatureIndex";
+import TopAgent from "./pages/website/reports/topAgent/TopAgent";
+import MarketMovement from "./pages/website/reports/marketMovement/MarketMovement";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -70,7 +72,7 @@ const router = createBrowserRouter([
         handle: { whiteBg: true },
       },
       {
-        path: "contracts/sign/:mls/:user_id",
+        path: "contracts/sign/:mls",
         element: <ContractSignatureIndex />,
         handle: { whiteBg: true },
       },
@@ -85,6 +87,14 @@ const router = createBrowserRouter([
       {
         path: "contact/edit/:id",
         element: <EditContactFormIndex />,
+      },
+      {
+        path: "reports/top-agent",
+        element: <TopAgent />,
+      },
+      {
+        path: "reports/market-movement",
+        element: <MarketMovement />,
       },
     ],
   },

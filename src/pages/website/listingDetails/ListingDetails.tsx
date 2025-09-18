@@ -201,11 +201,6 @@ function ListingDetails({ data }: ListingDetailsProps) {
 
   const handleNavigate = () => navigate(-1);
 
-  const county = cityChoices?.find(
-    (item) => item?.value == data?.address?.county
-  )?.label;
-  const city = cityChoices?.find((item) => item?.value == data?.address?.city)
-    ?.label;
   const status = STATUS?.find((item) => item?.value == data?.status);
   const transType = TransType?.find((item) => item?.value == data?.trans_type);
   const propertyType = PROPERTY_TYPE?.find(
@@ -226,6 +221,8 @@ function ListingDetails({ data }: ListingDetailsProps) {
   }`.trim();
 
   const dummyProperty = {
+    livable: data?.livable,
+    sellers: data?.sellers ?? [],
     trans_type: transType?.label,
     ac: data.additional?.ac ? "يوجد" : "لا يوجد",
     apartmentNumber: data.address?.apt || "2",
@@ -237,7 +234,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     buildYear: data.year_built || "1999",
     buildingNumber: data.address?.building_num || "452146",
     buyerCommission: data.buyer_realtor_commission + "%" || "$",
-    city: city || "النص هنا",
+    city: data?.address?.city || "النص هنا",
     contractExpiration: data?.exp_date ?? "---",
     description: data.description || "---",
     elevator: data.additional?.elevator ? " يوجد" : "لا يوجد",
@@ -246,7 +243,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
     floor: data?.address?.floor || "2",
     floorNumber: data.address?.floor || "3",
     garden: data.additional?.garden ? "يوجد" : "لا يوجد",
-    governorate: county || "حمص",
+    governorate: data?.address?.county || "حمص",
     image: data.images_urls?.map((item) => ({
       url: item?.url?.replace("//static", "/static"),
       is_main: item?.is_main,

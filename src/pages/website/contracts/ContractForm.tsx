@@ -10,6 +10,7 @@ import {
   type ContractFormType,
 } from "@/data/website/schema/contractSchema";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
+import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -23,7 +24,6 @@ interface ContractFormProps {
   handleAddContract: any;
   isSubmitting: any;
   isCreate: any;
-  user_id?: any;
   defaultData: any;
 }
 function ContractForm({
@@ -33,8 +33,8 @@ function ContractForm({
   isSubmitting,
   isCreate,
   defaultData,
-  user_id,
 }: ContractFormProps) {
+  const { user } = useUser();
   const [disabled1, setDisabled1] = useState(true);
   const [disabled2, setDisabled2] = useState(true);
   const [checkbox1, setCheckBox1] = useState(false);
@@ -112,39 +112,55 @@ function ContractForm({
         pool: propertyByMls?.pool || false,
       };
 
+  const userId = user?.user_id ?? user?.data?.user_id;
+  const userData = user?.data ?? user;
+  const buyer_agent_id = useWatch({
+    control: form.control,
+    name: "buyer_agent_id",
+  });
+
+  useEffect(() => {
+    if (isCreate && !buyer_agent_id) {
+      form.setValue("buyer_agent_id", userId);
+      form.setValue(
+        "buyer_agent",
+        `${userData?.first_name ?? ""} ${userData?.last_name ?? ""}`
+      );
+    }
+  }, [isCreate, buyer_agent_id, userId]);
+
   // Function to populate form with listing details
   const populateFormWithListingData = useCallback(() => {
     if (!propertyByMls) return;
 
-    // Seller information - populate the first seller in the array
-    const sellerData = {
-      id: `seller-${Date.now()}`,
-      seller_name: (propertyByMls.owner as any)?.name,
-      seller_mothor_name: (propertyByMls.owner as any)?.mother_name_surname,
-      seller_birth_place: (propertyByMls.owner as any)?.place_birth,
-      seller_nation_number: (propertyByMls.owner as any)?.national_number,
-      seller_registry: (propertyByMls.owner as any)?.registry,
-      seller_signature: (propertyByMls.owner as any)?.signature || "",
-    };
+    // --- POPULATE ALL SELLERS ---
+    // Check if sellers data is an array and process it
+    if (propertyByMls.sellers && Array.isArray(propertyByMls.sellers)) {
+      const sellersData = propertyByMls.sellers.map((seller: any) => ({
+        id: seller.consumer_id,
+        seller_name: seller.name,
+        seller_mothor_name: seller.mother_name_surname,
+        seller_birth_place: seller.place_birth,
+        seller_nation_number: seller.national_number,
+        seller_registry: seller.registry,
+        seller_signature: seller.signature || "",
+      }));
 
-    // Set the first seller in the array
-    form.setValue("sellers.0", sellerData);
+      // Use 'replace' to update the field array with all sellers
+      sellers.replace(sellersData);
 
-    // Keep backward compatibility with original fields
-    form.setValue("seller_name", (propertyByMls.owner as any)?.name);
-    form.setValue(
-      "seller_mothor_name",
-      (propertyByMls.owner as any)?.mother_name_surname
-    );
-    form.setValue(
-      "seller_birth_place",
-      (propertyByMls.owner as any)?.place_birth
-    );
-    form.setValue(
-      "seller_nation_number",
-      (propertyByMls.owner as any)?.national_number
-    );
-    form.setValue("seller_registry", (propertyByMls.owner as any)?.registry);
+      // Keep backward compatibility with original non-array fields for the first seller
+      if (sellersData.length > 0) {
+        form.setValue("seller_name", sellersData[0].seller_name);
+        form.setValue("seller_mothor_name", sellersData[0].seller_mothor_name);
+        form.setValue("seller_birth_place", sellersData[0].seller_birth_place);
+        form.setValue(
+          "seller_nation_number",
+          sellersData[0].seller_nation_number
+        );
+        form.setValue("seller_registry", sellersData[0].seller_registry);
+      }
+    }
 
     // Property information
     form.setValue(
@@ -179,10 +195,11 @@ function ContractForm({
     // Agent information
     form.setValue(
       "sller_agent_name",
-      propertyByMls.created_by_user?.first_name +
-        " " +
+      `${propertyByMls.created_by_user?.first_name || ""} ${
         propertyByMls.created_by_user?.last_name || ""
+      }`.trim()
     );
+    form.setValue("seller_agent_id", propertyByMls.created_by_user?.id);
     form.setValue(
       "seller_company_address",
       propertyByMls.created_by_user?.address || ""
@@ -196,7 +213,7 @@ function ContractForm({
       propertyByMls.property_realtor_commission
     );
     form.setValue("buyer_commission", propertyByMls.buyer_realtor_commission);
-  }, [propertyByMls, form]);
+  }, [propertyByMls, form, sellers]);
 
   const { handleSubmit } = form;
   const watchMLS = useWatch({ control: form.control, name: "mls" });
@@ -208,13 +225,18 @@ function ContractForm({
     name: "buyer_name",
   });
   const contractRef = useRef<HTMLDivElement>(null);
+  const seller_agent_id = useWatch({
+    control: form.control,
+    name: "seller_agent_id",
+  });
 
   // Populate form when propertyByMls changes
   useEffect(() => {
-    if (propertyByMls && isCreate) {
+    if (propertyByMls && isCreate && !seller_agent_id) {
       populateFormWithListingData();
     }
-  }, [propertyByMls, populateFormWithListingData]);
+  }, [propertyByMls, isCreate]);
+
   useEffect(() => {
     const price = Number(watchPrice || 0);
     const deposit = Number(watchDeposit || 0);
@@ -271,6 +293,7 @@ function ContractForm({
     }
   }, [watchBuyerName, allContacts, form]);
 
+  const [renderBuyers, setRenderBuyers] = useState(0);
   // Handle buyer selection for all buyers in the array
   useEffect(() => {
     if (isCreate) {
@@ -311,7 +334,11 @@ function ContractForm({
         }
       });
     }
-  }, [controlledBuyers, allContacts, form]);
+  }, [controlledBuyers, allContacts, form, isCreate, renderBuyers]);
+
+  // can sign
+  const canBuyerAgent = !isCreate && buyer_agent_id == userId;
+  const canSellerAgent = !isCreate && seller_agent_id == userId;
 
   return (
     <PageContainer>
@@ -339,7 +366,6 @@ function ContractForm({
                 e.preventDefault();
                 e.stopPropagation();
                 setCurrentMLS?.(watchMLS);
-                // Populate form after setting MLS (will be called when propertyByMls updates)
               }}
               className="p-3 bg-primary  rounded-lg cursor-pointer mt-0 ml-3"
             >
@@ -357,12 +383,13 @@ function ContractForm({
           <div>
             <h1 className="text-size25 font-bold">الأطراف:</h1>
           </div>
-          {/* Dynamic Sellers Section */}
-          <div className="flex items-center flex-wrap gap-4xl pt-3xl">
-            {controlledSellers?.map((_, index) => (
+          {/* --- DYNAMIC SELLERS SECTION --- */}
+          {/* This .map() loop will render fields for every seller in the form state */}
+          <div className="flex flex-col items-start gap-3xl pt-3xl">
+            {controlledSellers?.map((field, index) => (
               <div
-                key={sellers.fields?.[index]?.id}
-                className="flex items-end flex-wrap gap-2"
+                key={field.id}
+                className="flex items-end flex-wrap gap-x-4 gap-y-2 w-full"
               >
                 <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">البائع:</span>
@@ -420,11 +447,11 @@ function ContractForm({
             ))}
           </div>
           {/* Dynamic Buyers Section */}
-          <div className="flex items-center flex-wrap gap-3xl pt-3xl">
-            {controlledBuyers?.map((_, index) => (
+          <div className="flex flex-col items-start gap-3xl pt-3xl">
+            {controlledBuyers?.map((field, index) => (
               <div
-                key={buyers.fields?.[index]?.id}
-                className="flex items-end flex-wrap gap-2"
+                key={field.id}
+                className="flex items-end flex-wrap gap-x-4 gap-y-2 w-full"
               >
                 <div className="flex items-end gap-2">
                   <span className="whitespace-nowrap text-size18">
@@ -437,42 +464,7 @@ function ContractForm({
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_name`}
-                    onChange={(selectedValue) => {
-                      if (!allContacts?.length) return;
-
-                      const selectedName =
-                        typeof selectedValue === "string"
-                          ? selectedValue
-                          : (selectedValue as { value?: string })?.value;
-
-                      if (!selectedName) return;
-
-                      const selectedContact = (
-                        allContacts as ContactWithUser[]
-                      ).find(
-                        (contact: ContactWithUser) =>
-                          contact?.name === selectedName
-                      );
-
-                      if (selectedContact) {
-                        form.setValue(
-                          `buyers.${index}.buyer_mothor_name`,
-                          selectedContact?.mother_name_surname || ""
-                        );
-                        form.setValue(
-                          `buyers.${index}.buyer_birth_place`,
-                          selectedContact?.place_birth || ""
-                        );
-                        form.setValue(
-                          `buyers.${index}.buyer_nation_number`,
-                          Number(selectedContact?.national_number)
-                        );
-                        form.setValue(
-                          `buyers.${index}.buyer_registry`,
-                          selectedContact?.registry || ""
-                        );
-                      }
-                    }}
+                    onChange={() => setRenderBuyers((prev) => prev + 1)}
                     disabled={!isCreate}
                   />
                 </div>
@@ -518,12 +510,16 @@ function ContractForm({
                     disabled={true}
                   />
                 </div>
-                {controlledBuyers.length > 1 && (
-                  <RemoveButton onClick={() => buyers.remove(index)} />
-                )}
+                <div className="flex items-center">
+                  {controlledBuyers.length > 1 && (
+                    <RemoveButton onClick={() => buyers.remove(index)} />
+                  )}
+                </div>
               </div>
             ))}
-            <AddButton onClick={() => buyers.append(buyerInitialValues)} />
+            <div className="self-start">
+              <AddButton onClick={() => buyers.append(buyerInitialValues)} />
+            </div>
           </div>
           <div className="pt-3xl">
             <p>
@@ -1167,6 +1163,8 @@ function ContractForm({
                 </span>
                 <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledSellers?.map((item, index) => {
+                    const canSign = !isCreate && item?.id == userId;
+
                     return (
                       <div
                         key={item?.id}
@@ -1178,7 +1176,12 @@ function ContractForm({
                           </span>
                         ) : null}
                         <SignatureInput
-                          disabled={!isCreate}
+                          disabled={!canSign}
+                          defaultValue={
+                            isCreate
+                              ? undefined
+                              : form.watch(`sellers.${index}.seller_signature`)
+                          }
                           form={form}
                           name={`sellers.${index}.seller_signature`}
                         />
@@ -1198,9 +1201,14 @@ function ContractForm({
                     </span>
                   ) : null}
                   <SignatureInput
-                    disabled={!isCreate}
                     form={form}
-                    name="agent_signature"
+                    disabled={!canSellerAgent}
+                    defaultValue={
+                      isCreate
+                        ? undefined
+                        : form.watch("seller_agent_signature")
+                    }
+                    name="seller_agent_signature"
                   />
                 </div>
               </div>
@@ -1210,6 +1218,7 @@ function ContractForm({
                 </span>
                 <div className="flex items-center flex-wrap gap-[20px]">
                   {controlledBuyers?.map((item, index) => {
+                    const canSign = !isCreate && item?.id == userId;
                     return (
                       <div
                         key={index}
@@ -1221,9 +1230,14 @@ function ContractForm({
                           </span>
                         ) : null}
                         <SignatureInput
-                          disabled={!isCreate}
+                          disabled={!canSign}
                           form={form}
                           name={`buyers.${index}.buyer_signature`}
+                          defaultValue={
+                            isCreate
+                              ? undefined
+                              : form.watch(`buyers.${index}.buyer_signature`)
+                          }
                         />
                       </div>
                     );
@@ -1241,9 +1255,12 @@ function ContractForm({
                     </span>
                   ) : null}
                   <SignatureInput
-                    disabled={!isCreate}
+                    disabled={!canBuyerAgent}
                     form={form}
-                    name="agent_signature"
+                    defaultValue={
+                      isCreate ? undefined : form.watch("buyer_agent_signature")
+                    }
+                    name="buyer_agent_signature"
                   />
                 </div>
               </div>
@@ -1257,7 +1274,12 @@ function ContractForm({
           <Button
             className="w-[200px]"
             onClick={handleSubmit((data) =>
-              handleAddContract(data, contractRef)
+              handleAddContract(
+                data,
+                contractRef,
+                data?.mls,
+                data?.sellers?.[0]?.id
+              )
             )}
             disabled={isSubmitting}
           >

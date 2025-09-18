@@ -27,6 +27,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
   const isSameUser =
     row?.original?.created_by_user?.user_id ==
     (user?.user_id ?? user?.data?.user_id);
+  const isClosed = row?.original?.status == PropertyStatus.CLOSED;
 
   const { handleEditListingPartial } = useEditListingsPartial();
   const { handleCloseListing } = useCloseListings();
@@ -57,15 +58,17 @@ function StatusForm({ row }: { row: Row<Listing> }) {
             keyValue="value"
             showValue="label"
             name="status"
-            disabled={!isSameUser}
+            disabled={!isSameUser || isClosed}
             customTrigger={({ setIsOpen, isOpen }) => {
               return (
                 <Badge
                   className={`w-full ${
-                    isSameUser ? "cursor-pointer" : "cursor-default"
+                    isSameUser && !isClosed
+                      ? "cursor-pointer"
+                      : "cursor-default"
                   }`}
                   onClick={() => {
-                    if (isSameUser) setIsOpen(true);
+                    if (isSameUser && !isClosed) setIsOpen(true);
                   }}
                   status={
                     STATUS_WITH_CLOSED?.find(
@@ -79,7 +82,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                           (item) => item?.value == value?.value
                         )?.label ?? (value?.label as string)}
                       </span>
-                      {isSameUser ? (
+                      {isSameUser && !isClosed ? (
                         <div
                           className={`relative toggle-button ${
                             isOpen
@@ -124,13 +127,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
           );
         }}
         onContinue={() => {
-          handleCloseListing(
-            {
-              mls: row?.original?.mls_num,
-              status: (value as { value: string })?.value,
-            },
-            row?.original?.property_id
-          );
+          handleCloseListing(row?.original?.mls_num);
           setOpen(false);
         }}
         open={open}

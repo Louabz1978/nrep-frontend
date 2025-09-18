@@ -69,4 +69,20 @@ export const tabs: TabsType = [
       },
     ],
   },
+  {
+    label: "التقارير",
+    permission: [],
+    submenu: [
+      {
+        label: "حركة السوق",
+        permission: [],
+        to: "/reports/market-movement",
+      },
+      {
+        label: "أفضل الوكلاء",
+        permission: [],
+        to: "/reports/top-agent",
+      },
+    ],
+  },
 ];

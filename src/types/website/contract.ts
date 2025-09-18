@@ -76,6 +76,25 @@ export interface Contract {
   created_by_type: UserType;
 }
 
+export interface Seller {
+  id?: string;
+  consumer_id?: number;
+  created_at?: string;
+  created_by?: number;
+  created_by_type?: string;
+  date_birth?: string;
+  email?: string;
+  father_name?: string;
+  mother_name_surname: string;
+  name: string;
+  national_number: number;
+  phone_number?: string;
+  place_birth: string;
+  registry: string;
+  surname?: string;
+  signature?: string;
+}
+
 // Contract with User Information
 export interface ContractWithUser extends Contract {
   created_by_user: {
