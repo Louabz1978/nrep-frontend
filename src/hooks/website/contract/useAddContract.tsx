@@ -12,6 +12,7 @@ interface CreateContractMutationProps {
   mls: string;
   id: number;
   ipAddress: string | null;
+  isCreate?: boolean;
 }
 
 async function getIpAddress() {
@@ -35,12 +36,16 @@ export default function useAddContract() {
       mls,
       id,
       ipAddress,
+      isCreate,
     }: CreateContractMutationProps) =>
-      createContract({ json, file, mls, id, ipAddress }),
-    onSuccess: () => {
-      toast.success("تم إنشاء العقد بنجاح", {
-        duration: 3000,
-      });
+      createContract({ json, file, mls, id, ipAddress, isCreate }),
+    onSuccess: ({ isCreate }) => {
+      toast.success(
+        isCreate ? "تم إنشاء العقد بنجاح" : "تم توقيع العقد بنجاح",
+        {
+          duration: 3000,
+        }
+      );
 
       // Invalidate and refetch contracts list
       queryClient.invalidateQueries({
@@ -249,11 +254,15 @@ export default function useAddContract() {
     submitData: ContractFormType,
     contractRef: React.RefObject<HTMLDivElement | null>,
     mls: string,
-    id: number
+    id: number,
+    isCreate?: boolean
   ) => {
-    const toastId = toast.loading("جار إنشاء العقد وإرساله...", {
-      duration: Infinity,
-    });
+    const toastId = toast.loading(
+      isCreate ? "جار إنشاء العقد وإرساله..." : "جار توقيع العقد وإرساله...",
+      {
+        duration: Infinity,
+      }
+    );
 
     try {
       const ipAddress = await getIpAddress();
@@ -284,6 +293,7 @@ export default function useAddContract() {
         mls: mls,
         id: id,
         ipAddress: ipAddress,
+        isCreate: isCreate,
       });
     } catch (error) {
       toast.error("فشل في إنشاء ملف PDF", {
