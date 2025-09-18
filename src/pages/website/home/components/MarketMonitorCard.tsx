@@ -193,6 +193,7 @@ const FilterForm = ({ form }: { form: UseFormReturn<FilterChartsType> }) => {
           ]}
           showValue="label"
           keyValue="value"
+          preventRemove
         />
         <Select
           form={form}
@@ -201,6 +202,7 @@ const FilterForm = ({ form }: { form: UseFormReturn<FilterChartsType> }) => {
           placeholder="المنطقة"
           choices={Area}
           showValue="title"
+          preventRemove
           keyValue="title"
         />
       </div>

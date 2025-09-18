@@ -88,8 +88,8 @@ export const useSessionManager = () => {
     const loginTime = parseInt(loginTimeData.data as string);
     const now = Date.now();
     const timeSinceLogin = now - loginTime;
-    const fiftyFiveMinutes = 55 * 60 * 1000;
-    const sixtyMinutes = 60 * 60 * 1000;
+    const fiftyFiveMinutes = 550 * 60 * 1000;
+    const sixtyMinutes = 600 * 60 * 1000;
     // const fiftyFiveMinutes = 0.25 * 60 * 1000;
     // const sixtyMinutes = 0.5 * 60 * 1000;
 
@@ -139,7 +139,12 @@ export const useSessionManager = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       clearTimers();
     };
-  }, [scheduleTimers, clearTimers, user?.user_id, user?.data?.user_id]);
+  }, [
+    scheduleTimers,
+    clearTimers,
+    user?.user_id,
+    (user as unknown as { data: { user_id: number } })?.data?.user_id,
+  ]);
 
   return { refreshSession };
 };
