@@ -108,15 +108,20 @@ export default function useAddContract() {
     document.body.classList.add("printing");
 
     try {
-      // 1. Create a container for the content
+      // 1. Create a container for the content (fixed desktop viewport width for consistent rendering)
       const container = document.createElement("div");
-      container.style.width = "100%";
+      // Force desktop breakpoint regardless of actual screen size
+      const DESKTOP_VIEWPORT_WIDTH_PX = 1280;
+      container.style.width = `${DESKTOP_VIEWPORT_WIDTH_PX}px`;
+      container.style.maxWidth = `${DESKTOP_VIEWPORT_WIDTH_PX}px`;
+      container.style.backgroundColor = "#ffffff";
       container.style.position = "absolute";
       container.style.left = "-9999px";
+      container.style.top = "0";
       container.style.direction = "rtl";
       container.style.textAlign = "right";
       container.style.padding = "20px";
-      container.style.fontSize = "26px"; // Increased font size
+      container.style.boxSizing = "border-box";
       container.id = "print-container";
       document.body.appendChild(container);
 
@@ -128,11 +133,13 @@ export default function useAddContract() {
 
       // Apply RTL and padding styles to the cloned content
       contractClone.style.display = "block";
+      contractClone.style.width = "100%";
+      contractClone.style.maxWidth = "100%";
       contractClone.style.direction = "rtl";
       contractClone.style.textAlign = "right";
       contractClone.style.padding = "20px";
       contractClone.style.margin = "0";
-      contractClone.style.fontSize = "20px"; // Increased font size
+      contractClone.style.boxSizing = "border-box";
 
       // Add section header
       const contractHeader = document.createElement("h1");
@@ -149,20 +156,32 @@ export default function useAddContract() {
 
       // 4. Capture as single image
       const canvas = await html2canvas(container, {
+        // Fixed scale for higher fidelity while keeping predictable pixel sizes
         scale: 2,
         useCORS: true,
         allowTaint: true,
         logging: false,
+        backgroundColor: "#ffffff",
+        // Ensure consistent layout independent of actual viewport; force desktop width
+        width: container.scrollWidth,
+        height: container.scrollHeight,
+        windowWidth: DESKTOP_VIEWPORT_WIDTH_PX,
+        windowHeight: container.scrollHeight,
         scrollX: 0,
-        scrollY: -window.scrollY,
+        scrollY: 0,
         onclone: (clonedDoc, element) => {
           element.style.display = "block";
+          element.style.width = `${DESKTOP_VIEWPORT_WIDTH_PX}px`;
+          element.style.maxWidth = `${DESKTOP_VIEWPORT_WIDTH_PX}px`;
+          element.style.backgroundColor = "#ffffff";
           element.style.direction = "rtl";
           element.style.textAlign = "right";
           element.style.padding = "30px";
+          (element as HTMLElement).style.boxSizing = "border-box";
           clonedDoc.body.style.overflow = "visible";
           clonedDoc.body.style.direction = "rtl";
           clonedDoc.body.style.textAlign = "right";
+          clonedDoc.body.style.backgroundColor = "#ffffff";
 
           // Apply styles to the cloned document as well
           const clonedContract = clonedDoc.querySelector(
@@ -173,8 +192,7 @@ export default function useAddContract() {
             (clonedContract as HTMLElement).style.direction = "rtl";
             (clonedContract as HTMLElement).style.textAlign = "right";
             (clonedContract as HTMLElement).style.padding = "30px";
-            (clonedContract as HTMLElement).style.fontSize = "30px"; // Increased font size
-            (clonedContract as HTMLElement).style.lineHeight = "2.4"; // Increased line spacing
+            (clonedContract as HTMLElement).style.boxSizing = "border-box";
           }
         },
       });
