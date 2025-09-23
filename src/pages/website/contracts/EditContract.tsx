@@ -6,16 +6,22 @@ import {
   editContractFormInitialValues,
   EditContractFormSchema,
   type EditContractFormType,
+  type EditBuyer,
+  type EditSeller,
 } from "@/data/website/schema/editContractSchema";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Button } from "@/components/global/form/button/Button";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
 import Select from "@/components/global/form/select/Select";
+import SignatureInput from "@/components/global/form/signatureInput/SignatureInput";
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import type { ContactWithUser } from "@/types/website/contact";
+import { useUser } from "@/stores/useUser";
+
+type ContactOption = { value: string; id: number };
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -29,6 +35,20 @@ function EditContract() {
     mode: "onChange",
   });
 
+  const sellersArray = useFieldArray({
+    name: "sellers",
+    control: form.control,
+    keyName: "id",
+  });
+  const buyersArray = useFieldArray({
+    name: "buyers",
+    control: form.control,
+    keyName: "id",
+  });
+
+  const { user } = useUser();
+  const userId = user?.user_id;
+
   function onDocumentLoadSuccess() {
     setPageNumber(1);
   }
@@ -36,12 +56,23 @@ function EditContract() {
   function handleFileChange(selectedFile: File | null) {
     setFile(selectedFile);
     setPageNumber(1);
+    if (selectedFile) {
+      // reset parties on new upload
+      form.setValue("sellers", []);
+      form.setValue("buyers", []);
+      // ensure at least one empty row for each
+      sellersArray.append({ id: undefined , name: undefined , signature: undefined  });
+      buyersArray.append({ id: undefined , name: undefined , signature: undefined  });
+    }
   }
 
   
   const { allContacts } = useGetAllContacts();
-  const contacts =
-    allContacts?.map((contact: ContactWithUser) => ({ value: contact?.name })) || [];
+  const contactOptions: ContactOption[] =
+    allContacts?.map((contact: ContactWithUser) => ({
+      value: contact?.name,
+      id: contact?.consumer_id,
+    })) || [];
 
   const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
     // Hide elements with data-print-hidden=true - query from the CLONED element
@@ -184,6 +215,20 @@ function EditContract() {
       duration: Infinity,
     });
     try {
+      const values = form.getValues();
+      const normalized = {
+        sellers: (values?.sellers || []).map((s: EditSeller) => ({
+          id: s?.id ?? null,
+          name: (s?.name as unknown as { value?: string })?.value ?? null,
+          signature: s?.signature ?? null,
+        })),
+        buyers: (values?.buyers || []).map((b: EditBuyer) => ({
+          id: b?.id ?? null,
+          name: (b?.name as unknown as { value?: string })?.value ?? null,
+          signature: b?.signature ?? null,
+        })),
+      };
+      console.log("edit-contract-normalized", normalized);
       generatePDFBlob(contractRef);
     } catch (error) {
       toast.error("فشل في إنشاء ملف PDF", {
@@ -212,20 +257,6 @@ function EditContract() {
                 required
               />
             </div>
-
-            <div className="flex flex-col gap-2xl w-[400px]">
-              <label htmlFor="agent_id" className="font-semibold text-gray-700">
-                الوكيل العقاري
-              </label>
-              <select
-                id="agent_id"
-                className="border border-gray-300 rounded-lg p-3 w-full h-12 bg-white text-gray-700 focus:border-blue-500 focus:outline-none"
-              >
-                <option value="">اختر الوكيل</option>
-                <option value="1">وكيل 1</option>
-                <option value="2">وكيل 2</option>
-              </select>
-            </div>
           </div>
         )}
 
@@ -233,20 +264,84 @@ function EditContract() {
           <>
             <div className="flex justify-between   mt-12 max-w-[1400px] ">
               <div className="flex flex-col items-start gap-2xl min-w-[320px]">
-                <Select
-                  form={form}
-                  name="seller_name"
-                  label="البائع"
-                  choices={contacts}
-                  showValue="value"
-                />
-                <Select
-                  form={form}
-                  name="buyer_name"
-                  label="المشتري"
-                  choices={contacts}
-                  showValue="value"
-                />
+                <div className="flex flex-col gap-md">
+                  <span className="font-semibold">البائعون</span>
+                  <div className="flex flex-col gap-md">
+                    {form.watch("sellers")?.map((_item: EditSeller, index: number) => (
+                      <div key={index} className="w-full max-w-[520px] flex items-start gap-lg p-md rounded-lg border bg-white shadow-sm">
+                        <Select
+                          form={form}
+                          name={`sellers.${index}.name`}
+                          placeholder="اختر البائع"
+                          choices={contactOptions}
+                          showValue="value"
+                          onChange={(val: unknown) => {
+                            const opt = val as ContactOption;
+                            form.setValue(`sellers.${index}.id`, (opt?.id as unknown as string  ) ?? undefined);
+                          }}
+                          variant="contract"
+                        />
+                        <div className="flex flex-col items-center gap-xs">
+                          <SignatureInput
+                            form={form}
+                            label="توقيع البائع"
+                            name={`sellers.${index}.signature`}
+                            disabled={form.watch(`sellers.${index}.id`) !== userId}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="self-start px-md py-xs rounded bg-primary text-white cursor-pointer hover:bg-primary/90 transition-colors"
+                      onClick={() => sellersArray.append({ id: undefined , name: undefined , signature: undefined  })}
+                    >
+                      إضافة بائع
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-md mt-lg">
+                  <span className="font-semibold">المشترون</span>
+                  <div className="flex flex-col gap-md">
+                    {form.watch("buyers")?.map((_item: EditBuyer, index: number) => (
+                      <div key={index} className="w-full max-w-[520px] flex items-start gap-lg p-md rounded-lg border  bg-white shadow-sm">
+                        <Select
+                          form={form}
+                          name={`buyers.${index}.name`}
+                          placeholder="اختر المشتري"
+                          choices={contactOptions}
+                          showValue="value"
+                          onChange={(val: unknown) => {
+                            const opt = val as ContactOption;
+                            form.setValue(`buyers.${index}.id`, (opt?.id as unknown as string) ?? undefined);
+                          }}
+                          variant="contract"
+                        />
+                        <div className="flex flex-col items-center gap-xs">
+                          {(form.watch(`buyers.${index}.name`) as { value?: string } | null)?.value ? (
+                            <span className="text-center text-size16 mb-xs">
+                              {(form.watch(`buyers.${index}.name`) as { value?: string }).value}
+                            </span>
+                          ) : null}
+                          <SignatureInput
+                            form={form}
+                            label="توقيع المشتري"
+                            name={`buyers.${index}.signature`}
+                            disabled={form.watch(`buyers.${index}.id`) !== userId}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="self-start px-md py-xs rounded bg-primary text-white cursor-pointer hover:bg-primary/90 transition-colors"
+                      onClick={() => buyersArray.append({ id: undefined , name: undefined , signature: undefined  })}
+                    >
+                      إضافة مشتري
+                    </button>
+                  </div>
+                </div>
               </div>
               <div
                 className="rounded-lg overflow-hidden border-2  border-dashed cursor-pointer w-[304px] h-[304px] "
