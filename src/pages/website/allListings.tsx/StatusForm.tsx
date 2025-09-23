@@ -1,11 +1,11 @@
-import { ConfirmationAlert } from "@/components/global/alert/Alert";
 import Badge from "@/components/global/badge/Badge";
 import Select from "@/components/global/form/select/Select";
+import Input from "@/components/global/form/input/Input";
+import { PropertyStatus, STATUS_WITH_CLOSED } from "@/data/global/select";
 import {
-  PropertyStatus,
-  STATUS_COLORS,
-  STATUS_WITH_CLOSED,
-} from "@/data/global/select";
+  closingFormInitialValues,
+  closingFormSchema,
+} from "@/data/website/schema/ClosingFormSchema";
 import {
   statusFormInitialValues,
   statusFormSchema,
@@ -14,19 +14,21 @@ import { useCloseListings } from "@/hooks/website/listing/useCloseListing";
 import { useEditListingsPartial } from "@/hooks/website/listing/useEditListingPartial";
 import { useUser } from "@/stores/useUser";
 import type { Listing } from "@/types/website/listings";
+import type { ClosingFormData } from "@/data/website/schema/ClosingFormSchema";
 import cleanValues from "@/utils/cleanValues";
 import { joiResolver } from "@hookform/resolvers/joi";
 import type { Row } from "@tanstack/react-table";
 import { useState } from "react";
 import { Form, useForm, useWatch } from "react-hook-form";
 import { FaAngleDown } from "react-icons/fa6";
+import Popup from "@/components/global/popup/Popup";
+import { Button } from "@/components/global/form/button/Button";
+import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 
 function StatusForm({ row }: { row: Row<Listing> }) {
   const { user } = useUser();
 
-  const isSameUser =
-    row?.original?.created_by_user?.user_id ==
-    (user?.user_id ?? user?.data?.user_id);
+  const isSameUser = row?.original?.created_by_user?.user_id == user?.user_id;
   const isClosed = row?.original?.status == PropertyStatus.CLOSED;
 
   const { handleEditListingPartial } = useEditListingsPartial();
@@ -45,7 +47,25 @@ function StatusForm({ row }: { row: Row<Listing> }) {
 
   const value = useWatch({ control: form.control, name: "status" });
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [initialStatusBeforeClosing, setInitialStatusBeforeClosing] = useState<{
+    label: string;
+    value: PropertyStatus;
+  } | null>(null);
+
+  const closingForm = useForm<ClosingFormData>({
+    resolver: joiResolver(closingFormSchema),
+    defaultValues: closingFormInitialValues,
+    mode: "onChange",
+  });
+
+  const handleCloseFormSubmit = (data: ClosingFormData) => {
+    handleCloseListing(row?.original?.mls_num, data);
+    setOpen(false);
+    setInitialStatusBeforeClosing(null);
+  };
+
+  const { allContacts } = useGetAllContacts();
 
   return (
     <>
@@ -73,7 +93,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                   status={
                     STATUS_WITH_CLOSED?.find(
                       (item) => item?.value == value?.value
-                    )?.value as keyof typeof STATUS_COLORS
+                    )?.value as PropertyStatus
                   }
                   label={
                     <div className="flex items-center gap-xs">
@@ -98,14 +118,25 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                 />
               );
             }}
-            onChange={(value) => {
-              if (value?.value == PropertyStatus.CLOSED) {
+            onChange={(newValue) => {
+              const currentStatus = form.getValues("status");
+
+              if (newValue?.value == PropertyStatus.CLOSED) {
+                setInitialStatusBeforeClosing(
+                  currentStatus
+                    ? {
+                        label: currentStatus.label as string,
+                        value: currentStatus.value as PropertyStatus,
+                      }
+                    : null
+                );
                 setOpen(true);
               } else {
                 handleEditListingPartial(
-                  { status: (value as { value: string })?.value },
+                  { status: (newValue as { value: string })?.value },
                   row?.original?.property_id
                 );
+                setInitialStatusBeforeClosing(null);
               }
             }}
             preventRemove
@@ -114,24 +145,93 @@ function StatusForm({ row }: { row: Row<Listing> }) {
         </form>
       </Form>
 
-      <ConfirmationAlert
-        title="هل أنت متأكد من إغلاق عقد العقار؟"
-        description="لن تتمكن من إجراء أي تعديل على العقار بعد ذلك"
-        onCancel={() => {
-          setOpen(false);
-          form.setValue(
-            "status",
-            STATUS_WITH_CLOSED?.find(
-              (ele) => ele?.value == row?.original?.status
-            )
-          );
-        }}
-        onContinue={() => {
-          handleCloseListing(row?.original?.mls_num);
-          setOpen(false);
-        }}
-        open={open}
-      />
+      {open && (
+        <Popup
+          open={open}
+          onClose={() => {
+            setOpen(false);
+            if (initialStatusBeforeClosing) {
+              form.setValue("status", initialStatusBeforeClosing);
+            }
+            setInitialStatusBeforeClosing(null);
+          }}
+        >
+          <div className="flex flex-col gap-md p-md">
+            <h3 className="text-lg font-semibold">إغلاق عقد العقار</h3>
+            <Form {...closingForm}>
+              <form
+                id="closing_form"
+                onSubmit={closingForm.handleSubmit(handleCloseFormSubmit)}
+                className="flex flex-col gap-md"
+              >
+                <Select
+                  form={closingForm}
+                  name="buyer_agent"
+                  label="وكيل المشتري"
+                  placeholder="أدخل اسم وكيل المشتري"
+                  choices={allContacts?.map((contact) => ({
+                    label: contact?.name + " " + contact?.surname,
+                    value: String(contact?.consumer_id),
+                  }))}
+                  keyValue="value"
+                  showValue="label"
+                  required
+                />
+                <Input
+                  form={closingForm}
+                  name="buyer_agent_commission"
+                  label="نسبة وكيل المشتري (%)"
+                  placeholder="أدخل نسبة وكيل المشتري"
+                  type="number"
+                  required
+                />
+                <Input
+                  form={closingForm}
+                  name="seller_agent_commission"
+                  label="نسبة وكيل البائع (%)"
+                  placeholder="أدخل نسبة وكيل البائع"
+                  type="number"
+                  required
+                />
+                <Input
+                  form={closingForm}
+                  name="closing_date"
+                  label="تاريخ الإغلاق"
+                  placeholder="اختر تاريخ الإغلاق"
+                  type="date"
+                  required
+                />
+                <Input
+                  form={closingForm}
+                  name="closing_price"
+                  label="سعر الإغلاق"
+                  placeholder="أدخل سعر الإغلاق"
+                  type="number"
+                  required
+                />
+                <div className="flex justify-end gap-sm mt-md">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      if (initialStatusBeforeClosing) {
+                        form.setValue("status", initialStatusBeforeClosing);
+                      }
+                      setInitialStatusBeforeClosing(null);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    إلغاء
+                  </button>
+                  <Button id="closing_form" type="submit">
+                    حفظ
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+        </Popup>
+      )}
     </>
   );
 }
