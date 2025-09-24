@@ -24,6 +24,7 @@ const QUERY_KEYS = {
   },
   reports: {
     getTopAgent: "reports-get-top-agent",
+    getMarketMovement: "reports-get-market-movement",
   },
 };
 
