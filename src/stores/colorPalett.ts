@@ -14,6 +14,10 @@ export type ColorPalette = {
   quinaryBg: string;
   senaryBg: string;
   popupBg: string;
+  digitalGreenBg: string;
+  layoutBg: string;
+  goldenMedium: string;
+  goldenBold: string;
 
   /* foreground */
   primaryFg: string;
@@ -54,6 +58,10 @@ export const defaultColorPalette: ColorPalette = {
   quinaryBg: "#ada7a7",
   senaryBg: "#1c2026",
   popupBg: "#14191e",
+  digitalGreenBg: "#6cbf84",
+  layoutBg: "#002623",
+  goldenMedium: "#b9a779",
+  goldenBold: "#988561",
   primaryFg: "#333333",
   secondaryFg: "#000000",
   quaternaryFg: "#ffffff",

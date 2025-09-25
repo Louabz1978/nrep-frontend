@@ -80,6 +80,16 @@ export const ColorPaletteEditor = () => {
                   variable="secondary"
                   description=" لون التمييز"
                 />
+                <ColorInput
+                  label="الذهبي المتوسط"
+                  variable="goldenMedium"
+                  description="لون ذهبي متوسط"
+                />
+                <ColorInput
+                  label="الذهبي الغامق"
+                  variable="goldenBold"
+                  description="لون ذهبي غامق"
+                />
               </div>
 
               {/* Backgrounds */}

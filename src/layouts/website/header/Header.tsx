@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
-import logo from "@/assets/images/logo.svg";
+import logo from "@/assets/images/new logo.png";
 import { useUser } from "@/stores/useUser";
 import { useMemo, useState } from "react";
 import { LuLogIn } from "react-icons/lu";
@@ -100,7 +100,7 @@ const Nav: React.FC<NavProps> = ({
               }
               className={`w-full flex items-center justify-between gap-3 text-right transition-colors rounded-full px-4 py-2 mt-3 ${
                 open || isActive || hasCurrentChild
-                  ? "bg-white text-primary"
+                  ? "bg-golden-medium text-tertiary-bg"
                   : "hover:bg-white/10 active:bg-white/15"
               }`}
             >
@@ -133,7 +133,7 @@ const Nav: React.FC<NavProps> = ({
                       onClick={onNavigate}
                       className={`block text-right text-size16 rounded-md px-4 py-2 mt-2 ${
                         subActive
-                          ? "bg-white text-primary"
+                          ? "bg-golden-bold text-tertiary-bg"
                           : "text-white/90 bg-transparent hover:bg-white/10"
                       }`}
                     >
@@ -192,13 +192,13 @@ function Header() {
     <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
       {/* brand + inline nav */}
       <div className="flex items-center gap-4xl">
-        <Link to="/" className="md:w-11xl w-7xl h-7xl">
-          <img src={logo} alt="NREP" className="size-full object-contain" />
-        </Link>
         <div className="max-md:hidden">
           <Navbar variant="inline" />
         </div>
       </div>
+      <Link to="/" className="md:w-11xl w-7xl h-7xl">
+        <img src={logo} alt="NREP" className="size-full object-contain" />
+      </Link>
 
       {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
@@ -265,17 +265,17 @@ function Header() {
           )}
 
           {/* notifications */}
-          <div className="flex items-center gap-lg">
+          {/* <div className="flex items-center gap-lg">
             <Link
               to="/notifications"
               aria-label="Notifications"
               className="relative"
             >
-              <AiOutlineBell className="size-[24px] text-inverse-fg cursor-pointer" />
-              <span className="absolute -top-xxs right-[1px] size-[7px] bg-error rounded-full"></span>
+            <AiOutlineBell className="size-[24px] text-inverse-fg cursor-pointer" />
+            <span className="absolute -top-xxs right-[1px] size-[7px] bg-error rounded-full"></span>
             </Link>
-            <span className="w-[1px] h-[18px] bg-inverse-fg/30" />
-          </div>
+          </div> */}
+          <span className="w-[1px] h-[18px] bg-inverse-fg/30" />
 
           {/* settings */}
           <PiGear
@@ -311,7 +311,7 @@ function Header() {
           />
 
           <aside
-            className={`absolute right-0 top-0 h-full w-[300px] bg-primary text-inverse-fg shadow-2xl flex flex-col transform transition-transform duration-300 ${
+            className={`absolute right-0 top-0 h-full w-[300px] bg-layout-bg text-inverse-fg shadow-2xl flex flex-col transform transition-transform duration-300 ${
               isSidebarOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >

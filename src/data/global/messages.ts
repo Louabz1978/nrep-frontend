@@ -24,6 +24,12 @@ const MESSAGES = {
       loading: "جار تعديل العقار...",
       success: "تم تعديل العقار بنجاح!",
     },
+    get_mls:{
+      loading:"جار استرداد بيانات العقار...",
+      success:"تم استرداد بيانات العقار",
+      error:"لم يتم العثور على MLS.",
+
+    }
   },
   contact: {
     add: {
@@ -51,6 +57,11 @@ const MESSAGES = {
     delete: {
       loading: "جار حذف العقد...",
       success: "تم حذف العقد بنجاح!",
+    },
+    mls: {
+      loading: "جار البحث عن MLS...",
+      success: "تم العثور على MLS بنجاح!",
+      error: "لم يتم العثور على MLS.",
     },
   },
 };

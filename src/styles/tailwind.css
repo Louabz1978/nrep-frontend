@@ -64,8 +64,6 @@
   font-style: normal;
 }
 
-
-
 /* General var */
 :root {
   --text-factor: 1;
@@ -87,7 +85,8 @@
   --senary-bg: #1c2026;
   --popup-bg: #14191e;
   --digital-green-bg: #6cbf84;
-  --layout-bg : #0057B0;
+  --layout-bg: #002623;
+  --golden-medium: #b9a779;
 
   /* foreground */
   --primary-fg: #333333;
@@ -138,7 +137,7 @@
   --shadow-xs: 0px 1px 2px 0px #010d120d;
 }
 
-/* Dark mode */ 
+/* Dark mode */
 .dark:root {
   /* color pallet */
   --primary: #005bbb;
@@ -153,7 +152,12 @@
   --senary-bg: #1c2026;
   --popup-bg: #14191e;
   --digital-green-bg: #6cbf84;
-  --table-bg: #000000 /* foreground */ --primary-fg: #333333;
+  --table-bg: #000000;
+  --layout-bg: #002623;
+  --golden-medium: #b9a779;
+  --golden-bold: #988561;
+  /* foreground */
+  --primary-fg: #333333;
   --secondary-fg: #000000;
   --quaternary-fg: #ffffff;
   --inverse-fg: #ffffff;
@@ -203,7 +207,7 @@
 }
 
 @theme {
-  /* Text size */ 
+  /* Text size */
   --text-size3: calc(0.1675rem * var(--text-factor));
   --text-size4: calc(0.25rem * var(--text-factor));
   --text-size5: calc(0.3125rem * var(--text-factor));
@@ -282,6 +286,8 @@
   --color-digital-green-bg: var(--digital-green-bg);
   --color-table-bg: var(--table-bg);
   --color-layout-bg: var(--layout-bg);
+  --color-golden-medium: var(--golden-medium);
+  --color-golden-bold: var(--golden-bold);
 
   /* foreground */
   --color-primary-fg: var(--primary-fg);
@@ -351,22 +357,22 @@
   --spacing-11xl: 160px; */
 
   --spacing-xxs: calc(2px * var(--space-factor));
---spacing-xs: calc(4px * var(--space-factor));
---spacing-sm: calc(6px * var(--space-factor));
---spacing-md: calc(8px * var(--space-factor));
---spacing-lg: calc(12px * var(--space-factor));
---spacing-xl: calc(16px * var(--space-factor));
---spacing-2xl: calc(20px * var(--space-factor));
---spacing-3xl: calc(24px * var(--space-factor));
---spacing-4xl: calc(32px * var(--space-factor));
---spacing-2lg: calc(36px * var(--space-factor));
---spacing-5xl: calc(40px * var(--space-factor));
---spacing-6xl: calc(48px * var(--space-factor));
---spacing-7xl: calc(64px * var(--space-factor));
---spacing-8xl: calc(80px * var(--space-factor));
---spacing-9xl: calc(96px * var(--space-factor));
---spacing-10xl: calc(112px * var(--space-factor));
---spacing-11xl: calc(160px * var(--space-factor));
+  --spacing-xs: calc(4px * var(--space-factor));
+  --spacing-sm: calc(6px * var(--space-factor));
+  --spacing-md: calc(8px * var(--space-factor));
+  --spacing-lg: calc(12px * var(--space-factor));
+  --spacing-xl: calc(16px * var(--space-factor));
+  --spacing-2xl: calc(20px * var(--space-factor));
+  --spacing-3xl: calc(24px * var(--space-factor));
+  --spacing-4xl: calc(32px * var(--space-factor));
+  --spacing-2lg: calc(36px * var(--space-factor));
+  --spacing-5xl: calc(40px * var(--space-factor));
+  --spacing-6xl: calc(48px * var(--space-factor));
+  --spacing-7xl: calc(64px * var(--space-factor));
+  --spacing-8xl: calc(80px * var(--space-factor));
+  --spacing-9xl: calc(96px * var(--space-factor));
+  --spacing-10xl: calc(112px * var(--space-factor));
+  --spacing-11xl: calc(160px * var(--space-factor));
 
   --spacing-container-max-width-desktop: 1280px;
   --spacing-container-padding-mobile: 16px;

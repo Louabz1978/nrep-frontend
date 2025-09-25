@@ -80,7 +80,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                     isCurrentPath || hasCurrentChild
                       ? "text-primary font-medium"
                       : isOpen
-                      ? "text-secondary !text-size16"
+                      ? " !text-size16"
                       : "text-inverse-fg hover:text-secondary !text-size16"
                   }`}
                 >
@@ -112,7 +112,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             to={item.to}
             onClick={() => setOpenPopovers([])}
             className={`flex items-center border-b border-secondary-border last:border-b-0 justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
-              isCurrentPath ? "text-primary" : "text-primary"
+              isCurrentPath ? "text-tertiary-bg " : "text-tertiary-bg"
             }`}
           >
             {item.label}
@@ -121,7 +121,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
           <span
             key={index}
             className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer  ${
-              isCurrentPath ? "text-primary" : "text-primary"
+              isCurrentPath ? "text-tertiary-bg" : "text-tertiary-bg"
             }`}
           >
             {item.label}
@@ -168,12 +168,12 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                   <button
                     aria-label={`Toggle ${tab.label}`}
                     title={tab.label}
-                    className={`group flex flex-col items-center gap-xxs transition-colors cursor-pointer text-size18 duration-[0.3s] focus:outline-none active:scale-[0.97] active:opacity-90 ${
+                    className={`group text-inverse-fg flex  flex-col items-center gap-xxs transition-colors cursor-pointer text-size18 duration-[0.3s] focus:outline-none active:scale-[0.97] active:opacity-90 ${
                       isCurrentPath || hasCurrentChild
-                        ? "p-sm bg-tertiary-bg rounded-lg text-primary"
+                        ? "p-sm border-b-2 border-golden-medium"
                         : isOpen
-                        ? "text-tertiary-bg text-size18"
-                        : "text-inverse-fg text-size18 "
+                        ? " text-size18 "
+                        : " text-size18"
                     }`}
                   >
                     <div className="flex items-center gap-md">
@@ -190,7 +190,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-35 mt-0 border-none bg-tertiary-bg !p-0 rounded-[8px]"
+                  className="w-35 mt-0 border-none bg-golden-medium !p-0 rounded-[8px]"
                   sideOffset={8}
                 >
                   <div className="space-y-1">{renderSubMenu(tab.submenu)}</div>
@@ -203,9 +203,9 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             <Link
               key={index}
               to={tab.to}
-              className={`group flex flex-col gap-xxs items-center transition-colors text-size18 duration-[0.3s]] focus:outline-none active:scale-[0.97] active:opacity-90 ${
+              className={`group text-inverse-fg  flex flex-col gap-xxs items-center transition-colors text-size18 duration-[0.3s]] focus:outline-none active:scale-[0.97] active:opacity-90 ${
                 isCurrentPath
-                  ? "p-sm px-lg bg-tertiary-bg rounded-lg text-primary"
+                  ? "p-sm px-lg  border-b-2 border-golden-medium "
                   : "text-inverse-fg "
               }`}
             >
@@ -222,7 +222,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             <span
               key={index}
               className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer active:scale-[0.97] active:opacity-90 ${
-                isCurrentPath ? "text-primary font-medium" : ""
+                isCurrentPath ? "font-medium" : ""
               }`}
             >
               <div className="flex items-center gap-md">
