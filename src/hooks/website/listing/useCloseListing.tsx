@@ -1,6 +1,7 @@
 import closeContract from "@/api/website/listings/closeContract";
 import MESSAGES from "@/data/global/messages";
 import QUERY_KEYS from "@/data/global/queryKeys";
+import type { ClosingFormData } from "@/data/website/schema/ClosingFormSchema";
 import { showApiErrors } from "@/utils/showApiErrors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -27,9 +28,9 @@ export const useCloseListings = () => {
   });
 
   // handle submit close listing form
-  async function handleCloseListing(mls: number | null) {
+  async function handleCloseListing(mls: number | null, data: ClosingFormData) {
     // toaster
-    toast.promise(closeListing.mutateAsync({ mls }), {
+    toast.promise(closeListing.mutateAsync({ mls, ...data }), {
       loading: MESSAGES?.listing?.close?.loading,
       success: MESSAGES?.listing?.close?.success,
       error: (error) => {

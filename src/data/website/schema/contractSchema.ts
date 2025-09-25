@@ -10,6 +10,8 @@ export type SellerType = {
   seller_nation_number: TNumber;
   seller_registry: TString;
   seller_signature: TString;
+  ipAddress?: TString;
+  signature_date?: TString;
 };
 
 export type BuyerType = {
@@ -20,13 +22,14 @@ export type BuyerType = {
   buyer_nation_number: TNumber;
   buyer_registry: TString;
   buyer_signature: TString;
+  ipAddress?: TString;
+  signature_date?: TString;
 };
 
 export type ContractFormType = {
   mls: TNumber;
   sellers: SellerType[];
   buyers: BuyerType[];
-  // Keep original fields for backward compatibility
   seller_name: TString;
   seller_mothor_name: TString;
   seller_birth_place: TString;
@@ -57,7 +60,7 @@ export type ContractFormType = {
   pool: boolean;
   price: TNumber;
   deposit: TNumber;
-  valid_date:TString;
+  valid_date: TString;
   deposit_date: TString;
   batch: TNumber;
   batch_date: TString;
@@ -95,7 +98,7 @@ export type ContractFormType = {
   buyer_commission: TNumber;
   contract_file: File | null;
   editcontract_file: File | null;
-  ipAddress : TString
+  ipAddress: TString;
 };
 
 const SellerSchema = Joi.object<SellerType>({
@@ -113,10 +116,11 @@ const SellerSchema = Joi.object<SellerType>({
   seller_registry: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("رقم قيد البائع"),
-
   seller_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("توقيع البائع"),
+  ipAddress: Joi.any().optional().messages(VALIDATION_MESSAGES).label("IP البائع"),
+  signature_date: Joi.any().optional().messages(VALIDATION_MESSAGES).label("تاريخ توقيع البائع"),
 });
 
 const BuyerSchema = Joi.object<BuyerType>({
@@ -137,6 +141,8 @@ const BuyerSchema = Joi.object<BuyerType>({
   buyer_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("توقيع المشتري"),
+  ipAddress: Joi.any().optional().messages(VALIDATION_MESSAGES).label("IP المشتري"),
+  signature_date: Joi.any().optional().messages(VALIDATION_MESSAGES).label("تاريخ توقيع المشتري"),
 });
 
 export const ContractFormSchema = Joi.object<ContractFormType>({
@@ -287,10 +293,7 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
   buyer_commission: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("عمولة وكيل المشتري"),
-  ipAddress: Joi.any()
-    .messages(VALIDATION_MESSAGES)
-    .label("Ip الجهاز"),
-
+  ipAddress: Joi.any().messages(VALIDATION_MESSAGES).label("Ip الجهاز"),
 });
 
 export const sellerInitialValues: SellerType = {
@@ -301,6 +304,8 @@ export const sellerInitialValues: SellerType = {
   seller_nation_number: null,
   seller_registry: null,
   seller_signature: null,
+  ipAddress: null,
+  signature_date: null,
 };
 
 export const buyerInitialValues: BuyerType = {
@@ -311,6 +316,8 @@ export const buyerInitialValues: BuyerType = {
   buyer_nation_number: null,
   buyer_registry: null,
   buyer_signature: null,
+  ipAddress: null,
+  signature_date: null,
 };
 
 export const contractFormInitialValues: ContractFormType = {
@@ -319,7 +326,6 @@ export const contractFormInitialValues: ContractFormType = {
   mls: null,
   sellers: [sellerInitialValues],
   buyers: [buyerInitialValues],
-  // Keep original fields for backward compatibility
   seller_name: null,
   seller_mothor_name: null,
   seller_birth_place: null,
@@ -385,6 +391,6 @@ export const contractFormInitialValues: ContractFormType = {
   buyer_company_address: null,
   buyer_company_phone: null,
   buyer_commission: null,
-  ipAddress:null,
-  valid_date:null
+  ipAddress: null,
+  valid_date: null,
 };
