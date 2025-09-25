@@ -16,6 +16,32 @@ export interface GetTopAgentResponse {
   };
 }
 
+export interface MarketMovementReport {
+  criteria: string;
+  year2024: string;
+  year2025: string;
+  changeRate: string;
+}
+
+export interface PropertyStatsResponse {
+  data: {
+    criteria: string;
+    year2024: string;
+    year2025: string;
+    changeRate: string;
+  }[];
+}
+
+export interface GetMarketMovementResponse {
+  data: MarketMovementReport[];
+  pagination: {
+    total_pages: number;
+    total_records: number;
+    current_page: number;
+    records_per_page: number;
+  };
+}
+
 export interface QueryParams {
   [key: string]: string | number | boolean | undefined;
 }

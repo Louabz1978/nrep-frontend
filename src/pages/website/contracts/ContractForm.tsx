@@ -1185,16 +1185,6 @@ function ContractForm({
                           form={form}
                           name={`sellers.${index}.seller_signature`}
                         />
-                        {item?.seller_signature && item?.ipAddress ? (
-                          <span className="text-center text-size14 text-gray-500">
-                            IP: {item.ipAddress}
-                          </span>
-                        ) : null}
-                        {item?.seller_signature && item?.signature_date ? (
-                          <span className="text-center text-size14 text-gray-500">
-                            Date: {item.signature_date}
-                          </span>
-                        ) : null}
                       </div>
                     );
                   })}
@@ -1220,17 +1210,6 @@ function ContractForm({
                     }
                     name="seller_agent_signature"
                   />
-                  {form.watch("seller_agent_signature") &&
-                  form.watch("ipAddress") ? (
-                    <div className="flex flex-col items-center">
-                      <span className="text-center text-size14 text-gray-500">
-                        IP: {form.watch("ipAddress")}
-                      </span>
-                      <span className="text-center text-size14 text-gray-500">
-                        Date: {form.watch("valid_date")}
-                      </span>
-                    </div>
-                  ) : null}
                 </div>
               </div>
               <div className="flex gap-[30px] items-start">
@@ -1260,16 +1239,6 @@ function ContractForm({
                               : form.watch(`buyers.${index}.buyer_signature`)
                           }
                         />
-                        {item?.buyer_signature && item?.ipAddress ? (
-                          <span className="text-center text-size14 text-gray-500">
-                            IP: {item.ipAddress}
-                          </span>
-                        ) : null}
-                        {item?.buyer_signature && item?.signature_date ? (
-                          <span className="text-center text-size14 text-gray-500">
-                            Date: {item.signature_date}
-                          </span>
-                        ) : null}
                       </div>
                     );
                   })}
@@ -1293,17 +1262,6 @@ function ContractForm({
                     }
                     name="buyer_agent_signature"
                   />
-                  {form.watch("buyer_agent_signature") &&
-                  form.watch("ipAddress") ? (
-                    <div className="flex flex-col items-center">
-                      <span className="text-center text-size14 text-gray-500">
-                        IP: {form.watch("ipAddress")}
-                      </span>
-                      <span className="text-center text-size14 text-gray-500">
-                        Date: {form.watch("valid_date")}
-                      </span>
-                    </div>
-                  ) : null}
                 </div>
               </div>
             </div>

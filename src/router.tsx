@@ -20,6 +20,7 @@ import ContactTable from "./pages/website/contactTable/ContactTable";
 import EditContactFormIndex from "./pages/website/ContactForm/EditContactFormIndex";
 import ContractSignatureIndex from "./pages/website/contracts/contractSignature/ContractSignatureIndex";
 import TopAgent from "./pages/website/reports/topAgent/TopAgent";
+import MarketMovement from "./pages/website/reports/marketMovement/MarketMovement";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: "reports/top-agent",
         element: <TopAgent />,
+      },
+      {
+        path: "reports/market-movement",
+        element: <MarketMovement />,
       },
     ],
   },

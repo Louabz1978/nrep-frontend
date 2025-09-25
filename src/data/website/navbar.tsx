@@ -76,7 +76,7 @@ export const tabs: TabsType = [
       {
         label: "حركة السوق",
         permission: [],
-        to: "/reports/market-movment",
+        to: "/reports/market-movement",
       },
       {
         label: "أفضل الوكلاء",
