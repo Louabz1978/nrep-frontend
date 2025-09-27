@@ -1,8 +1,13 @@
-import type { TNumber, TString } from "@/data/global/schema";
+import {
+  optionSchema,
+  type TNumber,
+  type TOption,
+  type TString,
+} from "@/data/global/schema";
 import Joi from "joi";
 
 export interface ClosingFormData {
-  buyer_agent: TString;
+  buyer_agent: TOption;
   buyer_agent_commission: TNumber;
   seller_agent_commission: TNumber;
   closing_date: string;
@@ -10,16 +15,10 @@ export interface ClosingFormData {
 }
 
 export const closingFormSchema = Joi.object<ClosingFormData>({
-  buyer_agent: Joi.object({
-    label: Joi.string().required(),
-    value: Joi.string().required(),
-  })
-    .required()
-    .label("وكيل المشتري")
-    .messages({
-      "any.required": "حقل وكيل المشتري مطلوب",
-      "string.empty": "حقل وكيل المشتري لا يمكن أن يكون فارغًا",
-    }),
+  buyer_agent: optionSchema.required().label("وكيل المشتري").messages({
+    "any.required": "حقل وكيل المشتري مطلوب",
+    "string.empty": "حقل وكيل المشتري لا يمكن أن يكون فارغًا",
+  }),
   buyer_agent_commission: Joi.number()
     .required()
     .min(0)
@@ -49,7 +48,7 @@ export const closingFormSchema = Joi.object<ClosingFormData>({
   closing_price: Joi.number().required().min(0).label("سعر الإغلاق").messages({
     "any.required": "حقل سعر الإغلاق مطلوب",
     "number.base": "حقل سعر الإغلاق يجب أن يكون رقمًا",
-    "number.min": "سعر الإغلاق لا يمكن أن يكون أقل من 0",
+    "number.min": "سعر الإغلاق لا يمكن أن تكون أقل من 0",
   }),
 });
 

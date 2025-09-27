@@ -28,7 +28,7 @@ import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 function StatusForm({ row }: { row: Row<Listing> }) {
   const { user } = useUser();
 
-  console.log(user)
+  console.log(user);
 
   const isSameUser = row?.original?.created_by_user?.user_id == user?.user_id;
   const isClosed = row?.original?.status == PropertyStatus.CLOSED;
@@ -62,7 +62,10 @@ function StatusForm({ row }: { row: Row<Listing> }) {
   });
 
   const handleCloseFormSubmit = (data: ClosingFormData) => {
-    handleCloseListing(row?.original?.mls_num, data);
+    handleCloseListing(row?.original?.mls_num, {
+      ...data,
+      buyer_agent: data.buyer_agent?.value || null,
+    });
     setOpen(false);
     setInitialStatusBeforeClosing(null);
   };
@@ -132,6 +135,13 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                       }
                     : null
                 );
+                // Temporarily revert the status in the form until the closing form is submitted or cancelled
+                if (currentStatus) {
+                  form.setValue("status", {
+                    label: currentStatus.label,
+                    value: currentStatus.value as string,
+                  });
+                }
                 setOpen(true);
               } else {
                 handleEditListingPartial(
@@ -166,51 +176,50 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                 onSubmit={closingForm.handleSubmit(handleCloseFormSubmit)}
                 className="flex flex-col gap-md"
               >
-                <Select
-                  form={closingForm}
-                  name="buyer_agent"
-                  label="وكيل المشتري"
-                  placeholder="أدخل اسم وكيل المشتري"
-                  choices={allContacts?.map((contact) => ({
-                    label: contact?.name + " " + contact?.surname,
-                    value: String(contact?.consumer_id),
-                  }))}
-                  keyValue="value"
-                  showValue="label"
-                  required
-                />
-                <Input
-                  form={closingForm}
-                  name="buyer_agent_commission"
-                  label="نسبة وكيل المشتري (%)"
-                  placeholder="أدخل نسبة وكيل المشتري"
-                  type="number"
-                  required
-                />
-                <Input
-                  form={closingForm}
-                  name="seller_agent_commission"
-                  label="نسبة وكيل البائع (%)"
-                  placeholder="أدخل نسبة وكيل البائع"
-                  type="number"
-                  required
-                />
-                <Input
-                  form={closingForm}
-                  name="closing_date"
-                  label="تاريخ الإغلاق"
-                  placeholder="اختر تاريخ الإغلاق"
-                  type="date"
-                  required
-                />
-                <Input
-                  form={closingForm}
-                  name="closing_price"
-                  label="سعر الإغلاق"
-                  placeholder="أدخل سعر الإغلاق"
-                  type="number"
-                  required
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+                  <Select
+                    form={closingForm}
+                    name="buyer_agent"
+                    label="وكيل المشتري"
+                    placeholder="أدخل اسم وكيل المشتري"
+                    choices={allContacts}
+                    keyValue="consumer_id"
+                    showValue="name"
+                    required
+                  />
+                  <Input
+                    form={closingForm}
+                    name="buyer_agent_commission"
+                    label="نسبة وكيل المشتري (%)"
+                    placeholder="أدخل نسبة وكيل المشتري"
+                    type="number"
+                    required
+                  />
+                  <Input
+                    form={closingForm}
+                    name="seller_agent_commission"
+                    label="نسبة وكيل البائع (%)"
+                    placeholder="أدخل نسبة وكيل البائع"
+                    type="number"
+                    required
+                  />
+                  <Input
+                    form={closingForm}
+                    name="closing_date"
+                    label="تاريخ الإغلاق"
+                    placeholder="اختر تاريخ الإغلاق"
+                    type="date"
+                    required
+                  />
+                  <Input
+                    form={closingForm}
+                    name="closing_price"
+                    label="سعر الإغلاق"
+                    placeholder="أدخل سعر الإغلاق"
+                    type="number"
+                    required
+                  />
+                </div>
                 <div className="flex justify-end gap-sm mt-md">
                   <button
                     type="button"

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import { motion } from "framer-motion";
+import { createPortal } from "react-dom";
 
 interface PopupProps {
   open: boolean;
@@ -12,7 +13,7 @@ interface PopupProps {
 function Popup({ open, onClose, children, className = "" }: PopupProps) {
   if (!open) return null;
 
-  return (
+  return createPortal(
     <motion.div
       initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
       animate={{ opacity: 1, backdropFilter: "blur(4px)" }}
@@ -20,6 +21,7 @@ function Popup({ open, onClose, children, className = "" }: PopupProps) {
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-primary-overlay backdrop-blur-[30px]"
       onClick={onClose}
+      dir="rtl"
     >
       <div
         className={twMerge(
@@ -30,7 +32,8 @@ function Popup({ open, onClose, children, className = "" }: PopupProps) {
       >
         {children}
       </div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }
 
