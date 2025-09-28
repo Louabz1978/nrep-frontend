@@ -6,7 +6,7 @@ export type MarketMovementFormType = {
   area: TString;
   month: TString;
   year: TString;
-};
+};  
 
 export const MarketMovementFormSchema = Joi.object<MarketMovementFormType>({
   area: Joi.optional()
