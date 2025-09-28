@@ -21,6 +21,8 @@ import EditContactFormIndex from "./pages/website/ContactForm/EditContactFormInd
 import ContractSignatureIndex from "./pages/website/contracts/contractSignature/ContractSignatureIndex";
 import TopAgent from "./pages/website/reports/topAgent/TopAgent";
 import MarketMovement from "./pages/website/reports/marketMovement/MarketMovement";
+import RentalTransfer from "@/pages/website/RentalTransfer";
+import SaleTransfer from "@/pages/website/SaleTransfer";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -95,6 +97,14 @@ const router = createBrowserRouter([
       {
         path: "reports/market-movement",
         element: <MarketMovement />,
+      },
+      {
+        path: "transfers/rental",
+        element: <RentalTransfer />,
+      },
+      {
+        path: "transfers/sale",
+        element: <SaleTransfer />,
       },
     ],
   },
