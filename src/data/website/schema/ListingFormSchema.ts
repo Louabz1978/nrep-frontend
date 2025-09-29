@@ -251,6 +251,7 @@ export type ImageInputFile = {
   path: any;
   mode: string;
   isMain: boolean;
+  originalFile?: File;
 };
 export type PropertyImagesStepType = {
   photos: ImageInputFile[];
@@ -270,6 +271,7 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
           .messages(VALIDATION_MESSAGES),
         mode: Joi.string().optional(),
         isMain: Joi.boolean(),
+        originalFile: Joi.any().optional(), // Add validation for originalFile
       })
         .unknown()
         .custom((value, helpers) => {
@@ -278,18 +280,23 @@ export const propertyImagesStepSchema = Joi.object<PropertyImagesStepType>({
             return value;
           }
 
+          const fileToValidate = value.originalFile || value.path; // Use originalFile for validation if available
+
           // Validate the path value
-          if (value.path instanceof File || value.path instanceof Blob) {
-            if (value.path.size < 256 * 1024) {
+          if (
+            fileToValidate instanceof File ||
+            fileToValidate instanceof Blob
+          ) {
+            if (fileToValidate.size < 256 * 1024) {
               return helpers.error("file.minSize", { limit: "256KB" });
             }
-            if (value.path.size > 5 * 1024 * 1024) {
+            if (fileToValidate.size > 5 * 1024 * 1024) {
               return helpers.error("file.maxSize", { limit: "5MB" });
             }
-            if (!value.path.type.startsWith("image/")) {
+            if (!fileToValidate.type.startsWith("image/")) {
               return helpers.error("file.invalidType");
             }
-          } else if (typeof value.path === "string" && !value.path) {
+          } else if (typeof fileToValidate === "string" && !fileToValidate) {
             return helpers.error("any.required");
           }
 

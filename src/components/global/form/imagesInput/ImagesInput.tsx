@@ -17,10 +17,12 @@ import Toggle from "../toggle/Toggle";
 import { PiStar, PiStarFill } from "react-icons/pi";
 import { Tooltip, TooltipContent } from "../../tooltip/Tooltiop";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import imageCompression from "browser-image-compression";
 
 interface ImageFile {
   id: number;
   path: string | File;
+  originalFile?: File;
   mode?: "edit" | "delete";
   isMain: boolean;
 }
@@ -77,14 +79,37 @@ function ImagesInput<T extends FieldValues>({
   const handleAddFiles = useCallback(
     async (files: FileList | File[]) => {
       let initFiles = watch(name) as (
-        | { id: number; path: File; isMain: boolean }
+        | { id: number; path: File; isMain: boolean; originalFile?: File }
         | PathValue<T, Path<T>>[number]
       )[];
       let newId = customFileId - 1;
 
       await Promise.all(
-        Array.from(files).map((file) => {
-          initFiles = [...initFiles, { id: newId, path: file, isMain: false }];
+        Array.from(files).map(async (file) => {
+          console.log("Original file size:", file.size / 1024 / 1024, "MB");
+
+          const compressedFile = await imageCompression(file, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+            initialQuality: 0.8,
+          });
+
+          console.log(
+            "Compressed file size:",
+            compressedFile.size / 1024 / 1024,
+            "MB"
+          );
+
+          initFiles = [
+            ...initFiles,
+            {
+              id: newId,
+              path: compressedFile,
+              originalFile: file,
+              isMain: false,
+            },
+          ];
           newId -= 1;
         })
       );
@@ -107,11 +132,31 @@ function ImagesInput<T extends FieldValues>({
     e: React.ChangeEvent<HTMLInputElement>,
     fileId: number
   ) => {
+    const newFile = e.target.files?.[0];
+
+    if (!newFile) return;
+
+    console.log("Original file size:", newFile.size / 1024 / 1024, "MB");
+
+    const compressedFile = await imageCompression(newFile, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+      initialQuality: 0.8, 
+    });
+
+    console.log(
+      "Compressed file size:",
+      compressedFile.size / 1024 / 1024,
+      "MB"
+    );
+
     const initFiles = watch(name).map((file: ImageFile) => {
       if (file.id !== fileId) return file;
       return {
         id: file.id,
-        path: e.target.files?.[0] as File,
+        path: compressedFile,
+        originalFile: newFile,
         mode: "edit" as const,
         isMain: file?.isMain,
       };

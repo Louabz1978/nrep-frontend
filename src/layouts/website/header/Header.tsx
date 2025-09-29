@@ -195,10 +195,13 @@ function Header() {
         <div className="max-md:hidden">
           <Navbar variant="inline" />
         </div>
+        <Link
+          to="/"
+          className="md:w-11xl w-7xl h-7xl"
+        >
+          <img src={logo} alt="NREP" className="size-full object-contain" />
+        </Link>
       </div>
-      <Link to="/" className="md:w-11xl w-7xl h-7xl">
-        <img src={logo} alt="NREP" className="size-full object-contain" />
-      </Link>
 
       {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">

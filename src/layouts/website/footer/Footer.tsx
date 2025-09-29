@@ -35,7 +35,7 @@ function Footer() {
             {topRowLinks.map((linkItem) => (
               <div
                 key={linkItem.name}
-                className="hover:border-b-2 border-golden-bold transition-all"
+                className="hover:border-b-2 hover:border-golden-bold border-transparent border-b-2 transition-all"
               >
                 <a
                   href={linkItem.link}
@@ -52,7 +52,7 @@ function Footer() {
             {bottomRowLinks.map((linkItem) => (
               <div
                 key={linkItem.name}
-                className="hover:border-b-2 border-golden-bold transition-all"
+                className="hover:border-b-2 hover:border-golden-bold border-transparent border-b-2 transition-all"
               >
                 <a
                   href={linkItem.link}

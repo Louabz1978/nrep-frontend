@@ -30,7 +30,7 @@ const PropertyImagesStep = ({
   // handle submit form
   const onSubmit = () => {
     handleSubmitForm();
-    console.log(form.watch())
+    console.log(form.watch());
   };
 
   return (
@@ -46,7 +46,12 @@ const PropertyImagesStep = ({
             <div className="flex flex-col flex-1 gap-0">
               <FormSectionHeader>صور العقار</FormSectionHeader>
 
-              <ImagesInput form={form} name={"photos"} required />
+              <ImagesInput
+                form={form}
+                name={"photos"}
+                required
+                max={mode === "add" ? 5 : 32}
+              />
             </div>
             <div className="flex justify-center md:items-center flex-col text-error font-normal">
               {mode == "add" ? (
