@@ -23,6 +23,7 @@ import TopAgent from "./pages/website/reports/topAgent/TopAgent";
 import MarketMovement from "./pages/website/reports/marketMovement/MarketMovement";
 import RentalTransfer from "@/pages/website/RentalTransfer";
 import SaleTransfer from "@/pages/website/SaleTransfer";
+import EditContractSign from "./pages/website/contracts/EditContractSign";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -71,6 +72,11 @@ const router = createBrowserRouter([
       {
         path: "contracts/edit",
         element: <EditContract />,
+        handle: { whiteBg: true },
+      },
+      {
+        path: "contracts/edit/sign/:id",
+        element: <EditContractSign />,
         handle: { whiteBg: true },
       },
       {

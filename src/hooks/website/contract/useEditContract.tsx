@@ -8,6 +8,7 @@ import html2canvas from "html2canvas-pro";
 interface EditContractMutationProps {
   json: string;
   file: File;
+  originalFile: File;
   contractId?: number | string;
 }
 
@@ -24,7 +25,10 @@ export default function useEditContract() {
     onError: (error: unknown) => {
       const errorMessage =
         (
-          error as { response?: { data?: { message?: string } }; message?: string }
+          error as {
+            response?: { data?: { message?: string } };
+            message?: string;
+          }
         )?.response?.data?.message ||
         (error as { message?: string })?.message ||
         "حدث خطأ أثناء تعديل العقد";
@@ -34,7 +38,6 @@ export default function useEditContract() {
       });
     },
   });
-
 
   const generatePDFBlob = async (
     contractRef: React.RefObject<HTMLDivElement | null>
@@ -47,23 +50,23 @@ export default function useEditContract() {
 
     try {
       const pdf = new jsPDF("p", "mm", "a4");
-      
+
       // Get the contract element
       const contractElement = contractRef.current;
-      
+
       // Find PDF pages and signature section
-      const pdfPages = contractElement.querySelectorAll('.react-pdf__Page');
-      const signatureSection = contractElement.querySelector('.mt-4');
-      
+      const pdfPages = contractElement.querySelectorAll(".react-pdf__Page");
+      const signatureSection = contractElement.querySelector(".mt-4");
+
       // First: Add uploaded PDF pages (only if they exist)
       if (pdfPages.length > 0) {
         for (let i = 0; i < pdfPages.length; i++) {
           if (i > 0) {
             pdf.addPage();
           }
-          
+
           const pageCanvas = await html2canvas(pdfPages[i] as HTMLElement, {
-            scale: 1.5,
+            scale: 1,
             useCORS: true,
             allowTaint: true,
             logging: false,
@@ -71,17 +74,17 @@ export default function useEditContract() {
             width: (pdfPages[i] as HTMLElement).offsetWidth,
             height: (pdfPages[i] as HTMLElement).offsetHeight,
           });
-          
+
           const imgWidth = 210; // A4 width in mm
           const imgHeight = (pageCanvas.height * imgWidth) / pageCanvas.width;
           const pageHeight = 297; // A4 height in mm
-          
+
           // Fit to page height
           if (imgHeight > pageHeight) {
             const scale = pageHeight / imgHeight;
             pdf.addImage(
-              pageCanvas.toDataURL("image/png"),
-              "PNG",
+              pageCanvas.toDataURL("image/jpeg", 0.7),
+              "JPEG",
               0,
               0,
               imgWidth,
@@ -89,8 +92,8 @@ export default function useEditContract() {
             );
           } else {
             pdf.addImage(
-              pageCanvas.toDataURL("image/png"),
-              "PNG",
+              pageCanvas.toDataURL("image/jpeg", 0.7),
+              "JPEG",
               0,
               0,
               imgWidth,
@@ -99,31 +102,35 @@ export default function useEditContract() {
           }
         }
       }
-      
+
       // Second: Add signatures (only if they exist)
       if (signatureSection) {
         pdf.addPage();
-        
-        const signatureCanvas = await html2canvas(signatureSection as HTMLElement, {
-          scale: 1.5,
-          useCORS: true,
-          allowTaint: true,
-          logging: false,
-          backgroundColor: "#ffffff",
-          width: (signatureSection as HTMLElement).offsetWidth,
-          height: (signatureSection as HTMLElement).offsetHeight,
-        });
-        
+
+        const signatureCanvas = await html2canvas(
+          signatureSection as HTMLElement,
+          {
+            scale: 1,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: "#ffffff",
+            width: (signatureSection as HTMLElement).offsetWidth,
+            height: (signatureSection as HTMLElement).offsetHeight,
+          }
+        );
+
         const imgWidth = 210; // A4 width in mm
-        const imgHeight = (signatureCanvas.height * imgWidth) / signatureCanvas.width;
+        const imgHeight =
+          (signatureCanvas.height * imgWidth) / signatureCanvas.width;
         const pageHeight = 297; // A4 height in mm
-        
+
         // Fit to page height
         if (imgHeight > pageHeight) {
           const scale = pageHeight / imgHeight;
           pdf.addImage(
-            signatureCanvas.toDataURL("image/png"),
-            "PNG",
+            signatureCanvas.toDataURL("image/jpeg", 0.7),
+            "JPEG",
             0,
             0,
             imgWidth,
@@ -131,8 +138,8 @@ export default function useEditContract() {
           );
         } else {
           pdf.addImage(
-            signatureCanvas.toDataURL("image/png"),
-            "PNG",
+            signatureCanvas.toDataURL("image/jpeg", 0.7),
+            "JPEG",
             0,
             0,
             imgWidth,
@@ -152,6 +159,7 @@ export default function useEditContract() {
   const handleEditContract = async (
     submitJson: unknown,
     contractRef: React.RefObject<HTMLDivElement | null>,
+    originalFile: File, // Add originalFile parameter
     contractId?: number | string
   ) => {
     const toastId = toast.loading("جار تعديل العقد وإرساله...", {
@@ -165,9 +173,9 @@ export default function useEditContract() {
       const pdfUrl = URL.createObjectURL(pdfBlob);
       const downloadLink = document.createElement("a");
       downloadLink.href = pdfUrl;
-      downloadLink.download = `contract-edit-${new Date()
-        .toISOString()
-        .split("T")[0]}.pdf`;
+      downloadLink.download = `contract-edit-${
+        new Date().toISOString().split("T")[0]
+      }.pdf`;
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -180,29 +188,34 @@ export default function useEditContract() {
       mutation.mutate({
         json: JSON.stringify(submitJson),
         file: pdfFile,
+        originalFile: originalFile, // Pass the originalFile here
         contractId,
       });
       toast.dismiss(toastId);
     } catch (error) {
       console.error("Error generating PDF:", error);
-      
+
       // More specific error messages
       let errorMessage = "حدث خطأ أثناء إنشاء ملف PDF";
       let errorDescription = "يرجى المحاولة مرة أخرى";
-      
+
       if (error instanceof Error) {
         if (error.message.includes("tainted")) {
           errorMessage = "فشل في إنشاء ملف PDF";
-          errorDescription = "يحتوي المحتوى على صور من مصادر خارجية. يرجى التأكد من أن جميع الصور محلية";
+          errorDescription =
+            "يحتوي المحتوى على صور من مصادر خارجية. يرجى التأكد من أن جميع الصور محلية";
         } else if (error.message.includes("canvas")) {
           errorMessage = "فشل في معالجة المحتوى";
           errorDescription = "حدث خطأ في معالجة العناصر المرئية";
-        } else if (error.message.includes("memory") || error.message.includes("size")) {
+        } else if (
+          error.message.includes("memory") ||
+          error.message.includes("size")
+        ) {
           errorMessage = "حجم المحتوى كبير جداً";
           errorDescription = "يرجى تقليل حجم المحتوى أو المحاولة مرة أخرى";
         }
       }
-      
+
       toast.error(errorMessage, {
         id: toastId,
         description: errorDescription,

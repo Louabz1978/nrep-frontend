@@ -96,8 +96,8 @@ export type ContractFormType = {
   buyer_company_address: TString;
   buyer_company_phone: TNumber;
   buyer_commission: TNumber;
-  contract_file: File | null;
-  editcontract_file: File | null;
+  contract_file: string | null;
+  editcontract_file: string | null;
   ipAddress: TString;
 };
 
@@ -119,8 +119,14 @@ const SellerSchema = Joi.object<SellerType>({
   seller_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("توقيع البائع"),
-  ipAddress: Joi.any().optional().messages(VALIDATION_MESSAGES).label("IP البائع"),
-  signature_date: Joi.any().optional().messages(VALIDATION_MESSAGES).label("تاريخ توقيع البائع"),
+  ipAddress: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("IP البائع"),
+  signature_date: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("تاريخ توقيع البائع"),
 });
 
 const BuyerSchema = Joi.object<BuyerType>({
@@ -141,13 +147,25 @@ const BuyerSchema = Joi.object<BuyerType>({
   buyer_signature: Joi.any()
     .messages(VALIDATION_MESSAGES)
     .label("توقيع المشتري"),
-  ipAddress: Joi.any().optional().messages(VALIDATION_MESSAGES).label("IP المشتري"),
-  signature_date: Joi.any().optional().messages(VALIDATION_MESSAGES).label("تاريخ توقيع المشتري"),
+  ipAddress: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("IP المشتري"),
+  signature_date: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("تاريخ توقيع المشتري"),
 });
 
 export const ContractFormSchema = Joi.object<ContractFormType>({
-  contract_file: Joi.any().messages(VALIDATION_MESSAGES).label("ملف العقد"),
-  editcontract_file: Joi.any()
+  contract_file: Joi.string()
+    .allow(null, "")
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("ملف العقد"),
+  editcontract_file: Joi.string()
+    .allow(null, "")
+    .optional()
     .messages(VALIDATION_MESSAGES)
     .label("تعديل ملف العقد"),
   mls: Joi.number().messages(VALIDATION_MESSAGES).label("mls"),

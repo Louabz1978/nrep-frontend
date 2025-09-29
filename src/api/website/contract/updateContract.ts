@@ -1,28 +1,30 @@
+import axiosClient from "@/libs/axios/axios-client";
 // Placeholder API for updating a contract
 // The real implementation should call your backend endpoint
 
 export interface UpdateContractPayload {
   json: string;
   file: File;
-  // Extend with any identifiers you need, e.g. contractId, mls, etc.
+  originalFile?: File;
   contractId?: number | string;
 }
 
 export default async function updateContract(
-  _payload: UpdateContractPayload
+  payload: UpdateContractPayload
 ): Promise<{ success: boolean }> {
-  // Mark as used to satisfy linter in placeholder implementation
-  void _payload;
-  // TODO: Replace with actual API call using axios/fetch
-  // Example:
-  // const formData = new FormData();
-  // formData.append("json", payload.json);
-  // formData.append("file", payload.file);
-  // if (payload.contractId) formData.append("contractId", String(payload.contractId));
-  // await axiosClient.post("/contracts/update", formData)
+  const formData = new FormData();
+  formData.append("json", payload.json);
+  formData.append("file", payload.file);
+  if (payload.contractId)
+    formData.append("contractId", String(payload.contractId));
+  if (payload.originalFile)
+    formData.append("originalFile", payload.originalFile);
 
-  // For now, simulate success
-  return Promise.resolve({ success: true });
+  const response = await axiosClient.post("/contracts/update", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
 }
-
-
