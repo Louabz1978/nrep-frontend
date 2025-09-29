@@ -26,6 +26,11 @@ const QUERY_KEYS = {
     getTopAgent: "reports-get-top-agent",
     getMarketMovement: "reports-get-market-movement",
   },
+  transfers: {
+    query: "transfers-query",
+    sale: "sale-transfers-query",
+    rental: "rental-transfers-query",
+  },
 };
 
 export default QUERY_KEYS;
