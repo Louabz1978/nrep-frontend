@@ -8,7 +8,7 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router";
 import "@/styles/global/index.css";
 import { AnimatePresence } from "framer-motion";
-import { ColorPaletteProvider } from "./providers/ColorPaletteProvider";
+// import { ColorPaletteProvider } from "./providers/ColorPaletteProvider";
 import NuqsProvider from "./providers/NuqsProvider";
 import "swiper/css/navigation";
 import "swiper/swiper-bundle.css";
@@ -19,20 +19,20 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <Provider>
-    <ColorPaletteProvider>
-      <NuqsProvider>
-        <AppInitializer>
-          <QueryClientProvider client={queryClient}>
-            <SonnerToast />
-            <SessionManager key="session-manager" />
-            <AnimatePresence mode="wait">
-              <RouterProvider key="router-provider" router={router} />
-              {/* <ColorPaletteEditor /> */}
-            </AnimatePresence>
-            <ReactQueryDevtools />
-          </QueryClientProvider>
-        </AppInitializer>
-      </NuqsProvider>
-    </ColorPaletteProvider>
+    {/* <ColorPaletteProvider> */}
+    <NuqsProvider>
+      <AppInitializer>
+        <QueryClientProvider client={queryClient}>
+          <SonnerToast />
+          <SessionManager key="session-manager" />
+          <AnimatePresence mode="wait">
+            <RouterProvider key="router-provider" router={router} />
+            {/* <ColorPaletteEditor /> */}
+          </AnimatePresence>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </AppInitializer>
+    </NuqsProvider>
+    {/* </ColorPaletteProvider> */}
   </Provider>
 );

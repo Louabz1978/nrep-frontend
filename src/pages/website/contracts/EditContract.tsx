@@ -35,6 +35,7 @@ function EditContract() {
     defaultValues: editContractFormInitialValues,
     mode: "onChange",
   });
+  console.log(form.formState.errors, form.watch());
   const mls = form.watch("mls");
   const [searchedMls, setSearchedMls] = useState<number | null>(null);
   const { propertyByMls } = useGetPropertyByMls(searchedMls);
@@ -51,8 +52,12 @@ function EditContract() {
   });
 
   const { user } = useUser();
+
   const userId = user?.user_id;
-  const userName = user ? `${user.first_name} ${user.last_name}` : "";
+
+  const userName = user
+    ? `${(user?.data ?? user)?.first_name} ${(user?.data ?? user)?.last_name}`
+    : "";
 
   const [isBuyerAgent, setIsBuyerAgent] = useState(false);
   const [isSellerAgent, setIsSellerAgent] = useState(false);
