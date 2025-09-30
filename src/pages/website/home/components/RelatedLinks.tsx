@@ -15,7 +15,7 @@ const RelatedLinks = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-[380px] bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-xl)] flex flex-col justify-between">
+    <div className="min-h-[380px] bg-tertiary-bg rounded shadow-primary-shadow p-[var(--spacing-xl)] flex flex-col justify-between">
       <h2 className="text-size24 font-semibold text-right mb-[var(--spacing-lg)] text-secondary-fg">
         روابط ذات صلة
       </h2>

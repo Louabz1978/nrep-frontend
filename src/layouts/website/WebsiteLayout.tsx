@@ -6,20 +6,30 @@ import Footer from "./footer/Footer";
 
 function WebsiteLayout() {
   const matches = useMatches();
+
   const useWhiteBackground = matches.some((match) => {
     const handle = (match as { handle?: { whiteBg?: boolean } }).handle;
     return Boolean(handle?.whiteBg);
   });
+
+  // ✅ detect if current route wants noPadding
+  const noPadding = matches.some((match) => {
+    const handle = (match as { handle?: { noPadding?: boolean } }).handle;
+    return Boolean(handle?.noPadding);
+  });
+
   return (
     <div
-      className={` relative ${useWhiteBackground ? "bg-white" : "bg-primary-bg"}
-         min-h-full flex flex-col scroll-bar transition-colors duration-[0.3s]`}
+      className={`relative ${useWhiteBackground ? "bg-white" : "bg-primary-bg"}
+        min-h-full flex flex-col scroll-bar transition-colors duration-[0.3s]`}
     >
-      <AnimateContainer className="">
+      <AnimateContainer>
         <Header />
-        <Page>
+        {/* Page content */}
+        <Page noPadding={noPadding}>
           <Outlet />
         </Page>
+
         <Footer />
       </AnimateContainer>
     </div>

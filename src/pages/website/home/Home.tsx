@@ -1,29 +1,37 @@
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import NewsNotificationsCard from "@/pages/website/home/components/NewsNotificationsCard";
-import MarketMonitorCard from "./components/MarketMonitorCard";
 import SearchCard from "@/pages/website/home/components/SearchCard";
 import ExternalLinksCard from "@/pages/website/home/components/ExternalLinksCard";
-import RelatedLinks from "@/pages/website/home/components/RelatedLinks";
-
+import HomeReports from "@/pages/website/home/components/HomeReports";
+import ActionQuickEntry from "@/pages/website/home/components/ActionQuickEntry";
+import HeroSection from "@/pages/website/home/components/HeroSection";
+import CardContract from "./components/CardContract";
+import Reports from "./components/Reports";
 function Home() {
   return (
-    <AnimateContainer>
-      <div className="min-h-screen">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* First four components in two columns (2 in each column) */}
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <SearchCard />
-            <MarketMonitorCard />
-            <RelatedLinks />
-            <ExternalLinksCard />
+    <>
+      <HeroSection />
+      <div className="flex flex-col flex-1 overflow-auto md:p-container-padding-desktop p-container-padding-mobile bg-white lg:p-20   ">
+        <AnimateContainer>
+          <div className="min-h-screen space-y-8 text-center    ">
+            <HomeReports />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 ">
+              <div className="flex flex-col gap-12">
+                <SearchCard />
+                <ActionQuickEntry />
+              </div>
+              <NewsNotificationsCard />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 text-[var(--tertiary)]">
+              <CardContract />
+              <ExternalLinksCard />
+              <Reports />
+            </div>
           </div>
-          {/* Last component in its own column */}
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <NewsNotificationsCard />
-          </div>
-        </div>
+        </AnimateContainer>
       </div>
-    </AnimateContainer>
+    </>
   );
 }
 

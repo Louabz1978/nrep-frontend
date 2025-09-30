@@ -65,6 +65,9 @@ importers:
       '@types/react-signature-canvas':
         specifier: ^1.0.7
         version: 1.0.7
+      apexcharts:
+        specifier: ^5.3.5
+        version: 5.3.5
       axios:
         specifier: ^1.10.0
         version: 1.10.0
@@ -130,7 +133,7 @@ importers:
         version: 19.1.0
       react-apexcharts:
         specifier: ^1.7.0
-        version: 1.7.0(apexcharts@5.3.1)(react@19.1.0)
+        version: 1.7.0(apexcharts@5.3.5)(react@19.1.0)
       react-chartjs-2:
         specifier: ^5.3.0
         version: 5.3.0(chart.js@4.5.0)(react@19.1.0)
@@ -1618,8 +1621,8 @@ packages:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
     engines: {node: '>=8'}
 
-  apexcharts@5.3.1:
-    resolution: {integrity: sha512-GMfVt9h8qNMqebZz1HOSyWcmdOKWPGnp/F7ta6IijXO3t2B/K25bS+Ml709zdw7yHO/45F1DgnKnDyK6uRZ2Ng==}
+  apexcharts@5.3.5:
+    resolution: {integrity: sha512-I04DY/WBZbJgJD2uixeV5EzyiL+J5LgKQXEu8rctqAwyRmKv44aDVeofJoLdTJe3ao4r2KEQfCgtVzXn6pqirg==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -4747,7 +4750,7 @@ snapshots:
     dependencies:
       color-convert: 2.0.1
 
-  apexcharts@5.3.1:
+  apexcharts@5.3.5:
     dependencies:
       '@svgdotjs/svg.draggable.js': 3.0.6(@svgdotjs/svg.js@3.2.4)
       '@svgdotjs/svg.filter.js': 3.0.9
@@ -6137,9 +6140,9 @@ snapshots:
       performance-now: 2.1.0
     optional: true
 
-  react-apexcharts@1.7.0(apexcharts@5.3.1)(react@19.1.0):
+  react-apexcharts@1.7.0(apexcharts@5.3.5)(react@19.1.0):
     dependencies:
-      apexcharts: 5.3.1
+      apexcharts: 5.3.5
       prop-types: 15.8.1
       react: 19.1.0
 

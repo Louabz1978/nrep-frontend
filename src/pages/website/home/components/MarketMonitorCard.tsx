@@ -1,16 +1,7 @@
 // Filename: MarketMonitorCard.tsx
 import { useMemo } from "react";
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-} from "chart.js";
-import type { ChartOptions, ScriptableContext } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
+import ReactApexChart from "react-apexcharts";
+import type { ApexOptions } from "apexcharts";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Select from "@/components/global/form/select/Select";
@@ -34,15 +25,6 @@ const GRADIENT_COLORS = [
   ["#6caee0", "#c2dcf056"], // Blue
 ];
 const BAR_THICKNESS = 42;
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  ChartDataLabels
-);
 
 // --- Utility Functions ---
 const translateLabelToArabic = (label: string): string => {
@@ -76,68 +58,47 @@ const normalizeMarketData = (data: unknown): ChartSeries[] => {
   return [];
 };
 
-const getChartData = (series: ChartSeries[]) => ({
-  labels: series.map((item) => item.label),
-  datasets: [
-    {
-      data: series.map((item) => item.value),
-      backgroundColor: (context: ScriptableContext<"bar">) => {
-        const {
-          chart: { ctx, chartArea },
-          dataIndex,
-        } = context;
-        if (!chartArea) return "transparent";
-        const gradient = ctx.createLinearGradient(
-          chartArea.right,
-          0,
-          chartArea.left,
-          0
-        );
-        const colorPair = GRADIENT_COLORS[dataIndex % GRADIENT_COLORS.length];
-        if (colorPair) {
-          gradient.addColorStop(0, colorPair[0]);
-          gradient.addColorStop(1, colorPair[1]);
-        }
-        return gradient;
-      },
-      borderRadius: 10,
-      barThickness: BAR_THICKNESS,
-    },
-  ],
-});
+const getApexOptionsAndSeries = (
+  series: ChartSeries[]
+): { options: ApexOptions; series: { name: string; data: number[] }[] } => {
+  const categories = series.map((s) => s.label);
+  const data = series.map((s) => s.value);
 
-const getChartOptions = (hasData: boolean): ChartOptions<"bar"> => ({
-  indexAxis: "y",
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: { enabled: false },
-    datalabels: {
-      display: hasData,
-      labels: {
-        text: {
-          anchor: "end",
-          align: "end",
-          offset: -7,
-          color: "#333",
-          font: { weight: "bold", size: 15 },
-          formatter: (_, context) =>
-            context.chart.data.labels?.[context.dataIndex] ?? "",
-        },
-        value: {
-          anchor: "start",
-          align: "start",
-          offset: 150,
-          color: "#555",
-          font: { weight: "bold", size: 14 },
-          formatter: (value) => value ?? "",
-        },
+  const options: ApexOptions = {
+    chart: { type: "bar", toolbar: { show: false } },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: `${BAR_THICKNESS}px`,
+        borderRadius: 8,
+        distributed: true,
       },
     },
-  },
-  scales: { x: { display: false, reverse: true }, y: { display: false } },
-  layout: { padding: { left: 200, right: 20 } },
+    colors: GRADIENT_COLORS.map((c) => c[0]),
+    dataLabels: {
+      enabled: true,
+      formatter: (_val, opts) => {
+        const label = categories[opts.dataPointIndex] ?? "";
+        const value = data[opts.dataPointIndex] ?? 0;
+        return `${label}  —  ${value}`;
+      },
+      style: { fontWeight: 700, colors: ["#333"] },
+      offsetX: -10,
+    },
+    xaxis: { categories, labels: { show: false } },
+    yaxis: { labels: { show: false } },
+    grid: { show: false },
+    tooltip: { enabled: false },
+    theme: { mode: "light" },
+    legend: { show: false },
+  };
+
+  return { options, series: [{ name: "عدد", data }] };
+};
+
+const getChartOptions = (hasData: boolean): ApexOptions => ({
+  ...getApexOptionsAndSeries([]).options,
+  dataLabels: { ...(getApexOptionsAndSeries([]).options.dataLabels as any), enabled: hasData },
 });
 
 // --- Component Parts ---
@@ -232,7 +193,10 @@ const MarketMonitorCard = () => {
   );
   const hasData = displaySeries.length > 0;
 
-  const chartData = useMemo(() => getChartData(displaySeries), [displaySeries]);
+  const { options, series } = useMemo(
+    () => getApexOptionsAndSeries(displaySeries),
+    [displaySeries]
+  );
   const chartOptions = useMemo(() => getChartOptions(hasData), [hasData]);
 
   return (
@@ -249,7 +213,12 @@ const MarketMonitorCard = () => {
         hasData={hasData}
         isFetched={isFetched}
       >
-        <Bar data={chartData} options={chartOptions} />
+        <ReactApexChart
+          options={{ ...options, ...chartOptions }}
+          series={series}
+          type="bar"
+          height={500}
+        />
       </ChartContainer>
       <FilterForm form={form} />
     </div>
