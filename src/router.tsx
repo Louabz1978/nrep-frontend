@@ -34,6 +34,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+        handle: {
+          noPadding: true,
+          whitebg: true
+        }
       },
       {
         path: "test-table",

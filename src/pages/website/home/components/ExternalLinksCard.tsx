@@ -1,4 +1,5 @@
 import { SlUser } from "react-icons/sl";
+import SectionTitle from "./SectionTitle";
 
 const ExternalLinksCard = () => {
   const users = [
@@ -10,17 +11,17 @@ const ExternalLinksCard = () => {
   ];
 
   return (
-    <div className="bg-tertiary-bg rounded-[var(--spacing-2xl)] shadow-primary-shadow p-[var(--spacing-lg)] min-h-[300px] flex flex-col">
-      <h2 className=" text-size24 font-semibold text-right mb-[var(--spacing-lg)] text-secondary-fg">
-        أخر نشاط العملاء
-      </h2>
-      <div className="flex flex-col gap-4 p-3">
-        {users.map((user) => (
-          <div className="flex items-center justify-between">
-            <p className="flex gap-3"><SlUser /> {user.name} </p>
-            <p>{user.time}</p>
-          </div>
-        ))}
+    <div>
+      <SectionTitle>اخر نشاط العملاء</SectionTitle>
+      <div className="min-h-[350px] bg-[var(--card-bg)] rounded shadow-[var(--shadow-card)] p-[var(--spacing-lg)]  flex flex-col">
+        <div className="flex flex-col gap-4 p-3">
+          {users.map((user) => (
+            <div className="flex items-center justify-between">
+              <p className="flex gap-3"><SlUser /> {user.name} </p>
+              <p>{user.time}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

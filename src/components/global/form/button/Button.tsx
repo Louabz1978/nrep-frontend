@@ -9,15 +9,15 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "h-5xl gap-2xl py-md px-lg rounded !text-inverse-fg bg-primary text-size18",
+          "h-5xl gap-2xl py-md px-lg rounded !text-inverse-fg bg-[var(--button-bg)] text-size18",
         "semi-round":
-          "!h-[40px] py-md px-lg rounded-2xl !text-inverse-fg bg-primary text-size16",
+          "!h-[40px] py-md px-lg rounded-2xl !text-inverse-fg bg-[var(--button-bg)] text-size16",
         "semi-round-outline":
-          "!h-[40px] py-md px-lg hover:!bg-primary hover:!text-inverse-fg border-2 border-primary rounded-2xl !text-primary bg-transparent text-size16",
+          "!h-[40px] py-md px-lg hover:!bg-[var(--button-bg)] hover:!text-inverse-fg border-2 border-primary rounded-2xl !text-primary bg-transparent text-size16",
         destructive:
           "font-medium !text-13p py-9p px-16p bg-destructive text-destructive-foreground hover:bg-destructive-hover rounded-xs border border-solid border-destructive hover:border-destructive-hover",
         outline:
-          "h-5xl border-[3px] border-primary rounded px-sm !text-primary hover:!text-inverse-fg hover:!bg-primary bg-transparent text-size18",
+          "h-5xl border-[3px] border-primary rounded px-sm !text-primary hover:!text-inverse-fg hover:!bg-[var(--button-bg)] bg-transparent text-size18",
         secondary:
           "font-medium !text-13p py-9p px-16p bg-secondary text-secondary-foreground hover:bg-secondary-hover rounded-xs border border-solid border-secondary hover:border-secondary-hover",
         ghost:
@@ -27,7 +27,7 @@ export const buttonVariants = cva(
         "ghost-light":
           "font-medium !text-13p py-9p px-16p bg-transparent text-foreground-secondary hover:bg-background-hover rounded-xs",
         panel:
-          "font-medium !text-13p py-md px-lg bg-primary-bg text-primary-fg hover:brightness-95 rounded-[7px]",
+          "font-medium !text-13p py-md px-lg bg-[var(--button-bg)]-bg text-primary-fg hover:brightness-95 rounded-[7px]",
         radio:
           "w-[180px] h-[40px] rounded-full py-[13px] px-[30px] bg-quinary-bg text-inverse-fg",
         "table-filter":
@@ -35,7 +35,7 @@ export const buttonVariants = cva(
         pagination:
           "font-medium !text-size13 h-[40px] py-[9px] px-[16px] bg-transparent text-primary hover:text-primary-fg rounded-[7px] border border-solid border-primary ",
         "pagination-current":
-          "font-medium !text-size13 py-[9px] px-[16px] bg-primary text-inverse-fg hover:bg-primary rounded-xs border border-solid border-primary hover:border-primary",
+          "font-medium !text-size13 py-[9px] px-[16px] bg-[var(--button-bg)] text-inverse-fg hover:bg-[var(--button-bg)] rounded-xs border border-solid border-primary hover:border-primary",
       },
 
       size: {
