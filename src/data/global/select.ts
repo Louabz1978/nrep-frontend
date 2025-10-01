@@ -79,10 +79,10 @@ export const STATUS_WITH_CLOSED: StatusOption[] = [
 // Status colors type
 export type StatusColorKey = PropertyStatus;
 export const STATUS_COLORS: Record<StatusColorKey, string> = {
-  [PropertyStatus.ACTIVE]: "bg-green/70 border-green",
-  [PropertyStatus.PENDING]: "bg-yellow/70 border-yellow",
-  [PropertyStatus.CLOSED]: "bg-red/70 border-red",
-  [PropertyStatus.OUT_OF_MARKET]: "bg-grey/70 border-grey",
+  [PropertyStatus.ACTIVE]: "bg-[#428177] border-[#428177]",
+  [PropertyStatus.PENDING]: "bg-[#B9A779] border-[#B9A779]",
+  [PropertyStatus.CLOSED]: "bg-[#6B1F2A] border-[#6B1F2A]",
+  [PropertyStatus.OUT_OF_MARKET]: "bg-grey/50 border-grey/50",
 };
 export const STATUS_TEXT: Record<StatusColorKey, string> = {
   [PropertyStatus.ACTIVE]: "text-green",

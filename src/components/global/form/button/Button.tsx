@@ -33,7 +33,7 @@ export const buttonVariants = cva(
         "table-filter":
           "min-w-10xl text-size16 h-full px-sm py-xxs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
         pagination:
-          "font-medium !text-size13 h-[40px] py-[9px] px-[16px] bg-transparent text-primary hover:text-primary-fg rounded-[7px] border border-solid border-primary ",
+          "font-medium !text-size13 h-[40px] py-[9px] px-[16px] bg-transparent text-primary hover:text-primary-fg rounded-[7px]  ",
         "pagination-current":
           "font-medium !text-size13 py-[9px] px-[16px] bg-[var(--button-bg)] text-inverse-fg hover:bg-[var(--button-bg)] rounded-xs border border-solid border-primary hover:border-primary",
       },

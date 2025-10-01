@@ -202,13 +202,6 @@ function ContactTable() {
         searchKey: "father_name",
       },
       {
-        id: "4",
-        type: "text",
-        label: "رقم الهاتف",
-        title: "رقم الهاتف",
-        searchKey: "phone_number",
-      },
-      {
         id: "5",
         type: "text",
         label: "البريد الإلكتروني",
