@@ -119,64 +119,6 @@ export function DataTable<TData, TValue, TRow>({
 
   return (
     <div className="flex flex-col flex-1 gap-xl">
-      <div className="flex justify-between items-start">
-        <div className="flex gap-3xl flex-wrap items-center">
-          <TableSearch
-            prefix={prefix}
-            wrapperClassName="w-fit min-w-[200px]"
-            searchKey={searchKey}
-            searchPlaceholder={searchPlaceholder}
-            searchType={searchType}
-          />
-          {filters && filters.length > 0 ? (
-            <Fragment>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button size={"sm"} className="!rounded-sm">
-                    <ListFilterPlus className="size-2xl" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[220px] p-lg rounded-sm bg-tertiary-bg">
-                  <p className="mb-lg">{"الفلتر"}</p>
-
-                  {filters.map((f) => {
-                    return (
-                      <Label className="flex items-center" key={f.id}>
-                        <Checkbox
-                          className="capitalize me-md"
-                          checked={allowedFilters.includes(f.id)}
-                          onCheckedChange={(value) => {
-                            setAllowedFilters((pre) =>
-                              value
-                                ? [...pre, f.id]
-                                : pre.filter((id) => id !== f.id)
-                            );
-                          }}
-                        />
-                        <span>{f.label}</span>
-                      </Label>
-                    );
-                  })}
-                </PopoverContent>
-              </Popover>
-              {filters.map((filter) => {
-                return (
-                  <ColumnSearch
-                    state={[allowedFilters, setAllowedFilters]}
-                    {...filter}
-                    key={filter.id}
-                    prefix={prefix}
-                  />
-                );
-              })}
-            </Fragment>
-          ) : null}
-        </div>
-        <div className="flex items-center justify-between gap-lg">
-          {show && <AddButton to={`${to}`} />}
-          <SettingsButton id={id} />
-        </div>
-      </div>
       <div
         className={cn(
           "relative flex-1 flex flex-col ease-out rounded-md transition-transform z-[1] bg-tertiary-bg",
@@ -202,7 +144,7 @@ export function DataTable<TData, TValue, TRow>({
             />
           </Button>
         )}
-        <ScrollArea className="rounded-md flex-1 border border-secondary w-full whitespace-nowrap">
+        <ScrollArea className="rounded-md flex-1 w-full whitespace-nowrap">
           <Table
             style={{
               minWidth: miw,
@@ -222,7 +164,77 @@ export function DataTable<TData, TValue, TRow>({
 
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="bg-secondary">
+                <TableRow key={headerGroup.id} className="bg-white">
+                  <TableHead
+                    colSpan={table.getCenterLeafHeaders().length}
+                    className="relative"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-3xl flex-wrap items-center">
+                        <TableSearch
+                          prefix={prefix}
+                          wrapperClassName="w-fit min-w-[200px]"
+                          searchKey={searchKey}
+                          searchPlaceholder={searchPlaceholder}
+                          searchType={searchType}
+                        />
+                        {filters && filters.length > 0 ? (
+                          <Fragment>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button size={"sm"} className="!rounded-sm">
+                                  <ListFilterPlus className="size-2xl" />
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[220px] p-lg rounded-sm bg-tertiary-bg">
+                                <p className="mb-lg">{"الفلتر"}</p>
+
+                                {filters.map((f) => {
+                                  return (
+                                    <Label
+                                      className="flex items-center"
+                                      key={f.id}
+                                    >
+                                      <Checkbox
+                                        className="capitalize me-md"
+                                        checked={allowedFilters.includes(f.id)}
+                                        onCheckedChange={(value) => {
+                                          setAllowedFilters((pre) =>
+                                            value
+                                              ? [...pre, f.id]
+                                              : pre.filter((id) => id !== f.id)
+                                          );
+                                        }}
+                                      />
+                                      <span>{f.label}</span>
+                                    </Label>
+                                  );
+                                })}
+                              </PopoverContent>
+                            </Popover>
+                            {filters.map((filter) => {
+                              return (
+                                <ColumnSearch
+                                  state={[allowedFilters, setAllowedFilters]}
+                                  {...filter}
+                                  key={filter.id}
+                                  prefix={prefix}
+                                />
+                              );
+                            })}
+                          </Fragment>
+                        ) : null}
+                      </div>
+                      <div className="flex items-center justify-between gap-lg">
+                        {show && <AddButton to={`${to}`} />}
+                        <SettingsButton id={id} />
+                      </div>
+                    </div>
+                  </TableHead>
+                </TableRow>
+              ))}
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="bg-white">
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
@@ -292,13 +304,12 @@ export function DataTable<TData, TValue, TRow>({
                   </TableRow>
                 }
               >
-                {table.getRowModel().rows.map((row) => (
+                {table.getRowModel().rows.map((row, index) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => onRowClick?.(row as TRow)}
                     className={cn(
-                      "!border-b border-secondary",
                       onRowClick ? "cursor-pointer" : "",
                       selectedRows?.find(
                         (ele) =>
@@ -306,6 +317,8 @@ export function DataTable<TData, TValue, TRow>({
                           (row?.original as { id: string })?.id
                       )
                         ? "bg-primary-bg"
+                        : index % 2 === 0
+                        ? "bg-[#edebe0]"
                         : "bg-tertiary-bg"
                     )}
                   >
@@ -313,7 +326,7 @@ export function DataTable<TData, TValue, TRow>({
                       <TableCell
                         key={cell.id}
                         style={{ width: `${cell.column.getSize()}px` }}
-                        className="border-t border-l last:border-l-0 border-secondary max-w-[150px]"
+                        className="max-w-[150px]"
                       >
                         {(cell.getValue() !== undefined &&
                           cell.getValue() !== null &&
@@ -335,17 +348,18 @@ export function DataTable<TData, TValue, TRow>({
           </Table>
         </ScrollArea>
 
-        <div className="flex items-center justify-end space-x-md py-lg px-lg">
+        <div className="flex items-center justify-between space-x-md py-lg px-lg">
           <div className="flex-1 text-sm text-secondary-fg">
             {`تم تحديد ${table.getFilteredSelectedRowModel().rows.length} من
             ${table.getFilteredRowModel().rows.length}`}
           </div>
-          <div>
+          <div className="flex-1 flex justify-center">
             <DynamicPagination
               prefix={prefix}
               totalPageCount={totalPageCount}
             />
           </div>
+          <div className="flex-1" />
         </div>
       </div>
       <SideModal size="sm" title={"إعدادات الجدول"} id={`table-${id}`}>

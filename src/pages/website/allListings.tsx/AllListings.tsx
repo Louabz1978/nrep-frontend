@@ -29,6 +29,9 @@ import {
 import { Link } from "react-router-dom";
 import StatusForm from "./StatusForm";
 import { PropertyStatus } from "@/data/global/enums";
+import { FiEdit } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { TfiInfoAlt } from "react-icons/tfi";
 
 function AllListings() {
   // user information
@@ -156,16 +159,16 @@ function AllListings() {
                   <Link
                     to={`/listing/edit/${row?.original?.property_id}`}
                     className={`${
-                      isSameUser && !isClosed ? "" : "pointer-events-none"
+                      isSameUser || !isClosed ? "cursor-not-allowed" : "pointer-events-none"
                     }`}
                     aria-disabled={!isSameUser || isClosed}
                   >
                     <Button
                       size={"icon"}
-                      className="bg-green"
+                      className="bg-transparent !text-[#428177]"
                       disabled={!isSameUser || isClosed}
                     >
-                      <PiPencilSimpleBold />
+                      <FiEdit className="text-size25" />
                     </Button>
                   </Link>
                 </TooltipTrigger>
@@ -179,7 +182,7 @@ function AllListings() {
                     <div>
                       <Button
                         size={"icon"}
-                        className="bg-red"
+                        className={`bg-transparent`}
                         disabled={
                           (deleteListing?.isPending &&
                             deleteListing?.variables?.id ==
@@ -191,7 +194,7 @@ function AllListings() {
                           handleDeleteListing(row?.original?.property_id);
                         }}
                       >
-                        <PiTrashSimpleBold />
+                        <FaRegTrashAlt className="text-size25 text-[#6B1F2A]" />
                       </Button>
                     </div>
                   </TooltipTrigger>
@@ -203,8 +206,8 @@ function AllListings() {
               <Tooltip>
                 <TooltipTrigger>
                   <Link to={`/listing/details/${row?.original?.property_id}`}>
-                    <Button size={"icon"}>
-                      <PiInfoBold />
+                    <Button className="bg-transparent !text-[#988561]" size={"icon"}>
+                    <TfiInfoAlt className="text-size28" />
                     </Button>
                   </Link>
                 </TooltipTrigger>

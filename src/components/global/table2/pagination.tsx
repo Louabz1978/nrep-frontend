@@ -26,6 +26,9 @@ export function DynamicPagination({
     if (totalPageCount || totalPageCount === 0) setCurrentTotal(totalPageCount);
   }, [totalPageCount]);
 
+  // Helper to get className for not-current page numbers
+  const notCurrentPageClass = "bg-[#edebe0] hover:bg-gray-200";
+
   const renderPageNumbers = () => {
     const items: ReactNode[] = [];
     const maxVisiblePages = 5;
@@ -40,6 +43,7 @@ export function DynamicPagination({
                 setPage(i).catch(console.error);
               }}
               variant={page === i ? "pagination-current" : "link"}
+              className={page !== i ? notCurrentPageClass : undefined}
             >
               {i}
             </Button>
@@ -55,6 +59,7 @@ export function DynamicPagination({
               setPage(1).catch(console.error);
             }}
             variant={page === 1 ? "pagination-current" : "link"}
+            className={page !== 1 ? notCurrentPageClass : undefined}
           >
             1
           </Button>
@@ -81,6 +86,7 @@ export function DynamicPagination({
                 setPage(i).catch(console.error);
               }}
               variant={page === i ? "pagination-current" : "link"}
+              className={page !== i ? notCurrentPageClass : undefined}
             >
               {i}
             </Button>
@@ -104,6 +110,7 @@ export function DynamicPagination({
               setPage(currentTotal).catch(console.error);
             }}
             variant={page === currentTotal ? "pagination-current" : "link"}
+            className={page !== currentTotal ? notCurrentPageClass : undefined}
           >
             {currentTotal}
           </Button>
