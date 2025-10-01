@@ -6,12 +6,14 @@ const searches = [
   { name: "كتابة عقد", link: "/contracts/add" },
   { name: "تعديل عقد", link: "contracts/edit" },
 ];
-const   CardContract = () => {
+const CardContract = () => {
   const navigate = useNavigate();
 
   return (
     <div>
-      <SectionTitle>العقود</SectionTitle>
+      <div>
+        <SectionTitle contract={true}>العقود</SectionTitle>
+      </div>
 
       <div className="min-h-[350px] flex-1 bg-[var(--card-bg)] rounded shadow-[var(--shadow-card)] p-[var(--spacing-xl)] flex flex-col gap-5">
         {searches.map((item, idx) => (

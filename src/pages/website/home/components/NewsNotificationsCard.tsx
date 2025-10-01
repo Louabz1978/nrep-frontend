@@ -23,7 +23,7 @@ const news = [
 const NewsNotificationsCard = () => (
   <div>
     <SectionTitle>الأخبار والتنبيهات</SectionTitle>
-    <div className="max-h-[800px] bg-[var(--card-bg)] shadow-[var(--shadow-card)] rounded  p-[var(--spacing-xl)] h-full flex flex-col justify-between">
+    <div className="lg:h-[800px]   bg-[var(--card-bg)] shadow-[var(--shadow-card)] rounded  p-[var(--spacing-xl)] h-full flex flex-col justify-between">
       <h2 className="text-size24 font-semibold  mb-[var(--spacing-lg)] text-secondary-fg">
         أخبار عقارية سورية
       </h2>
