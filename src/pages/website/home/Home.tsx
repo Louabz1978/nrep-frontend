@@ -4,13 +4,13 @@ import SearchCard from "@/pages/website/home/components/SearchCard";
 import ExternalLinksCard from "@/pages/website/home/components/ExternalLinksCard";
 import HomeReports from "@/pages/website/home/components/HomeReports";
 import ActionQuickEntry from "@/pages/website/home/components/ActionQuickEntry";
-import HeroSection from "@/pages/website/home/components/HeroSection";
+import TopSection from "@/pages/website/home/components/Topsection";
 import CardContract from "./components/CardContract";
 import Reports from "./components/Reports";
 function Home() {
   return (
     <>
-      <HeroSection />
+      <TopSection />
       <div className="flex flex-col flex-1 overflow-auto md:p-container-padding-desktop p-container-padding-mobile bg-white lg:p-20   ">
         <AnimateContainer>
           <div className="min-h-screen space-y-8 text-center    ">

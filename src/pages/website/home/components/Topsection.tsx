@@ -5,7 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 
-function HeroSection() {
+function Topsection() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ function HeroSection() {
           <FormSectionHeader>المنصة الوطنية للعقارات</FormSectionHeader>
           <FormSectionHeader>حمص</FormSectionHeader>
           <div className="flex justify-center mt-6">
-            <div className="relative lg:w-[552px] md:w-[250px] w-[200px]">
+            <div className="relative lg:w-[552px] md:w-[350px] w-[300px]">
               <input
                 type="number"
                 id="search"
@@ -68,6 +68,6 @@ function HeroSection() {
   );
 }
 
-export default HeroSection;
+export default Topsection;
 
 
