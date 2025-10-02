@@ -44,7 +44,7 @@ function MyListings() {
         id: "select",
         header: ({ table }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-whit  "
             checked={
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -57,7 +57,7 @@ function MyListings() {
         ),
         cell: ({ row }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-white"
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
@@ -104,7 +104,7 @@ function MyListings() {
       },
       {
         id: "trans_type",
-        header: "نوع العقد",
+        header: "نوع العرض",
         accessorKey: "trans_type",
         cell: ({ row }) => {
           const transTypeValue = row?.original?.trans_type;
@@ -266,9 +266,7 @@ function MyListings() {
       <PageContainer>
         <div className="mb-5xl">
           <h1 className="text-size30 font-medium">عقاراتي</h1>
-          <h3 className="text-size24 mb-2xl">
-            يتم عرض جميع عقاراتي المضافة
-          </h3>
+          <h3 className="text-size24 mb-2xl">يتم عرض جميع عقاراتي المضافة</h3>
           <hr />
         </div>
         <DataTable

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip/Tooltiop";
 import { PiPlusCircle } from "react-icons/pi";
 import { Button } from "../form/button/Button";
 
@@ -7,22 +6,15 @@ type Props = { to: string };
 
 const AddButton = ({ to }: Props) => {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Link to={to}>
-          <Button
-            className="bg-digital-green-bg !size-4xl border-0 rounded-md cursor-pointer flex justify-center items-center"
-            size={"icon"}
-          >
+        <Link to={to} className="bg-primary  rounded-md cursor-pointer flex items-center gap-2  transition-colors p-sm">
+
             <PiPlusCircle
               strokeWidth={1.4}
-              className="text-inverse-fg size-3xl"
+              className="text-inverse-fg text-2xl"
             />
-          </Button>
+            <span className="text-inverse-fg font-medium text-size14">إضافة جهة اتصال</span>
+
         </Link>
-      </TooltipTrigger>
-      <TooltipContent>إضافة جهة اتصال</TooltipContent>
-    </Tooltip>
   );
 };
 

@@ -7,6 +7,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgentReport } from "@/types/website/reports";
 import useGetTopAgent from "@/hooks/website/reports/useGetTopAgent";
 import { useState } from "react";
+import { Radio } from "@/components/global/ui/radio";
 
 const TopAgent = () => {
   // Default values for month and year as 9 and 2025
@@ -78,33 +79,22 @@ const TopAgent = () => {
             </h1>
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-12 mb-2 sm:mb-4">
               <div className="flex flex-row items-center gap-4 sm:gap-10 w-full sm:w-auto justify-center">
-
-                <label className="flex items-center gap-2 sm:gap-4 cursor-pointer select-none">
-                  <input
-                    type="radio"
-                    className="sr-only peer"
-                    name="period"
-                    value="current"
-                    checked={period === "current"}
-                    onChange={() => setPeriod("current")}
-                    aria-label="الشهر الحالي"
-                  />
-                  <span className="relative grid place-items-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-tertiary-bg shadow-md after:content-[''] after:w-3 after:h-3 sm:after:w-3.5 sm:after:h-3.5 after:rounded-full after:bg-primary after:transition-transform after:duration-150 after:ease-out after:scale-0 peer-checked:after:scale-100" />
-                  <span className="text-base sm:text-xl text-primary">الشهر الحالي</span>
-                </label>
-                <label className="flex items-center gap-2 sm:gap-4 cursor-pointer select-none">
-                  <input
-                    type="radio"
-                    className="sr-only peer"
-                    name="period"
-                    value="previous"
-                    checked={period === "previous"}
-                    onChange={() => setPeriod("previous")}
-                    aria-label="الشهر السابق"
-                  />
-                  <span className="relative grid place-items-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-tertiary-bg shadow-md after:content-[''] after:w-3 after:h-3 sm:after:w-3.5 sm:after:h-3.5 after:rounded-full after:bg-primary after:transition-transform after:duration-150 after:ease-out after:scale-0 peer-checked:after:scale-100" />
-                  <span className="text-base sm:text-xl text-primary">الشهر السابق</span>
-                </label>
+                <Radio
+                  name="period"
+                  value="current"
+                  label="الشهر الحالي"
+                  checked={period === "current"}
+                  onChange={() => setPeriod("current")}
+                  ariaLabel="الشهر الحالي"
+                />
+                <Radio
+                  name="period"
+                  value="previous"
+                  label="الشهر السابق"
+                  checked={period === "previous"}
+                  onChange={() => setPeriod("previous")}
+                  ariaLabel="الشهر السابق"
+                />
               </div>
             </div>
           </div>

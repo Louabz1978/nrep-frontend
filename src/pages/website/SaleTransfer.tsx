@@ -12,7 +12,7 @@ export default function SaleTransfer() {
     { accessorKey: "to", header: "إلى" },
     { accessorKey: "date", header: "تاريخ الانتقال" },
   ];
-  
+
   return (
     <PageContainer>
       <h2 className="text-xl font-bold mb-4">جدول انتقالات البيع</h2>

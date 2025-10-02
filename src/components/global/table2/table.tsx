@@ -389,8 +389,16 @@ export function DataTable<TData, TValue, TRow>({
         {!report && (
           <div className="flex items-center justify-between space-x-md py-lg px-lg">
             <div className="flex-1 text-sm text-secondary-fg">
-              {`تم تحديد ${table.getFilteredSelectedRowModel().rows.length} من
-            ${table.getFilteredRowModel().rows.length}`}
+              <span className="hidden sm:inline">
+                {`تم تحديد ${
+                  table.getFilteredSelectedRowModel().rows.length
+                } من ${table.getFilteredRowModel().rows.length}`}
+              </span>
+              <span className="inline sm:hidden">
+                {`${table.getFilteredSelectedRowModel().rows.length} من ${
+                  table.getFilteredRowModel().rows.length
+                }`}
+              </span>
             </div>
             <div className="flex-1 flex justify-center">
               <DynamicPagination
