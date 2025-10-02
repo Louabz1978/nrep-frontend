@@ -48,7 +48,7 @@ const TableSearch = ({
       value={value}
       onChange={handleChange}
       className={cn(
-        "w-100 bg-white !h-2lg !text-size16 rounded-[8px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
+        "w-80 bg-white !h-2lg !text-size16 border-gray-400 rounded-[8px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
         className
       )}
     />

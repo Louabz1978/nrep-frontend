@@ -12,7 +12,6 @@ import useGetMarketMovement from "@/hooks/website/reports/useGetMarketMovement";
 import useGetCities from "@/hooks/website/listing/useGetCities";
 import useGetArea from "@/hooks/website/listing/useGetArea";
 import MONTHS from "@/data/global/months";
-import YEARS from "@/data/global/years";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import {
   MarketMovementFormSchema,
@@ -27,15 +26,22 @@ type MarketMovementReport = {
   changeRate: string;
 };
 
-const calculateChangeRate = (currentValue: number, previousValue: number): string => {
+const calculateChangeRate = (
+  currentValue: number,
+  previousValue: number
+): string => {
   if (previousValue === 0) return "+0%";
   const change = ((currentValue - previousValue) / previousValue) * 100;
   return `${change > 0 ? "+" : ""}${change.toFixed(1)}%`;
 };
 
-const transformMarketData = (apiData :any): MarketMovementReport[] => {
-  if (!apiData || !apiData.current_year || !Array.isArray(apiData.current_year)) {
-    return []; 
+const transformMarketData = (apiData: any): MarketMovementReport[] => {
+  if (
+    !apiData ||
+    !apiData.current_year ||
+    !Array.isArray(apiData.current_year)
+  ) {
+    return [];
   }
 
   const currentYearData = apiData.current_year[0] ?? {};
@@ -121,7 +127,6 @@ const MarketMovement = () => {
         accessorKey: "year2024",
         header: "2024",
       },
-
     ],
     []
   );
@@ -156,46 +161,60 @@ const MarketMovement = () => {
 
   return (
     <AnimateContainer>
-      <FormSectionHeader>تقرير حركة السوق</FormSectionHeader>
       <PageContainer>
+        <div className="mb-5xl">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-size24 sm:text-size30 font-medium text-center sm:text-right">
+              تقرير حركة السوق
+            </h1>
+
+            {/* Filter Section */}
+            <form className="mb-xl w-full sm:w-auto">
+              <div className="flex flex-row gap-3 sm:gap-4 w-full">
+                <div className="flex-1">
+                  <Select
+                    form={form}
+                    label="المنطقة"
+                    name="area"
+                    placeholder="اختر المنطقة"
+                    choices={Area}
+                    showValue="title"
+                    keyValue="title"
+                    addingSelectStyle="w-full"
+                  />
+                </div>
+                <div className="flex-1">
+                  <Select
+                    form={form}
+                    label="الشهر"
+                    name="month"
+                    placeholder="اختر الشهر"
+                    choices={MONTHS}
+                    showValue="label"
+                    keyValue="value"
+                    addingSelectStyle="w-full"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+          <hr className="my-2" />
+        </div>
         {/* Subtitle */}
-        <p className="text-center text-lg text-gray-600 mb-8">
+        <p className="text-center text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
           محافظة {city || "حمص"}
         </p>
 
-        {/* Filter Section */}
-        <form className="mb-8">
-          <div className="flex justify-center items-center gap-4 ">
-            <Select
-              form={form}
-              label="المنطقة"
-              name="area"
-              placeholder="اختر المنطقة"
-              choices={Area}
-              showValue="title"
-              keyValue="title"
-              addingSelectStyle=""
-            />
-            <Select
-              form={form}
-              label="الشهر"
-              name="month"
-              placeholder="اختر الشهر"
-              choices={MONTHS}
-              showValue="label"
-              keyValue="value"
-            />
-            
-          </div>
-        </form>
-
         {/* Report Table */}
-        <DataTable
-          prefix={TABLE_PREFIXES.market_movement}
-          columns={columns}
-          data={reportData}
-          query={getMarketMovementQuery}
-        />
+        <div className="overflow-x-auto">
+          <DataTable
+            report={true}
+            prefix={TABLE_PREFIXES.market_movement}
+            columns={columns}
+            data={reportData}
+            query={getMarketMovementQuery}
+          />
+        </div>
       </PageContainer>
     </AnimateContainer>
   );

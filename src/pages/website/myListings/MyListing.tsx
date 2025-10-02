@@ -20,11 +20,6 @@ import {
 } from "@/components/global/tooltip/Tooltiop";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import {
-  PiInfoBold,
-  PiPencilSimpleBold,
-  PiTrashSimpleBold,
-} from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { useUser } from "@/stores/useUser";
 import StatusForm from "../allListings.tsx/StatusForm";
@@ -154,12 +149,14 @@ function MyListings() {
                 <TooltipTrigger>
                   <Link
                     to={`/listing/edit/${row?.original?.property_id}`}
-                    className={`${!isClosed ? "cursor-not-allowed" : "pointer-events-none"}`}
+                    className={`${
+                      !isClosed ? "cursor-not-allowed" : "pointer-events-none"
+                    }`}
                     aria-disabled={isClosed}
                   >
                     <Button
                       size={"icon"}
-                      className="bg-transparent !text-[#428177]"
+                      className="bg-transparent !text-primary"
                       disabled={isClosed}
                     >
                       <FiEdit className="text-size25" />
@@ -200,8 +197,11 @@ function MyListings() {
               <Tooltip>
                 <TooltipTrigger>
                   <Link to={`/listing/details/${row?.original?.property_id}`}>
-                  <Button className="bg-transparent !text-[#988561]" size={"icon"}>
-                  <TfiInfoAlt className="text-size28" />
+                    <Button
+                      className="bg-transparent !text-[#988561]"
+                      size={"icon"}
+                    >
+                      <TfiInfoAlt className="text-size28" />
                     </Button>
                   </Link>
                 </TooltipTrigger>
@@ -264,6 +264,13 @@ function MyListings() {
   return (
     <AnimateContainer>
       <PageContainer>
+        <div className="mb-5xl">
+          <h1 className="text-size30 font-medium">عقاراتي</h1>
+          <h3 className="text-size24 mb-2xl">
+            يتم عرض جميع عقاراتي المضافة
+          </h3>
+          <hr />
+        </div>
         <DataTable
           prefix={TABLE_PREFIXES.myListings}
           columns={listingColumns}
@@ -274,6 +281,7 @@ function MyListings() {
           searchKey="mls_num"
           searchPlaceholder="بحث عن MLS ..."
           searchType="number"
+          showActionButtons={true}
         />
       </PageContainer>
     </AnimateContainer>
