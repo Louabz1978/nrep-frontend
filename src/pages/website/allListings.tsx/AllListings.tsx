@@ -104,19 +104,6 @@ function AllListings() {
         size: 20,
       },
       {
-        id: "trans_type",
-        header: "نوع العرض",
-        accessorKey: "trans_type",
-        cell: ({ row }) => {
-          const transTypeValue = row?.original?.trans_type;
-          const trans_type = TransType?.find(
-            (item) => item?.value == transTypeValue
-          )?.label;
-          return trans_type;
-        },
-        size: 10,
-      },
-      {
         id: "area",
         header: "المنطقة",
         accessorKey: "address.area",
@@ -136,6 +123,23 @@ function AllListings() {
           return <StatusForm row={row} />;
         },
         size: 25,
+      },
+      {
+        id: "trans_type",
+        header: "نوع العرض",
+        accessorKey: "trans_type",
+        cell: ({ row }) => {
+          const transTypeValue = row?.original?.trans_type;
+          const trans_type = TransType?.find(
+            (item) => item?.value == transTypeValue
+          )?.label;
+          return (
+            <span className="inline-flex items-center justify-center px-3xl py-md rounded-full text-sm font-medium bg-[#ADA7A7]/25">
+              {trans_type}
+            </span>
+          );
+        },
+        size: 10,
       },
       {
         id: "action",
