@@ -7,9 +7,7 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import Select from "@/components/global/form/select/Select";
 import { DataTable } from "@/components/global/table2/table";
-import Loader from "@/components/global/loader/Loader";
 import useGetMarketMovement from "@/hooks/website/reports/useGetMarketMovement";
-import useGetCities from "@/hooks/website/listing/useGetCities";
 import useGetArea from "@/hooks/website/listing/useGetArea";
 import MONTHS from "@/data/global/months";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
@@ -18,11 +16,14 @@ import {
   marketMovementFormInitialValues,
   type MarketMovementFormType,
 } from "@/data/website/schema/MarketMovementFormSchema";
+import YEARS from "@/data/global/years";
 
-type MarketMovementReport = {
+// ---------------- Helpers ----------------
+
+type MarketMovementRow = {
   criteria: string;
-  year2024: string | number;
   year2025: string | number;
+  year2024: string | number;
   changeRate: string;
 };
 
@@ -35,117 +36,99 @@ const calculateChangeRate = (
   return `${change > 0 ? "+" : ""}${change.toFixed(1)}%`;
 };
 
-const transformMarketData = (apiData: any): MarketMovementReport[] => {
-  if (
-    !apiData ||
-    !apiData.current_year ||
-    !Array.isArray(apiData.current_year)
-  ) {
-    return [];
+const translatePropertyType = (type: string): string => {
+  switch (type) {
+    case "apartment":
+      return "شقة";
+    case "villa":
+    case "house":
+      return "فيلا";
+    case "farm":
+      return "مزرعة";
+    case "store":
+      return "محل تجاري";
+    case "land":
+      return "ارض";
+    case "building":
+      return "بناء";
+    default:
+      return "-";
   }
+};
 
-  const currentYearData = apiData.current_year[0] ?? {};
-  const previousYearData = apiData.previous_year?.[0] ?? {};
+const buildRows = (current: any, previous: any): MarketMovementRow[] => {
+  const c = Array.isArray(current) ? current[0] ?? {} : {};
+  const p = Array.isArray(previous) ? previous[0] ?? {} : {};
 
-  const closedCount2025 = currentYearData.number_of_closed || 0;
-  const closedCount2024 = previousYearData.number_of_closed || 0;
+  const closedCurr = Number(c.number_of_closed || 0);
+  const closedPrev = Number(p.number_of_closed || 0);
 
-  const avgPrice2025 = currentYearData.avg_closed_price || 0;
-  const avgPrice2024 = previousYearData.avg_closed_price || 0;
-  const type25 = currentYearData.property_type || 0;
-  const type24 = previousYearData.property_type || 0;
+  const avgCurr = Number(c.avg_closed_price || 0);
+  const avgPrev = Number(p.avg_closed_price || 0);
+
+  const typeCurr = translatePropertyType(String(c.property_type || "-"));
+  const typePrev = translatePropertyType(String(p.property_type || "-"));
 
   return [
     {
-      criteria: "عدد العقارات المغلقة",
-      year2025: closedCount2025,
-      year2024: closedCount2024,
-      changeRate: calculateChangeRate(closedCount2025, closedCount2024),
+      criteria: "عدد العقارات المباعة",
+      year2025: closedCurr,
+      year2024: closedPrev,
+      changeRate: calculateChangeRate(closedCurr, closedPrev),
     },
     {
-      criteria: "متوسط الأسعار ",
-      year2025: avgPrice2025,
-      year2024: avgPrice2024,
-      changeRate: calculateChangeRate(avgPrice2025, avgPrice2024),
+      criteria: "متوسط الأسعار",
+      year2025: avgCurr,
+      year2024: avgPrev,
+      changeRate: calculateChangeRate(avgCurr, avgPrev),
     },
     {
       criteria: "نوع العقار",
-      year2025: type25,
-      year2024: type24,
-      changeRate: calculateChangeRate(type25, type24),
+      year2025: typeCurr,
+      year2024: typePrev,
+      changeRate: "-",
     },
   ];
 };
 
+// ---------------- Component ----------------
+
 const MarketMovement = () => {
-  // Initialize form with schema validation
   const form = useForm<MarketMovementFormType>({
     resolver: joiResolver(MarketMovementFormSchema),
     defaultValues: marketMovementFormInitialValues,
   });
 
-  // Watch form values, providing fallback values for initial API call
-  const { city, area, month: monthLabel, year } = form.watch();
+  const { area, month, year } = form.watch();
 
-  // Convert month label to numeric value for API
-  const month = useMemo(() => {
-    return MONTHS.find((m) => m.label === monthLabel)?.value || "9";
-  }, [monthLabel]);
+  const selectedMonth = useMemo(() => Number(month || 9), [month]);
+  const selectedYear = useMemo(() => Number(year || 2025), [year]);
 
-  // Get cities and areas data from hooks
-  const { cities } = useGetCities();
   const { Area } = useGetArea();
 
-  // Fetch market movement data based on form values
   const { marketMovement, getMarketMovementQuery } = useGetMarketMovement({
     city: "حمص",
     area: area || "الانشاءات",
-    month: parseInt(month),
-    year: parseInt(year || "2025"),
+    month: selectedMonth,
+    year: selectedYear,
   });
 
-  const reportData: MarketMovementReport[] = useMemo(() => {
-    if (marketMovement) {
-      return transformMarketData(marketMovement);
-    }
-    return [];
-  }, [marketMovement]);
-
-  // Define the columns for the DataTable
-  const columns: ColumnDef<MarketMovementReport>[] = useMemo(
-    () => [
-      {
-        accessorKey: "criteria",
-        header: "معايير التقرير",
-        headerClassName: "bg-white",
-      },
-      {
-        accessorKey: "year2025",
-        header: "2025",
-      },
-      {
-        accessorKey: "year2024",
-        header: "2024",
-      },
-    ],
-    []
+  const rows: MarketMovementRow[] = useMemo(
+    () =>
+      buildRows(marketMovement?.current_year, marketMovement?.previous_year),
+    [marketMovement]
   );
 
-  // Show loading state
-  if (getMarketMovementQuery.isLoading) {
-    return (
-      <AnimateContainer>
-        <FormSectionHeader>تقرير حركة السوق</FormSectionHeader>
-        <PageContainer>
-          <div className="flex justify-center items-center h-64">
-            <Loader />
-          </div>
-        </PageContainer>
-      </AnimateContainer>
-    );
-  }
+  const columns: ColumnDef<MarketMovementRow>[] = useMemo(
+    () => [
+      { accessorKey: "criteria", header: "معايير التقرير" },
+      { accessorKey: "year2025", header: selectedYear.toString() },
+      { accessorKey: "year2024", header: (selectedYear - 1).toString() },
+      { accessorKey: "changeRate", header: "% معدل التغير" },
+    ],
+    [selectedYear]
+  );
 
-  // Show error state
   if (getMarketMovementQuery.isError) {
     return (
       <AnimateContainer>
@@ -162,59 +145,51 @@ const MarketMovement = () => {
   return (
     <AnimateContainer>
       <PageContainer>
-        <div className="mb-5xl">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h1 className="text-size24 sm:text-size30 font-medium text-center sm:text-right">
-              تقرير حركة السوق
-            </h1>
+        <div className="flex xl:flex-nowrap flex-wrap border-b mb-8 pb-2">
+          <FormSectionHeader className="text-right">
+            تقرير حركة السوق
+          </FormSectionHeader>
 
-            {/* Filter Section */}
-            <form className="mb-xl w-full sm:w-auto">
-              <div className="flex flex-row gap-3 sm:gap-4 w-full">
-                <div className="flex-1">
-                  <Select
-                    form={form}
-                    label="المنطقة"
-                    name="area"
-                    placeholder="اختر المنطقة"
-                    choices={Area}
-                    showValue="title"
-                    keyValue="title"
-                    addingSelectStyle="w-full"
-                  />
-                </div>
-                <div className="flex-1">
-                  <Select
-                    form={form}
-                    label="الشهر"
-                    name="month"
-                    placeholder="اختر الشهر"
-                    choices={MONTHS}
-                    showValue="label"
-                    keyValue="value"
-                    addingSelectStyle="w-full"
-                  />
-                </div>
-              </div>
-            </form>
-          </div>
-          <hr className="my-2" />
+          <form>
+            <div className="flex justify-center items-center gap-10">
+              {/* <Select
+                form={form}
+                label="السنة"
+                name="year"
+                placeholder="اختر السنة"
+                choices={YEARS}
+                showValue="label"
+                keyValue="value"
+              />
+              <Select
+                form={form}
+                label="الشهر"
+                name="month"
+                placeholder="اختر الشهر"
+                choices={MONTHS}
+                showValue="label"
+                keyValue="value"
+              /> */}
+              <Select
+                form={form}
+                label="المنطقة"
+                name="area"
+                placeholder="اختر المنطقة"
+                choices={Area}
+                showValue="title"
+                keyValue="title"
+              />
+            </div>
+          </form>
         </div>
-        {/* Subtitle */}
-        <p className="text-center text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
-          محافظة {city || "حمص"}
-        </p>
 
-        {/* Report Table */}
-        <div className="overflow-x-auto">
-          <DataTable
-            report={true}
-            prefix={TABLE_PREFIXES.market_movement}
-            columns={columns}
-            data={reportData}
-            query={getMarketMovementQuery}
-          />
-        </div>
+        <DataTable
+          report={true}
+          prefix={TABLE_PREFIXES.market_movement}
+          columns={columns}
+          data={rows}
+          query={getMarketMovementQuery}
+        />
       </PageContainer>
     </AnimateContainer>
   );

@@ -191,7 +191,7 @@ function Header() {
     // header container
     <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
       {/* brand + inline nav */}
-      <div className="flex items-center gap-4xl">
+      <div className="flex items-center ">
         <div className="max-md:hidden">
           <Navbar variant="inline" />
         </div>
