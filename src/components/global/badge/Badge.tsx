@@ -14,7 +14,7 @@ function Badge({ status, label, onClick, className = "" }: BadgeProps) {
   return (
     <div
       onClick={onClick}
-      className={`rounded-full text-size12 py-md px-lg px-md flex justify-center items-center text-center ${color} ${text} ${className}`}
+      className={`rounded-full text-size12 py-md px-lg px-md font-medium flex justify-center items-center text-center ${color} ${text} ${className}`}
     >
       {label}
     </div>
