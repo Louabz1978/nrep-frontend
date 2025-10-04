@@ -284,6 +284,9 @@ function MyListings() {
           searchPlaceholder="بحث عن MLS ..."
           searchType="number"
           showActionButtons={true}
+          show
+          to="/listing/add"
+          addLabel="إضافة عقار"
         />
       </PageContainer>
     </AnimateContainer>

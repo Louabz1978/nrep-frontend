@@ -7,7 +7,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/global/tooltip/Tooltiop";
-import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { useDeleteContact } from "@/hooks/website/Contact/useDeleteContact";
@@ -19,7 +18,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
-import { PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 function ContactTable() {

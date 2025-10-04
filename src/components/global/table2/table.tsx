@@ -68,6 +68,7 @@ interface DataTableProps<TData, TValue, TRow> {
   searchPlaceholder?: string;
   searchType?: "text" | "number";
   show?: boolean;
+  addLabel?: string;
   showActionButtons?: boolean;
   report?: boolean;
 }
@@ -90,6 +91,7 @@ export function DataTable<TData, TValue, TRow>({
   searchPlaceholder = "بحث...",
   searchType = "text",
   show,
+  addLabel,
   showActionButtons = false,
   report = false,
 }: DataTableProps<TData, TValue, TRow>) {
@@ -177,17 +179,12 @@ export function DataTable<TData, TValue, TRow>({
                     >
                       <div className="flex justify-between items-center">
                         <div className="flex items-center justify-between gap-lg">
-                          {show && <AddButton to={`${to}`} />}
                           <SettingsButton id={id} />
+                          {show && (
+                            <AddButton to={`${to}`} addLabel={addLabel} />
+                          )}
                           {showActionButtons && (
                             <>
-                              <Link
-                                to="/listing/add"
-                                className="flex items-center justify-between gap-xl bg-primary p-sm rounded-md text-tertiary-bg "
-                              >
-                                <p>إضافة عقار</p>
-                                <FaPlus />
-                              </Link>
                               <Link
                                 to=""
                                 className="flex items-center justify-between gap-xl bg-[#6B1F2A] p-sm rounded-md text-tertiary-bg "

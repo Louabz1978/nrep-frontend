@@ -1,20 +1,17 @@
 import { Link } from "react-router-dom";
-import { PiPlusCircle } from "react-icons/pi";
-import { Button } from "../form/button/Button";
+import { FaPlus } from "react-icons/fa6";
 
-type Props = { to: string };
+type Props = { to: string; addLabel?: string };
 
-const AddButton = ({ to }: Props) => {
+const AddButton = ({ to, addLabel = "إضافة جهة اتصال" }: Props) => {
   return (
-        <Link to={to} className="bg-primary  rounded-md cursor-pointer flex items-center gap-2  transition-colors p-sm">
-
-            <PiPlusCircle
-              strokeWidth={1.4}
-              className="text-inverse-fg text-2xl"
-            />
-            <span className="text-inverse-fg font-medium text-size14">إضافة جهة اتصال</span>
-
-        </Link>
+    <Link
+      to={to}
+      className="flex items-center justify-between gap-xl bg-primary p-sm rounded-md text-tertiary-bg"
+    >
+      <span>{addLabel}</span>
+      <FaPlus />
+    </Link>
   );
 };
 

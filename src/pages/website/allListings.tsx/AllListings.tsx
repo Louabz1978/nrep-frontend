@@ -289,6 +289,9 @@ function AllListings() {
           searchKey="mls_num"
           searchPlaceholder="بحث عن MLS ..."
           searchType="number"
+          show
+          to="/listing/add"
+          addLabel="إضافة عقار"
           showActionButtons={true}
         />
       </PageContainer>
