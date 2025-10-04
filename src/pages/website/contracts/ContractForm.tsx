@@ -464,6 +464,7 @@ function ContractForm({
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_name`}
+                    preventRemove={!isCreate}
                     onChange={() => setRenderBuyers((prev) => prev + 1)}
                     disabled={!isCreate}
                   />
@@ -510,16 +511,20 @@ function ContractForm({
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center">
-                  {controlledBuyers.length > 1 && (
-                    <RemoveButton onClick={() => buyers.remove(index)} />
-                  )}
-                </div>
+                {isCreate ? (
+                  <div className="flex items-center">
+                    {controlledBuyers.length > 1 && (
+                      <RemoveButton onClick={() => buyers.remove(index)} />
+                    )}
+                  </div>
+                ) : null}
               </div>
             ))}
-            <div className="self-start">
-              <AddButton onClick={() => buyers.append(buyerInitialValues)} />
-            </div>
+            {isCreate ? (
+              <div className="self-start">
+                <AddButton onClick={() => buyers.append(buyerInitialValues)} />
+              </div>
+            ) : null}
           </div>
           <div className="pt-3xl">
             <p>
@@ -1153,7 +1158,7 @@ function ContractForm({
               ("الإغلاق") ما لم يتم تعديله بأحكام أخرى.
             </p>
           </div>
-          <div className="mt-3xl">
+          <div className="mt-7xl">
             <FormSectionHeader>التواقيع</FormSectionHeader>
 
             <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
@@ -1278,7 +1283,8 @@ function ContractForm({
                 data,
                 contractRef,
                 data?.mls,
-                data?.sellers?.[0]?.id
+                data?.sellers?.[0]?.id,
+                isCreate
               )
             )}
             disabled={isSubmitting}

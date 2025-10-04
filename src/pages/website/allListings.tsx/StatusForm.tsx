@@ -182,7 +182,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                     name="buyer_agent"
                     label="وكيل المشتري"
                     placeholder="أدخل اسم وكيل المشتري"
-                    choices={allContacts}
+                    choices={allContacts ?? []}
                     keyValue="consumer_id"
                     showValue="name"
                     required

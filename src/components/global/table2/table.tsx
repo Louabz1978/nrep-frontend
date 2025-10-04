@@ -282,8 +282,16 @@ export function DataTable<TData, TValue, TRow>({
                             className={cn(
                               "flex items-center justify-center gap-2 font-bold ",
                               header.column.getCanSort()
-                                ? "cursor-pointer select-none text-primary-fg hover:text-primary-fg"
-                                : "text-secondary-fg"
+                                ? `cursor-pointer select-none ${
+                                    report
+                                      ? "text-inverse-fg"
+                                      : "text-primary-fg hover:text-primary-fg"
+                                  } `
+                                : `${
+                                    report
+                                      ? "text-inverse-fg"
+                                      : "text-secondary-fg"
+                                  }`
                             )}
                             onClick={header.column.getToggleSortingHandler()}
                           >
@@ -291,7 +299,7 @@ export function DataTable<TData, TValue, TRow>({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            {header.column.getCanSort() && (
+                            {header.column.getCanSort() && !report && (
                               <span className="flex flex-col">
                                 <ChevronUp
                                   size={14}

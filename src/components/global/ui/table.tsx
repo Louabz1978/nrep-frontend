@@ -26,7 +26,7 @@ function TableHeader({ className, report, ...props }: TableHeaderProps) {
     <thead
       data-slot="table-header"
       className={cn(
-        `[&_tr]:${report ? "bg-primary " : "bg-tertiary-bg"}`,
+        `[&_tr]:${report ? "bg-primary" : "bg-tertiary-bg"}`,
         className
       )}
       {...props}

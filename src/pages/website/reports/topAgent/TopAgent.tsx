@@ -22,27 +22,30 @@ const TopAgent = () => {
   const columns: ColumnDef<TopAgentReport>[] = useMemo(
     () => [
       {
-        accessorKey: "rank",
+        id: "rank",
         header: "#",
+        cell: ({ row }) => {
+          return row?.index + 1;
+        },
         size: 10,
       },
       {
-        accessorKey: "broker_license",
+        accessorKey: "license_number",
         header: "رخصة الوسيط العقاري",
         size: 20,
       },
       {
-        accessorKey: "broker_name",
+        accessorKey: "full_name",
         header: "اسم الوسيط العقاري",
         size: 30,
       },
       {
-        accessorKey: "closed_properties",
+        accessorKey: "closed_count",
         header: "عدد العقارات المغلقة",
         size: 10,
       },
       {
-        accessorKey: "sold_rented_total",
+        accessorKey: "total_price",
         header: "مجموع المباع و المؤجر",
         size: 10,
       },
@@ -78,7 +81,6 @@ const TopAgent = () => {
             </h1>
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-12 mb-2 sm:mb-4">
               <div className="flex flex-row items-center gap-4 sm:gap-10 w-full sm:w-auto justify-center">
-
                 <label className="flex items-center gap-2 sm:gap-4 cursor-pointer select-none">
                   <input
                     type="radio"
@@ -90,7 +92,9 @@ const TopAgent = () => {
                     aria-label="الشهر الحالي"
                   />
                   <span className="relative grid place-items-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-tertiary-bg shadow-md after:content-[''] after:w-3 after:h-3 sm:after:w-3.5 sm:after:h-3.5 after:rounded-full after:bg-primary after:transition-transform after:duration-150 after:ease-out after:scale-0 peer-checked:after:scale-100" />
-                  <span className="text-base sm:text-xl text-primary">الشهر الحالي</span>
+                  <span className="text-base sm:text-xl text-primary">
+                    الشهر الحالي
+                  </span>
                 </label>
                 <label className="flex items-center gap-2 sm:gap-4 cursor-pointer select-none">
                   <input
@@ -103,7 +107,9 @@ const TopAgent = () => {
                     aria-label="الشهر السابق"
                   />
                   <span className="relative grid place-items-center w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-tertiary-bg shadow-md after:content-[''] after:w-3 after:h-3 sm:after:w-3.5 sm:after:h-3.5 after:rounded-full after:bg-primary after:transition-transform after:duration-150 after:ease-out after:scale-0 peer-checked:after:scale-100" />
-                  <span className="text-base sm:text-xl text-primary">الشهر السابق</span>
+                  <span className="text-base sm:text-xl text-primary">
+                    الشهر السابق
+                  </span>
                 </label>
               </div>
             </div>

@@ -27,7 +27,7 @@ export const useDeleteListings = () => {
         .catch(console.error);
 
       // navigate to all listings page
-      navigate("/listing/all-listings");
+      // navigate("/listing/all-listings");
     },
   });
 

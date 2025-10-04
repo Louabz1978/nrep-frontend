@@ -27,7 +27,7 @@ export const useDeleteContact = () => {
         .catch(console.error);
 
       // navigate to contact page
-      navigate("/contact");
+      // navigate("/contact");
     },
   });
 

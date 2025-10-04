@@ -22,6 +22,8 @@ async function closeContract({
     seller_agent_commission,
   });
 
+  // return { ...(res?.data ?? {}), id: mls };
+
   return { ...(res?.data ?? {}), id: mls };
 }
 
