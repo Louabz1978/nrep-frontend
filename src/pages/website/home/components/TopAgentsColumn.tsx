@@ -21,18 +21,19 @@ const TopAgentsColumn = () => {
   const categories = dataset.map((name) => name.full_name ?? "-");
   const data = dataset.map((r) => r.closed_count ?? 0);
 
-  const barColors = [
-    "#428177",
-    "#000000c8",
-    "#B9A779",
-    "#6B1F2A",
+  const baseColors = [
     "#B9A779",
     "#428177",
-    "#A9A18E",
-    "#6CA69C",
-    "#B9A779",
-    "#428177",
+    "#988561",
+    "#054239",
+    "#002623",
   ];
+
+  const barColors = Array.from({ length: 10 }).map((_, idx) => {
+    if (idx < 5) return baseColors[idx]; 
+    const repeatCount = idx - 4; 
+    return baseColors.slice(0, repeatCount).reduce((prev, curr) => prev + curr, baseColors[0]);
+  });
 
   const options: ApexOptions = {
     chart: {
@@ -92,7 +93,7 @@ const TopAgentsColumn = () => {
               {[20, 100, 30, 90, 40, 80, 50, 70, 60, 10].map((h, idx) => (
                 <Skeleton
                   key={idx}
-                  className={`w-16 ${idx >= 5 ? "hidden lg:block" : ""}`} // Show only 5 bars on mobile, all 10 on lg+
+                  className={`w-16 ${idx >= 5 ? "hidden lg:block" : ""}`} 
                   style={{ height: `${h}%` }}
                 />
               ))}
@@ -107,7 +108,7 @@ const TopAgentsColumn = () => {
             {Array.from({ length: 10 }).map((_, i) => (
               <Skeleton
                 key={i}
-                className={`h-4 w-16 ${i >= 5 ? "hidden lg:block" : ""}`} // Show only 5 labels on mobile, all 10 on lg+
+                className={`h-4 w-16 ${i >= 5 ? "hidden lg:block" : ""}`} 
               />
             ))}
           </div>

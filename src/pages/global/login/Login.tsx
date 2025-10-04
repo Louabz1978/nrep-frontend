@@ -2,8 +2,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
-import loginBg from "@/assets/images/login_bg.png";
-import logo from "@/assets/images/logo.svg";
+import logo from "@/assets/images/new logo.png";
 import LOGIN_FORM_SCHEMA, {
   LOGIN_FORM_SCHEMA_INITIAL_VALUES,
   type LoginFormType,
@@ -24,17 +23,13 @@ interface LoginProps<T> {
   handleLogin: (data: LoginFormType) => Promise<void>;
 }
 
-// login page
-// gets: login mutation, handleLogin method
 function Login<T>({ login, handleLogin }: LoginProps<T>) {
-  // form control methods
   const form = useForm({
     resolver: joiResolver(LOGIN_FORM_SCHEMA),
     defaultValues: LOGIN_FORM_SCHEMA_INITIAL_VALUES,
     mode: "onChange",
   });
 
-  // handle submit form data
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     handleLogin(data);
   };
@@ -42,78 +37,88 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
   return (
     <AnimateContainer>
       <div
-        className={`w-full h-full flex-1 overflow-auto md:px-8xl px-container-padding-mobile py-3xl relative z-0 flex items-center justify-end bg-right bg-cover`}
-        style={{ backgroundImage: `url(${loginBg})` }}
+        className={`w-full h-screen flex items-center justify-center`}
+        style={{
+          backgroundImage: "radial-gradient(circle, #00A891 0%, #054239 80%)",
+        }}
       >
-        {/* overlay */}
-        <div className="fixed top-0 left-0 size-full bg-primary-overlay z-[-1]" />
-
-        {/* login form container */}
-        <form
-          id="login_form"
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="md:bg-tertiary-bg bg-tertiary-bg/80 max-md:backdrop-blur-[15px] rounded-3xl w-[680px] max-w-full max-h-full overflow-auto flex flex-col items-center gap-6xl md:px-5xl px-3xl py-3xl shadow-primary-shadow"
+       
+        <div
+          className={`
+            w-[420px] max-w-full 
+            rounded-3xl p-10
+            border-[#B9A7797D] 
+             bg-black/10 
+            border-[2px]
+            flex flex-col items-center gap-8
+          `}
         >
-          {/* top section */}
-          <div className="w-full flex flex-col gap-6xl">
-            {/* logo */}
-            <div className="flex flex-col items-center gap-[15px]">
-              {/* logo image */}
-              <Link to={"/"} className="size-9xl rounded-3xl overflow-hidden">
-                <img src={logo} alt="NREP" className="size-full object-cover" />
+          <form
+            id="login_form"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full flex flex-col items-center gap-8"
+          >
+            {/* logo + title */}
+            <div className="flex flex-col items-center gap-4">
+              <Link to={"/"} className="w-24 h-24 rounded-full overflow-hidden">
+                <img
+                  src={logo}
+                  alt="NREP"
+                  className="w-full h-full object-cover shadow-lg"
+                />
               </Link>
-
-              {/* logo title */}
-              <div className="font-bold text-size24 text-primary">
+              <div className="font-bold text-lg text-white">
                 المنصة الوطنية للعقارات - حمص
               </div>
             </div>
 
-            {/* form area */}
-            <div className="w-full flex flex-col gap-3xl">
-              {/* username */}
+            <div className="w-full flex flex-col gap-6">
               <Input
                 form={form}
                 name="username"
                 label="البريد الإلكتروني أو اسم المستخدم:"
                 placeholder="البريد الإلكتروني"
-                labelStyle="!font-bold !text-size18"
-                addingInputStyle="!h-6xl !rounded-lg"
-                addingValidStyle={"border-primary-border"}
+                labelStyle="!font-bold !text-white"
+                addingInputStyle="!h-12 !rounded-lg !bg-white/90"
               />
-
-              {/* password */}
               <Input
                 form={form}
                 name="password"
                 type="password"
-                label="كلمة السر :"
+                label="كلمة السر:"
                 placeholder="كلمة السر"
-                labelStyle="!font-bold !text-size18"
-                addingInputStyle="!h-6xl !rounded-lg"
-                addingValidStyle={"border-primary-border"}
+                labelStyle="!font-bold !text-white"
+                addingInputStyle="!h-12 !rounded-lg !bg-white/90"
                 bottomElement={
                   <Link
                     to={"/forgot-password"}
-                    className="px-xs text-size16 text-primary font-bold border-b border-primary w-max mt-sm"
+                    className="text-[12px] text-white font-bold mt-2 hover:text-[#B9A779] transition-colors"
                   >
                     هل نسيت كلمة السر؟
                   </Link>
                 }
               />
             </div>
-          </div>
 
-          {/* buttons section */}
-          <div className="w-[250px] flex flex-col gap-xl">
-            <Button disabled={login?.isPending} type="submit">
-              تسجيل الدخول
-            </Button>
-            <Link to={"/register"} className="!w-full flex flex-col">
-              <Button variant={"outline"}>إنشاء حساب</Button>
+            {/* buttons */}
+            <div className="w-full flex flex-col gap-3">
+              <Button
+                disabled={login?.isPending}
+                type="submit"
+                className="w-full bg-[#B9A779] hover:bg-[#a5966d] text-gray-900 font-extrabold shadow-md"
+              >
+                تسجيل الدخول
+              </Button>
+            </div>
+            <Link
+              to={"/register"}
+              className="text-size12 text-white font-medium mt-2 hover:text-[#B9A779] transition-colors"
+            >
+              ليس لديك حساب؟{" "}
+              <span className="text-size14 font-bold">إنشاء حساب</span>
             </Link>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </AnimateContainer>
   );

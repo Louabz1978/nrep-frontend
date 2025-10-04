@@ -132,7 +132,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
 
   const containerClasses =
     variant === "inline"
-      ? `h-full bg-transparent shadow-none flex items-center gap-6xl px-0 ${className}`
+      ? `h-full bg-transparent shadow-none flex items-center gap-4xl px-0 ${className}`
       : `w-full bg-quaternary-bg h-6xl shadow-navbar-shadow flex items-center gap-3xl px-15 ${className}`;
 
   return (
