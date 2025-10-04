@@ -21,7 +21,7 @@ function WebsiteLayout() {
   return (
     <div
       className={`relative ${useWhiteBackground ? "bg-white" : "bg-primary-bg"}
-        min-h-full flex flex-col scroll-bar transition-colors duration-[0.3s]`}
+        flex flex-col scroll-bar transition-colors duration-[0.3s]`}
     >
       <AnimateContainer>
         <Header />

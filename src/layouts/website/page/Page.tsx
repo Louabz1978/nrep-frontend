@@ -8,7 +8,7 @@ interface PageProps {
 function Page({ children, noPadding }: PageProps) {
   return (
     <main
-      className={`flex flex-col flex-1 overflow-auto ${
+      className={`flex flex-col flex-1 overflow-auto min-h-[100vh] ${
         noPadding
           ? "" // no padding
           : "md:p-container-padding-desktop p-container-padding-mobile"

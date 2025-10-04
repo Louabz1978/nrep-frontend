@@ -189,7 +189,7 @@ export default function ColumnSearch({
         <Button
           variant="table-filter"
           className={cn(
-            "min-w-10xl h-full !text-size16 px-sm py-xxs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+            "min-w-8xl h-9 !text-size14 px-sm py-xs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
             hasValue ? "bg-primary text-white" : ""
           )}
         >
@@ -200,9 +200,9 @@ export default function ColumnSearch({
           {!hasValue ? (
             <span
               onClick={removeFilter}
-              className="absolute opacity-0 group-hover:opacity-100 transition top-0 right-0 translate-x-1/2 -translate-y-1/2 size-xl rounded-full border border-primary-border bg-error/75 flex items-center justify-center"
+              className="absolute opacity-0 group-hover:opacity-100 transition top-0 right-0 translate-x-1/2 -translate-y-1/2 size-lg rounded-full border border-primary-border bg-error/75 flex items-center justify-center"
             >
-              <X strokeWidth={1.3} className="size-lg text-white" />
+              <X strokeWidth={1.3} className="size-sm text-white" />
             </span>
           ) : null}
 
@@ -212,7 +212,7 @@ export default function ColumnSearch({
               onClick={handleClear}
               className="border-s border-white h-full flex items-center ps-sm justify-center ms-2 cursor-pointer"
             >
-              <X strokeWidth={1.3} className="size-xl text-white" />
+              <X strokeWidth={1.3} className="size-lg text-white" />
             </span>
           ) : null}
         </Button>

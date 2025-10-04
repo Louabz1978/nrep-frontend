@@ -39,7 +39,7 @@ function ContactTable() {
         id: "select",
         header: ({ table }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-white"
             checked={
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -52,7 +52,7 @@ function ContactTable() {
         ),
         cell: ({ row }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-white"
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
@@ -230,7 +230,9 @@ function ContactTable() {
       <PageContainer>
         <div className="mb-5xl">
           <h1 className="text-size30 font-medium">جهات الإتصال</h1>
-          <h3 className="text-size24 mb-2xl">يتم عرض جميع جهات الإتصال المضافة</h3>
+          <h3 className="text-size24 mb-2xl">
+            يتم عرض جميع جهات الإتصال المضافة
+          </h3>
           <hr />
         </div>
         <DataTable
