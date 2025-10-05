@@ -80,7 +80,7 @@ function ContractForm({
     <button
       data-print-hidden={true}
       type="button"
-      className="flex items-center justify-center w-8 h-8 bg-blue-500 hover:bg-blue-600 cursor-pointer text-white rounded-full"
+      className="flex items-center justify-center w-8 h-8 bg-primary hover:bg-primary/90 cursor-pointer text-white rounded-full"
       onClick={onClick}
     >
       <FaPlus className="text-sm" />
@@ -91,7 +91,7 @@ function ContractForm({
     <button
       data-print-hidden={true}
       type="button"
-      className="flex items-center justify-center w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full"
+      className="flex items-center justify-center w-8 h-8 bg-umber-light hover:bg-umber-light/90 text-white rounded-full"
       onClick={onClick}
     >
       <FaXmark className="text-sm" />
@@ -1227,7 +1227,7 @@ function ContractForm({
                         {/* Signature Info Display */}
                         {!isCreate && signatureInfo[`seller_${index}`] && (
                           <div className="mt-2 text-center">
-                            <div className="text-xs text-gray-600">
+                            <div className="text-xs text-primary">
                               <div>
                                 IP: {signatureInfo[`seller_${index}`].ip}
                               </div>
@@ -1268,7 +1268,7 @@ function ContractForm({
                   {/* Signature Info Display */}
                   {!isCreate && signatureInfo["seller_agent"] && (
                     <div className="mt-2 text-center">
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-primary">
                         <div>IP: {signatureInfo["seller_agent"].ip}</div>
                         <div>تاريخ التوقيع : {signatureInfo["seller_agent"].date}</div>
                       </div>
@@ -1309,7 +1309,7 @@ function ContractForm({
                         {/* Signature Info Display */}
                         {!isCreate && signatureInfo[`buyer_${index}`] && (
                           <div className="mt-2 text-center">
-                            <div className="text-xs text-gray-600">
+                            <div className="text-xs text-primary">
                               <div>
                                 IP: {signatureInfo[`buyer_${index}`].ip}
                               </div>
@@ -1348,7 +1348,7 @@ function ContractForm({
                   {/* Signature Info Display */}
                   {!isCreate && signatureInfo["buyer_agent"] && (
                     <div className="mt-2 text-center">
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs text-primary">
                         <div>IP: {signatureInfo["buyer_agent"].ip}</div>
                         <div> تاريخ التوقيع : {signatureInfo["buyer_agent"].date}</div>
                       </div>
