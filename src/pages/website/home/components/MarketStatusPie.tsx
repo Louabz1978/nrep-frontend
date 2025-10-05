@@ -17,6 +17,7 @@ import {
 
 import type { GetMarketWatcherProps } from "@/api/website/listings/getMarketWatcher";
 import SkeltonPie from "@/components/global/ui/Skeltonpie";
+import StatusManager from "@/components/global/statusManager/StatusManager";
 
 const MarketStatusPie = () => {
   const form = useForm<FilterChartsType>({
@@ -30,22 +31,28 @@ const MarketStatusPie = () => {
 
   const apiParams = useMemo<GetMarketWatcherProps | null>(() => {
     if (!date?.value || !area?.title) return null;
-    return { queryParams: { period: String(date.value), area: String(area.title) } };
+    return {
+      queryParams: { period: String(date.value), area: String(area.title) },
+    };
   }, [date, area]);
 
-  const { marketWatcher, isLoading } = useMarketWatcher(apiParams);
+  const { marketWatcher, marketWatcherQuery } = useMarketWatcher(apiParams);
 
   const { labels, values } = useMemo(() => {
-    const arr: Array<{ label: string; value: number }> = Array.isArray(marketWatcher)
+    const arr: Array<{ label: string; value: number }> = Array.isArray(
+      marketWatcher
+    )
       ? marketWatcher.map((x: any) => ({
           label: String(x.label ?? ""),
           value: Number(x.value ?? 0),
         }))
       : marketWatcher && typeof marketWatcher === "object"
-      ? Object.entries(marketWatcher as Record<string, number>).map(([k, v]) => ({
-          label: k,
-          value: Number(v),
-        }))
+      ? Object.entries(marketWatcher as Record<string, number>).map(
+          ([k, v]) => ({
+            label: k,
+            value: Number(v),
+          })
+        )
       : [];
 
     return {
@@ -108,16 +115,24 @@ const MarketStatusPie = () => {
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-size20 font-semibold">مراقب السوق</h3>
       </div>
-
-      {isLoading ? (
-        <SkeltonPie /> 
-      ) : values.length > 0 ? (
-        <ReactApexChart options={options} series={values} type="pie" height={280} />
-      ) : (
-        <div className="text-center text-gray-400 mt-20">لا توجد بيانات متاحة</div>
-      )}
-
-      <form className="flex justify-between px-5">
+      <StatusManager
+        Loader={SkeltonPie}
+        query={marketWatcherQuery}
+        isEmpty={!values || values.length === 0}
+        emptyContent={
+          <div className="text-center text-gray-400 mt-20">
+            لا توجد بيانات متاحة
+          </div>
+        }
+      >
+        <ReactApexChart
+          options={options}
+          series={values}
+          type="pie"
+          height={250}
+        />
+      </StatusManager>
+      <form className="flex justify-between px-5 mb-4">
         <div className="max-w-40 min-w-30">
           <Select
             form={form}

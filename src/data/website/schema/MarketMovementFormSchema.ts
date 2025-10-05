@@ -4,27 +4,21 @@ import Joi from "joi";
 
 export type MarketMovementFormType = {
   area: TString;
-  month: TString;
-  year: TString;
-};  
+  period: TString;
+};
 
 export const MarketMovementFormSchema = Joi.object<MarketMovementFormType>({
-  area: Joi.optional()
+  area: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المنطقة"),
-  month: Joi.optional()
+  period: Joi.string()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الشهر"),
-  year: Joi.number()
-    .required()
-    .messages(VALIDATION_MESSAGES)
-    .label("السنة"),
+    .label("الفترة"),
 });
 
 export const marketMovementFormInitialValues: MarketMovementFormType = {
-  area: "",
-  month: "",
-  year: "",
+  area: null,
+  period: null,
 };
