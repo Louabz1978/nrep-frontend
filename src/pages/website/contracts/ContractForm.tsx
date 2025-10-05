@@ -1232,7 +1232,7 @@ function ContractForm({
                                 IP: {signatureInfo[`seller_${index}`].ip}
                               </div>
                               <div>
-                                التوقيع: {signatureInfo[`seller_${index}`].date}
+                              تاريخ التوقيع : {signatureInfo[`seller_${index}`].date}
                               </div>
                             </div>
                           </div>
@@ -1270,7 +1270,7 @@ function ContractForm({
                     <div className="mt-2 text-center">
                       <div className="text-xs text-gray-600">
                         <div>IP: {signatureInfo["seller_agent"].ip}</div>
-                        <div>التوقيع: {signatureInfo["seller_agent"].date}</div>
+                        <div>تاريخ التوقيع : {signatureInfo["seller_agent"].date}</div>
                       </div>
                     </div>
                   )}
@@ -1314,7 +1314,7 @@ function ContractForm({
                                 IP: {signatureInfo[`buyer_${index}`].ip}
                               </div>
                               <div>
-                                التوقيع: {signatureInfo[`buyer_${index}`].date}
+                              تاريخ التوقيع : {signatureInfo[`buyer_${index}`].date}
                               </div>
                             </div>
                           </div>
@@ -1350,7 +1350,7 @@ function ContractForm({
                     <div className="mt-2 text-center">
                       <div className="text-xs text-gray-600">
                         <div>IP: {signatureInfo["buyer_agent"].ip}</div>
-                        <div>التوقيع: {signatureInfo["buyer_agent"].date}</div>
+                        <div> تاريخ التوقيع : {signatureInfo["buyer_agent"].date}</div>
                       </div>
                     </div>
                   )}
