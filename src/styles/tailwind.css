@@ -90,6 +90,9 @@
   --golden-bold: #988561;
   --card-bg: #edebe0;
   --button-bg: #428177;
+  --umber-light:#6B1F2A;
+  --umber-medium:#4A151E;
+  --umber-bold:#260F14;
 
   /* foreground */
   --primary-fg: #333333;
@@ -101,6 +104,13 @@
   /* status*/
   --success: #34c759;
   --error: #c1272d;
+  --active-bg:#EBF9F1;
+  --active-text:#1F9254;
+  --pending-bg:#FEF2E5;
+  --pending-text:#CD6200;
+  --closing-bg:#FBE7E8;
+  --closing-text:#A30D11;
+  --unactive-bg:#ADA7A7;
 
   /* general colors */
   --yellow: #ffb400;
@@ -162,6 +172,9 @@
   --layout-bg: #002623;
   --golden-medium: #b9a779;
   --golden-bold: #988561;
+  --umber-light:#6B1F2A;
+  --umber-medium:#4A151E;
+  --umber-bold:#260F14;
   /* foreground */
   --primary-fg: #333333;
   --secondary-fg: #000000;
@@ -172,6 +185,13 @@
   /* status*/
   --success: #34c759;
   --error: #c1272d;
+  --active-bg:#EBF9F1;
+  --active-text:#1F9254;
+  --pending-bg:#FEF2E5;
+  --pending-text:#CD6200;
+  --closing-bg:#FBE7E8;
+  --closing-text:#A30D11;
+  --unactive-bg:#ADA7A7;
 
   /* general colors */
   --yellow: #ffb400;
@@ -294,6 +314,9 @@
   --color-layout-bg: var(--layout-bg);
   --color-golden-medium: var(--golden-medium);
   --color-golden-bold: var(--golden-bold);
+  --color-umber-light: var(--umber-light);
+  --color-umber-medium: var(--umber-medium);
+  --color-umber-bold: var(--umber-bold);
 
   /* foreground */
   --color-primary-fg: var(--primary-fg);
@@ -302,9 +325,16 @@
   --color-inverse-fg: var(--inverse-fg);
   --color-header-fg: var(--header-fg);
 
-  /* status*/
+  /* status */
   --color-success: var(--success);
   --color-error: var(--error);
+  --color-active-bg: var(--active-bg);
+  --color-active-text: var(--active-text);
+  --color-pending-bg: var(--pending-bg);
+  --color-pending-text: var(--pending-text);
+  --color-closing-bg: var(--closing-bg);
+  --color-closing-text: var(--closing-text);
+  --color-unactive-bg: var(--unactive-bg);
 
   /* general colors */
   --color-blue: var(--blue);

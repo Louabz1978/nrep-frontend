@@ -112,7 +112,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             to={item.to}
             onClick={() => setOpenPopovers([])}
             className={`flex items-center justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
-              isCurrentPath ? "text-white bg-[#988561]" : "text-tertiary-bg"
+              isCurrentPath ? "text-tertiary-bg bg-golden-medium" : "text-tertiary-bg"
             }`}
           >
             {item.label}
@@ -121,7 +121,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
           <span
             key={index}
             className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer px-4 py-2 ${
-              isCurrentPath ? "text-white bg-[#988561]" : "text-tertiary-bg"
+              isCurrentPath ? "text-tertiary-bg bg-golden-medium" : "text-tertiary-bg"
             }`}
           >
             {item.label}
@@ -190,7 +190,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-35 mt-0 border-none bg-golden-medium !p-0 rounded-[12px] overflow-hidden"
+                  className="w-35 mt-0 border-none bg-golden-medium/75 !p-0 rounded-[12px] overflow-hidden"
                   sideOffset={8}
                 >
                   <div className="space-y-0">{renderSubMenu(tab.submenu)}</div>

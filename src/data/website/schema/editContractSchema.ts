@@ -19,7 +19,7 @@ export type EditBuyer = {
 };
 
 export type EditContractFormType = {
-  contract_file: string | null;
+  contract_file: File | null;
   sellers: EditSeller[];
   buyers: EditBuyer[];
   mls: number | null;

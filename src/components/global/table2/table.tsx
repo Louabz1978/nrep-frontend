@@ -177,7 +177,7 @@ export function DataTable<TData, TValue, TRow>({
                       colSpan={table.getCenterLeafHeaders().length}
                       className="relative"
                     >
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center p-2xl">
                         <div className="flex items-center justify-between gap-lg">
                           <SettingsButton id={id} />
                           {show && (
@@ -187,7 +187,7 @@ export function DataTable<TData, TValue, TRow>({
                             <>
                               <Link
                                 to=""
-                                className="flex items-center justify-between gap-xl bg-[#6B1F2A] p-sm rounded-md text-tertiary-bg "
+                                className="flex items-center justify-between gap-xl bg-umber-light p-sm rounded-md text-tertiary-bg "
                               >
                                 <p>حذف عقار</p>
                                 <FaRegTrashAlt />
@@ -265,7 +265,7 @@ export function DataTable<TData, TValue, TRow>({
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
-                  className={cn(report ? "bg-primary" : "bg-white")}
+                  className={cn(report ? "bg-primary" : "bg-tertiary-bg")}
                 >
                   {headerGroup.headers.map((header) => {
                     return (
@@ -327,7 +327,7 @@ export function DataTable<TData, TValue, TRow>({
               ))}
             </TableHeader>
 
-            <TableBody>
+            <TableBody className="">
               <StatusManager
                 Loader={() => <RowSkeletonLoader table={table} />}
                 loaderCount={10}

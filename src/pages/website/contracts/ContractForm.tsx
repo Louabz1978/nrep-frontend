@@ -12,6 +12,7 @@ import {
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
+import { getUserIP, getCurrentDateTime } from "@/utils/getUserIP";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
@@ -39,6 +40,11 @@ function ContractForm({
   const [disabled2, setDisabled2] = useState(true);
   const [checkbox1, setCheckBox1] = useState(false);
   const [checkbox2, setCheckBox2] = useState(false);
+  const [userIP, setUserIP] = useState<string>("");
+  const [signingDate, setSigningDate] = useState<string>("");
+  const [signatureInfo, setSignatureInfo] = useState<{
+    [key: string]: { ip: string; date: string };
+  }>({});
 
   const { allContacts } = useGetAllContacts();
 
@@ -112,8 +118,8 @@ function ContractForm({
         pool: propertyByMls?.pool || false,
       };
 
-  const userId = user?.user_id ?? user?.data?.user_id;
-  const userData = user?.data ?? user;
+  const userId = user?.user_id;
+  const userData = user;
   const buyer_agent_id = useWatch({
     control: form.control,
     name: "buyer_agent_id",
@@ -229,6 +235,31 @@ function ContractForm({
     control: form.control,
     name: "seller_agent_id",
   });
+
+  // Get IP address when in sign mode (not create mode)
+  useEffect(() => {
+    if (!isCreate) {
+      const fetchIP = async () => {
+        const ip = await getUserIP();
+        setUserIP(ip);
+        setSigningDate(getCurrentDateTime());
+      };
+      fetchIP();
+    }
+  }, [isCreate]);
+
+  // Function to handle signature completion
+  const handleSignatureComplete = (signatureKey: string) => {
+    if (userIP && signingDate) {
+      setSignatureInfo((prev) => ({
+        ...prev,
+        [signatureKey]: {
+          ip: userIP,
+          date: signingDate,
+        },
+      }));
+    }
+  };
 
   // Populate form when propertyByMls changes
   useEffect(() => {
@@ -1189,7 +1220,23 @@ function ContractForm({
                           }
                           form={form}
                           name={`sellers.${index}.seller_signature`}
+                          onSignatureComplete={() =>
+                            handleSignatureComplete(`seller_${index}`)
+                          }
                         />
+                        {/* Signature Info Display */}
+                        {!isCreate && signatureInfo[`seller_${index}`] && (
+                          <div className="mt-2 text-center">
+                            <div className="text-xs text-gray-600">
+                              <div>
+                                IP: {signatureInfo[`seller_${index}`].ip}
+                              </div>
+                              <div>
+                                التوقيع: {signatureInfo[`seller_${index}`].date}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -1214,7 +1261,19 @@ function ContractForm({
                         : form.watch("seller_agent_signature")
                     }
                     name="seller_agent_signature"
+                    onSignatureComplete={() =>
+                      handleSignatureComplete("seller_agent")
+                    }
                   />
+                  {/* Signature Info Display */}
+                  {!isCreate && signatureInfo["seller_agent"] && (
+                    <div className="mt-2 text-center">
+                      <div className="text-xs text-gray-600">
+                        <div>IP: {signatureInfo["seller_agent"].ip}</div>
+                        <div>التوقيع: {signatureInfo["seller_agent"].date}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-[30px] items-start">
@@ -1243,7 +1302,23 @@ function ContractForm({
                               ? undefined
                               : form.watch(`buyers.${index}.buyer_signature`)
                           }
+                          onSignatureComplete={() =>
+                            handleSignatureComplete(`buyer_${index}`)
+                          }
                         />
+                        {/* Signature Info Display */}
+                        {!isCreate && signatureInfo[`buyer_${index}`] && (
+                          <div className="mt-2 text-center">
+                            <div className="text-xs text-gray-600">
+                              <div>
+                                IP: {signatureInfo[`buyer_${index}`].ip}
+                              </div>
+                              <div>
+                                التوقيع: {signatureInfo[`buyer_${index}`].date}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -1266,7 +1341,19 @@ function ContractForm({
                       isCreate ? undefined : form.watch("buyer_agent_signature")
                     }
                     name="buyer_agent_signature"
+                    onSignatureComplete={() =>
+                      handleSignatureComplete("buyer_agent")
+                    }
                   />
+                  {/* Signature Info Display */}
+                  {!isCreate && signatureInfo["buyer_agent"] && (
+                    <div className="mt-2 text-center">
+                      <div className="text-xs text-gray-600">
+                        <div>IP: {signatureInfo["buyer_agent"].ip}</div>
+                        <div>التوقيع: {signatureInfo["buyer_agent"].date}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1278,15 +1365,23 @@ function ContractForm({
         >
           <Button
             className="w-[200px]"
-            onClick={handleSubmit((data) =>
+            onClick={handleSubmit((data) => {
+              // Include signature info for each signature in sign mode
+              const contractData = !isCreate
+                ? {
+                    ...data,
+                    signature_info: signatureInfo,
+                  }
+                : data;
+
               handleAddContract(
-                data,
+                contractData,
                 contractRef,
                 data?.mls,
                 data?.sellers?.[0]?.id,
                 isCreate
-              )
-            )}
+              );
+            })}
             disabled={isSubmitting}
           >
             {isSubmitting ? "جار الإرسال..." : "تأكيد"}
