@@ -1,4 +1,4 @@
-import { STATUS_COLORS } from "@/data/global/select";
+import { STATUS_COLORS, STATUS_TEXT } from "@/data/global/select";
 import type { ReactNode } from "react";
 
 interface BadgeProps {
@@ -9,11 +9,12 @@ interface BadgeProps {
 }
 function Badge({ status, label, onClick, className = "" }: BadgeProps) {
   const color = STATUS_COLORS?.[status];
+  const text = STATUS_TEXT?.[status];
 
   return (
     <div
       onClick={onClick}
-      className={`rounded-full text-size12 text-inverse-fg py-xs px-md flex justify-center font-bold items-center text-center border-2 ${color} ${className}`}
+      className={`rounded-full text-size12 py-md px-lg px-md font-medium flex justify-center items-center text-center ${color} ${text} ${className}`}
     >
       {label}
     </div>

@@ -180,7 +180,7 @@ export interface updateListingProps {
 
 export interface closeContractProps {
   mls: number | null;
-  buyer_agent:  | null;
+  buyer_agent: null;
   buyer_agent_commission: number;
   seller_agent_commission: number;
   closing_date: string;

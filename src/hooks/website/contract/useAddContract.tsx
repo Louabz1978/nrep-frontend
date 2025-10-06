@@ -5,6 +5,7 @@ import QUERY_KEYS from "@/data/global/queryKeys";
 import type { ContractFormType } from "@/data/website/schema/contractSchema";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
+import { useNavigate } from "react-router-dom";
 
 interface CreateContractMutationProps {
   json: string;
@@ -12,6 +13,7 @@ interface CreateContractMutationProps {
   mls: string;
   id: number;
   ipAddress: string | null;
+  isCreate?: boolean;
 }
 
 async function getIpAddress() {
@@ -27,6 +29,7 @@ async function getIpAddress() {
 
 export default function useAddContract() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: ({
@@ -35,17 +38,18 @@ export default function useAddContract() {
       mls,
       id,
       ipAddress,
+      isCreate,
     }: CreateContractMutationProps) =>
-      createContract({ json, file, mls, id, ipAddress }),
-    onSuccess: () => {
-      toast.success("تم إنشاء العقد بنجاح", {
-        duration: 3000,
-      });
+      createContract({ json, file, mls, id, ipAddress, isCreate }),
+    onSuccess: ({ isCreate }) => {
+      toast.success(
+        isCreate ? "تم إنشاء العقد بنجاح" : "تم توقيع العقد بنجاح",
+        {
+          duration: 3000,
+        }
+      );
 
-      // Invalidate and refetch contracts list
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.contracts.query],
-      });
+      navigate("/");
     },
     onError: (error: unknown) => {
       console.error("Error creating contract:", error);
@@ -267,11 +271,15 @@ export default function useAddContract() {
     submitData: ContractFormType,
     contractRef: React.RefObject<HTMLDivElement | null>,
     mls: string,
-    id: number
+    id: number,
+    isCreate?: boolean
   ) => {
-    const toastId = toast.loading("جار إنشاء العقد وإرساله...", {
-      duration: Infinity,
-    });
+    const toastId = toast.loading(
+      isCreate ? "جار إنشاء العقد وإرساله..." : "جار توقيع العقد وإرساله...",
+      {
+        duration: Infinity,
+      }
+    );
 
     try {
       const ipAddress = await getIpAddress();
@@ -296,13 +304,24 @@ export default function useAddContract() {
         type: "application/pdf",
       });
 
-      mutation.mutate({
-        json: JSON.stringify(submitData),
-        file: pdfFile,
-        mls: mls,
-        id: id,
-        ipAddress: ipAddress,
-      });
+      mutation.mutate(
+        {
+          json: JSON.stringify(submitData),
+          file: pdfFile,
+          mls: mls,
+          id: id,
+          ipAddress: ipAddress,
+          isCreate: isCreate,
+        },
+        {
+          onSuccess: () => {
+            toast.dismiss(toastId);
+          },
+          onError: () => {
+            toast.dismiss(toastId);
+          },
+        }
+      );
     } catch (error) {
       toast.error("فشل في إنشاء ملف PDF", {
         id: toastId,

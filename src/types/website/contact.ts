@@ -107,7 +107,7 @@ export interface GetAllContactsProps {
 export type GetAllContactsResult = Promise<
   {
     message?: string;
-  } & PaginationData<ContactWithUser[]>
+  } & PaginationData<Contact[]>
 >;
 
 export interface GetMyContactsProps {

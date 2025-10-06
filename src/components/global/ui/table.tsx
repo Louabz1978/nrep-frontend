@@ -17,11 +17,18 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
   );
 }
 
-function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
+interface TableHeaderProps extends React.ComponentProps<"thead"> {
+  report?: boolean;
+}
+
+function TableHeader({ className, report, ...props }: TableHeaderProps) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:bg-white", className)}
+      className={cn(
+        `[&_tr]:${report ? "bg-primary" : "bg-tertiary-bg"}`,
+        className
+      )}
       {...props}
     />
   );

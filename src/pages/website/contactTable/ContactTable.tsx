@@ -16,7 +16,8 @@ import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { PiPencilSimpleBold, PiTrashSimpleBold } from "react-icons/pi";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 function ContactTable() {
@@ -36,7 +37,7 @@ function ContactTable() {
         id: "select",
         header: ({ table }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-white"
             checked={
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -49,7 +50,7 @@ function ContactTable() {
         ),
         cell: ({ row }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-white"
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
@@ -122,8 +123,11 @@ function ContactTable() {
                 <Tooltip>
                   <TooltipTrigger>
                     <Link to={`/contact/edit/${row?.original?.consumer_id}`}>
-                      <Button size={"icon"} className="bg-green">
-                        <PiPencilSimpleBold />
+                      <Button
+                        size={"icon"}
+                        className="bg-transparent !text-primary"
+                      >
+                        <FiEdit className="text-size25" />
                       </Button>
                     </Link>
                   </TooltipTrigger>
@@ -138,7 +142,7 @@ function ContactTable() {
                     <div>
                       <Button
                         size={"icon"}
-                        className="bg-red"
+                        className={`bg-transparent`}
                         disabled={
                           deleteContact?.isPending &&
                           deleteContact?.variables?.id ==
@@ -149,7 +153,7 @@ function ContactTable() {
                           handleDeleteContact(row?.original?.consumer_id);
                         }}
                       >
-                        <PiTrashSimpleBold />
+                        <FaRegTrashAlt className="text-size25 text-[#6B1F2A]" />
                       </Button>
                     </div>
                   </TooltipTrigger>
@@ -222,6 +226,13 @@ function ContactTable() {
   return (
     <AnimateContainer>
       <PageContainer>
+        <div className="mb-5xl">
+          <h1 className="text-size30 font-medium">جهات الإتصال</h1>
+          <h3 className="text-size24 mb-2xl">
+            يتم عرض جميع جهات الإتصال المضافة
+          </h3>
+          <hr />
+        </div>
         <DataTable
           prefix={TABLE_PREFIXES.contact}
           columns={ContactColumns?.filter((ele) => {

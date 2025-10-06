@@ -15,6 +15,7 @@ interface SignatureInputProps<T extends FieldValues> {
   required?: boolean;
   disabled?: boolean;
   defaultValue?: string;
+  onSignatureComplete?: () => void;
 }
 
 function SignatureInput<T extends FieldValues>({
@@ -24,6 +25,7 @@ function SignatureInput<T extends FieldValues>({
   required,
   disabled,
   defaultValue,
+  onSignatureComplete,
 }: SignatureInputProps<T>) {
   const sigRef = useRef<SignatureCanvas>(null);
   const value = useWatch({ control: form.control, name: name });
@@ -80,6 +82,10 @@ function SignatureInput<T extends FieldValues>({
                 } else {
                   const signatureData = sigRef.current?.toDataURL() ?? "";
                   field.onChange(signatureData);
+                  // Call the completion callback if provided
+                  if (onSignatureComplete) {
+                    onSignatureComplete();
+                  }
                 }
               }}
             />

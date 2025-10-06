@@ -1,27 +1,27 @@
 import axiosClient from "@/libs/axios/axios-client";
-import type { GetMarketMovementResponse } from "@/types/website/reports";
+import type { PropertyStatsResponse } from "@/types/website/reports";
 
 interface GetMarketMovementProps {
   queryParams: {
-    period: string; // e.g. "1 month"
-    area: string;   // e.g. "الإنشاءات"
+    city: string;
+    area: string;
+    year: number;
+    month: number;
   };
 }
 
 export default async function getMarketMovement({
   queryParams,
-}: GetMarketMovementProps): Promise<GetMarketMovementResponse> {
-  const { period, area } = queryParams ?? {};
+}: GetMarketMovementProps): Promise<PropertyStatsResponse> {
+  const { city, area, year, month } = queryParams ?? {};
 
-  if (!period || !area) {
-    throw new Error("Both `period` and `area` are required for getMarketMovement API.");
+  if (!city || !area || !year || !month) {
+    throw new Error("All parameters are required for getMarketMovement API.");
   }
 
-  const res = await axiosClient.get<GetMarketMovementResponse>("/market_watcher/", {
-    params: { period, area },
+  const res = await axiosClient.get<PropertyStatsResponse>("/get_property_stats/", {
+    params: { city, area, year, month, t: Date.now() }, // ✅ add timestamp to bypass browser caching
   });
-  console.log("results "+res)
 
   return res.data;
 }
-

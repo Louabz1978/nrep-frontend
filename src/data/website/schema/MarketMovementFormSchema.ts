@@ -4,7 +4,8 @@ import Joi from "joi";
 
 export type MarketMovementFormType = {
   area: TString;
-  period: TString;
+  year: number;
+  month: number;
 };
 
 export const MarketMovementFormSchema = Joi.object<MarketMovementFormType>({
@@ -12,13 +13,18 @@ export const MarketMovementFormSchema = Joi.object<MarketMovementFormType>({
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المنطقة"),
-  period: Joi.string()
+  year: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("الفترة"),
+    .label("السنة"),
+  month: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الشهر"),
 });
 
 export const marketMovementFormInitialValues: MarketMovementFormType = {
-  area: null,
-  period: null,
+  area: null, 
+  year: 0,
+  month: 0,
 };

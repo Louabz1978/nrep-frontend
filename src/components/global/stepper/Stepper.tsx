@@ -23,10 +23,10 @@ const Stepper = ({ currentStep, steps }: StepperProps) => {
           const isCompleted = index < currentStep;
           // Color classes
           const base = isActive
-            ? "bg-primary text-inverse-fg"
+            ? "bg-secondary text-inverse-fg"
             : isCompleted
-            ? "bg-primary text-inverse-fg"
-            : "bg-secondary text-inverse-fg";
+            ? "bg-secondary text-inverse-fg"
+            : "bg-primary text-inverse-fg";
           // Only allow going back to previous steps, not forward
           // Prevent clicking on the first step if already on the first step
           const isClickable = index <= currentStep + 1;

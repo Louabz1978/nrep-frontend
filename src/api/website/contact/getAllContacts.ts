@@ -2,7 +2,7 @@ import axiosClient from "@/libs/axios/axios-client";
 import type { AxiosRes } from "@/types/global/axios";
 import type { PaginationData } from "@/types/global/pagination";
 import type {
-  ContactWithUser,
+  Contact,
   GetAllContactsProps,
   GetAllContactsResult,
 } from "@/types/website/contact";
@@ -13,14 +13,15 @@ import type {
 async function getAllContacts({
   queryParams,
 }: GetAllContactsProps): GetAllContactsResult {
-  const res = await axiosClient.get<
-    AxiosRes<PaginationData<ContactWithUser[]>>
-  >(`consumers/`, {
-    params: {
-      ...queryParams,
-      page: queryParams?.page ?? 1,
-    },
-  });
+  const res = await axiosClient.get<AxiosRes<PaginationData<Contact[]>>>(
+    `consumers/`,
+    {
+      params: {
+        ...queryParams,
+        page: queryParams?.page ?? 1,
+      },
+    }
+  );
 
   return res?.data;
 }

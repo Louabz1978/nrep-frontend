@@ -9,6 +9,7 @@ async function createContract({
   mls,
   id,
   ipAddress,
+  isCreate,
 }: any): CreateContractResult {
   const formData = new FormData();
   formData.append("contract_json", json);
@@ -20,7 +21,7 @@ async function createContract({
     },
   });
 
-  return res?.data;
+  return { ...(res?.data ?? {}), isCreate };
 }
 
 export default createContract;

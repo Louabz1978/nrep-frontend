@@ -6,44 +6,47 @@ import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgentReport } from "@/types/website/reports";
 import useGetTopAgent from "@/hooks/website/reports/useGetTopAgent";
-import { Input } from "@/components/global/ui/input";
-import { Label } from "@/components/global/ui/label";
 import { useState } from "react";
-import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
+import { Radio } from "@/components/global/ui/radio";
 
 const TopAgent = () => {
-  // Set default values for month and year as 9 and 2025
-  const [month, setMonth] = useState("9");
-  const [year, setYear] = useState("2025");
+  // Default values for month and year as 9 and 2025
+  const month = "9";
+  const year = "2025";
   const { topAgent, getTopAgentQuery } = useGetTopAgent({
     month,
     year,
   });
 
+  const [period, setPeriod] = useState<"current" | "previous">("current");
+
   const columns: ColumnDef<TopAgentReport>[] = useMemo(
     () => [
       {
-        accessorKey: "rank",
+        id: "rank",
         header: "#",
+        cell: ({ row }) => {
+          return row?.index + 1;
+        },
         size: 10,
       },
       {
-        accessorKey: "broker_license",
+        accessorKey: "license_number",
         header: "رخصة الوسيط العقاري",
         size: 20,
       },
       {
-        accessorKey: "broker_name",
+        accessorKey: "full_name",
         header: "اسم الوسيط العقاري",
         size: 30,
       },
       {
-        accessorKey: "closed_properties",
+        accessorKey: "closed_count",
         header: "عدد العقارات المغلقة",
         size: 10,
       },
       {
-        accessorKey: "sold_rented_total",
+        accessorKey: "total_price",
         header: "مجموع المباع و المؤجر",
         size: 10,
       },
@@ -51,62 +54,74 @@ const TopAgent = () => {
     []
   );
 
-  // Defensive: fallback to empty array if topAgent or its properties are missing
-  const currentResults =
-    (topAgent && "results" in topAgent && Array.isArray((topAgent as any).results)
-      ? (topAgent as any).results
-      : []) as TopAgentReport[];
+  type TopAgentResponse = {
+    results?: TopAgentReport[];
+    previous_results?: TopAgentReport[];
+  };
 
-  const previousResults =
-    (topAgent && "previous_results" in topAgent && Array.isArray((topAgent as any).previous_results)
-      ? (topAgent as any).previous_results
-      : []) as TopAgentReport[];
+  const response = topAgent as Partial<TopAgentResponse> | undefined;
+
+  const currentResults: TopAgentReport[] = Array.isArray(response?.results)
+    ? (response!.results as TopAgentReport[])
+    : [];
+
+  const previousResults: TopAgentReport[] = Array.isArray(
+    response?.previous_results
+  )
+    ? (response!.previous_results as TopAgentReport[])
+    : [];
 
   return (
     <AnimateContainer>
-      <FormSectionHeader>أفضل عشرة وكلاء</FormSectionHeader>
       <PageContainer>
-        <div className="flex gap-4 mb-4">
-          <div>
-            <Label htmlFor="month">الشهر</Label>
-            <Input
-              id="month"
-              type="number"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              placeholder="الشهر"
-            />
+        {/* Responsive controls for month/year can be added here if needed */}
+        <div className="mb-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-size24 sm:text-size30 font-medium mb-md sm:mb-xl text-center sm:text-right">
+              تقرير أفضل عشر وسطاء عقاريين
+            </h1>
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-12 mb-2 sm:mb-4">
+              <div className="flex flex-row items-center gap-4 sm:gap-10 w-full sm:w-auto justify-center">
+                <Radio
+                  name="period"
+                  value="current"
+                  label="الشهر الحالي"
+                  checked={period === "current"}
+                  onChange={() => setPeriod("current")}
+                  ariaLabel="الشهر الحالي"
+                />
+                <Radio
+                  name="period"
+                  value="previous"
+                  label="الشهر السابق"
+                  checked={period === "previous"}
+                  onChange={() => setPeriod("previous")}
+                  ariaLabel="الشهر السابق"
+                />
+              </div>
+            </div>
           </div>
-          <div>
-            <Label htmlFor="year">السنة</Label>
-            <Input
-              id="year"
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              placeholder="السنة"
-            />
-          </div>
+          <hr className="mt-2" />
         </div>
-        <h2 className="text-center text-2xl font-bold mb-4 mt-4xl">
-          تقرير الشهر الحالي
-        </h2>
-        <DataTable
-          prefix={TABLE_PREFIXES.top_agent}
-          columns={columns}
-          data={currentResults}
-          query={getTopAgentQuery}
-        />
-
-        <h2 className="text-center text-2xl font-bold mt-8 mb-4">
-          تقرير الشهر السابق
-        </h2>
-        <DataTable
-          prefix={TABLE_PREFIXES.top_agent}
-          columns={columns}
-          data={previousResults}
-          query={getTopAgentQuery}
-        />
+        <div className="w-full overflow-x-auto">
+          {period === "current" ? (
+            <DataTable
+              report={true}
+              prefix={TABLE_PREFIXES.top_agent}
+              columns={columns}
+              data={currentResults}
+              query={getTopAgentQuery}
+            />
+          ) : (
+            <DataTable
+              report={true}
+              prefix={TABLE_PREFIXES.top_agent}
+              columns={columns}
+              data={previousResults}
+              query={getTopAgentQuery}
+            />
+          )}
+        </div>
       </PageContainer>
     </AnimateContainer>
   );

@@ -76,7 +76,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             >
               <PopoverTrigger asChild>
                 <button
-                  className={`flex items-center border-b border-secondary-border last:border-b-0 justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
+                  className={`flex items-center justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
                     isCurrentPath || hasCurrentChild
                       ? "text-primary font-medium"
                       : isOpen
@@ -95,10 +95,10 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
               <PopoverContent
                 side="left"
                 align="start"
-                className="w-56 ml-1 !bg-quaternary-bg !p-0 rounded-[8px]"
+                className="w-56 ml-1 !bg-quaternary-bg !p-0 rounded-[12px] overflow-hidden"
                 sideOffset={5}
               >
-                <div className="space-y-1">
+                <div className="space-y-0">
                   {renderSubMenu(item.submenu, level + 1)}
                 </div>
               </PopoverContent>
@@ -111,8 +111,8 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             key={index}
             to={item.to}
             onClick={() => setOpenPopovers([])}
-            className={`flex items-center border-b border-secondary-border last:border-b-0 justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
-              isCurrentPath ? "text-tertiary-bg " : "text-tertiary-bg"
+            className={`flex items-center justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
+              isCurrentPath ? "text-tertiary-bg bg-golden-medium" : "text-tertiary-bg"
             }`}
           >
             {item.label}
@@ -120,8 +120,8 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
         ) : (
           <span
             key={index}
-            className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer  ${
-              isCurrentPath ? "text-tertiary-bg" : "text-tertiary-bg"
+            className={`group flex flex-col items-center text-size18 text-inverse-fg cursor-pointer px-4 py-2 ${
+              isCurrentPath ? "text-tertiary-bg bg-golden-medium" : "text-tertiary-bg"
             }`}
           >
             {item.label}
@@ -190,10 +190,10 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-35 mt-0 border-none bg-golden-medium !p-0 rounded-[8px]"
+                  className="w-35 mt-0 border-none bg-golden-medium/75 !p-0 rounded-[12px] overflow-hidden"
                   sideOffset={8}
                 >
-                  <div className="space-y-1">{renderSubMenu(tab.submenu)}</div>
+                  <div className="space-y-0">{renderSubMenu(tab.submenu)}</div>
                 </PopoverContent>
               </Popover>
             );

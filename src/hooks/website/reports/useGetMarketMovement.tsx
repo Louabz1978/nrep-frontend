@@ -3,30 +3,35 @@ import QUERY_KEYS from "@/data/global/queryKeys";
 import getMarketMovement from "@/api/website/reports/getMarketMovement";
 
 interface IUseGetMarketMovement {
+  city: string;
   area: string;
-  period: string;
+  year: number;
+  month: number;
 }
 
-function useGetMarketMovement({ area, period }: IUseGetMarketMovement) {
-  const getMarketMovementQuery = useQuery({
-    queryKey: [QUERY_KEYS.reports.getMarketMovement, area, period],
-    queryFn: () =>
-      getMarketMovement({
-        queryParams: {
-          area,
-          period,
-        },
-      }),
-    enabled: !!area && !!period,
+function useGetMarketMovement({ city, area, year, month }: IUseGetMarketMovement) {
+  const query = useQuery({
+    queryKey: [QUERY_KEYS.reports.getMarketMovement, city, area, year, month],
+    queryFn: () => {
+      console.log("API call with params:", { city, area, year, month });
+      return getMarketMovement({
+        queryParams: { city, area, year, month },
+      });
+    },
+    enabled: !!city && !!area && !!year && !!month,
     retry: false,
     refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    // Force refetch every time (no cache)
+    staleTime: 0,
+    gcTime: 0,
   });
 
-  const marketMovement = getMarketMovementQuery.data;
-
   return {
-    getMarketMovementQuery,
-    marketMovement,
+    ...query,
+    marketMovement: query.data,
+    getMarketMovementQuery: query,
   };
 }
 

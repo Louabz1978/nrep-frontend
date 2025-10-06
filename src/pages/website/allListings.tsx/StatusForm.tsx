@@ -61,6 +61,8 @@ function StatusForm({ row }: { row: Row<Listing> }) {
     mode: "onChange",
   });
 
+  const { handleSubmit } = closingForm;
+
   const handleCloseFormSubmit = (data: ClosingFormData) => {
     handleCloseListing(row?.original?.mls_num, {
       ...data,
@@ -173,7 +175,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
             <Form {...closingForm}>
               <form
                 id="closing_form"
-                onSubmit={closingForm.handleSubmit(handleCloseFormSubmit)}
+                onSubmit={handleSubmit(handleCloseFormSubmit)}
                 className="flex flex-col gap-md"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
@@ -182,7 +184,7 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                     name="buyer_agent"
                     label="وكيل المشتري"
                     placeholder="أدخل اسم وكيل المشتري"
-                    choices={allContacts}
+                    choices={allContacts ?? []}
                     keyValue="consumer_id"
                     showValue="name"
                     required

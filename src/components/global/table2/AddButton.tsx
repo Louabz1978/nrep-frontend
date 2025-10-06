@@ -1,28 +1,17 @@
 import { Link } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip/Tooltiop";
-import { PiPlusCircle } from "react-icons/pi";
-import { Button } from "../form/button/Button";
+import { FaPlus } from "react-icons/fa6";
 
-type Props = { to: string };
+type Props = { to: string; addLabel?: string };
 
-const AddButton = ({ to }: Props) => {
+const AddButton = ({ to, addLabel = "إضافة جهة اتصال" }: Props) => {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Link to={to}>
-          <Button
-            className="bg-digital-green-bg !size-4xl border-0 rounded-md cursor-pointer flex justify-center items-center"
-            size={"icon"}
-          >
-            <PiPlusCircle
-              strokeWidth={1.4}
-              className="text-inverse-fg size-3xl"
-            />
-          </Button>
-        </Link>
-      </TooltipTrigger>
-      <TooltipContent>إضافة جهة اتصال</TooltipContent>
-    </Tooltip>
+    <Link
+      to={to}
+      className="flex items-center justify-between gap-xl bg-primary p-sm rounded-md text-tertiary-bg"
+    >
+      <span>{addLabel}</span>
+      <FaPlus />
+    </Link>
   );
 };
 

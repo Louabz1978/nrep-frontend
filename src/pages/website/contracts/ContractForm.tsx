@@ -12,6 +12,7 @@ import {
 import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 import { useUser } from "@/stores/useUser";
 import type { ContactWithUser } from "@/types/website/contact";
+import { getUserIP, getCurrentDateTime } from "@/utils/getUserIP";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
@@ -39,6 +40,11 @@ function ContractForm({
   const [disabled2, setDisabled2] = useState(true);
   const [checkbox1, setCheckBox1] = useState(false);
   const [checkbox2, setCheckBox2] = useState(false);
+  const [userIP, setUserIP] = useState<string>("");
+  const [signingDate, setSigningDate] = useState<string>("");
+  const [signatureInfo, setSignatureInfo] = useState<{
+    [key: string]: { ip: string; date: string };
+  }>({});
 
   const { allContacts } = useGetAllContacts();
 
@@ -74,7 +80,7 @@ function ContractForm({
     <button
       data-print-hidden={true}
       type="button"
-      className="flex items-center justify-center w-8 h-8 bg-blue-500 hover:bg-blue-600 cursor-pointer text-white rounded-full"
+      className="flex items-center justify-center w-8 h-8 bg-primary hover:bg-primary/90 cursor-pointer text-white rounded-full"
       onClick={onClick}
     >
       <FaPlus className="text-sm" />
@@ -85,7 +91,7 @@ function ContractForm({
     <button
       data-print-hidden={true}
       type="button"
-      className="flex items-center justify-center w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full"
+      className="flex items-center justify-center w-8 h-8 bg-umber-light hover:bg-umber-light/90 text-white rounded-full"
       onClick={onClick}
     >
       <FaXmark className="text-sm" />
@@ -112,8 +118,8 @@ function ContractForm({
         pool: propertyByMls?.pool || false,
       };
 
-  const userId = user?.user_id ?? user?.data?.user_id;
-  const userData = user?.data ?? user;
+  const userId = user?.user_id;
+  const userData = user;
   const buyer_agent_id = useWatch({
     control: form.control,
     name: "buyer_agent_id",
@@ -229,6 +235,31 @@ function ContractForm({
     control: form.control,
     name: "seller_agent_id",
   });
+
+  // Get IP address when in sign mode (not create mode)
+  useEffect(() => {
+    if (!isCreate) {
+      const fetchIP = async () => {
+        const ip = await getUserIP();
+        setUserIP(ip);
+        setSigningDate(getCurrentDateTime());
+      };
+      fetchIP();
+    }
+  }, [isCreate]);
+
+  // Function to handle signature completion
+  const handleSignatureComplete = (signatureKey: string) => {
+    if (userIP && signingDate) {
+      setSignatureInfo((prev) => ({
+        ...prev,
+        [signatureKey]: {
+          ip: userIP,
+          date: signingDate,
+        },
+      }));
+    }
+  };
 
   // Populate form when propertyByMls changes
   useEffect(() => {
@@ -464,6 +495,7 @@ function ContractForm({
                     variant="contract"
                     form={form}
                     name={`buyers.${index}.buyer_name`}
+                    preventRemove={!isCreate}
                     onChange={() => setRenderBuyers((prev) => prev + 1)}
                     disabled={!isCreate}
                   />
@@ -510,16 +542,20 @@ function ContractForm({
                     disabled={true}
                   />
                 </div>
-                <div className="flex items-center">
-                  {controlledBuyers.length > 1 && (
-                    <RemoveButton onClick={() => buyers.remove(index)} />
-                  )}
-                </div>
+                {isCreate ? (
+                  <div className="flex items-center">
+                    {controlledBuyers.length > 1 && (
+                      <RemoveButton onClick={() => buyers.remove(index)} />
+                    )}
+                  </div>
+                ) : null}
               </div>
             ))}
-            <div className="self-start">
-              <AddButton onClick={() => buyers.append(buyerInitialValues)} />
-            </div>
+            {isCreate ? (
+              <div className="self-start">
+                <AddButton onClick={() => buyers.append(buyerInitialValues)} />
+              </div>
+            ) : null}
           </div>
           <div className="pt-3xl">
             <p>
@@ -1153,7 +1189,7 @@ function ContractForm({
               ("الإغلاق") ما لم يتم تعديله بأحكام أخرى.
             </p>
           </div>
-          <div className="mt-3xl">
+          <div className="mt-7xl">
             <FormSectionHeader>التواقيع</FormSectionHeader>
 
             <div className="flex flex-col gap-[40px] items-start justify-center mt-3xl">
@@ -1184,7 +1220,23 @@ function ContractForm({
                           }
                           form={form}
                           name={`sellers.${index}.seller_signature`}
+                          onSignatureComplete={() =>
+                            handleSignatureComplete(`seller_${index}`)
+                          }
                         />
+                        {/* Signature Info Display */}
+                        {!isCreate && signatureInfo[`seller_${index}`] && (
+                          <div className="mt-2 text-center">
+                            <div className="text-xs text-primary">
+                              <div>
+                                IP: {signatureInfo[`seller_${index}`].ip}
+                              </div>
+                              <div>
+                              تاريخ التوقيع : {signatureInfo[`seller_${index}`].date}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -1209,7 +1261,19 @@ function ContractForm({
                         : form.watch("seller_agent_signature")
                     }
                     name="seller_agent_signature"
+                    onSignatureComplete={() =>
+                      handleSignatureComplete("seller_agent")
+                    }
                   />
+                  {/* Signature Info Display */}
+                  {!isCreate && signatureInfo["seller_agent"] && (
+                    <div className="mt-2 text-center">
+                      <div className="text-xs text-primary">
+                        <div>IP: {signatureInfo["seller_agent"].ip}</div>
+                        <div>تاريخ التوقيع : {signatureInfo["seller_agent"].date}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-[30px] items-start">
@@ -1238,7 +1302,23 @@ function ContractForm({
                               ? undefined
                               : form.watch(`buyers.${index}.buyer_signature`)
                           }
+                          onSignatureComplete={() =>
+                            handleSignatureComplete(`buyer_${index}`)
+                          }
                         />
+                        {/* Signature Info Display */}
+                        {!isCreate && signatureInfo[`buyer_${index}`] && (
+                          <div className="mt-2 text-center">
+                            <div className="text-xs text-primary">
+                              <div>
+                                IP: {signatureInfo[`buyer_${index}`].ip}
+                              </div>
+                              <div>
+                              تاريخ التوقيع : {signatureInfo[`buyer_${index}`].date}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -1261,7 +1341,19 @@ function ContractForm({
                       isCreate ? undefined : form.watch("buyer_agent_signature")
                     }
                     name="buyer_agent_signature"
+                    onSignatureComplete={() =>
+                      handleSignatureComplete("buyer_agent")
+                    }
                   />
+                  {/* Signature Info Display */}
+                  {!isCreate && signatureInfo["buyer_agent"] && (
+                    <div className="mt-2 text-center">
+                      <div className="text-xs text-primary">
+                        <div>IP: {signatureInfo["buyer_agent"].ip}</div>
+                        <div> تاريخ التوقيع : {signatureInfo["buyer_agent"].date}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1273,14 +1365,23 @@ function ContractForm({
         >
           <Button
             className="w-[200px]"
-            onClick={handleSubmit((data) =>
+            onClick={handleSubmit((data) => {
+              // Include signature info for each signature in sign mode
+              const contractData = !isCreate
+                ? {
+                    ...data,
+                    signature_info: signatureInfo,
+                  }
+                : data;
+
               handleAddContract(
-                data,
+                contractData,
                 contractRef,
                 data?.mls,
-                data?.sellers?.[0]?.id
-              )
-            )}
+                data?.sellers?.[0]?.id,
+                isCreate
+              );
+            })}
             disabled={isSubmitting}
           >
             {isSubmitting ? "جار الإرسال..." : "تأكيد"}

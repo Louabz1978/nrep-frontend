@@ -9,9 +9,9 @@ const updateContact = async ({
   data,
   id,
 }: UpdateContactProps): UpdateContactResult => {
-  const formData = createFormData(data);
+  // const formData = createFormData(data);
 
-  const response = await axiosClient.put(`consumers/${id}`, formData);
+  const response = await axiosClient.put(`consumers/${id}`, data);
   return { ...(response.data ?? {}), id };
 };
 

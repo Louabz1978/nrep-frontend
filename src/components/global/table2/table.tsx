@@ -42,6 +42,9 @@ import { type UseQueryResult } from "@tanstack/react-query";
 import RowSkeletonLoader from "./row-skeleton-loader";
 import EmptyCell from "./empty-cell";
 import AddButton from "./AddButton";
+import { FaPlus } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 type FilterItem = Omit<ColumnSearchProps, "state">;
 export type Filters = FilterItem[];
@@ -65,6 +68,9 @@ interface DataTableProps<TData, TValue, TRow> {
   searchPlaceholder?: string;
   searchType?: "text" | "number";
   show?: boolean;
+  addLabel?: string;
+  showActionButtons?: boolean;
+  report?: boolean;
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -85,6 +91,9 @@ export function DataTable<TData, TValue, TRow>({
   searchPlaceholder = "بحث...",
   searchType = "text",
   show,
+  addLabel,
+  showActionButtons = false,
+  report = false,
 }: DataTableProps<TData, TValue, TRow>) {
   const id = useId();
 
@@ -113,9 +122,7 @@ export function DataTable<TData, TValue, TRow>({
   };
 
   // allowed filters
-  const [allowedFilters, setAllowedFilters] = useState(
-    filters?.map((f) => f.id) || []
-  );
+  const [allowedFilters, setAllowedFilters] = useState<string[]>([]);
 
   return (
     <div className="flex flex-col flex-1 gap-xl">
@@ -162,79 +169,104 @@ export function DataTable<TData, TValue, TRow>({
               ))}
             </colgroup>
 
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="bg-white">
-                  <TableHead
-                    colSpan={table.getCenterLeafHeaders().length}
-                    className="relative"
-                  >
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-3xl flex-wrap items-center">
-                        <TableSearch
-                          prefix={prefix}
-                          wrapperClassName="w-fit min-w-[200px]"
-                          searchKey={searchKey}
-                          searchPlaceholder={searchPlaceholder}
-                          searchType={searchType}
-                        />
-                        {filters && filters.length > 0 ? (
-                          <Fragment>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <Button size={"sm"} className="!rounded-sm">
-                                  <ListFilterPlus className="size-2xl" />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent className="w-[220px] p-lg rounded-sm bg-tertiary-bg">
-                                <p className="mb-lg">{"الفلتر"}</p>
+            <TableHeader report={report}>
+              {table.getHeaderGroups().map((headerGroup) =>
+                !report ? (
+                  <TableRow key={headerGroup.id} className="bg-white">
+                    <TableHead
+                      colSpan={table.getCenterLeafHeaders().length}
+                      className="relative"
+                    >
+                      <div className="flex justify-between items-center p-2xl">
+                        <div className="flex items-center justify-between gap-lg">
+                          <SettingsButton id={id} />
+                          {show && (
+                            <AddButton to={`${to}`} addLabel={addLabel} />
+                          )}
+                          {showActionButtons && (
+                            <>
+                              <Link
+                                to=""
+                                className="flex items-center justify-between gap-xl bg-umber-light p-sm rounded-md text-tertiary-bg "
+                              >
+                                <p>حذف عقار</p>
+                                <FaRegTrashAlt />
+                              </Link>
+                            </>
+                          )}
+                        </div>
+                        <div className="flex gap-lg flex-wrap items-center flex-row-reverse">
+                          <TableSearch
+                            prefix={prefix}
+                            wrapperClassName="w-fit min-w-[150px]"
+                            searchKey={searchKey}
+                            searchPlaceholder={searchPlaceholder}
+                            searchType={searchType}
+                          />
+                          {filters && filters.length > 0 ? (
+                            <Fragment>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <Button
+                                    size={"sm"}
+                                    className="!rounded-sm bg-tertiary-bg !text-black border-1 border-gray-400"
+                                  >
+                                    <ListFilterPlus className="size-2xl" />
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[180px] p-md rounded-sm bg-tertiary-bg">
+                                  <p className="mb-lg">{"الفلتر"}</p>
 
-                                {filters.map((f) => {
-                                  return (
-                                    <Label
-                                      className="flex items-center"
-                                      key={f.id}
-                                    >
-                                      <Checkbox
-                                        className="capitalize me-md"
-                                        checked={allowedFilters.includes(f.id)}
-                                        onCheckedChange={(value) => {
-                                          setAllowedFilters((pre) =>
-                                            value
-                                              ? [...pre, f.id]
-                                              : pre.filter((id) => id !== f.id)
-                                          );
-                                        }}
-                                      />
-                                      <span>{f.label}</span>
-                                    </Label>
-                                  );
-                                })}
-                              </PopoverContent>
-                            </Popover>
-                            {filters.map((filter) => {
-                              return (
-                                <ColumnSearch
-                                  state={[allowedFilters, setAllowedFilters]}
-                                  {...filter}
-                                  key={filter.id}
-                                  prefix={prefix}
-                                />
-                              );
-                            })}
-                          </Fragment>
-                        ) : null}
+                                  {filters.map((f) => {
+                                    return (
+                                      <Label
+                                        className="flex items-center"
+                                        key={f.id}
+                                      >
+                                        <Checkbox
+                                          className="capitalize me-md"
+                                          checked={allowedFilters.includes(
+                                            f.id
+                                          )}
+                                          onCheckedChange={(value) => {
+                                            setAllowedFilters((pre) =>
+                                              value
+                                                ? [...pre, f.id]
+                                                : pre.filter(
+                                                    (id) => id !== f.id
+                                                  )
+                                            );
+                                          }}
+                                        />
+                                        <span>{f.label}</span>
+                                      </Label>
+                                    );
+                                  })}
+                                </PopoverContent>
+                              </Popover>
+                              {filters.map((filter) => {
+                                return (
+                                  <ColumnSearch
+                                    state={[allowedFilters, setAllowedFilters]}
+                                    {...filter}
+                                    key={filter.id}
+                                    prefix={prefix}
+                                  />
+                                );
+                              })}
+                            </Fragment>
+                          ) : null}
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between gap-lg">
-                        {show && <AddButton to={`${to}`} />}
-                        <SettingsButton id={id} />
-                      </div>
-                    </div>
-                  </TableHead>
-                </TableRow>
-              ))}
+                    </TableHead>
+                  </TableRow>
+                ) : null
+              )}
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="bg-white">
+                <TableRow
+                  key={headerGroup.id}
+                  className={cn(report ? "bg-primary" : "bg-tertiary-bg")}
+                >
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
@@ -245,10 +277,18 @@ export function DataTable<TData, TValue, TRow>({
                         {header.isPlaceholder ? null : (
                           <div
                             className={cn(
-                              "flex items-center gap-2 font-bold ",
+                              "flex items-center justify-center gap-2 font-bold ",
                               header.column.getCanSort()
-                                ? "cursor-pointer select-none text-primary-fg hover:text-primary-fg"
-                                : "text-secondary-fg"
+                                ? `cursor-pointer select-none ${
+                                    report
+                                      ? "text-inverse-fg"
+                                      : "text-primary-fg hover:text-primary-fg"
+                                  } `
+                                : `${
+                                    report
+                                      ? "text-inverse-fg"
+                                      : "text-secondary-fg"
+                                  }`
                             )}
                             onClick={header.column.getToggleSortingHandler()}
                           >
@@ -256,7 +296,7 @@ export function DataTable<TData, TValue, TRow>({
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            {header.column.getCanSort() && (
+                            {header.column.getCanSort() && !report && (
                               <span className="flex flex-col">
                                 <ChevronUp
                                   size={14}
@@ -287,7 +327,7 @@ export function DataTable<TData, TValue, TRow>({
               ))}
             </TableHeader>
 
-            <TableBody>
+            <TableBody className="">
               <StatusManager
                 Loader={() => <RowSkeletonLoader table={table} />}
                 loaderCount={10}
@@ -311,12 +351,15 @@ export function DataTable<TData, TValue, TRow>({
                     onClick={() => onRowClick?.(row as TRow)}
                     className={cn(
                       onRowClick ? "cursor-pointer" : "",
+                      report ? "border-b border-gray-300 last:border-b-0" : "",
                       selectedRows?.find(
                         (ele) =>
                           (ele as { id: string })?.id ==
                           (row?.original as { id: string })?.id
                       )
                         ? "bg-primary-bg"
+                        : report
+                        ? "bg-tertiary-bg"
                         : index % 2 === 0
                         ? "bg-[#edebe0]"
                         : "bg-tertiary-bg"
@@ -326,7 +369,7 @@ export function DataTable<TData, TValue, TRow>({
                       <TableCell
                         key={cell.id}
                         style={{ width: `${cell.column.getSize()}px` }}
-                        className="max-w-[150px]"
+                        className="max-w-[150px] text-center"
                       >
                         {(cell.getValue() !== undefined &&
                           cell.getValue() !== null &&
@@ -348,19 +391,29 @@ export function DataTable<TData, TValue, TRow>({
           </Table>
         </ScrollArea>
 
-        <div className="flex items-center justify-between space-x-md py-lg px-lg">
-          <div className="flex-1 text-sm text-secondary-fg">
-            {`تم تحديد ${table.getFilteredSelectedRowModel().rows.length} من
-            ${table.getFilteredRowModel().rows.length}`}
+        {!report && (
+          <div className="flex items-center justify-between space-x-md py-lg px-lg">
+            <div className="flex-1 text-sm text-secondary-fg">
+              <span className="hidden sm:inline">
+                {`تم تحديد ${
+                  table.getFilteredSelectedRowModel().rows.length
+                } من ${table.getFilteredRowModel().rows.length}`}
+              </span>
+              <span className="inline sm:hidden">
+                {`${table.getFilteredSelectedRowModel().rows.length} من ${
+                  table.getFilteredRowModel().rows.length
+                }`}
+              </span>
+            </div>
+            <div className="flex-1 flex justify-center">
+              <DynamicPagination
+                prefix={prefix}
+                totalPageCount={totalPageCount}
+              />
+            </div>
+            <div className="flex-1" />
           </div>
-          <div className="flex-1 flex justify-center">
-            <DynamicPagination
-              prefix={prefix}
-              totalPageCount={totalPageCount}
-            />
-          </div>
-          <div className="flex-1" />
-        </div>
+        )}
       </div>
       <SideModal size="sm" title={"إعدادات الجدول"} id={`table-${id}`}>
         <div className="space-y-3xl">

@@ -139,7 +139,12 @@ export const useSessionManager = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       clearTimers();
     };
-  }, [scheduleTimers, clearTimers, user?.user_id, user?.data?.user_id]);
+  }, [
+    scheduleTimers,
+    clearTimers,
+    user?.user_id,
+    (user as unknown as { data: { user_id: number } })?.data?.user_id,
+  ]);
 
   return { refreshSession };
 };

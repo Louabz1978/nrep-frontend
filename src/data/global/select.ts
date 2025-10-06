@@ -79,16 +79,16 @@ export const STATUS_WITH_CLOSED: StatusOption[] = [
 // Status colors type
 export type StatusColorKey = PropertyStatus;
 export const STATUS_COLORS: Record<StatusColorKey, string> = {
-  [PropertyStatus.ACTIVE]: "bg-[#428177] border-[#428177]",
-  [PropertyStatus.PENDING]: "bg-[#B9A779] border-[#B9A779]",
-  [PropertyStatus.CLOSED]: "bg-[#6B1F2A] border-[#6B1F2A]",
-  [PropertyStatus.OUT_OF_MARKET]: "bg-grey/50 border-grey/50",
+  [PropertyStatus.ACTIVE]: "bg-active-bg ",
+  [PropertyStatus.PENDING]: "bg-pending-bg ",
+  [PropertyStatus.CLOSED]: "bg-closing-bg ",
+  [PropertyStatus.OUT_OF_MARKET]: "bg-unactive-bg/25 ",
 };
 export const STATUS_TEXT: Record<StatusColorKey, string> = {
-  [PropertyStatus.ACTIVE]: "text-green",
-  [PropertyStatus.PENDING]: "text-yellow",
-  [PropertyStatus.CLOSED]: "text-red",
-  [PropertyStatus.OUT_OF_MARKET]: "text-grey",
+  [PropertyStatus.ACTIVE]: "!text-active-text",
+  [PropertyStatus.PENDING]: "!text-pending-text",
+  [PropertyStatus.CLOSED]: "!text-closing-text",
+  [PropertyStatus.OUT_OF_MARKET]: "text-secondary-fg",
 };
 
 // Water line options

@@ -437,7 +437,7 @@ function EditContract() {
                 </div>
               </div>
               <div
-                className="rounded-lg overflow-hidden border-2 border-dashed cursor-pointer w-[304px] h-[304px]"
+                className="rounded-lg overflow-hidden  cursor-pointer w-[304px] h-[304px]"
                 onClick={() => {
                   const inputEl = document.getElementById(
                     "file-contract_file"
@@ -526,7 +526,7 @@ function EditContract() {
                   </span>
 
                   <div className="flex gap-[20px] items-start w-full">
-                    <span className="mb-lg text-size18 w-[100px] min-w-[100px] text-start">
+                    <span className=" mb-lg text-size18 w-[130px] min-w-[130px] text-start m-sm">
                       البائع:
                     </span>
                     <div className="flex items-center flex-wrap gap-[15px] flex-1">
@@ -535,7 +535,7 @@ function EditContract() {
                         ?.map((s: EditSeller, index: number) => (
                           <div
                             key={index}
-                            className="flex flex-col items-center gap-[2px] min-w-[180px] border-b border-dashed border-gray-400 pb-1"
+                            className="flex flex-col items-center gap-[2px] min-w-[180px]  pb-1"
                           >
                             {typeof s.name === "string" && s.name ? (
                               <span className="text-center mb-sm text-size16 font-semibold">
@@ -558,10 +558,13 @@ function EditContract() {
 
                   {isSellerAgent && (
                     <div className="flex gap-[20px] items-start w-full">
-                      <span className="mb-lg text-size18 w-[100px] min-w-[100px] text-start">
+                      <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                         وكيل البائع:
                       </span>
-                      <div className="flex flex-col items-center gap-[2px] min-w-[180px] border-b border-dashed border-gray-400 pb-1 w-[200px]">
+                      <div
+                        className="flex flex-col items-center gap-[2px] min-w-[180px]
+                       pb-1 w-[200px]"
+                      >
                         <span className="text-center mb-sm text-size16 font-semibold">
                           {userName}
                         </span>
@@ -575,7 +578,7 @@ function EditContract() {
                   )}
 
                   <div className="flex gap-[20px] items-start w-full">
-                    <span className="mb-lg text-size18 w-[100px] min-w-[100px] text-start">
+                    <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start m-sm">
                       المشتري:
                     </span>
                     <div className="flex items-center flex-wrap gap-[15px] flex-1">
@@ -584,7 +587,7 @@ function EditContract() {
                         ?.map((b: EditBuyer, index: number) => (
                           <div
                             key={index}
-                            className="flex flex-col items-center gap-[2px] min-w-[180px] border-b border-dashed border-gray-400 pb-1"
+                            className="flex flex-col items-center gap-[2px] min-w-[180px]  pb-1"
                           >
                             {(b.name as TOption)?.value ? (
                               <span className="text-center mb-sm text-size16 font-semibold">
@@ -603,10 +606,10 @@ function EditContract() {
 
                   {isBuyerAgent && ( // Show buyer agent signature if selected
                     <div className="flex gap-[20px] items-start w-full">
-                      <span className="mb-lg text-size18 w-[100px] min-w-[100px] text-start">
+                      <span className="mb-lg text-size18 w-[130px] min-w-[130px] text-start">
                         وكيل المشتري:
                       </span>
-                      <div className="flex flex-col items-center gap-[2px] min-w-[180px] border-b border-dashed border-gray-400 pb-1 w-[200px]">
+                      <div className="flex flex-col items-center gap-[2px] min-w-[180px]  pb-1 w-[200px]">
                         <span className="text-center mb-sm text-size16 font-semibold">
                           {userName}
                         </span>

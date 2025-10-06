@@ -39,84 +39,90 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
       <div
         className={`w-full h-screen flex items-center justify-center `}
         style={{
-          backgroundImage: "radial-gradient(circle, #00A891 0%, #054239 80%)",
+          backgroundImage:
+            "radial-gradient(circle, #0DA891 ,#054239)",
         }}
       >
         <div
           className={`
-            w-[420px] max-w-full 
-            rounded-3xl p-10
-            border-[#B9A7797D] 
+            w-[410px] max-w-full
+            h-[498px]
+            gap-[16px]
+            px-[80px]
+            py-[40px]
+            border-[var(--login-primary)] 
              bg-white 
             border-[2px]
-            flex flex-col items-center gap-8
+              rounded-[28px]
+            flex flex-col items-center
           `}
         >
           <form
             id="login_form"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full flex flex-col items-center gap-8"
+            className="w-full flex flex-col items-center"
           >
             {/* logo + title */}
-            <div className="flex flex-col items-center gap-4">
-              <Link to={"/"} className="w-24 h-24 rounded-full overflow-hidden">
+            <div className="flex flex-col items-center gap-3">
+              <Link
+                to={"/"}
+                className="w-[100px] h-[100px] rounded-full overflow-hidden"
+              >
                 <img
                   src={logo}
                   alt="NREP"
                   className="w-full h-full object-cover shadow-lg"
                 />
               </Link>
-              <div className="font-bold text-size13 text-[#988561]">
+              <div className="font-medium text-size13 text-[var(--login-text)]">
                 المنصة الوطنية للعقارات - حمص
               </div>
             </div>
-            <span className="text-size24 font-bold">تسجيل الدخول</span>
+            <div className="w-[250px] h-[279px] flex flex-col gap-[24px]">
+              <div className="w-full flex justify-start ">
+                <span className="text-size24 font-bold mt-2">تسجيل الدخول</span>
+              </div>
 
-            <div className="w-full flex flex-col gap-6">
-              <Input
-                form={form}
-                name="username"
-                label="البريد الإلكتروني أو اسم المستخدم:"
-                placeholder="البريد الإلكتروني"
-                labelStyle="!font-bold !text-size13"
-                addingInputStyle="!h-12 !rounded-lg !bg-white/90"
-              />
-              <Input
-                form={form}
-                name="password"
-                type="password"
-                label="كلمة السر:"
-                placeholder="كلمة السر"
-                labelStyle="!font-bold !text-size13"
-                addingInputStyle="!h-12  !rounded-lg !bg-white/90"
-                bottomElement={
-                  <Link
-                    to={"/forgot-password"}
-                    className="text-[12px]  font-bold mt-2 hover:text-[#B9A779] transition-colors"
-                  >
-                    هل نسيت كلمة السر؟
-                  </Link>
-                }
-              />
+              <div className="flex flex-col w-[250px] h-[172px] gap-[8px]">
+                <Input
+                  form={form}
+                  name="username"
+                  label="البريد الإلكتروني"
+                  placeholder="username@gmail.com"
+                  labelStyle="!font-bold mb-2 !text-size13"
+                  addingInputStyle="!h-8 !rounded !p-4 !bg-white/90 !text-size16 placeholder:!text-size13"
+                />
+
+                <Input
+                  form={form}
+                  name="password"
+                  type="password"
+                  label="كلمة السر"
+                  placeholder="ادخل كلمة المرور"
+                  labelStyle="!font-bold mb-2 !text-size13"
+                  addingInputStyle="!h-8 !rounded !p-4 !bg-white/90 !text-size16 placeholder:!text-size13"
+                  bottomElement={
+                    <Link
+                      to={"/forgot-password"}
+                      className="text-size12 d-block font-medium mt-2  transition-colors"
+                    >
+                      هل نسيت كلمة السر؟
+                    </Link>
+                  }
+                />
+              </div>
+              <div className="w-full flex flex-col ">
+                <Button
+                  disabled={login?.isPending}
+                  type="submit"
+                  className="w-full py-4 d-block text-white shadow-md login-button bg-[var(--login-primary)]"
+                >
+                  Sign in{" "}
+                </Button>
+              </div>
             </div>
 
             {/* buttons */}
-            <div className="w-full flex flex-col gap-3">
-              <Button
-                disabled={login?.isPending}
-                type="submit"
-                className="w-full bg-[#B9A779] hover:bg-[#a5966d] text-gray-900 font-extrabold shadow-md"
-              >
-                تسجيل الدخول
-              </Button>
-            </div>
-            <Link
-              to={"/register"}
-              className="text-size12  font-medium mt-2 hover:text-[#B9A779] transition-colors"
-            >
-              ليس لديك حساب؟{" "}
-              <span className="text-size14 font-bold">إنشاء حساب</span>
-            </Link>
           </form>
         </div>
       </div>

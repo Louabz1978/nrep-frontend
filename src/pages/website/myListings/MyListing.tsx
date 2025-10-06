@@ -20,11 +20,6 @@ import {
 } from "@/components/global/tooltip/Tooltiop";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import {
-  PiInfoBold,
-  PiPencilSimpleBold,
-  PiTrashSimpleBold,
-} from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { useUser } from "@/stores/useUser";
 import StatusForm from "../allListings.tsx/StatusForm";
@@ -49,7 +44,7 @@ function MyListings() {
         id: "select",
         header: ({ table }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-whit  "
             checked={
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -62,7 +57,7 @@ function MyListings() {
         ),
         cell: ({ row }) => (
           <Checkbox
-            className="ms-2"
+            className="ms-2 bg-white"
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
@@ -108,19 +103,6 @@ function MyListings() {
         size: 20,
       },
       {
-        id: "trans_type",
-        header: "نوع العقد",
-        accessorKey: "trans_type",
-        cell: ({ row }) => {
-          const transTypeValue = row?.original?.trans_type;
-          const trans_type = TransType?.find(
-            (item) => item?.value == transTypeValue
-          )?.label;
-          return trans_type;
-        },
-        size: 10,
-      },
-      {
         id: "area",
         header: "المنطقة",
         accessorKey: "address.area",
@@ -142,6 +124,23 @@ function MyListings() {
         size: 25,
       },
       {
+        id: "trans_type",
+        header: "نوع العرض",
+        accessorKey: "trans_type",
+        cell: ({ row }) => {
+          const transTypeValue = row?.original?.trans_type;
+          const trans_type = TransType?.find(
+            (item) => item?.value == transTypeValue
+          )?.label;
+          return (
+            <span className="inline-flex items-center justify-center px-3xl py-md rounded-full text-sm font-medium bg-[#ADA7A7]/25">
+              {trans_type}
+            </span>
+          );
+        },
+        size: 10,
+      },
+      {
         id: "action",
         header: "الإجراء",
         cell: ({ row }) => {
@@ -154,12 +153,14 @@ function MyListings() {
                 <TooltipTrigger>
                   <Link
                     to={`/listing/edit/${row?.original?.property_id}`}
-                    className={`${!isClosed ? "cursor-not-allowed" : "pointer-events-none"}`}
+                    className={`${
+                      !isClosed ? "cursor-not-allowed" : "pointer-events-none"
+                    }`}
                     aria-disabled={isClosed}
                   >
                     <Button
                       size={"icon"}
-                      className="bg-transparent !text-[#428177]"
+                      className="bg-transparent !text-primary"
                       disabled={isClosed}
                     >
                       <FiEdit className="text-size25" />
@@ -200,8 +201,11 @@ function MyListings() {
               <Tooltip>
                 <TooltipTrigger>
                   <Link to={`/listing/details/${row?.original?.property_id}`}>
-                  <Button className="bg-transparent !text-[#988561]" size={"icon"}>
-                  <TfiInfoAlt className="text-size28" />
+                    <Button
+                      className="bg-transparent !text-[#988561]"
+                      size={"icon"}
+                    >
+                      <TfiInfoAlt className="text-size28" />
                     </Button>
                   </Link>
                 </TooltipTrigger>
@@ -264,6 +268,11 @@ function MyListings() {
   return (
     <AnimateContainer>
       <PageContainer>
+        <div className="mb-5xl">
+          <h1 className="text-size30 font-medium">عقاراتي</h1>
+          <h3 className="text-size24 mb-2xl">يتم عرض جميع عقاراتي المضافة</h3>
+          <hr />
+        </div>
         <DataTable
           prefix={TABLE_PREFIXES.myListings}
           columns={listingColumns}
@@ -274,6 +283,10 @@ function MyListings() {
           searchKey="mls_num"
           searchPlaceholder="بحث عن MLS ..."
           searchType="number"
+          showActionButtons={true}
+          show
+          to="/listing/add"
+          addLabel="إضافة عقار"
         />
       </PageContainer>
     </AnimateContainer>
