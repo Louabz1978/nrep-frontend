@@ -5,6 +5,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import React, { useState } from "react";
 import type { IconType } from "react-icons/lib";
 import { Input } from "../ui/input";
+import { FaSearch } from "react-icons/fa";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -39,11 +40,13 @@ const TableSearch = ({
     search(e.target.value);
   };
 
+
   return (
     <Input
       placeholder={searchPlaceholder}
       type={searchType}
       variant="white"
+      icon={FaSearch}
       {...props}
       value={value}
       onChange={handleChange}

@@ -212,16 +212,19 @@ export function DataTable<TData, TValue, TRow>({
                               >
                                 <PopoverTrigger asChild>
                                   <Button
-                                    size={"sm"}
-                                    className={` group !rounded-sm  bg-tertiary-bg !text-black `}
+                                    className={`!rounded-md bg-transparent !text-primary-fg flex items-center gap-xs ml-4xl px-lg py-sm  border border-transparent  ${
+                                      isFilterOpen
+                                        ? "border-primary"
+                                        : "hover:border-primary"
+                                    }`}
                                   >
-                                    <div className={`flex items-center gap-sm ml-10xl p-sm ${isFilterOpen ? "border border-primary rounded-lg" : "hover:border hover:border-primary rounded-lg"}`}>
-                                      <p className="">الفلتر</p>
-                                      <ListFilterPlus className="size-2xl" />
-                                    </div>
+                                    <p className="font-medium text-size16">
+                                      الفلتر
+                                    </p>
+                                    <ListFilterPlus className="size-xl ml-xs" />
                                   </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[180px] p-md rounded-sm bg-tertiary-bg">
+                                <PopoverContent className="w-[180px] p-md rounded-sm bg-tertiary-bg border-0 shadow-[#00000040] shadow-2xl">
                                   <p className="mb-lg">{"الفلتر"}</p>
 
                                   {filters.map((f) => {
