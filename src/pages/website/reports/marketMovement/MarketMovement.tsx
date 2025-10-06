@@ -106,30 +106,12 @@ const MarketMovement = () => {
   const { area, year, month } = form.watch();
   const { Area } = useGetArea();
 
-  const currentArea = area;
-  const currentYear = year;
-  const currentMonth = month;
-
-  const queryEnabled = !!currentArea && !!currentYear && !!currentMonth;
-
   const { marketMovement, getMarketMovementQuery } = useGetMarketMovement({
     city: "حمص",
-    area: currentArea,
-    year: currentYear,
-    month: currentMonth,
+    area: area?.title,
+    year: year?.value,
+    month: month?.value,
   });
-
-  useEffect(() => {
-    if (queryEnabled) {
-      getMarketMovementQuery.refetch();
-    }
-  }, [
-    currentArea,
-    currentYear,
-    currentMonth,
-    getMarketMovementQuery,
-    queryEnabled,
-  ]);
 
   const rows = useMemo(() => buildRows(marketMovement), [marketMovement]);
 
@@ -143,18 +125,18 @@ const MarketMovement = () => {
     []
   );
 
-  if (getMarketMovementQuery.isError) {
-    return (
-      <AnimateContainer>
-        <FormSectionHeader>تقرير حركة السوق</FormSectionHeader>
-        <PageContainer>
-          <div className="text-center text-red-600 py-8">
-            <p>حدث خطأ في تحميل البيانات. يرجى المحاولة مرة أخرى.</p>
-          </div>
-        </PageContainer>
-      </AnimateContainer>
-    );
-  }
+  // if (getMarketMovementQuery.isError) {
+  //   return (
+  //     <AnimateContainer>
+  //       <FormSectionHeader>تقرير حركة السوق</FormSectionHeader>
+  //       <PageContainer>
+  //         <div className="text-center text-red-600 py-8">
+  //           <p>حدث خطأ في تحميل البيانات. يرجى المحاولة مرة أخرى.</p>
+  //         </div>
+  //       </PageContainer>
+  //     </AnimateContainer>
+  //   );
+  // }
 
   return (
     <AnimateContainer>

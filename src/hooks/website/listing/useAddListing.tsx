@@ -37,6 +37,7 @@ export const useAddListings = () => {
     submitData: ListingFormType
     // forms:
   ) {
+    console.log({ submitData });
     // preparing data to submit
     const data = {
       ...(submitData ?? {}),

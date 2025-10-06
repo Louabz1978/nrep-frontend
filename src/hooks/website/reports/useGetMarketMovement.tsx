@@ -9,16 +9,20 @@ interface IUseGetMarketMovement {
   month: number;
 }
 
-function useGetMarketMovement({ city, area, year, month }: IUseGetMarketMovement) {
+function useGetMarketMovement({
+  city,
+  area,
+  year,
+  month,
+}: IUseGetMarketMovement) {
   const query = useQuery({
     queryKey: [QUERY_KEYS.reports.getMarketMovement, city, area, year, month],
     queryFn: () => {
-      console.log("API call with params:", { city, area, year, month });
       return getMarketMovement({
         queryParams: { city, area, year, month },
       });
     },
-    enabled: !!city && !!area && !!year && !!month,
+    enabled: !!city || !!area || !!year || !!month,
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnMount: true,

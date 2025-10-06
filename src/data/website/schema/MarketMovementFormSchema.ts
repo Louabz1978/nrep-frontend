@@ -1,30 +1,30 @@
-import { type TString } from "@/data/global/schema";
+import { optionSchema, type TOption } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
 export type MarketMovementFormType = {
-  area: TString;
-  year: number;
-  month: number;
+  area: TOption;
+  year: TOption;
+  month: TOption;
 };
 
 export const MarketMovementFormSchema = Joi.object<MarketMovementFormType>({
-  area: Joi.string()
-    .required()
+  area: optionSchema
+    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("المنطقة"),
-  year: Joi.number()
-    .required()
+  year: optionSchema
+    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("السنة"),
-  month: Joi.number()
-    .required()
+  month: optionSchema
+    .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("الشهر"),
 });
 
 export const marketMovementFormInitialValues: MarketMovementFormType = {
-  area: null, 
-  year: 0,
-  month: 0,
+  area: null,
+  year: null,
+  month: null,
 };
