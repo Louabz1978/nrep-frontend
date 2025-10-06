@@ -93,6 +93,7 @@ function ImagesInput<T extends FieldValues>({
             maxWidthOrHeight: 1920,
             useWebWorker: true,
             initialQuality: 0.8,
+
           });
 
           console.log(
@@ -142,7 +143,7 @@ function ImagesInput<T extends FieldValues>({
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
-      initialQuality: 0.8, 
+      initialQuality: 0.8,
     });
 
     console.log(
