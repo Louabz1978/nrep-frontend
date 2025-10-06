@@ -123,6 +123,7 @@ export function DataTable<TData, TValue, TRow>({
 
   // allowed filters
   const [allowedFilters, setAllowedFilters] = useState<string[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   return (
     <div className="flex flex-col flex-1 gap-xl">
@@ -205,13 +206,19 @@ export function DataTable<TData, TValue, TRow>({
                           />
                           {filters && filters.length > 0 ? (
                             <Fragment>
-                              <Popover>
+                              <Popover
+                                open={isFilterOpen}
+                                onOpenChange={setIsFilterOpen}
+                              >
                                 <PopoverTrigger asChild>
                                   <Button
                                     size={"sm"}
-                                    className="!rounded-sm bg-tertiary-bg !text-black border-1 border-gray-400"
+                                    className={` group !rounded-sm  bg-tertiary-bg !text-black `}
                                   >
-                                    <ListFilterPlus className="size-2xl" />
+                                    <div className={`flex items-center gap-sm ml-10xl p-sm ${isFilterOpen ? "border border-primary rounded-lg" : "hover:border hover:border-primary rounded-lg"}`}>
+                                      <p className="">الفلتر</p>
+                                      <ListFilterPlus className="size-2xl" />
+                                    </div>
                                   </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-[180px] p-md rounded-sm bg-tertiary-bg">

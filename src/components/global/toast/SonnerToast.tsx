@@ -24,7 +24,7 @@ function SonnerToast() {
         closeButton: true,
         classNames: {
           toast:
-            "flex items-center !bg-golden-light sm:!w-[400px] !w-[calc(100vw_-_28px)] justify-between !gap-md !py-xl !border-0 !px-2xl rounded-lg !border-b-[5px] !h-auto",
+            "flex items-center !bg-[var(--card-bg)] sm:!w-[400px] !w-[calc(100vw_-_28px)] justify-between !gap-md !py-xl !border-0 !px-2xl rounded-lg !border-b-[5px] !h-auto",
           content:
             "flex-1 order-2 gap-3 text-size18 !text-primary-fg !font-medium",
           icon: "order-1 !size-[22px] !min-w-[22px]",
