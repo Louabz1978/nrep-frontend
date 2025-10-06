@@ -90,9 +90,16 @@
   --golden-bold: #988561;
   --card-bg: #edebe0;
   --button-bg: #428177;
-  --umber-light:#6B1F2A;
-  --umber-medium:#4A151E;
-  --umber-bold:#260F14;
+  --umber-light: #6b1f2a;
+  --umber-medium: #4a151e;
+  --umber-bold: #260f14;
+
+  /* Login form colors */
+  --login-primary: #b9a779;
+  --login-primary-hover: #a5966d;
+  --login-text: #988561;
+  --login-bg-start: #0da891;
+  --login-bg-end: #054239;
 
   /* foreground */
   --primary-fg: #333333;
@@ -104,13 +111,13 @@
   /* status*/
   --success: #34c759;
   --error: #c1272d;
-  --active-bg:#EBF9F1;
-  --active-text:#1F9254;
-  --pending-bg:#FEF2E5;
-  --pending-text:#CD6200;
-  --closing-bg:#FBE7E8;
-  --closing-text:#A30D11;
-  --unactive-bg:#ADA7A7;
+  --active-bg: #ebf9f1;
+  --active-text: #1f9254;
+  --pending-bg: #fef2e5;
+  --pending-text: #cd6200;
+  --closing-bg: #fbe7e8;
+  --closing-text: #a30d11;
+  --unactive-bg: #ada7a7;
 
   /* general colors */
   --yellow: #ffb400;
@@ -172,9 +179,17 @@
   --layout-bg: #002623;
   --golden-medium: #b9a779;
   --golden-bold: #988561;
-  --umber-light:#6B1F2A;
-  --umber-medium:#4A151E;
-  --umber-bold:#260F14;
+  --umber-light: #6b1f2a;
+  --umber-medium: #4a151e;
+  --umber-bold: #260f14;
+
+  /* Login form colors */
+  --login-primary: #b9a779;
+  --login-primary-hover: #a5966d;
+  --login-text: #988561;
+  --login-bg-start: #0da891;
+  --login-bg-end: #054239;
+
   /* foreground */
   --primary-fg: #333333;
   --secondary-fg: #000000;
@@ -185,13 +200,13 @@
   /* status*/
   --success: #34c759;
   --error: #c1272d;
-  --active-bg:#EBF9F1;
-  --active-text:#1F9254;
-  --pending-bg:#FEF2E5;
-  --pending-text:#CD6200;
-  --closing-bg:#FBE7E8;
-  --closing-text:#A30D11;
-  --unactive-bg:#ADA7A7;
+  --active-bg: #ebf9f1;
+  --active-text: #1f9254;
+  --pending-bg: #fef2e5;
+  --pending-text: #cd6200;
+  --closing-bg: #fbe7e8;
+  --closing-text: #a30d11;
+  --unactive-bg: #ada7a7;
 
   /* general colors */
   --yellow: #ffb400;

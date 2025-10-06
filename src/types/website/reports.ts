@@ -23,13 +23,18 @@ export interface MarketMovementReport {
   changeRate: string;
 }
 
+export interface PropertyStatsItem {
+  property_type: string;
+  year: number;
+  month: number;
+  number_of_closed: number;
+  avg_closed_price: number | null;
+}
+
 export interface PropertyStatsResponse {
-  data: {
-    criteria: string;
-    year2024: string;
-    year2025: string;
-    changeRate: string;
-  }[];
+  current_year: PropertyStatsItem[];
+  previous_year: PropertyStatsItem[];
+  comparison: any[];
 }
 
 export interface GetMarketMovementResponse {
