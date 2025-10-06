@@ -37,18 +37,17 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
   return (
     <AnimateContainer>
       <div
-        className={`w-full h-screen flex items-center justify-center`}
+        className={`w-full h-screen flex items-center justify-center `}
         style={{
           backgroundImage: "radial-gradient(circle, #00A891 0%, #054239 80%)",
         }}
       >
-       
         <div
           className={`
             w-[420px] max-w-full 
             rounded-3xl p-10
             border-[#B9A7797D] 
-             bg-black/10 
+             bg-white 
             border-[2px]
             flex flex-col items-center gap-8
           `}
@@ -67,10 +66,11 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
                   className="w-full h-full object-cover shadow-lg"
                 />
               </Link>
-              <div className="font-bold text-lg text-white">
+              <div className="font-bold text-size13 text-[#988561]">
                 المنصة الوطنية للعقارات - حمص
               </div>
             </div>
+            <span className="text-size24 font-bold">تسجيل الدخول</span>
 
             <div className="w-full flex flex-col gap-6">
               <Input
@@ -78,7 +78,7 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
                 name="username"
                 label="البريد الإلكتروني أو اسم المستخدم:"
                 placeholder="البريد الإلكتروني"
-                labelStyle="!font-bold !text-white"
+                labelStyle="!font-bold !text-size13"
                 addingInputStyle="!h-12 !rounded-lg !bg-white/90"
               />
               <Input
@@ -87,12 +87,12 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
                 type="password"
                 label="كلمة السر:"
                 placeholder="كلمة السر"
-                labelStyle="!font-bold !text-white"
-                addingInputStyle="!h-12 !rounded-lg !bg-white/90"
+                labelStyle="!font-bold !text-size13"
+                addingInputStyle="!h-12  !rounded-lg !bg-white/90"
                 bottomElement={
                   <Link
                     to={"/forgot-password"}
-                    className="text-[12px] text-white font-bold mt-2 hover:text-[#B9A779] transition-colors"
+                    className="text-[12px]  font-bold mt-2 hover:text-[#B9A779] transition-colors"
                   >
                     هل نسيت كلمة السر؟
                   </Link>
@@ -112,7 +112,7 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
             </div>
             <Link
               to={"/register"}
-              className="text-size12 text-white font-medium mt-2 hover:text-[#B9A779] transition-colors"
+              className="text-size12  font-medium mt-2 hover:text-[#B9A779] transition-colors"
             >
               ليس لديك حساب؟{" "}
               <span className="text-size14 font-bold">إنشاء حساب</span>
