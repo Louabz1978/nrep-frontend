@@ -39,7 +39,8 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
       <div
         className={`w-full h-screen flex items-center justify-center `}
         style={{
-          backgroundImage: "radial-gradient(circle, #0DA891 ,#054239)",
+          backgroundImage:
+            "radial-gradient(50% 50% at 50% 50%, #0DA891 0%, #054239 100%)",
         }}
       >
         <div

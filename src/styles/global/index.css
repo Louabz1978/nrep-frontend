@@ -60,3 +60,7 @@ a {
 .animate-rotate {
   animation: rotate 0.2s linear;
 }
+
+.apexcharts-canvas * {
+  font-family: "Tajawal", "Segoe", sans-serif !important;
+}

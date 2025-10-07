@@ -24,9 +24,9 @@ function Home() {
               <NewsNotificationsCard />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 text-[var(--tertiary)]">
+              <Reports />
               <CardContract />
               <ExternalLinksCard />
-              <Reports />
             </div>
           </div>
         </AnimateContainer>

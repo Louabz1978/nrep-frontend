@@ -1,5 +1,7 @@
 import { Button } from "@/components/global/form/button/Button";
 import SectionTitle from "./SectionTitle";
+import { PiBookOpenTextBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 const news = [
   {
@@ -33,40 +35,22 @@ const NewsNotificationsCard = () => (
             key={idx}
             className="text-right border-b border-quaternary-border pb-4 last:border-0"
           >
-            <div className="font-bold text-lg mb-2 text-secondary-fg">{item.title}</div>
+            <div className="font-bold text-lg mb-2 text-secondary-fg">
+              {item.title}
+            </div>
             <div className="text-sm text-quaternary-border leading-relaxed mb-3 text-justify">
               {item.desc}
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-quaternary-border text-xs">
-                {new Date().toLocaleDateString("ar-SY", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-              <Button>
-                <a
-                  href="#"
-                  className=" text-xs font-medium hover:underline flex items-center"
-                >
+              <Link
+                to="#"
+                className=" text-xs hover:underline flex items-center gap-[10px]"
+              >
+                <Button className="!text-xs !font-normal">
                   تابع قراءة الخبر
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-3 w-3 mr-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </a>
-              </Button>
+                  <PiBookOpenTextBold className="size-[20px]" />
+                </Button>
+              </Link>
             </div>
           </div>
         ))}
@@ -90,7 +74,6 @@ const NewsNotificationsCard = () => (
       </button>
     </div>
   </div>
-
 );
 
 export default NewsNotificationsCard;

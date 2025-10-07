@@ -39,8 +39,30 @@ const TopAgentsColumn = () => {
     return period === "current" ? currentResults : previousResults;
   }, [period, response?.results, response?.previous_results]);
 
-  const categories = dataset.map((item) => item.full_name ?? "-");
-  const data = dataset.map((item) => item.closed_count ?? 0);
+  const categories = useMemo(() => {
+    const actualCategories = dataset.map((item) => item.full_name ?? "-");
+
+    // If we have less than 10 items, fill the rest with placeholder labels
+    if (actualCategories.length < 10) {
+      return [
+        ...actualCategories,
+        ...Array(10 - actualCategories.length).fill("-"),
+      ];
+    }
+
+    return actualCategories.slice(0, 10); // Ensure exactly 10 items
+  }, [dataset]);
+
+  const data = useMemo(() => {
+    const actualData = dataset.map((item) => item.closed_count ?? 0);
+
+    // If we have less than 10 items, fill the rest with zeros
+    if (actualData.length < 10) {
+      return [...actualData, ...Array(10 - actualData.length).fill(0)];
+    }
+
+    return actualData.slice(0, 10); // Ensure exactly 10 items
+  }, [dataset]);
 
   const baseColors = ["#B9A779", "#428177", "#988561", "#054239", "#002623"];
 
@@ -62,7 +84,7 @@ const TopAgentsColumn = () => {
       bar: {
         horizontal: false,
         columnWidth: "40%",
-        borderRadius: 6,
+        borderRadius: 0,
         distributed: true,
       },
     },
@@ -71,25 +93,28 @@ const TopAgentsColumn = () => {
       categories,
       tickPlacement: "on",
       labels: { rotate: -45, style: { fontSize: "12px" }, offsetY: 4 },
-      axisTicks: { show: true },
-      axisBorder: { show: true },
+      axisTicks: { show: true, color: "#333333" },
+      axisBorder: { show: true, color: "#000000" },
     },
-    yaxis: { labels: { show: true } },
-    grid: { strokeDashArray: 4 },
+    yaxis: {
+      labels: { show: true },
+      axisBorder: { show: true, color: "#000000" },
+    },
+    grid: { show: false },
     colors: barColors,
     legend: { show: false },
     tooltip: { y: { formatter: (val: number) => `${val} عقار مغلق` } },
   };
 
   return (
-    <div className="bg-tertiary-bg rounded shadow-[var(--shadow-card)] h-[425px] p-[var(--spacing-lg)] text-[var(--card)]">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-size20 font-semibold mb-6">
+    <div className="bg-tertiary-bg rounded shadow-[var(--shadow-card)] md:h-[425px] h-max p-[var(--spacing-lg)] text-[var(--card)]">
+      <div className="flex items-center justify-center mb-3">
+        <h3 className="text-size20 text-center font-semibold mb-6">
           أفضل عشرة وسطاء العقارات
         </h3>
       </div>
 
-      <div className="flex">
+      <div className="flex md:flex-row flex-col">
         <div
           className={`flex flex-col items-start justify-end ${
             getTopAgentQuery.isLoading ? "mb-37 me-5" : "mb-15"
@@ -103,7 +128,9 @@ const TopAgentsColumn = () => {
               checked={period === "current"}
               onChange={() => setPeriod("current")}
               ariaLabel="الشهر الحالي"
+              className="!gap-0"
               labelClassName="!text-size12 w-[85px]"
+              radioClassName="!bg-quinary-bg peer-checked:!bg-primary after:!bg-tertiary-bg"
             />
             <Radio
               name="period"
@@ -112,7 +139,9 @@ const TopAgentsColumn = () => {
               checked={period === "previous"}
               onChange={() => setPeriod("previous")}
               ariaLabel="الشهر السابق"
+              className="!gap-0"
               labelClassName="!text-size12  w-[85px]"
+              radioClassName="!bg-quinary-bg peer-checked:!bg-primary after:!bg-tertiary-bg"
             />
           </div>
         </div>
