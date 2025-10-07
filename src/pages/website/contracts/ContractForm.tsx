@@ -118,8 +118,8 @@ function ContractForm({
         pool: propertyByMls?.pool || false,
       };
 
-  const userId = user?.user_id;
-  const userData = user;
+  const userId = (user?.data ?? user)?.user_id;
+  const userData = user?.data ?? user;
   const buyer_agent_id = useWatch({
     control: form.control,
     name: "buyer_agent_id",
@@ -1232,7 +1232,8 @@ function ContractForm({
                                 IP: {signatureInfo[`seller_${index}`].ip}
                               </div>
                               <div>
-                              تاريخ التوقيع : {signatureInfo[`seller_${index}`].date}
+                                تاريخ التوقيع :{" "}
+                                {signatureInfo[`seller_${index}`].date}
                               </div>
                             </div>
                           </div>
@@ -1270,7 +1271,9 @@ function ContractForm({
                     <div className="mt-2 text-center">
                       <div className="text-xs text-primary">
                         <div>IP: {signatureInfo["seller_agent"].ip}</div>
-                        <div>تاريخ التوقيع : {signatureInfo["seller_agent"].date}</div>
+                        <div>
+                          تاريخ التوقيع : {signatureInfo["seller_agent"].date}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1314,7 +1317,8 @@ function ContractForm({
                                 IP: {signatureInfo[`buyer_${index}`].ip}
                               </div>
                               <div>
-                              تاريخ التوقيع : {signatureInfo[`buyer_${index}`].date}
+                                تاريخ التوقيع :{" "}
+                                {signatureInfo[`buyer_${index}`].date}
                               </div>
                             </div>
                           </div>
@@ -1350,7 +1354,10 @@ function ContractForm({
                     <div className="mt-2 text-center">
                       <div className="text-xs text-primary">
                         <div>IP: {signatureInfo["buyer_agent"].ip}</div>
-                        <div> تاريخ التوقيع : {signatureInfo["buyer_agent"].date}</div>
+                        <div>
+                          {" "}
+                          تاريخ التوقيع : {signatureInfo["buyer_agent"].date}
+                        </div>
                       </div>
                     </div>
                   )}
