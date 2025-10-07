@@ -212,7 +212,7 @@ export function DataTable<TData, TValue, TRow>({
                               >
                                 <PopoverTrigger asChild>
                                   <Button
-                                    className={`!rounded-md bg-transparent !text-primary-fg flex items-center gap-xs ml-4xl px-lg py-sm  border border-transparent  ${
+                                    className={`!rounded-md bg-transparent !h-9 !text-primary-fg flex items-center gap-xs ml-2xl px-lg py-sm  border border-transparent  ${
                                       isFilterOpen
                                         ? "border-primary"
                                         : "hover:border-primary"

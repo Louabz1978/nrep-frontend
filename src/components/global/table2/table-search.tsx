@@ -40,18 +40,19 @@ const TableSearch = ({
     search(e.target.value);
   };
 
-
   return (
     <Input
       placeholder={searchPlaceholder}
       type={searchType}
       variant="white"
       icon={FaSearch}
+      iconClassName="text-gray-400/50 h-[18px] w-[18px] "
+      iconInline
       {...props}
       value={value}
       onChange={handleChange}
       className={cn(
-        "w-100 bg-white !h-2lg !text-size16 border-gray-400 rounded-[8px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
+        "w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
         className
       )}
     />
