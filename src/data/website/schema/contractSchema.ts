@@ -99,6 +99,11 @@ export type ContractFormType = {
   contract_file: string | null;
   editcontract_file: string | null;
   ipAddress: TString;
+  // agent signature meta
+  buyer_agent_ip?: TString;
+  buyer_agent_signature_date?: TString;
+  seller_agent_ip?: TString;
+  seller_agent_signature_date?: TString;
 };
 
 const SellerSchema = Joi.object<SellerType>({
@@ -312,6 +317,22 @@ export const ContractFormSchema = Joi.object<ContractFormType>({
     .messages(VALIDATION_MESSAGES)
     .label("عمولة وكيل المشتري"),
   ipAddress: Joi.any().messages(VALIDATION_MESSAGES).label("Ip الجهاز"),
+  buyer_agent_ip: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("IP وكيل المشتري"),
+  buyer_agent_signature_date: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("تاريخ توقيع وكيل المشتري"),
+  seller_agent_ip: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("IP وكيل البائع"),
+  seller_agent_signature_date: Joi.any()
+    .optional()
+    .messages(VALIDATION_MESSAGES)
+    .label("تاريخ توقيع وكيل البائع"),
 });
 
 export const sellerInitialValues: SellerType = {
@@ -411,4 +432,8 @@ export const contractFormInitialValues: ContractFormType = {
   buyer_commission: null,
   ipAddress: null,
   valid_date: null,
+  buyer_agent_ip: null,
+  buyer_agent_signature_date: null,
+  seller_agent_ip: null,
+  seller_agent_signature_date: null,
 };

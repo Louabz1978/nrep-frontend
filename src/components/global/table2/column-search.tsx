@@ -189,7 +189,7 @@ export default function ColumnSearch({
         <Button
           variant="table-filter"
           className={cn(
-            "min-w-8xl h-9 !text-size14 px-sm py-xs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
+            "min-w-7xl h-9 !text-size14 px-sm py-xs bg-transparent text-primary font-normal cursor-pointer rounded-sm group relative border-2 border-primary",
             hasValue ? "bg-primary text-white" : ""
           )}
         >

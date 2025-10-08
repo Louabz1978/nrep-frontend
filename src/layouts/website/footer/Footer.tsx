@@ -1,4 +1,4 @@
-import newLogo from "../../../assets/images/new logo.png";
+import newLogo from "../../../assets/images/new_logo.png";
 
 function Footer() {
   // Links for the top row as seen in the image

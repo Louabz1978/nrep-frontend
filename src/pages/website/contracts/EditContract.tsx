@@ -356,7 +356,7 @@ function EditContract() {
                           {form.watch("sellers")?.length > 1 ? (
                             <button
                               type="button"
-                              className="px-sm py-[6px] rounded bg-red-500 text-white"
+                              className="px-sm py-[6px] rounded bg-error text-white"
                               onClick={() => sellersArray.remove(index)}
                               data-print-hidden={true}
                             >
@@ -410,7 +410,7 @@ function EditContract() {
                           {form.watch("buyers")?.length > 1 ? (
                             <button
                               type="button"
-                              className="px-sm py-[6px] rounded bg-red-500 text-white"
+                              className="px-sm py-[6px] rounded bg-error text-white"
                               onClick={() => buyersArray.remove(index)}
                               data-print-hidden={true}
                             >

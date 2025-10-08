@@ -313,8 +313,8 @@ function Select<T extends FieldValues>({
                   : `border-secondary-border ${
                       isValid(form)
                         ? "focus-visible:border-success"
-                        : "focus-visible:border-secondary"
-                    } hover:border-secondary`
+                        : "focus-visible:border-golden-medium"
+                    } hover:border-golden-medium`
               } ${addingInputStyle} flex justify-between items-center`}
               onKeyDown={handleKeyDown}
               onClick={(e) => {
@@ -400,7 +400,7 @@ function Select<T extends FieldValues>({
                 <span
                   title="إفراغ"
                   data-print-hidden={true}
-                  className={`relative font-light text-size12 p-1 text-error rounded-full bg-error/30 opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
+                  className={`relative font-light text-size14 text-error rounded-full opacity-50 hover:opacity-100 transition-all duration-[0.2s] mr-auto`}
                 >
                   <FaXmark />
                   <div

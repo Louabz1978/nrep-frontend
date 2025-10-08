@@ -28,11 +28,18 @@ export const useCloseListings = () => {
   });
 
   // handle submit close listing form
-  async function handleCloseListing(mls: number | null, data: ClosingFormData) {
+  async function handleCloseListing(
+    mls: number | null,
+    data: ClosingFormData,
+    onSuccess: () => void
+  ) {
     // toaster
     toast.promise(closeListing.mutateAsync({ mls, ...data }), {
       loading: MESSAGES?.listing?.close?.loading,
-      success: MESSAGES?.listing?.close?.success,
+      success: () => {
+        onSuccess?.();
+        return MESSAGES?.listing?.close?.success;
+      },
       error: (error) => {
         return showApiErrors(error);
       },

@@ -88,12 +88,17 @@ function ImagesInput<T extends FieldValues>({
         Array.from(files).map(async (file) => {
           console.log("Original file size:", file.size / 1024 / 1024, "MB");
 
-          const compressedFile = await imageCompression(file, {
+          const compressedBlob = await imageCompression(file, {
             maxSizeMB: 1,
             maxWidthOrHeight: 1920,
             useWebWorker: true,
             initialQuality: 0.8,
+          });
 
+          // Ensure the compressed file keeps the original filename
+          const compressedFile = new File([compressedBlob], file.name, {
+            type: compressedBlob.type || file.type,
+            lastModified: Date.now(),
           });
 
           console.log(
@@ -139,11 +144,17 @@ function ImagesInput<T extends FieldValues>({
 
     console.log("Original file size:", newFile.size / 1024 / 1024, "MB");
 
-    const compressedFile = await imageCompression(newFile, {
+    const compressedBlob = await imageCompression(newFile, {
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
       initialQuality: 0.8,
+    });
+
+    // Ensure the compressed file keeps the original filename
+    const compressedFile = new File([compressedBlob], newFile.name, {
+      type: compressedBlob.type || newFile.type,
+      lastModified: Date.now(),
     });
 
     console.log(

@@ -42,16 +42,13 @@ function ContractForm({
   const [checkbox2, setCheckBox2] = useState(false);
   const [userIP, setUserIP] = useState<string>("");
   const [signingDate, setSigningDate] = useState<string>("");
-  const [signatureInfo, setSignatureInfo] = useState<{
-    [key: string]: { ip: string; date: string };
-  }>({});
 
   const { allContacts } = useGetAllContacts();
 
   const contacts =
-    allContacts?.map((contact: ContactWithUser) => ({
-      value: contact?.name,
-    })) || [];
+    (allContacts as unknown as ContactWithUser[] | undefined)?.map(
+      (contact) => ({ value: contact?.name as unknown as string })
+    ) || [];
 
   const form = useForm<ContractFormType>({
     resolver: joiResolver(ContractFormSchema),
@@ -248,17 +245,29 @@ function ContractForm({
     }
   }, [isCreate]);
 
-  // Function to handle signature completion
-  const handleSignatureComplete = (signatureKey: string) => {
-    if (userIP && signingDate) {
-      setSignatureInfo((prev) => ({
-        ...prev,
-        [signatureKey]: {
-          ip: userIP,
-          date: signingDate,
-        },
-      }));
-    }
+  // Function to handle signature completion -> persist into form state
+  const handleSellerSignatureComplete = (index: number) => {
+    if (!userIP || !signingDate) return;
+    form.setValue(`sellers.${index}.ipAddress` as const, userIP);
+    form.setValue(`sellers.${index}.signature_date` as const, signingDate);
+  };
+
+  const handleBuyerSignatureComplete = (index: number) => {
+    if (!userIP || !signingDate) return;
+    form.setValue(`buyers.${index}.ipAddress` as const, userIP);
+    form.setValue(`buyers.${index}.signature_date` as const, signingDate);
+  };
+
+  const handleSellerAgentSignatureComplete = () => {
+    if (!userIP || !signingDate) return;
+    form.setValue("seller_agent_ip", userIP as any);
+    form.setValue("seller_agent_signature_date", signingDate as any);
+  };
+
+  const handleBuyerAgentSignatureComplete = () => {
+    if (!userIP || !signingDate) return;
+    form.setValue("buyer_agent_ip", userIP as any);
+    form.setValue("buyer_agent_signature_date", signingDate as any);
   };
 
   // Populate form when propertyByMls changes
@@ -1216,24 +1225,25 @@ function ContractForm({
                           defaultValue={
                             isCreate
                               ? undefined
-                              : form.watch(`sellers.${index}.seller_signature`)
+                              : (form.watch(
+                                  `sellers.${index}.seller_signature`
+                                ) as any) || undefined
                           }
                           form={form}
                           name={`sellers.${index}.seller_signature`}
                           onSignatureComplete={() =>
-                            handleSignatureComplete(`seller_${index}`)
+                            handleSellerSignatureComplete(index)
                           }
                         />
-                        {/* Signature Info Display */}
-                        {!isCreate && signatureInfo[`seller_${index}`] && (
+                        {form.watch(`sellers.${index}.ipAddress`) && (
                           <div className="mt-2 text-center">
                             <div className="text-xs text-primary">
                               <div>
-                                IP: {signatureInfo[`seller_${index}`].ip}
+                                IP: {form.watch(`sellers.${index}.ipAddress`)}
                               </div>
                               <div>
                                 تاريخ التوقيع :{" "}
-                                {signatureInfo[`seller_${index}`].date}
+                                {form.watch(`sellers.${index}.signature_date`)}
                               </div>
                             </div>
                           </div>
@@ -1259,20 +1269,19 @@ function ContractForm({
                     defaultValue={
                       isCreate
                         ? undefined
-                        : form.watch("seller_agent_signature")
+                        : (form.watch("seller_agent_signature") as any) ||
+                          undefined
                     }
                     name="seller_agent_signature"
-                    onSignatureComplete={() =>
-                      handleSignatureComplete("seller_agent")
-                    }
+                    onSignatureComplete={handleSellerAgentSignatureComplete}
                   />
-                  {/* Signature Info Display */}
-                  {!isCreate && signatureInfo["seller_agent"] && (
+                  {form.watch("seller_agent_ip") && (
                     <div className="mt-2 text-center">
                       <div className="text-xs text-primary">
-                        <div>IP: {signatureInfo["seller_agent"].ip}</div>
+                        <div>IP: {form.watch("seller_agent_ip")}</div>
                         <div>
-                          تاريخ التوقيع : {signatureInfo["seller_agent"].date}
+                          تاريخ التوقيع :{" "}
+                          {form.watch("seller_agent_signature_date")}
                         </div>
                       </div>
                     </div>
@@ -1303,22 +1312,23 @@ function ContractForm({
                           defaultValue={
                             isCreate
                               ? undefined
-                              : form.watch(`buyers.${index}.buyer_signature`)
+                              : (form.watch(
+                                  `buyers.${index}.buyer_signature`
+                                ) as any) || undefined
                           }
                           onSignatureComplete={() =>
-                            handleSignatureComplete(`buyer_${index}`)
+                            handleBuyerSignatureComplete(index)
                           }
                         />
-                        {/* Signature Info Display */}
-                        {!isCreate && signatureInfo[`buyer_${index}`] && (
+                        {form.watch(`buyers.${index}.ipAddress`) && (
                           <div className="mt-2 text-center">
                             <div className="text-xs text-primary">
                               <div>
-                                IP: {signatureInfo[`buyer_${index}`].ip}
+                                IP: {form.watch(`buyers.${index}.ipAddress`)}
                               </div>
                               <div>
                                 تاريخ التوقيع :{" "}
-                                {signatureInfo[`buyer_${index}`].date}
+                                {form.watch(`buyers.${index}.signature_date`)}
                               </div>
                             </div>
                           </div>
@@ -1342,21 +1352,22 @@ function ContractForm({
                     disabled={!canBuyerAgent}
                     form={form}
                     defaultValue={
-                      isCreate ? undefined : form.watch("buyer_agent_signature")
+                      isCreate
+                        ? undefined
+                        : (form.watch("buyer_agent_signature") as any) ||
+                          undefined
                     }
                     name="buyer_agent_signature"
-                    onSignatureComplete={() =>
-                      handleSignatureComplete("buyer_agent")
-                    }
+                    onSignatureComplete={handleBuyerAgentSignatureComplete}
                   />
-                  {/* Signature Info Display */}
-                  {!isCreate && signatureInfo["buyer_agent"] && (
+                  {form.watch("buyer_agent_ip") && (
                     <div className="mt-2 text-center">
                       <div className="text-xs text-primary">
-                        <div>IP: {signatureInfo["buyer_agent"].ip}</div>
+                        <div>IP: {form.watch("buyer_agent_ip")}</div>
                         <div>
                           {" "}
-                          تاريخ التوقيع : {signatureInfo["buyer_agent"].date}
+                          تاريخ التوقيع :{" "}
+                          {form.watch("buyer_agent_signature_date")}
                         </div>
                       </div>
                     </div>
@@ -1373,16 +1384,8 @@ function ContractForm({
           <Button
             className="w-[200px]"
             onClick={handleSubmit((data) => {
-              // Include signature info for each signature in sign mode
-              const contractData = !isCreate
-                ? {
-                    ...data,
-                    signature_info: signatureInfo,
-                  }
-                : data;
-
               handleAddContract(
-                contractData,
+                data,
                 contractRef,
                 data?.mls,
                 data?.sellers?.[0]?.id,

@@ -7,7 +7,7 @@ async function getCities({
     params: queryParams,
   });
 
-  return res?.data;
+  return res?.data?.data;
 }
 
 export default getCities;

@@ -11,6 +11,7 @@ type RenderImagesTabProps = {
 
 const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const images = dummyProperty?.image ?? [];
+  console.log(images)
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleOpen = (index: number) => {

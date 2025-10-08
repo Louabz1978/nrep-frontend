@@ -64,12 +64,17 @@ function StatusForm({ row }: { row: Row<Listing> }) {
   const { handleSubmit } = closingForm;
 
   const handleCloseFormSubmit = (data: ClosingFormData) => {
-    handleCloseListing(row?.original?.mls_num, {
-      ...data,
-      buyer_agent: data.buyer_agent?.value || null,
-    });
-    setOpen(false);
-    setInitialStatusBeforeClosing(null);
+    handleCloseListing(
+      row?.original?.mls_num,
+      {
+        ...data,
+        buyer_agent: data.buyer_agent?.value || null,
+      },
+      () => {
+        setOpen(false);
+        setInitialStatusBeforeClosing(null);
+      }
+    );
   };
 
   const { allContacts } = useGetAllContacts();
@@ -170,15 +175,15 @@ function StatusForm({ row }: { row: Row<Listing> }) {
             setInitialStatusBeforeClosing(null);
           }}
         >
-          <div className="flex flex-col gap-md p-md">
-            <h3 className="text-lg font-semibold">إغلاق عقد العقار</h3>
+          <div className="flex flex-col gap-2xl p-md">
+            <h3 className="text-lg font-bold">إغلاق عقد العقار</h3>
             <Form {...closingForm}>
               <form
                 id="closing_form"
                 onSubmit={handleSubmit(handleCloseFormSubmit)}
                 className="flex flex-col gap-md"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-xl">
                   <Select
                     form={closingForm}
                     name="buyer_agent"
@@ -236,7 +241,18 @@ function StatusForm({ row }: { row: Row<Listing> }) {
                   >
                     إلغاء
                   </button>
-                  <Button id="closing_form" type="submit">
+                  <Button
+                    id="closing_form"
+                    type="submit"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      const isValid = await closingForm.trigger();
+                      if (isValid) {
+                        handleCloseFormSubmit(closingForm.watch());
+                      }
+                    }}
+                  >
                     حفظ
                   </Button>
                 </div>
