@@ -24,13 +24,14 @@ import MarketMovement from "./pages/website/reports/marketMovement/MarketMovemen
 import RentalTransfer from "@/pages/website/RentalTransfer";
 import SaleTransfer from "@/pages/website/SaleTransfer";
 import EditContractSign from "./pages/website/contracts/EditContractSign";
+import ListingMovementHistory from "./pages/website/reports/listingMovementHistory/ListingMovementHistory";
 
 // Browser URL router container
 const router = createBrowserRouter([
   // realtor pages
   {
     path: "/",
-    element: <PrivateRoute element={<WebsiteLayout />} role={"realtor"} />,
+    element: <PrivateRoute element={<WebsiteLayout />} role={"mustUnauth"} />,
     children: [
       {
         index: true,
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "listing/my-listings",
         element: <MyListings />,
+      },
+      {
+        path: "listing/listing-movement",
+        element: <ListingMovementHistory />,
       },
       {
         path: "listing/details/:id",

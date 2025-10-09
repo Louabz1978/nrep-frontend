@@ -8,7 +8,8 @@ const TABLE_PREFIXES = {
   cities:"cities",
   areas:"areas",
   top_agent: "topAgent",
-  market_movement: "marketMovement"
+  market_movement: "marketMovement",
+  listing_movement : "listingMovement"
 };
 
 export default TABLE_PREFIXES;

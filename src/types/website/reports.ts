@@ -1,3 +1,5 @@
+import type { TNumber, TString } from "@/data/global/schema";
+
 export interface TopAgentReport {
   rank: number;
   broker_license: number;
@@ -49,4 +51,28 @@ export interface GetMarketMovementResponse {
 
 export interface QueryParams {
   [key: string]: string | number | boolean | undefined;
+}
+
+export interface ListingMovement {
+  mls: TNumber;
+  listing_type: TString;
+  trans_type: TString;
+  status: TString;
+  floor: TNumber;
+  apt: TNumber;
+  area: TString;
+  city: TString;
+  building_num: TNumber;
+  street_name: TString;
+  sell_date: TString;
+  sell_price: TNumber;
+}
+export interface GetListingMovementResponse {
+  data: ListingMovement[];
+  pagination: {
+    total_pages: number;
+    total_records: number;
+    current_page: number;
+    records_per_page: number;
+  };
 }

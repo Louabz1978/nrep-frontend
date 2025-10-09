@@ -43,7 +43,7 @@ const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
 
   // if user logged in but try to login again, route him to his index page
   if (
-    (role === "mustUnauth" && isThereToken) ||
+    (role === "" && isThereToken) ||
     currentPath == "" ||
     currentPath == "/"
   ) {

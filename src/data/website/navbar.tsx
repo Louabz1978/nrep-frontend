@@ -51,6 +51,11 @@ export const tabs: TabsType = [
         permission: [],
         to: "/listing/my-listings",
       },
+      {
+        label: "تاريخ حركة العقار",
+        permission: [],
+        to: "/listing/listing-movement",
+      },
     ],
   },
   {
