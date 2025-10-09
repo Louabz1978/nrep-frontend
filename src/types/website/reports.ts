@@ -76,3 +76,20 @@ export interface GetListingMovementResponse {
     records_per_page: number;
   };
 }
+
+export interface AgentMovement {
+  license: number;
+  agent_name: string;
+  sales_number: number;
+  total_price: number;
+  summerize: string;
+}
+export interface GetAgentMovementResponse {
+  data: AgentMovement[];
+  pagination: {
+    total_pages: number;
+    total_records: number;
+    current_page: number;
+    records_per_page: number;
+  };
+}

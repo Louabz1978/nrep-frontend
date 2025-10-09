@@ -16,17 +16,32 @@ function Topsection() {
   };
 
   return (
-    <div className="relative w-full h-[420px] bg-white overflow-hidden shadow-primary-shadow">
+    <div className="relative z-1 w-full h-[420px] bg-white overflow-hidden shadow-primary-shadow">
       <img
         src={heroImg}
         alt="المنصة الوطنية للعقارات"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover opacity-50"
       />
-      <div className="absolute bg-black/10" />
+      <div className="absolute size-full z-0 bg-black/35" />
+
       <div className="relative z-10 h-full flex items-center justify-center p-4">
         <div className="w-full text-center">
-          <FormSectionHeader>المنصة الوطنية للعقارات</FormSectionHeader>
-          <FormSectionHeader>حمص</FormSectionHeader>
+          <FormSectionHeader
+            style={{
+              textShadow: "0px 4px 4px #ffffff80",
+            }}
+            className="!text-inverse-fg"
+          >
+            المنصة الوطنية للعقارات
+          </FormSectionHeader>
+          <FormSectionHeader
+            style={{
+              textShadow: "0px 4px 4px #ffffff80",
+            }}
+            className="!text-inverse-fg"
+          >
+            حمص
+          </FormSectionHeader>
           <div className="flex justify-center mt-6">
             <div className="relative lg:w-[552px] md:w-[350px] w-[300px]">
               <input
@@ -55,7 +70,9 @@ function Topsection() {
               </span>
               {/* Clear icon */}
               <span
-                className={`absolute inset-y-0 h-full group left-3 flex items-center justify-center cursor-pointer ${search ? "block" : "hidden"}`}
+                className={`absolute inset-y-0 h-full group left-3 flex items-center justify-center cursor-pointer ${
+                  search ? "block" : "hidden"
+                }`}
                 onClick={() => setSearch("")}
               >
                 <AiOutlineClose className="size-[12px] text-primary-icon group-hover:text-primary-fg transition-all" />
@@ -69,5 +86,3 @@ function Topsection() {
 }
 
 export default Topsection;
-
-

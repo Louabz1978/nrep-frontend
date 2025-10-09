@@ -7,7 +7,7 @@ async function getCountries({
     params: queryParams,
   });
 
-  return res?.data;
+  return res?.data?.data;
 }
 
 export default getCountries;

@@ -123,8 +123,8 @@ function Input<T extends FieldValues>({
         : `${
             isValid(form)
               ? "focus-visible:border-success"
-              : "focus-visible:border-secondary"
-          } hover:border-secondary ${
+              : "focus-visible:border-golden-medium"
+          } hover:border-golden-medium ${
             addingValidStyle ? addingValidStyle : "border-secondary-border"
           }`
     } ${type === "password" ? "!pl-[56px]" : ""}`;

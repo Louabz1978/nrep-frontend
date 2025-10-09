@@ -63,6 +63,9 @@ export const useAddListings = () => {
         submitData?.photos?.find((item) => item?.isMain)?.path as File
       )?.name,
       owner_id: 1,
+      area_id: 1,
+      city_id: 1,
+      county_id: 1,
     };
 
     // toaster

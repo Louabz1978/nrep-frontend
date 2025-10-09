@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
-import { AiOutlineClose, AiOutlineBell } from "react-icons/ai";
-import logo from "@/assets/images/new logo.png";
+import { AiOutlineClose } from "react-icons/ai";
+import logo from "@/assets/images/new_logo.png";
 import { useUser } from "@/stores/useUser";
 import { useMemo, useState } from "react";
 import { LuLogIn } from "react-icons/lu";
@@ -197,7 +197,7 @@ function Header() {
         </div>
         <Link
           to="/"
-          className="md:w-11xl w-7xl h-7xl"
+          className="2xl:absolute xl:left-[50%] xl:-translate-x-[50%]  w-7xl h-7xl"
         >
           <img src={logo} alt="NREP" className="size-full object-contain" />
         </Link>

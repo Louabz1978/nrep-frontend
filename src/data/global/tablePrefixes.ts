@@ -1,15 +1,16 @@
 const TABLE_PREFIXES = {
   allListings: "allListings",
   myListings: "myListings",
-  contact : "contact",
+  contact: "contact",
   listingStatus: "listingStatus",
   listingType: "listingType",
-  governorates : "governorates",
-  cities:"cities",
-  areas:"areas",
+  governorates: "governorates",
+  cities: "cities",
+  areas: "areas",
   top_agent: "topAgent",
   market_movement: "marketMovement",
-  listing_movement : "listingMovement"
+  listing_movement: "listingMovement",
+  agent_movement: "agentMovement",
 };
 
 export default TABLE_PREFIXES;

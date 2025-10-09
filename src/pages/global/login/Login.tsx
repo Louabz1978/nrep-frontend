@@ -2,7 +2,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
-import logo from "@/assets/images/new logo.png";
+import logo from "@/assets/images/new_logo.png";
 import LOGIN_FORM_SCHEMA, {
   LOGIN_FORM_SCHEMA_INITIAL_VALUES,
   type LoginFormType,
@@ -39,13 +39,13 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
       <div
         className={`w-full h-screen flex items-center justify-center `}
         style={{
-          backgroundImage: "radial-gradient(circle, #0DA891 ,#054239)",
+          backgroundImage:
+            "radial-gradient(50% 50% at 50% 50%, #0DA891 0%, #054239 100%)",
         }}
       >
         <div
           className={`
             w-[410px] max-w-full
-            h-[498px]
             gap-[16px]
             px-[80px]
             py-[40px]
@@ -77,7 +77,7 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
                 المنصة الوطنية للعقارات - حمص
               </div>
             </div>
-            <div className="w-[250px] h-[279px] flex flex-col gap-[24px]">
+            <div className="w-[250px] flex flex-col gap-[24px]">
               <div className="w-full flex justify-start ">
                 <span className="text-size24 font-bold mt-2">تسجيل الدخول</span>
               </div>

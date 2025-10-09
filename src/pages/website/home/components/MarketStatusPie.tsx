@@ -77,10 +77,10 @@ const MarketStatusPie = () => {
 
   const statusColorMap: Record<string, string> = {
     new_listings_count: "#B9A779",
-    pending_count: "#6CA69C",
+    pending_count: "#428177",
     closed_count: "#6B1F2A",
-    out_of_market: "#A9A18E",
-    return_the_market: "#428177",
+    out_of_market: "#260f14",
+    return_the_market: "#A9A18e",
   };
 
   const colors = labels.map((raw) => {
@@ -97,7 +97,7 @@ const MarketStatusPie = () => {
       formatter: (_val, opts) => {
         const idx = opts.seriesIndex ?? 0;
         const text = arLabels[idx] ?? "";
-        return text.length > 12 ? `...${text.slice(0, 12)}` : text;
+        return text;
       },
       style: { fontSize: "12px", fontWeight: 600, colors: ["#fff"] },
       dropShadow: { enabled: false },
@@ -112,8 +112,8 @@ const MarketStatusPie = () => {
 
   return (
     <div className="bg-tertiary-bg rounded shadow-[var(--shadow-card)] h-[425px] text-[var(--card)] p-3">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-size20 font-semibold">مراقب السوق</h3>
+      <div className="flex items-center justify-center mb-3">
+        <h3 className="text-size20 font-semibold text-center">مراقب السوق</h3>
       </div>
       <StatusManager
         Loader={SkeltonPie}

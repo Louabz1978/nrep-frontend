@@ -6,7 +6,7 @@ async function getArea({
   const res = await axiosClient.get(`areas/`, {
     params: queryParams,
   });
-  return res?.data;
+  return res?.data?.data;
 }
 
 export default getArea;

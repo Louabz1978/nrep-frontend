@@ -88,6 +88,11 @@ export const tabs: TabsType = [
         permission: [],
         to: "/reports/top-agent",
       },
+      {
+        label: "نشاط الوكيل",
+        permission: [],
+        to: "/reports/agent-movement",
+      },
     ],
   },
 ];

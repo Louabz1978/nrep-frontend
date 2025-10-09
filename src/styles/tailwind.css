@@ -87,6 +87,7 @@
   --digital-green-bg: #6cbf84;
   --layout-bg: #002623;
   --golden-medium: #b9a779;
+  --golden-medium-75: #c8b694;
   --golden-bold: #988561;
   --card-bg: #edebe0;
   --button-bg: #428177;
@@ -107,10 +108,11 @@
   --quaternary-fg: #ffffff;
   --inverse-fg: #ffffff;
   --header-fg: #333333;
+  --tertiary-fg: #3d3a3b;
 
   /* status*/
-  --success: #34c759;
-  --error: #c1272d;
+  --success: #1f9254;
+  --error: #a30d11;
   --active-bg: #ebf9f1;
   --active-text: #1f9254;
   --pending-bg: #fef2e5;
@@ -163,8 +165,8 @@
 /* Dark mode */
 .dark:root {
   /* color pallet */
-  --primary: #005bbb;
-  --secondary: #a3d3f5;
+  --primary: #428177;
+  --secondary: #002623;
 
   /* backgrounds */
   --primary-bg: #e5e5e5;
@@ -178,6 +180,7 @@
   --table-bg: #000000;
   --layout-bg: #002623;
   --golden-medium: #b9a779;
+  --golden-medium-75: #c8b694;
   --golden-bold: #988561;
   --umber-light: #6b1f2a;
   --umber-medium: #4a151e;
@@ -196,10 +199,11 @@
   --quaternary-fg: #ffffff;
   --inverse-fg: #ffffff;
   --header-fg: #333333;
+  --tertiary-fg: #3d3a3b;
 
   /* status*/
-  --success: #34c759;
-  --error: #c1272d;
+  --success: #1f9254;
+  --error: #a30d11;
   --active-bg: #ebf9f1;
   --active-text: #1f9254;
   --pending-bg: #fef2e5;
@@ -328,6 +332,7 @@
   --color-table-bg: var(--table-bg);
   --color-layout-bg: var(--layout-bg);
   --color-golden-medium: var(--golden-medium);
+  --color-golden-medium-75: var(--golden-medium-75);
   --color-golden-bold: var(--golden-bold);
   --color-umber-light: var(--umber-light);
   --color-umber-medium: var(--umber-medium);
@@ -339,6 +344,7 @@
   --color-quaternary-fg: var(--quaternary-fg);
   --color-inverse-fg: var(--inverse-fg);
   --color-header-fg: var(--header-fg);
+  --color-tertiary-fg: var(--tertiary-fg);
 
   /* status */
   --color-success: var(--success);

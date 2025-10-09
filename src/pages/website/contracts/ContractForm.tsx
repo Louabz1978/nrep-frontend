@@ -115,8 +115,8 @@ function ContractForm({
         pool: propertyByMls?.pool || false,
       };
 
-  const userId = user?.user_id;
-  const userData = user;
+  const userId = (user?.data ?? user)?.user_id;
+  const userData = user?.data ?? user;
   const buyer_agent_id = useWatch({
     control: form.control,
     name: "buyer_agent_id",

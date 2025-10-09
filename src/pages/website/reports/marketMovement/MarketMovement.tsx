@@ -83,8 +83,10 @@ const buildRows = (response?: PropertyStatsResponse): MarketMovementRow[] => {
   });
 
   // Property type
-  const currentType = currentYearData[0]?.property_type || "لا يوجد";
-  const previousType = previousYearData[0]?.property_type || "لا يوجد";
+  let currentType = currentYearData[0]?.property_type || "لا يوجد";
+  let previousType = previousYearData[0]?.property_type || "لا يوجد";
+  if (currentType === "apartment") currentType = "شقة";
+  if (previousType === "apartment") previousType = "شقة";
   const typeChangeRate = "25";
 
   rows.push({
