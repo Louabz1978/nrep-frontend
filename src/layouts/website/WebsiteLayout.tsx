@@ -12,7 +12,6 @@ function WebsiteLayout() {
     return Boolean(handle?.whiteBg);
   });
 
-  // ✅ detect if current route wants noPadding
   const noPadding = matches.some((match) => {
     const handle = (match as { handle?: { noPadding?: boolean } }).handle;
     return Boolean(handle?.noPadding);
