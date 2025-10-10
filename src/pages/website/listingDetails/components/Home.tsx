@@ -32,7 +32,10 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
 
   const detailsRows1 = [
     [
-      { label: "السعر :", value: dummyProperty.price?.toLocaleString?.() + " $" },
+      {
+        label: "السعر :",
+        value: dummyProperty.price?.toLocaleString?.() + " $",
+      },
       {
         label: "الحالة : ",
         value: dummyProperty.status?.label ?? dummyProperty?.status,
@@ -108,19 +111,7 @@ const RenderDetailsTab = ({ dummyProperty }: RenderDetailsTabProps) => {
     <div className="w-full border-quaternary-border border-2">
       {/* Address Bar */}
       <div className="p-3 border-0">
-        <div className="p-3 mb-6 rounded-s flex items-center justify-center border-2 ">
-          <div className="flex justify-center items-center w-full text-primary font-bold underline">
-            <span className="text-center w-full block">
-              {`${dummyProperty.buildingNumber ?? "  "} ${
-                dummyProperty.streetName ?? "  "
-              } الطابق ${dummyProperty.floor ?? "  "} الشقة ${
-                dummyProperty.apartmentNumber ?? "  "
-              } ${dummyProperty.area}, ${dummyProperty.city}, ${
-                dummyProperty.governorate
-              }`}
-            </span>
-          </div>
-        </div>
+        <div className="p-3 mb-6 rounded-s flex items-center justify-center border-2 "></div>
       </div>
 
       {/* Property Image */}

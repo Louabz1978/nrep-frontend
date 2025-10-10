@@ -65,6 +65,7 @@ const router = createBrowserRouter([
       {
         path: "listing/details/:id",
         element: <ListingDetailsIndex />,
+        handle: { whiteBg: true },
       },
       {
         path: "listing/add",

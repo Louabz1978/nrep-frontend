@@ -93,3 +93,11 @@ export interface GetAgentMovementResponse {
     records_per_page: number;
   };
 }
+
+export interface Taxes {
+  mls: TNumber;
+  address: TString;
+  discrition: TString;
+}
+
+
