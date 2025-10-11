@@ -75,6 +75,22 @@ export const tabs: TabsType = [
     ],
   },
   {
+    label: "انتقالات",
+    permission: [],
+    submenu: [
+      {
+        label: "بيع",
+        to: "/transfers/sale",
+        permission: [],
+      },
+      {
+        label: "اجار",
+        to: "/transfers/rental",
+        permission: [],
+      },
+    ],
+  },
+  {
     label: "التقارير",
     permission: [],
     submenu: [

@@ -189,7 +189,7 @@ function Header() {
 
   return (
     // header container
-    <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm">
+    <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm ">
       {/* brand + inline nav */}
       <div className="flex items-center ">
         <div className="max-md:hidden">
@@ -199,7 +199,7 @@ function Header() {
           to="/"
           className="2xl:absolute xl:left-[50%] xl:-translate-x-[50%]  w-7xl h-7xl"
         >
-          <img src={logo} alt="NREP" className="size-full object-contain" />
+          <img src={logo} alt="NREP" className="size-full object-contain relative right-8" />
         </Link>
       </div>
 

@@ -127,18 +127,6 @@ const MarketMovement = () => {
     []
   );
 
-  // if (getMarketMovementQuery.isError) {
-  //   return (
-  //     <AnimateContainer>
-  //       <FormSectionHeader>تقرير حركة السوق</FormSectionHeader>
-  //       <PageContainer>
-  //         <div className="text-center text-red-600 py-8">
-  //           <p>حدث خطأ في تحميل البيانات. يرجى المحاولة مرة أخرى.</p>
-  //         </div>
-  //       </PageContainer>
-  //     </AnimateContainer>
-  //   );
-  // }
 
   return (
     <AnimateContainer>
