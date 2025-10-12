@@ -20,7 +20,10 @@ const images = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
 ];
 
-export default function HomeImages() {
+interface HomeImagesProps {
+  images: { url: string; is_main?: boolean }[];
+}
+export default function HomeImages({ images }: HomeImagesProps) {
   const swiperRef = useRef<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -87,13 +90,13 @@ export default function HomeImages() {
           modules={[EffectCoverflow, Pagination, Navigation]}
           className="homeSwiper"
         >
-          {images.map((src, index) => (
+          {images.map((item, index) => (
             <SwiperSlide
               key={index}
               className="swiper-slide-custom rounded-[40px] overflow-hidden bg-tertiary-bg shadow-lg !w-[700px] !h-[400px]"
             >
               <img
-                src={src}
+                src={item?.url}
                 alt={`Slide ${index}`}
                 className="w-full h-full object-cover"
               />

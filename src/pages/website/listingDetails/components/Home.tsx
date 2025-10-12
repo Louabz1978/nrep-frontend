@@ -2,6 +2,7 @@ import type { ListingDetailsType } from "@/types/website/listings";
 import HomeImages from "./HomeImages";
 import HomeInfo from "./HomeInfo";
 import { PiCurrencyDollarFill } from "react-icons/pi";
+import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 
 interface RenderDetailsTabProps {
   propertyDetails: ListingDetailsType;
@@ -17,10 +18,15 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
   const lastName = propertyDetails?.owner?.last_name ?? "";
   const fullName = `${firstName}${lastName ? ` ${lastName}` : ""}`.trim();
 
+  const images = propertyDetails.images_urls?.map((item) => ({
+    url: item?.url?.replace("//static", "/static"),
+    is_main: item?.is_main,
+  })) || [{ url: image, is_main: true }];
+
   return (
     <div className="w-full flex flex-col gap-6xl">
       {/* images */}
-      <HomeImages />
+      <HomeImages images={images} />
 
       {/* info */}
       <div className="grid grid-cols-6 gap-6xl">
