@@ -305,7 +305,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
             data-tab-content="details"
             style={{ display: activeTab === "details" ? "block" : "none" }}
           >
-            <RenderDetailsTab dummyProperty={dummyProperty} />
+            <RenderDetailsTab propertyDetails={data} />
           </div>
 
           <div

@@ -64,3 +64,45 @@ a {
 .apexcharts-canvas * {
   font-family: "Tajawal", "Segoe", sans-serif !important;
 }
+
+.homeSwiper {
+  width: 100%;
+}
+
+.homeSwiper .swiper-slide-custom {
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+/* Center (active) slide */
+.homeSwiper .swiper-slide-active {
+  opacity: 1;
+  z-index: 30;
+}
+
+/* Immediate next & previous slides */
+.homeSwiper .swiper-slide-next,
+.homeSwiper .swiper-slide-prev {
+  opacity: 0.9;
+  z-index: 20;
+}
+
+/* Second layer (behind next/prev) */
+.homeSwiper .swiper-slide-next + .swiper-slide,
+div:has(+ .swiper-slide-prev) {
+  opacity: 0.8 !important;
+  z-index: 10;
+}
+
+/* Everything else invisible */
+.homeSwiper .swiper-slide {
+  pointer-events: none; /* prevents clicks on hidden slides */
+}
+
+.homeSwiper .swiper-slide-active,
+.homeSwiper .swiper-slide-next,
+.homeSwiper .swiper-slide-prev,
+.homeSwiper .swiper-slide-next + .swiper-slide,
+.homeSwiper .swiper-slide-prev ~ .swiper-slide-prev {
+  pointer-events: auto;
+}

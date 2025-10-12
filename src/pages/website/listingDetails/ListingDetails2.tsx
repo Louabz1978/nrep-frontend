@@ -291,15 +291,20 @@ function ListingDetails2({ data }: ListingDetailsProps) {
               }${"     "},${"     "}${dummyProperty.governorate}`}
             </span>
             <div className="flex text-size15 text-success">
-              <div className="flex items-center whitespace-nowrap">القيمة التقديرية للعقار : </div>
-              <span>${((dummyProperty?.price * 80) / 100).toFixed(2) }</span>
+              <div className="flex items-center whitespace-nowrap">
+                القيمة التقديرية للعقار :{" "}
+              </div>
+              <span>${((dummyProperty?.price * 80) / 100).toFixed(2)}</span>
             </div>
           </div>
           <hr />
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-5xl items-center justify-center my-5xl" style={{ direction: "ltr" }}>
+        <div
+          className="flex gap-5xl items-center justify-center my-5xl"
+          style={{ direction: "ltr" }}
+        >
           <div className="flex overflow-auto gap-5xl">
             {TABS.map((tab) => (
               <div className="flex items-center justify-center">
@@ -327,7 +332,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
             data-tab-content="details"
             style={{ display: activeTab === "details" ? "block" : "none" }}
           >
-            <RenderDetailsTab dummyProperty={dummyProperty} />
+            <RenderDetailsTab propertyDetails={data} />
           </div>
 
           <div
