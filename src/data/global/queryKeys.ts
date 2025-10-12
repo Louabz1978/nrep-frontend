@@ -25,6 +25,9 @@ const QUERY_KEYS = {
   reports: {
     getTopAgent: "reports-get-top-agent",
     getMarketMovement: "reports-get-market-movement",
+    getListingMovement: "report-get-listing-movement",
+    getAgentMovement: "report-get-agent-movement",
+    compatibleProperties: "reports-compatible-properties",
   },
   transfers: {
     query: "transfers-query",

@@ -24,6 +24,8 @@ import MarketMovement from "./pages/website/reports/marketMovement/MarketMovemen
 import RentalTransfer from "@/pages/website/RentalTransfer";
 import SaleTransfer from "@/pages/website/SaleTransfer";
 import EditContractSign from "./pages/website/contracts/EditContractSign";
+import ListingMovementHistory from "./pages/website/reports/listingMovementHistory/ListingMovementHistory";
+import AgentMovement from "./pages/website/reports/agentMovement/AgentMovements";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -57,8 +59,13 @@ const router = createBrowserRouter([
         element: <MyListings />,
       },
       {
+        path: "listing/listing-movement",
+        element: <ListingMovementHistory />,
+      },
+      {
         path: "listing/details/:id",
         element: <ListingDetailsIndex />,
+        handle: { whiteBg: true },
       },
       {
         path: "listing/add",
@@ -103,6 +110,10 @@ const router = createBrowserRouter([
       {
         path: "reports/top-agent",
         element: <TopAgent />,
+      },
+      {
+        path: "reports/agent-movement",
+        element: <AgentMovement />,
       },
       {
         path: "reports/market-movement",

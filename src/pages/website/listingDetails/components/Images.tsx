@@ -1,5 +1,7 @@
 import { useState } from "react";
 import type { ImageType } from "@/types/website/listings";
+import PopupContainer from "@/components/global/popupContainer/PopupContainer";
+import { motion, AnimatePresence } from "framer-motion";
 
 type RenderImagesTabProps = {
   dummyProperty: {
@@ -10,146 +12,92 @@ type RenderImagesTabProps = {
 const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const images = dummyProperty?.image ?? [];
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalImageIndex, setModalImageIndex] = useState<number>(0);
 
-  const handleThumbnailClick = (index: number) => setActiveIndex(index);
+  const handleImageClick = (index: number) => {
+    setActiveIndex(index);
+    setModalImageIndex(index);
+    setIsModalOpen(true);
+  };
 
-  const activeImageUrl =
-    typeof images?.[activeIndex]?.url === "string"
-      ? images[activeIndex].url
-      : undefined;
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseModalWrapper = () => setIsModalOpen(false);
+
+  const chunkPattern = [2, 3];
+  const gridRows: Array<{ startIdx: number; count: number }> = [];
+  let idx = 0, patternIdx = 0;
+  while (idx < images.length) {
+    const count = chunkPattern[patternIdx % chunkPattern.length];
+    gridRows.push({ startIdx: idx, count: Math.min(count, images.length - idx) });
+    idx += count;
+    patternIdx++;
+  }
 
   return (
-    <div className="max-w-[1300px] mx-auto bg-[#E5E5E5] h-full flex flex-col items-center">
-      {/* Thumbnails Custom Grid */}
+    <div className="max-w-[1300px] mx-auto h-full flex flex-col items-center">
+      
       <div className="w-full p-3xl flex flex-col items-center space-y-6">
-        {/* Divide images into groups of 8 (2 + 3 + 3) */}
-        {Array.from({ length: Math.ceil(images.length / 8) }).map((_, groupIdx) => {
-          const baseIdx = groupIdx * 8;
-
-          // Rows pattern
-          const firstRowImages = [images[baseIdx], images[baseIdx + 1]].filter(Boolean);
-          const secondRowImages = [
-            images[baseIdx + 2],
-            images[baseIdx + 3],
-            images[baseIdx + 4],
-          ].filter(Boolean);
-          const thirdRowImages = [
-            images[baseIdx + 5],
-            images[baseIdx + 6],
-            images[baseIdx + 7],
-          ].filter(Boolean);
-
+        {gridRows.map(({ startIdx, count }, rowIdx) => {
+          const rowImages = images.slice(startIdx, startIdx + count);
+          
+          let widthClass = "w-1/2";
+          if (count === 3) widthClass = "w-1/3";
+          if (count === 1) widthClass = "w-full";
           return (
-            <div key={groupIdx} className="w-full flex flex-col items-center gap-6">
-              {/* First row: 2 images side by side */}
-              {firstRowImages.length > 0 && (
-                <div className="flex gap-6 justify-center items-center flex-wrap">
-                  {firstRowImages.map((img, i) => (
-                    <div
-                      key={baseIdx + i}
-                      className={`overflow-hidden transition h-[350px] lg:w-[600px] sm:w-[300px] flex items-center justify-center cursor-pointer select-none ${
-                        activeIndex === baseIdx + i
-                          ? "border-primary ring-2 ring-primary opacity-100"
-                          : "border-gray-200 opacity-80"
-                      }`}
-                      onClick={() => handleThumbnailClick(baseIdx + i)}
-                      tabIndex={0}
-                      role="img"
-                      aria-label={`اختر صورة رقم ${baseIdx + i + 1}`}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ")
-                          handleThumbnailClick(baseIdx + i);
-                      }}
-                    >
-                      <img
-                        src={img.url}
-                        alt={`thumbnail-${baseIdx + i}`}
-                        className="object-cover h-full w-full"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Second row: 3 images */}
-              {secondRowImages.length > 0 && (
-                <div className="flex gap-6 justify-center items-center flex-wrap">
-                  {secondRowImages.map((img, i) => (
-                    <div
-                      key={baseIdx + 2 + i}
-                      className={`overflow-hidden transition h-[220px] lg:w-[380px] sm:w-[220px] ${
-                        activeIndex === baseIdx + 2 + i
-                          ? "border-primary ring-2 ring-primary opacity-100"
-                          : "border-gray-200 opacity-80"
-                      }`}
-                      onClick={() => handleThumbnailClick(baseIdx + 2 + i)}
-                      tabIndex={0}
-                      role="img"
-                      aria-label={`اختر صورة رقم ${baseIdx + 2 + i + 1}`}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ")
-                          handleThumbnailClick(baseIdx + 2 + i);
-                      }}
-                    >
-                      <img
-                        src={img.url}
-                        alt={`thumbnail-${baseIdx + 2 + i}`}
-                        className="object-cover h-full w-full"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Third row: 3 images */}
-              {thirdRowImages.length > 0 && (
-                <div className="flex gap-6 justify-center items-center flex-wrap">
-                  {thirdRowImages.map((img, i) => (
-                    <div
-                      key={baseIdx + 5 + i}
-                      className={`overflow-hidden transition h-[220px] lg:w-[380px] sm:w-[220px] ${
-                        activeIndex === baseIdx + 5 + i
-                          ? "border-primary ring-2 ring-primary opacity-100"
-                          : "border-gray-200 opacity-80"
-                      }`}
-                      onClick={() => handleThumbnailClick(baseIdx + 5 + i)}
-                      tabIndex={0}
-                      role="img"
-                      aria-label={`اختر صورة رقم ${baseIdx + 5 + i + 1}`}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ")
-                          handleThumbnailClick(baseIdx + 5 + i);
-                      }}
-                    >
-                      <img
-                        src={img.url}
-                        alt={`thumbnail-${baseIdx + 5 + i}`}
-                        className="object-cover h-full w-full"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div
+              key={`row-${rowIdx}`}
+              className={`w-full flex gap-6 justify-${count === 1 ? "center" : "between"} items-center`}
+            >
+              {rowImages.map((img, i) => {
+                const globalIdx = startIdx + i;
+                return (
+                  <div
+                    key={globalIdx}
+                    className={`${widthClass} h-[${count===1?350: count===2?350:250}px] overflow-hidden  transition cursor-pointer ${activeIndex === globalIdx ? " opacity-100" : "opacity-80 hover:opacity-100"}`}
+                    onClick={() => handleImageClick(globalIdx)}
+                  >
+                    <img
+                      src={img.url}
+                      className="object-cover h-full w-full"
+                      loading="lazy"
+                    />
+                  </div>
+                );
+              })}
             </div>
           );
         })}
       </div>
 
-      {/* Large selected image below thumbnails */}
-      <div className="mt-8 w-full flex justify-center px-2xl">
-        <div className="rounded-3xl overflow-hidden border-2 border-primary w-full max-w-2xl aspect-video bg-white flex items-center justify-center min-h-[300px]">
-          {activeImageUrl && (
-            <img
-              src={activeImageUrl}
-              alt={`selected-${activeIndex}`}
-              className="object-contain w-full h-full max-h-[480px]"
-            />
-          )}
-        </div>
-      </div>
+      {/* Full-screen Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <PopupContainer setIsOpen={handleCloseModalWrapper}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 opacity-10 z-[1000] flex items-center justify-center"
+              onClick={handleCloseModal}
+            >
+              <motion.div
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.95 }}
+                className="relative max-w-[calc(100vw-10%)] max-h-[90vh] flex items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  src={images[modalImageIndex]?.url}
+                  className="object-contain w-[1230px] h-[700px]"
+                  alt="selected"
+                />
+              </motion.div>
+            </motion.div>
+          </PopupContainer>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

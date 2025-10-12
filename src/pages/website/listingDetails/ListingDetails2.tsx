@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 // import { usePDF } from "react-to-pdf";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
-import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
 import {
-  
   PROPERTY_TYPE,
   STATUS_WITH_CLOSED,
   TransType,
@@ -21,23 +19,26 @@ import type { ListingDetailsType } from "@/types/website/listings";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaHouse, FaImages } from "react-icons/fa6";
+import { FaChartLine } from "react-icons/fa";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
 import RenderImagesTab from "./components/Images";
+import CompatibleMarketReport from "./components/CompatibleMarketReport";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
 }
 
 const TABS = [
-  { key: "details", label: "التفاصيل", icon: <FaHouse /> },
-  { key: "images", label: "الصور", icon: <FaImages /> },
-  { key: "taxes", label: "الضرائب", icon: <FaMoneyBillAlt /> },
+  { key: "reports", label: "السوق المتوافق", icon: <FaChartLine /> },
   { key: "map", label: "الخريطة", icon: <FaMap /> },
+  { key: "taxes", label: "الضرائب", icon: <FaMoneyBillAlt /> },
+  { key: "images", label: "الصور", icon: <FaImages /> },
+  { key: "details", label: "التفاصيل", icon: <FaHouse /> },
 ];
 
-function ListingDetails({ data }: ListingDetailsProps) {
+function ListingDetails2({ data }: ListingDetailsProps) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
@@ -49,7 +50,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
   useEffect(() => {
     if (activeTab === "map" && mapRef2.current) {
       setTimeout(() => {
-        mapRef2.current?.invalidateSize();
+        (mapRef2.current as any)?.invalidateSize();
       }, 100);
     }
   }, [activeTab]);
@@ -223,8 +224,6 @@ function ListingDetails({ data }: ListingDetailsProps) {
   }`.trim();
 
   const dummyProperty = {
-    livable: data?.livable,
-    sellers: data?.sellers ?? [],
     trans_type: transType?.label,
     ac: data.additional?.ac ? "يوجد" : "لا يوجد",
     apartmentNumber: data.address?.apt || "2",
@@ -276,24 +275,51 @@ function ListingDetails({ data }: ListingDetailsProps) {
   return (
     <AnimateContainer>
       <PageContainer>
-        <FormSectionHeader>تفاصيل العقار</FormSectionHeader>
+        <div>
+          <h1 className="text-size29">تفاصيل العقار </h1>
+          <div className="flex justify-around items-center w-full text-primary font-bold text-size18 mb-2xl">
+            <span className=" w-full block gap-2xl">
+              {`${dummyProperty.buildingNumber ?? "  "}${"     "}${
+                dummyProperty.streetName ?? "  "
+              }${"     "}الطابق${"     "}${
+                dummyProperty.floor ?? "  "
+              }${"     "}الشقة${"     "}${
+                dummyProperty.apartmentNumber ?? "  "
+              }${"     "}${dummyProperty.area}${"     "},${"     "}${
+                dummyProperty.city
+              }${"     "},${"     "}${dummyProperty.governorate}`}
+            </span>
+            <div className="flex text-size15 text-success">
+              <div className="flex items-center whitespace-nowrap">
+                القيمة التقديرية للعقار :{" "}
+              </div>
+              <span>${((dummyProperty?.price * 80) / 100).toFixed(2)}</span>
+            </div>
+          </div>
+          <hr />
+        </div>
 
         {/* Tabs */}
-        <div className="flex mt-6 gap-2 " style={{ direction: "ltr" }}>
-          <div className="flex overflow-auto gap-2">
+        <div
+          className="flex gap-5xl items-center justify-center my-5xl"
+          style={{ direction: "ltr" }}
+        >
+          <div className="flex overflow-auto gap-5xl">
             {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${
-                  activeTab === tab.key
-                    ? "bg-tertiary-bg border-2 border-b-0 border-quaternary-border"
-                    : "bg-quaternary-border text-tertiary-bg"
-                }`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                <div>{tab.icon}</div>
-                <div>{tab.label}</div>
-              </button>
+              <div className="flex items-center justify-center">
+                <button
+                  key={tab.key}
+                  className={`flex items-center justify-around gap-3 px-6 py-3 rounded-full font-medium cursor-pointer ${
+                    activeTab === tab.key
+                      ? "bg-golden-medium text-layout-bg"
+                      : "bg-layout-bg text-tertiary-bg"
+                  }`}
+                  onClick={() => setActiveTab(tab.key)}
+                >
+                  <div>{tab.label}</div>
+                  <div>{tab.icon}</div>
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -333,6 +359,14 @@ function ListingDetails({ data }: ListingDetailsProps) {
           >
             <RenderImagesTab dummyProperty={dummyProperty} />
           </div>
+
+          <div
+            data-tab-content="reports"
+            style={{ display: activeTab === "reports" ? "block" : "none" }}
+            className="h-full"
+          >
+            <CompatibleMarketReport mls={data.mls_num?.toString() || ""} />
+          </div>
         </div>
 
         {/* Action Buttons */}
@@ -356,4 +390,4 @@ function ListingDetails({ data }: ListingDetailsProps) {
   );
 }
 
-export default ListingDetails;
+export default ListingDetails2;

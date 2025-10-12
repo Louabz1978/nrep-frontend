@@ -51,6 +51,11 @@ export const tabs: TabsType = [
         permission: [],
         to: "/listing/my-listings",
       },
+      {
+        label: "تاريخ حركة العقار",
+        permission: [],
+        to: "/listing/listing-movement",
+      },
     ],
   },
   {
@@ -98,6 +103,11 @@ export const tabs: TabsType = [
         label: "أفضل الوكلاء",
         permission: [],
         to: "/reports/top-agent",
+      },
+      {
+        label: "نشاط الوكيل",
+        permission: [],
+        to: "/reports/agent-movement",
       },
     ],
   },

@@ -3,6 +3,7 @@ import useListingDetails from "@/hooks/website/listing/useListingDetails";
 import StatusManager from "@/components/global/statusManager/StatusManager";
 import ListingDetailsSkeleton from "./ListingDetailsSkeleton";
 import ListingDetails from "./ListingDetails";
+import ListingDetails2 from "./ListingDetails2";
 // import { AnimatePresence } from "framer-motion";
 // import PopupContainer from "@/components/global/popupContainer/PopupContainer";
 // import { useState } from "react";
@@ -18,7 +19,7 @@ function ListingDetailsIndex() {
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingDetailsSkeleton}>
       {!listingDetails ? null : (
-        <ListingDetails key={listingId} data={listingDetails} />
+        <ListingDetails2 key={listingId} data={listingDetails} />
       )}
     </StatusManager>
   );
