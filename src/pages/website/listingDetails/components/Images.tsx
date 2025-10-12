@@ -24,37 +24,48 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const handleCloseModal = () => setIsModalOpen(false);
   const handleCloseModalWrapper = () => setIsModalOpen(false);
 
-  const chunkPattern = [2, 3];
+  const chunkPattern = [2, 3, 1];
   const gridRows: Array<{ startIdx: number; count: number }> = [];
-  let idx = 0, patternIdx = 0;
+  let idx = 0,
+    patternIdx = 0;
   while (idx < images.length) {
     const count = chunkPattern[patternIdx % chunkPattern.length];
-    gridRows.push({ startIdx: idx, count: Math.min(count, images.length - idx) });
+    gridRows.push({
+      startIdx: idx,
+      count: Math.min(count, images.length - idx),
+    });
     idx += count;
     patternIdx++;
   }
 
   return (
     <div className="max-w-[1300px] mx-auto h-full flex flex-col items-center">
-      
       <div className="w-full p-3xl flex flex-col items-center space-y-6">
         {gridRows.map(({ startIdx, count }, rowIdx) => {
           const rowImages = images.slice(startIdx, startIdx + count);
-          
+
           let widthClass = "w-1/2";
           if (count === 3) widthClass = "w-1/3";
           if (count === 1) widthClass = "w-full";
           return (
             <div
               key={`row-${rowIdx}`}
-              className={`w-full flex gap-6 justify-${count === 1 ? "center" : "between"} items-center`}
+              className={`w-full flex flex-1 h-[300px] gap-6 justify-${
+                count === 1 ? "center" : "between"
+              } items-center`}
             >
               {rowImages.map((img, i) => {
                 const globalIdx = startIdx + i;
                 return (
                   <div
                     key={globalIdx}
-                    className={`${widthClass} h-[${count===1?350: count===2?350:250}px] overflow-hidden  transition cursor-pointer ${activeIndex === globalIdx ? " opacity-100" : "opacity-80 hover:opacity-100"}`}
+                    className={`${widthClass} h-[${
+                      count === 1 ? 450 : count === 2 ? 350 : 250
+                    }px] overflow-hidden  transition cursor-pointer ${
+                      activeIndex === globalIdx
+                        ? " opacity-100"
+                        : "opacity-80 hover:opacity-100"
+                    }`}
                     onClick={() => handleImageClick(globalIdx)}
                   >
                     <img
@@ -88,11 +99,13 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
                 className="relative max-w-[calc(100vw-10%)] max-h-[90vh] flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
               >
-                <img
-                  src={images[modalImageIndex]?.url}
-                  className="object-contain w-[1230px] h-[700px]"
-                  alt="selected"
-                />
+                <div className=" lg:w-[1230px] lg:h-[750px] sm:w-[300px] sm:h-[400px]">
+                  <img
+                    src={images[modalImageIndex]?.url}
+                    className="object-cover w-full h-full"
+                    alt="selected"
+                  />
+                </div>
               </motion.div>
             </motion.div>
           </PopupContainer>
