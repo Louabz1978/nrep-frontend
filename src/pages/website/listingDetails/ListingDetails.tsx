@@ -7,7 +7,7 @@ import FormSectionHeader from "@/components/global/typography/FormSectionHeader"
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
 import {
-  cityChoices,
+  
   PROPERTY_TYPE,
   STATUS_WITH_CLOSED,
   TransType,

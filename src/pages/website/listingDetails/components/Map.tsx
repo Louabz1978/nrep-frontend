@@ -41,7 +41,7 @@ const RenderMapTab = ({ dummyProperty, mapRef }: RenderMapTabProps) => {
   const markerPosition = [lat, lng] as [number, number];
 
   return (
-    <div className="p-3xl border-quaternary-border border-2 sticky">
+    <div className="p-3xl border-quaternary-border bg-[#E5E5E5]  sticky">
       <div className="rounded-3xl max-w-200 m-auto">
         <div className="flex justify-end mb-2">
           <button
@@ -64,7 +64,7 @@ const RenderMapTab = ({ dummyProperty, mapRef }: RenderMapTabProps) => {
             </span>
           </button>
         </div>
-        <div className="w-full h-96 rounded-md overflow-hidden">
+        <div className="w-full h-96 rounded-xl overflow-hidden shadow-lg">
           <MapContainer
             ref={mapRef}
             center={markerPosition}

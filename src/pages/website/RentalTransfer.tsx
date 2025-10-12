@@ -31,12 +31,17 @@ export default function RentalTransfer() {
       accessorKey: "property",
       header: "العقار",
       cell: ({ row }) => {
-        const property = row.getValue("property") as RentTransaction["property"];
+        const property = row.getValue(
+          "property"
+        ) as RentTransaction["property"];
         return (
           <div className="space-y-1">
             <div className="font-medium">{property.description}</div>
             <div className="text-sm text-gray-500">
-              {property.property_type === "apartment" ? "شقة" : property.property_type} - {property.bedrooms} غرف - {property.bathrooms} حمام
+              {property.property_type === "apartment"
+                ? "شقة"
+                : property.property_type}{" "}
+              - {property.bedrooms} غرف - {property.bathrooms} حمام
             </div>
             <div className="text-xs text-gray-400">{property.address}</div>
           </div>
@@ -50,7 +55,9 @@ export default function RentalTransfer() {
         const buyer = row.getValue("buyer") as RentTransaction["buyer"];
         return (
           <div className="space-y-1">
-            <div className="font-medium">{buyer.name} {buyer.surname}</div>
+            <div className="font-medium">
+              {buyer.name} {buyer.surname}
+            </div>
             <div className="text-sm text-gray-500">{buyer.phone_number}</div>
             <div className="text-xs text-gray-400">{buyer.email}</div>
           </div>
@@ -64,7 +71,9 @@ export default function RentalTransfer() {
         const seller = row.getValue("seller") as RentTransaction["seller"];
         return (
           <div className="space-y-1">
-            <div className="font-medium">{seller.name} {seller.surname}</div>
+            <div className="font-medium">
+              {seller.name} {seller.surname}
+            </div>
             <div className="text-sm text-gray-500">{seller.phone_number}</div>
             <div className="text-xs text-gray-400">{seller.email}</div>
           </div>
@@ -87,7 +96,7 @@ export default function RentalTransfer() {
       accessorKey: "buyer_agent_commission",
       header: "عمولة وكيل المستأجر",
       cell: ({ row }) => (
-        <span >
+        <span>
           {Number(row.getValue("buyer_agent_commission")).toLocaleString()} %
         </span>
       ),
@@ -106,7 +115,9 @@ export default function RentalTransfer() {
   return (
     <PageContainer>
       <div className="flex xl:flex-nowrap flex-wrap border-b mb-8 pb-2">
-        <FormSectionHeader className="text-right">معاملات الإيجار</FormSectionHeader>
+        <FormSectionHeader className="text-right">
+          معاملات الإيجار
+        </FormSectionHeader>
       </div>
 
       <DataTable
@@ -115,7 +126,6 @@ export default function RentalTransfer() {
         prefix="rentalTransactions"
         miw={1200}
         query={query}
-        report
       />
     </PageContainer>
   );

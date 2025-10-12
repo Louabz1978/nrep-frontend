@@ -1,7 +1,5 @@
 import { useState } from "react";
 import type { ImageType } from "@/types/website/listings";
-import { AnimatePresence } from "framer-motion";
-import PopupContainer from "@/components/global/popupContainer/PopupContainer";
 
 type RenderImagesTabProps = {
   dummyProperty: {
@@ -11,103 +9,147 @@ type RenderImagesTabProps = {
 
 const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const images = dummyProperty?.image ?? [];
-  console.log(images)
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  const handleOpen = (index: number) => {
-    setActiveIndex(index);
-  };
+  const handleThumbnailClick = (index: number) => setActiveIndex(index);
 
   const activeImageUrl =
-    typeof images?.[activeIndex as number]?.url === "string"
-      ? images?.[activeIndex as number]?.url
+    typeof images?.[activeIndex]?.url === "string"
+      ? images[activeIndex].url
       : undefined;
 
   return (
-    <div className="w-full border-quaternary-border border-2 h-full">
-      <div className="p-3xl h-full">
-        <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-3xl">
-          {images?.map((img: ImageType, index: number) => {
-            const url = img?.url;
-            return (
-              <div
-                key={index}
-                className="flex rounded-2xl overflow-auto h-[250px] justify-center items-center border cursor-pointer"
-                onClick={() => handleOpen(index)}
-              >
-                <img
-                  src={url}
-                  alt={`${index}`}
-                  className="size-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            );
-          })}
-        </div>
+    <div className="max-w-[1300px] mx-auto bg-[#E5E5E5] h-full flex flex-col items-center">
+      {/* Thumbnails Custom Grid */}
+      <div className="w-full p-3xl flex flex-col items-center space-y-6">
+        {/* Divide images into groups of 8 (2 + 3 + 3) */}
+        {Array.from({ length: Math.ceil(images.length / 8) }).map((_, groupIdx) => {
+          const baseIdx = groupIdx * 8;
+
+          // Rows pattern
+          const firstRowImages = [images[baseIdx], images[baseIdx + 1]].filter(Boolean);
+          const secondRowImages = [
+            images[baseIdx + 2],
+            images[baseIdx + 3],
+            images[baseIdx + 4],
+          ].filter(Boolean);
+          const thirdRowImages = [
+            images[baseIdx + 5],
+            images[baseIdx + 6],
+            images[baseIdx + 7],
+          ].filter(Boolean);
+
+          return (
+            <div key={groupIdx} className="w-full flex flex-col items-center gap-6">
+              {/* First row: 2 images side by side */}
+              {firstRowImages.length > 0 && (
+                <div className="flex gap-6 justify-center items-center flex-wrap">
+                  {firstRowImages.map((img, i) => (
+                    <div
+                      key={baseIdx + i}
+                      className={`overflow-hidden transition h-[350px] lg:w-[600px] sm:w-[300px] flex items-center justify-center cursor-pointer select-none ${
+                        activeIndex === baseIdx + i
+                          ? "border-primary ring-2 ring-primary opacity-100"
+                          : "border-gray-200 opacity-80"
+                      }`}
+                      onClick={() => handleThumbnailClick(baseIdx + i)}
+                      tabIndex={0}
+                      role="img"
+                      aria-label={`اختر صورة رقم ${baseIdx + i + 1}`}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          handleThumbnailClick(baseIdx + i);
+                      }}
+                    >
+                      <img
+                        src={img.url}
+                        alt={`thumbnail-${baseIdx + i}`}
+                        className="object-cover h-full w-full"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Second row: 3 images */}
+              {secondRowImages.length > 0 && (
+                <div className="flex gap-6 justify-center items-center flex-wrap">
+                  {secondRowImages.map((img, i) => (
+                    <div
+                      key={baseIdx + 2 + i}
+                      className={`overflow-hidden transition h-[220px] lg:w-[380px] sm:w-[220px] ${
+                        activeIndex === baseIdx + 2 + i
+                          ? "border-primary ring-2 ring-primary opacity-100"
+                          : "border-gray-200 opacity-80"
+                      }`}
+                      onClick={() => handleThumbnailClick(baseIdx + 2 + i)}
+                      tabIndex={0}
+                      role="img"
+                      aria-label={`اختر صورة رقم ${baseIdx + 2 + i + 1}`}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          handleThumbnailClick(baseIdx + 2 + i);
+                      }}
+                    >
+                      <img
+                        src={img.url}
+                        alt={`thumbnail-${baseIdx + 2 + i}`}
+                        className="object-cover h-full w-full"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Third row: 3 images */}
+              {thirdRowImages.length > 0 && (
+                <div className="flex gap-6 justify-center items-center flex-wrap">
+                  {thirdRowImages.map((img, i) => (
+                    <div
+                      key={baseIdx + 5 + i}
+                      className={`overflow-hidden transition h-[220px] lg:w-[380px] sm:w-[220px] ${
+                        activeIndex === baseIdx + 5 + i
+                          ? "border-primary ring-2 ring-primary opacity-100"
+                          : "border-gray-200 opacity-80"
+                      }`}
+                      onClick={() => handleThumbnailClick(baseIdx + 5 + i)}
+                      tabIndex={0}
+                      role="img"
+                      aria-label={`اختر صورة رقم ${baseIdx + 5 + i + 1}`}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          handleThumbnailClick(baseIdx + 5 + i);
+                      }}
+                    >
+                      <img
+                        src={img.url}
+                        alt={`thumbnail-${baseIdx + 5 + i}`}
+                        className="object-cover h-full w-full"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      {/* <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <div className="w-full max-w-[80vw] md:w-[80vw] min-h-[300px] max-h-[80svh] bg-tertiary-bg rounded-2xl flex flex-col">
-          <div className="py-lg px-4xl flex justify-end border-b ">
-            <FaXmark
-              onClick={() => setIsOpen(false)}
-              className="cursor-pointer text-xl"
+      {/* Large selected image below thumbnails */}
+      <div className="mt-8 w-full flex justify-center px-2xl">
+        <div className="rounded-3xl overflow-hidden border-2 border-primary w-full max-w-2xl aspect-video bg-white flex items-center justify-center min-h-[300px]">
+          {activeImageUrl && (
+            <img
+              src={activeImageUrl}
+              alt={`selected-${activeIndex}`}
+              className="object-contain w-full h-full max-h-[480px]"
             />
-          </div>
-
-          <div className="flex justify-between md:flex-row flex-col-reverse md:p-4xl p-md md:gap-4xl gap-2xl h-[calc(100%_-_45px)]">
-            <div className="flex-1 grid xl:grid-cols-3 lg:grid-cols-2 gap-xl overflow-auto h-full">
-              {images?.map((img: ImageType, index: number) => {
-                const url = img?.url;
-                const isActive = index === activeIndex;
-                return (
-                  <button
-                    key={index}
-                    className={` rounded-lg overflow-hidden border transition w-full h-[200px] ${
-                      isActive ? "border-primary" : ""
-                    }}`}
-                    onClick={() => setActiveIndex(index)}
-                  >
-                    <img
-                      src={url}
-                      alt={`${index}`}
-                      className="size-full object-cover"
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className=" rounded-2xl md:size-[400px] w-full aspect-square overflow-hidden border">
-              {activeImageUrl ? (
-                <img
-                  src={activeImageUrl}
-                  alt={`${activeIndex}`}
-                  className="size-full object-contain"
-                />
-              ) : null}
-            </div>
-          </div>
+          )}
         </div>
-      </Modal> */}
-
-      <AnimatePresence>
-        {activeIndex !== null ? (
-          <PopupContainer setIsOpen={setActiveIndex}>
-            <div className="w-[100vw] h-[100svh] flex justify-center items-center pointer-events-none">
-              <div className="w-[90vw] h-[90svh]">
-                <img
-                  src={activeImageUrl}
-                  alt={`${activeIndex}`}
-                  className="size-full object-contain"
-                />
-              </div>
-            </div>
-          </PopupContainer>
-        ) : null}
-      </AnimatePresence>
+      </div>
     </div>
   );
 };

@@ -115,7 +115,7 @@ export default function SaleTransfer() {
         prefix="saleTransactions"
         miw={1200}
         query={query}
-        report
+        
       />
     </PageContainer>
   );
