@@ -9,7 +9,8 @@ import LOGIN_FORM_SCHEMA, {
 } from "@/data/global/LoginFormSchema";
 import type { UseMutationResult } from "@tanstack/react-query";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useSendCode from "@/hooks/global/resetPassword/useSendCode";
 
 interface LoginProps<T> {
   login: UseMutationResult<
@@ -24,6 +25,9 @@ interface LoginProps<T> {
 }
 
 function Login<T>({ login, handleLogin }: LoginProps<T>) {
+  const navigate = useNavigate();
+  const { handleSendCode, sendCode } = useSendCode();
+
   const form = useForm({
     resolver: joiResolver(LOGIN_FORM_SCHEMA),
     defaultValues: LOGIN_FORM_SCHEMA_INITIAL_VALUES,
@@ -32,6 +36,20 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
 
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     handleLogin(data);
+  };
+
+  const handleForgotPassword = async () => {
+    const email = form.getValues("username");
+    if (email) {
+      try {
+        await handleSendCode(email);
+        // Navigate to reset OTP page only after successful code send
+        navigate("/reset-otp", { state: { email } });
+      } catch (error) {
+        // Error is already handled by the toast in useSendCode hook
+        // No navigation on error
+      }
+    }
   };
 
   return (
@@ -49,8 +67,8 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
             gap-[16px]
             px-[80px]
             py-[40px]
-            border-[var(--login-primary)] 
-             bg-white 
+            border-[var(--login-primary)]
+             bg-white
             border-[2px]
               rounded-[28px]
             flex flex-col items-center
@@ -101,12 +119,16 @@ function Login<T>({ login, handleLogin }: LoginProps<T>) {
                   labelStyle="!font-bold mb-2 !text-size13"
                   addingInputStyle="!h-8 !rounded !p-4 !bg-white/90 !text-size16 placeholder:!text-size13"
                   bottomElement={
-                    <Link
-                      to={"/forgot-password"}
-                      className="text-size12 d-block font-medium mt-2  transition-colors"
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      disabled={sendCode.isPending}
+                      className="text-size12 d-block font-medium mt-2 transition-colors hover:text-[var(--login-primary)] disabled:opacity-50"
                     >
-                      هل نسيت كلمة السر؟
-                    </Link>
+                      {sendCode.isPending
+                        ? "جار الإرسال..."
+                        : "هل نسيت كلمة السر؟"}
+                    </button>
                   }
                 />
               </div>
