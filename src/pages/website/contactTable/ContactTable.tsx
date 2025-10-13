@@ -18,9 +18,13 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function ContactTable() {
+
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   // user information
   const { hasPermissions } = useUser();
 
@@ -122,7 +126,7 @@ function ContactTable() {
               {hasPermissions(["admin"]) ? (
                 <Tooltip>
                   <TooltipTrigger>
-                    <Link to={`/contact/edit/${row?.original?.consumer_id}`}>
+                    <Link to={`${isAdminRoute ? "/admin" : ""}/contact/edit/${row?.original?.consumer_id}`}>
                       <Button
                         size={"icon"}
                         className="bg-transparent !text-primary"

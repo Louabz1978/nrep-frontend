@@ -42,8 +42,8 @@ const router = createBrowserRouter([
         element: <Home />,
         handle: {
           noPadding: true,
-          whitebg: true
-        }
+          whitebg: true,
+        },
       },
       {
         path: "test-table",
@@ -146,6 +146,14 @@ const router = createBrowserRouter([
         element: <AllListings />,
       },
       {
+        path: "listing/edit/:id",
+        element: <EditListingIndex />,
+      },
+      {
+        path: "listing/details/:id",
+        element: <ListingDetailsIndex />,
+      },
+      {
         path: "contact",
         element: <ContactTable />,
       },
@@ -240,7 +248,6 @@ const router = createBrowserRouter([
         path: "verify-password",
         element: <VerifyPassword />,
       },
-
     ],
   },
   // not found

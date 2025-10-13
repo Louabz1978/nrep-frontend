@@ -21,7 +21,7 @@ import { useUser } from "@/stores/useUser";
 import type { Listing } from "@/types/website/listings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import StatusForm from "./StatusForm";
 import { PropertyStatus } from "@/data/global/enums";
 import { FiEdit } from "react-icons/fi";
@@ -29,6 +29,10 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { TfiInfoAlt } from "react-icons/tfi";
 
 function AllListings() {
+
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   // user information
   const { user, hasPermissions } = useUser();
 
@@ -75,7 +79,7 @@ function AllListings() {
         header: "MLS",
         cell: ({ row }) => (
           <Link
-            to={`/listing/details/${row?.original?.property_id}`}
+            to={`${isAdminRoute ? "/admin" : ""}/listing/details/${row?.original?.property_id}`}
             className="hover:text-primary"
           >
             {`#${row?.original?.mls_num}`}
@@ -156,7 +160,7 @@ function AllListings() {
               <Tooltip>
                 <TooltipTrigger>
                   <Link
-                    to={`/listing/edit/${row?.original?.property_id}`}
+                    to={`${isAdminRoute ? "/admin" : ""}/listing/edit/${row?.original?.property_id}`}
                     className={`${
                       isSameUser || !isClosed
                         ? "cursor-not-allowed"
@@ -206,7 +210,7 @@ function AllListings() {
               {/* details */}
               <Tooltip>
                 <TooltipTrigger>
-                  <Link to={`/listing/details/${row?.original?.property_id}`}>
+                  <Link to={`${isAdminRoute ? "/admin" : ""}/listing/details/${row?.original?.property_id}`}>
                     <Button
                       className="bg-transparent !text-[#988561]"
                       size={"icon"}
