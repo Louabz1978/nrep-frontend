@@ -28,6 +28,7 @@ import ListingMovementHistory from "./pages/website/reports/listingMovementHisto
 import AgentMovement from "./pages/website/reports/agentMovement/AgentMovements";
 import ResetOtp from "./pages/global/resetOtp/ResetOtp";
 import VerifyPassword from "./pages/global/resetOtp/VerifyPassword";
+import AdminHome from "./pages/admin/home/AdminHome";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -133,12 +134,28 @@ const router = createBrowserRouter([
   },
   // admin pages
   {
-    path: "/admin",
+    path: "/admin/",
     element: <PrivateRoute element={<AdminLayout />} role={"admin"} />,
     children: [
       {
         index: true,
-        element: <OtherUserHome type="admin" />,
+        element: <AdminHome />,
+      },
+      {
+        path: "listing/all-listings",
+        element: <AllListings />,
+      },
+      {
+        path: "contact",
+        element: <ContactTable />,
+      },
+      {
+        path: "contact/add",
+        element: <AddContactFormIndex />,
+      },
+      {
+        path: "contact/edit/:id",
+        element: <EditContactFormIndex />,
       },
       {
         path: "*",
@@ -223,7 +240,7 @@ const router = createBrowserRouter([
         path: "verify-password",
         element: <VerifyPassword />,
       },
-      
+
     ],
   },
   // not found
