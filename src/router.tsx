@@ -27,6 +27,7 @@ import EditContractSign from "./pages/website/contracts/EditContractSign";
 import ListingMovementHistory from "./pages/website/reports/listingMovementHistory/ListingMovementHistory";
 import AgentMovement from "./pages/website/reports/agentMovement/AgentMovements";
 import ResetOtp from "./pages/global/resetOtp/ResetOtp";
+import VerifyPassword from "./pages/global/resetOtp/VerifyPassword";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -218,6 +219,11 @@ const router = createBrowserRouter([
         path: "reset-otp",
         element: <ResetOtp />,
       },
+      {
+        path: "verify-password",
+        element: <VerifyPassword />,
+      },
+      
     ],
   },
   // not found

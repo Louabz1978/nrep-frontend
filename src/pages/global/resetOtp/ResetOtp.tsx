@@ -24,7 +24,7 @@ const ResetOtp = () => {
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
-        setTimer(timer - 1);
+        setTimer((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
     } else {
@@ -49,9 +49,17 @@ const ResetOtp = () => {
     }
 
     try {
-      await handleSendOpt(email, otp);
-      // Navigate to reset password page or next step
-      navigate("/reset-password", { state: { email, otp } });
+      const response = await handleSendOpt(email, otp);
+
+      sessionStorage.setItem("resetEmail", email);
+      sessionStorage.setItem("resetToken", response?.success?.token || "temp_token");
+
+      navigate("/verify-password", { 
+        state: { 
+          email, 
+          token: response?.success?.token || "temp_token"
+        } 
+      });
     } catch (error) {
       console.error("Error verifying OTP:", error);
     }
@@ -59,25 +67,14 @@ const ResetOtp = () => {
   return (
     <AnimateContainer>
       <div
-        className={`w-full h-screen flex items-center justify-center `}
+        className="w-full h-screen flex items-center justify-center"
         style={{
           backgroundImage:
             "radial-gradient(50% 50% at 50% 50%, #0DA891 0%, #054239 100%)",
         }}
       >
         <div
-          className={`
-             w-[410px] max-w-full
-             gap-[16px]
-pb-2xl
-              bg-tertiary-bg
-              border-golden-medium
-             border-[2px]
-               rounded-[28px]
-             flex flex-col items-center
-             relative
-             shadow-lg
-           `}
+          className="w-[410px] max-w-full gap-[16px] pb-2xl bg-tertiary-bg border-golden-medium border-[2px] rounded-[28px] flex flex-col items-center relative shadow-lg"
         >
           {/* Back Button */}
           <button
@@ -109,7 +106,7 @@ pb-2xl
               </div>
             </div>
             <div className="w-[250px] flex flex-col gap-[24px]">
-              <div className="w-full flex justify-start ">
+              <div className="w-full flex justify-start">
                 <span className="text-size18 font-bold mt-2 text-center">
                   الرجاء مراجعة البريد الالكتروني
                 </span>
@@ -122,22 +119,11 @@ pb-2xl
                   <input
                     {...props}
                     onFocus={() => setActiveInput(index)}
-                    className={`
-              w-12 h-12
-              rounded-lg
-              border-2
-              text-center
-              text-lg
-              font-semibold
-              focus:outline-none
-              transition-colors
-              ${
-                index === activeInput
-                  ? "border-golden-medium bg-tertiary-bg"
-                  : "border-gray-300 bg-tertiary-bg"
-              }
-              ${props.value ? "border-golden-medium" : ""}
-            `}
+                    className={`w-12 h-12 rounded-lg border-2 text-center text-lg font-semibold focus:outline-none transition-colors ${
+                      index === activeInput
+                        ? "border-golden-medium bg-tertiary-bg"
+                        : "border-gray-300 bg-tertiary-bg"
+                    } ${props.value ? "border-golden-medium" : ""}`}
                     style={{
                       width: "48px",
                       height: "48px",
@@ -177,7 +163,7 @@ pb-2xl
                 )}
               </div>
 
-              <div className="w-full flex flex-col ">
+              <div className="w-full flex flex-col">
                 <Button
                   type="submit"
                   disabled={otp.length !== 4 || sendOpt.isPending}
@@ -187,8 +173,6 @@ pb-2xl
                 </Button>
               </div>
             </div>
-
-            {/* buttons */}
           </form>
         </div>
       </div>
