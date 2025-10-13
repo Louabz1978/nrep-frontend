@@ -26,6 +26,7 @@ import SaleTransfer from "@/pages/website/SaleTransfer";
 import EditContractSign from "./pages/website/contracts/EditContractSign";
 import ListingMovementHistory from "./pages/website/reports/listingMovementHistory/ListingMovementHistory";
 import AgentMovement from "./pages/website/reports/agentMovement/AgentMovements";
+import ResetOtp from "./pages/global/resetOtp/ResetOtp";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -212,6 +213,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginLogic />,
+      },
+      {
+        path: "reset-otp",
+        element: <ResetOtp />,
       },
     ],
   },
