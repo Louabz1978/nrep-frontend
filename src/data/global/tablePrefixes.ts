@@ -12,6 +12,8 @@ const TABLE_PREFIXES = {
   listing_movement: "listingMovement",
   agent_movement: "agentMovement",
   compatible_properties: "compatibleProperties",
+  brokers: "brokers",
+  realtors: "realtors",
 };
 
 export default TABLE_PREFIXES;
