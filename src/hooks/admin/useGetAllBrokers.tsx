@@ -4,9 +4,8 @@ import type { GetAllBrokersProps } from "@/api/admin/getBroker";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 
 function useGetAllBrokers(params?: GetAllBrokersProps) {
-
   const allBrokersQuery = useQuery({
-    queryKey:[TABLE_PREFIXES.brokers,JSON.stringify(params?.queryParams)],
+    queryKey: [TABLE_PREFIXES.brokers, JSON.stringify(params?.queryParams)],
     queryFn: () => getAllBrokers({ ...(params || {}) }),
     retry: false,
     refetchOnWindowFocus: false,

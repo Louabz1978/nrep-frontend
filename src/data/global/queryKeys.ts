@@ -34,6 +34,10 @@ const QUERY_KEYS = {
     sale: "sale-transfers-query",
     rental: "rental-transfers-query",
   },
+  agencies: {
+    query: "agencies-query",
+    details: "agencies-details",
+  },
 };
 
 export default QUERY_KEYS;

@@ -69,6 +69,28 @@ const MESSAGES = {
       success: "تم إرسال الكود بنجاح!",
     },
   },
+  agency: {
+    add: {
+      loading: "جار إضافة الشركة...",
+      success: "تمت إضافة الشركة بنجاح!",
+    },
+    edit: {
+      loading: "جار تعديل الشركة...",
+      success: "تم تعديل الشركة بنجاح!",
+    },
+    delete: {
+      loading: "جار حذف الشركة...",
+      success: "تم حذف الشركة بنجاح!",
+    },
+    addRealtor: {
+      loading: "جار ربط الوسيط بالشركة...",
+      success: "تم ربط الوسيط بالشركة بنجاح!",
+    },
+    removeRealtor: {
+      loading: "جار إزالة الوسيط من الشركة...",
+      success: "تمت إزالة الوسيط من الشركة بنجاح!",
+    },
+  },
 };
 
 export default MESSAGES;

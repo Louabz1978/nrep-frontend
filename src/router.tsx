@@ -29,6 +29,11 @@ import AgentMovement from "./pages/website/reports/agentMovement/AgentMovements"
 import ResetOtp from "./pages/global/resetOtp/ResetOtp";
 import VerifyPassword from "./pages/global/resetOtp/VerifyPassword";
 import AdminHome from "./pages/admin/home/AdminHome";
+import AgenciesList from "./pages/admin/agencies/AgenciesList";
+import CreateAgency from "./pages/admin/agencies/CreateAgency";
+import AgencyDetails from "./pages/admin/agencies/AgencyDetails";
+import BrokerTable from "@/components/admin/broker/BrokerTable";
+import RealtorTable from "@/components/admin/realtor/RealtorTable";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -164,6 +169,26 @@ const router = createBrowserRouter([
       {
         path: "contact/edit/:id",
         element: <EditContactFormIndex />,
+      },
+      {
+        path: "agencies",
+        element: <AgenciesList />,
+      },
+      {
+        path: "agencies/create",
+        element: <CreateAgency />,
+      },
+      {
+        path: "agencies/:id",
+        element: <AgencyDetails />,
+      },
+      {
+        path: "brokers",
+        element: <BrokerTable />,
+      },
+      {
+        path: "realtors",
+        element: <RealtorTable />,
       },
       {
         path: "*",

@@ -14,6 +14,7 @@ const TABLE_PREFIXES = {
   compatible_properties: "compatibleProperties",
   brokers: "brokers",
   realtors: "realtors",
+  agencies: "agencies",
 };
 
 export default TABLE_PREFIXES;
