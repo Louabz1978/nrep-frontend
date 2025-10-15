@@ -247,7 +247,7 @@ function ContactTable() {
           data={(allContacts ?? []) as ContactWithUser[]}
           query={allContactsQuery}
           totalPageCount={totalPages}
-          to="/contact/add"
+          to={`${isAdminRoute ? "/admin" : ""}/contact/add`}
           show={true}
           searchKey="name"
           searchPlaceholder="البحث عن طريق الاسم..."

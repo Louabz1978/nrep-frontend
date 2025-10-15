@@ -39,6 +39,7 @@ axiosAiClient.interceptors.response.use(
     if (typeof window != "undefined" && error?.response?.status === 401) {
       secureLocalStorage.removeItem("ACCESS_TOKEN");
       secureLocalStorage.removeItem("USER");
+      secureLocalStorage.removeItem("REFRESH_TOKEN");
       window.location.replace(`${window.location.origin}/login`);
     }
     let err = error;

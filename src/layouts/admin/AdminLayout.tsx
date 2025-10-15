@@ -7,6 +7,11 @@ import Footer from "./footer/Footer";
 function AdminLayout() {
   const matches = useMatches();
 
+  const useWhiteBackground = matches.some((match) => {
+    const handle = (match as { handle?: { whiteBg?: boolean } }).handle;
+    return Boolean(handle?.whiteBg);
+  });
+
   const noPadding = matches.some((match) => {
     const handle = (match as { handle?: { noPadding?: boolean } }).handle;
     return Boolean(handle?.noPadding);
@@ -14,7 +19,9 @@ function AdminLayout() {
 
   return (
     <div
-      className={`relative flex flex-col scroll-bar transition-colors duration-[0.3s]`}
+      className={`relative flex flex-col scroll-bar transition-colors duration-[0.3s] ${
+        useWhiteBackground ? "bg-white" : "bg-primary-bg"
+      }`}
     >
       <AnimateContainer>
         <Header />

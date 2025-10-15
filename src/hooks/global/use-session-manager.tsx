@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
 import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/stores/useUser";
+import { refreshTokenFunction } from "@/api/global/refreshToken/refreshToken";
 
 export const useSessionManager = () => {
   const { setUser, user } = useUser();
@@ -27,32 +28,37 @@ export const useSessionManager = () => {
   const logout = useCallback(() => {
     secureLocalStorage.removeItem("ACCESS_TOKEN");
     secureLocalStorage.removeItem("USER");
+    secureLocalStorage.removeItem("REFRESH_TOKEN");
     secureLocalStorage.removeItem("LOGIN_TIME");
     setUser(null);
     window.location.href = "/login";
   }, [setUser]);
 
   const refreshSession = useCallback(async () => {
-    logout();
-    // try {
-    //   // Implement your token refresh logic here
-    //   // For example:
-    //   // const newToken = await refreshTokenFunction();
-    //   // secureLocalStorage.setItem("ACCESS_TOKEN", { data: newToken });
+    try {
+      // Implement your token refresh logic here
+      // For example:
+      const refreshToken = secureLocalStorage.getItem(
+        "REFRESH_TOKEN"
+      ) as unknown as { data: string };
+      console.log(refreshToken.data);
+      const newToken = await refreshTokenFunction({
+        refresh_token: refreshToken?.data as string,
+      });
+      secureLocalStorage.setItem("ACCESS_TOKEN", { data: newToken });
 
-    //   // Reset login time on refresh
-    //   const newLoginTime = Date.now();
-    //   secureLocalStorage.setItem("LOGIN_TIME", {
-    //     data: newLoginTime.toString(),
-    //   });
+      // Reset login time on refresh
+      const newLoginTime = Date.now();
+      secureLocalStorage.setItem("LOGIN_TIME", {
+        data: newLoginTime.toString(),
+      });
 
-    //   toast.success("تم تجديد الجلسة بنجاح");
-    //   scheduleTimers(); // Reschedule timers with new login time
-    // } catch (error) {
-    //   logout();
-    //   toast.error("فشل في تجديد الجلسة");
-    // }
-  }, [logout]);
+      toast.success("تم تجديد الجلسة بنجاح");
+      scheduleTimers(); // Reschedule timers with new login time
+    } catch (error) {
+      toast.error("فشل في تجديد الجلسة");
+    }
+  }, []);
 
   const showRefreshPrompt = useCallback(() => {
     toast.info("جلسة العمل على وشك الانتهاء", {

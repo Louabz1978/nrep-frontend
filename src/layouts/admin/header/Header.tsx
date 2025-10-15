@@ -196,7 +196,7 @@ function Header() {
           <Navbar variant="inline" />
         </div>
         <Link
-          to="/"
+          to="/admin"
           className="2xl:absolute xl:left-[50%] xl:-translate-x-[50%]  w-7xl h-7xl"
         >
           <img src={logo} alt="NREP" className="size-full object-contain relative right-8" />

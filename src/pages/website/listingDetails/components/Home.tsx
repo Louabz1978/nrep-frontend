@@ -3,6 +3,7 @@ import HomeImages from "./HomeImages";
 import HomeInfo from "./HomeInfo";
 import { PiCurrencyDollarFill } from "react-icons/pi";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
+import { PROPERTY_TYPE, STATUS_WITH_CLOSED, WATERLINE } from "@/data/global/select";
 
 interface RenderDetailsTabProps {
   propertyDetails: ListingDetailsType;
@@ -13,6 +14,17 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
   const createdByFullName = `${createdByFirstName}${
     createdByLastName ? ` ${createdByLastName}` : ""
   }`.trim();
+
+  const status = STATUS_WITH_CLOSED?.find(
+    (item) => item?.value == propertyDetails?.status
+  );
+  const propertyType = PROPERTY_TYPE?.find(
+    (item) => item?.value == propertyDetails?.property_type
+  )?.label;
+  const waterLine = WATERLINE?.find(
+    (item) => item?.value == propertyDetails?.additional?.water
+  )?.label;
+
 
   const firstName = propertyDetails?.owner?.first_name ?? "";
   const lastName = propertyDetails?.owner?.last_name ?? "";
@@ -54,7 +66,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
               <HomeInfo
                 icon={PiCurrencyDollarFill}
                 label="الحالة"
-                value={propertyDetails?.status}
+                value={status?.label}
               />
               <HomeInfo
                 icon={PiCurrencyDollarFill}
@@ -99,7 +111,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
               <HomeInfo
                 icon={PiCurrencyDollarFill}
                 label="نوع العقار"
-                value={propertyDetails?.property_type}
+                value={propertyType}
               />
               <HomeInfo
                 icon={PiCurrencyDollarFill}
@@ -181,7 +193,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 iconClassName="size-4xl min-w-4xl"
                 label="خط المياه الواصل للعقار"
                 labelClassName="!font-bold"
-                value={propertyDetails?.additional?.water}
+                value={waterLine}
               />
               <HomeInfo
                 icon={PiCurrencyDollarFill}

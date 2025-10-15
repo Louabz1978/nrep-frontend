@@ -14,6 +14,7 @@ export type ContactFormType = {
   national_number: TNumber;
   email: TString;
   phone_number: TString;
+  password : TString;
 };
 
 export const ContactFormSchema = Joi.object<ContactFormType>({
@@ -66,6 +67,10 @@ export const ContactFormSchema = Joi.object<ContactFormType>({
       "string.pattern.base": `الحقل {{#label}} يجب أن يطابق النمط المطلوب , مثل: 09XXXXXXXX.`,
     })
     .label("رقم الهاتف"),
+    password: Joi.string()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("كلمة المرور"),
 });
 
 export const contactFormInitialValues: ContactFormType = {
@@ -79,4 +84,5 @@ export const contactFormInitialValues: ContactFormType = {
   national_number: null,
   email: null,
   phone_number: null,
+  password : null,
 };

@@ -23,8 +23,10 @@ function useLoginMutation() {
     onSuccess: async ({ user }) => {
       const data: User = jwtDecode(user.access_token);
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: user?.access_token });
+      secureLocalStorage.setItem("REFRESH_TOKEN", {
+        data: user?.refresh_token,
+      });
       secureLocalStorage.setItem("USER", { data: data });
-
       // Store login timestamp
       const loginTime = Date.now();
       secureLocalStorage.setItem("LOGIN_TIME", { data: loginTime.toString() });
