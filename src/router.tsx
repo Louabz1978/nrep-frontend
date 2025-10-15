@@ -142,7 +142,7 @@ const router = createBrowserRouter([
   // admin pages
   {
     path: "/admin/",
-    element: <AdminLayout />,
+    element: <PrivateRoute element={<AdminLayout />} role={"admin"} />,
     children: [
       {
         index: true,

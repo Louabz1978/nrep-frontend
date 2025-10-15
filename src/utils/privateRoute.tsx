@@ -17,7 +17,6 @@ const hasPermission = (userRole: UserType[], requiredRole: UserType) => {
 
 // Prevent user from accessing other user type pages
 const PrivateRoute = ({ element, role }: PrivateRouteProps) => {
-  return element
   const location = useLocation();
   const currentPath = location.pathname;
 
