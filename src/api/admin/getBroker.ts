@@ -10,14 +10,24 @@ export type GetAllBrokersResult = Promise<AxiosRes<PaginationData<User[]>>>;
 
 async function getAllBrokers({ queryParams }: GetAllBrokersProps = {}): GetAllBrokersResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
-    `/brokers/`,
+    `/users/`,
     {
       params: {
         ...queryParams,
+        roles: "broker", 
         page: queryParams?.page ?? 1,
       },
     }
   );
-  return res?.data;
+
+  const filtered = res.data.data.filter((user) =>
+    user.roles?.includes("broker")
+  );
+
+  return {
+    ...res.data,
+    data: filtered,
+  };
 }
+
 export default getAllBrokers;

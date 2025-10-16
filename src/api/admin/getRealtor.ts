@@ -10,15 +10,23 @@ export type GetAllRealtorsProps = {
 export type GetAllRealtorsResult = Promise<AxiosRes<PaginationData<User[]>>>;
 async function getAllRealtors({ queryParams }: GetAllRealtorsProps = {}): GetAllRealtorsResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
-    `/realtors/`,
+    `/users/`,
     {
       params: {
         ...queryParams,
+        roles: "realtor",
         page: queryParams?.page ?? 1,
       },
     }
   );
-  return res?.data;
+  const filtered = res.data.data.filter((user) =>
+    user.roles?.includes("realtor")
+  );
+
+  return {
+    ...res.data,
+    data: filtered,
+  };
 }
 
 export default getAllRealtors;
