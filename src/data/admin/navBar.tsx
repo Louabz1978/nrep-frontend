@@ -43,4 +43,41 @@ export const adminTabs: AdminTabsType = [
       },
     ],
   },
+  {
+    label: "الأساسيات",
+    permission: [],
+    submenu: [
+      {
+        label: "سماسرة",
+        permission: [],
+        to: "/admin/brokers",
+      },
+      {
+        label: "وكلاء العقارات",
+        permission: [],
+        to: "/admin/realtors",
+      },
+      {
+        label: "الشركات العقارية",
+        permission: [],
+        to: "/admin/agencies",
+      },
+    ],
+  },
+  {
+    label:"التقارير",
+    permission: [],
+    submenu: [
+      {
+        label: "أفضل عشر وكالات",
+        permission: [],
+        to: "/admin/reports/top-agencies",
+      },
+      {
+        label: "سجل حركة الوسطاء",
+        permission: [],
+        to: "/admin/reports/broker-history",
+      },
+    ],
+  }
 ];
