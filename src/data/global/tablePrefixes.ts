@@ -14,6 +14,9 @@ const TABLE_PREFIXES = {
   compatible_properties: "compatibleProperties",
   brokers: "brokers",
   realtors: "realtors",
+  realtor_history : "realtorHistory",
+  agencies_history : "agenciesHistory",
+  expected_price : "expectedPrice",
 };
 
 export default TABLE_PREFIXES;

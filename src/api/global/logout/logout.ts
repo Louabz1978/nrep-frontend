@@ -1,12 +1,15 @@
-// import axiosClient from "@/libs/axios/axios-client";
-import waitSeconds from "@/utils/waitSeconds";
+import axiosClient from "@/libs/axios/axios-client";
+
+interface LogoutProps {
+  token: string;
+  type: string;
+}
 
 // logout api call function
-async function logoutFunction() {
-  await waitSeconds();
-  // const res = await axiosClient.post(`auth/logout`, formData);
+async function logoutFunction({ token, type }: LogoutProps) {
+  const res = await axiosClient.post(`auth/logout`, { token, type });
 
-  return { success: true };
+  return res.data;
 }
 
 export default logoutFunction;

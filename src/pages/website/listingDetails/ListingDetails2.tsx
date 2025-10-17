@@ -272,6 +272,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
     waterLine: waterLine || "لا يوجد",
   };
 
+
   return (
     <AnimateContainer>
       <PageContainer>

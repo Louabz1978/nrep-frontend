@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import secureLocalStorage from "react-secure-storage";
 import { useUser } from "@/stores/useUser";
 import { refreshTokenFunction } from "@/api/global/refreshToken/refreshToken";
+import logoutFunction from "@/api/global/logout/logout";
 
 export const useSessionManager = () => {
   const { setUser, user } = useUser();
@@ -13,6 +14,7 @@ export const useSessionManager = () => {
     refresh: null,
     logout: null,
   });
+  const scheduleTimersRef = useRef<() => void>(() => {});
 
   const clearTimers = useCallback(() => {
     if (timersRef.current.refresh) {
@@ -36,26 +38,25 @@ export const useSessionManager = () => {
 
   const refreshSession = useCallback(async () => {
     try {
-      // Implement your token refresh logic here
-      // For example:
       const refreshToken = secureLocalStorage.getItem(
         "REFRESH_TOKEN"
       ) as unknown as { data: string };
-      console.log(refreshToken.data);
       const newToken = await refreshTokenFunction({
         refresh_token: refreshToken?.data as string,
       });
       secureLocalStorage.setItem("ACCESS_TOKEN", { data: newToken });
 
-      // Reset login time on refresh
       const newLoginTime = Date.now();
       secureLocalStorage.setItem("LOGIN_TIME", {
         data: newLoginTime.toString(),
       });
 
       toast.success("تم تجديد الجلسة بنجاح");
-      scheduleTimers(); // Reschedule timers with new login time
-    } catch (error) {
+      // avoid direct dependency on scheduleTimers to break circular hook deps
+      if (typeof scheduleTimersRef.current === "function") {
+        scheduleTimersRef.current();
+      }
+    } catch {
       toast.error("فشل في تجديد الجلسة");
     }
   }, []);
@@ -76,9 +77,25 @@ export const useSessionManager = () => {
     });
   }, [refreshSession]);
 
-  const forceLogout = useCallback(() => {
-    toast.error("انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.");
-    logout();
+  const forceLogout = useCallback(async () => {
+    try {
+      const accessTokenObj = secureLocalStorage.getItem(
+        "ACCESS_TOKEN"
+      ) as unknown as { data?: string } | null;
+      const token =
+        accessTokenObj && typeof accessTokenObj === "object"
+          ? accessTokenObj.data
+          : undefined;
+
+      if (token) {
+        await logoutFunction({ token: String(token), type: "force" });
+      }
+    } catch {
+      // swallow
+    } finally {
+      toast.error("انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.");
+      logout();
+    }
   }, [logout]);
 
   const scheduleTimers = useCallback(() => {
@@ -94,10 +111,10 @@ export const useSessionManager = () => {
     const loginTime = parseInt(loginTimeData.data as string);
     const now = Date.now();
     const timeSinceLogin = now - loginTime;
-    const fiftyFiveMinutes = 55 * 60 * 1000;
-    const sixtyMinutes = 60 * 60 * 1000;
-    // const fiftyFiveMinutes = 0.25 * 60 * 1000;
-    // const sixtyMinutes = 0.5 * 60 * 1000;
+    // const fiftyFiveMinutes = 55 * 60 * 1000;
+    // const sixtyMinutes = 60 * 60 * 1000;
+    const fiftyFiveMinutes = 0.25 * 60 * 1000;
+    const sixtyMinutes = 0.5 * 60 * 1000;
 
     // Calculate remaining time
     const timeUntilRefresh = Math.max(0, fiftyFiveMinutes - timeSinceLogin);
@@ -108,12 +125,10 @@ export const useSessionManager = () => {
 
     // Schedule refresh prompt
     if (timeUntilRefresh > 0) {
-      timersRef.current.refresh = setTimeout(
-        showRefreshPrompt,
-        timeUntilRefresh
-      );
+      timersRef.current.refresh = setTimeout(() => {
+        showRefreshPrompt();
+      }, timeUntilRefresh);
     } else if (timeSinceLogin < sixtyMinutes) {
-      // If already past 55min but not yet 60min, show prompt immediately
       showRefreshPrompt();
     }
 
@@ -126,7 +141,14 @@ export const useSessionManager = () => {
     }
   }, [showRefreshPrompt, forceLogout, clearTimers]);
 
+  // keep the latest schedule function in a ref for other callbacks
+  scheduleTimersRef.current = scheduleTimers;
+
   // Check session on mount and on visibility change
+  const stableUserId =
+    (user as unknown as { data?: { user_id?: number } })?.data?.user_id ??
+    user?.user_id;
+
   useEffect(() => {
     const userData = secureLocalStorage.getItem("USER");
     if (userData) {
@@ -145,12 +167,7 @@ export const useSessionManager = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       clearTimers();
     };
-  }, [
-    scheduleTimers,
-    clearTimers,
-    user?.user_id,
-    (user as unknown as { data: { user_id: number } })?.data?.user_id,
-  ]);
+  }, [scheduleTimers, clearTimers, stableUserId]);
 
   return { refreshSession };
 };
