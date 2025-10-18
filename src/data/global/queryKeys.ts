@@ -35,9 +35,13 @@ const QUERY_KEYS = {
     rental: "rental-transfers-query",
   },
   admin_reports: {
-    realtor_history : "realtor-history",
-    agencies_history : "agencies-history",
-    expected_price : "expected-price",
+    realtor_history: "realtor-history",
+    agencies_history: "agencies-history",
+    expected_price: "expected-price",
+  },
+  agencies: {
+    query: "agencies-query",
+    details: "agencies-details",
   },
 };
 
