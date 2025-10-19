@@ -34,6 +34,8 @@ import CreateAgency from "./pages/admin/agencies/CreateAgency";
 import AgencyDetails from "./pages/admin/agencies/AgencyDetails";
 import BrokerTable from "@/components/admin/broker/BrokerTable";
 import RealtorTable from "@/components/admin/realtor/RealtorTable";
+import AddRealtor from "./pages/admin/realtors/AddRealtor";
+import AddBroker from "./pages/admin/brokers/AddBroker";
 import TopAgencies from "./pages/admin/reports/TopAgencies";
 import BrokerHistory from "./pages/admin/reports/BrokerHistory";
 
@@ -189,8 +191,16 @@ const router = createBrowserRouter([
         element: <BrokerTable />,
       },
       {
+        path: "brokers/add",
+        element: <AddBroker />,
+      },
+      {
         path: "realtors",
         element: <RealtorTable />,
+      },
+      {
+        path: "realtors/add",
+        element: <AddRealtor />,
       },
       {
         path: "reports/top-agencies",

@@ -7,8 +7,7 @@ const AgenciesList = () => {
     <AnimateContainer>
       <PageContainer>
         <div className="mb-5xl">
-          <h1 className="text-size30 font-medium">الشركات</h1>
-          <h3 className="text-size24 mb-2xl">عرض جميع الشركات</h3>
+          <h1 className="text-size30 font-medium">أصحاب الشركات العقارية</h1>
           <hr />
         </div>
         <AgencyTable />

@@ -5,7 +5,7 @@ export type CreateAgencyForm = {
   name: string | null;
   email: string | null;
   phone_number: string | null;
-  brokers_id: string | null;
+  brokers_id: string | string[] | null;
   floor?: number | null;
   apt?: number | string | null;
   area_id?: number | null;
@@ -34,8 +34,10 @@ export const createAgencySchema = Joi.object<CreateAgencyForm>({
     .messages(VALIDATION_MESSAGES)
     .label("رقم الهاتف"),
 
-  brokers_id: Joi.string()
-    .required()
+  brokers_id: Joi.alternatives()
+    .try(Joi.string(), Joi.array().items(Joi.string()))
+    .allow(null)
+    .optional()
     .messages(VALIDATION_MESSAGES)
     .label("معرّفات السماسرة"),
   floor: Joi.number()
@@ -86,7 +88,7 @@ export const createAgencyInitialValues: CreateAgencyForm = {
   name: null,
   email: null,
   phone_number: null,
-  brokers_id: null,
+  brokers_id: [], 
   floor: null,
   apt: null,
   area_id: null,
