@@ -62,10 +62,25 @@ export const adminTabs: AdminTabsType = [
         permission: [],
         to: "/admin/agencies",
       },
+      {
+        label: "المحافظات",
+        permission: [],
+        to: "/admin/counties",
+      },
+      {
+        label: "المدن",
+        permission: [],
+        to: "/admin/cities",
+      },
+      {
+        label: "المناطق",
+        permission: [],
+        to: "/admin/areas",
+      },
     ],
   },
   {
-    label:"التقارير",
+    label: "التقارير",
     permission: [],
     submenu: [
       {
@@ -79,5 +94,5 @@ export const adminTabs: AdminTabsType = [
         to: "/admin/reports/broker-history",
       },
     ],
-  }
+  },
 ];
