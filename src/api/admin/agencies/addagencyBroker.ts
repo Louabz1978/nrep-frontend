@@ -1,25 +1,25 @@
 import axiosClient from "@/libs/axios/axios-client";
 import type { AxiosRes } from "@/types/global/axios";
 
-export type AddAgencyRealtorProps = {
-  agency_id: number;
+export type AddAgencyBrokerProps = {
+  agency_id:number,
   first_name: string;
   last_name: string;
   email: string;
   phone_number: string;
 };
 
-export type AddAgencyRealtorResult = Promise<AxiosRes<string>>;
+export type AddAgencyBroker = Promise<AxiosRes<string>>;
 
-async function addAgencyRealtor({
-  agency_id,
+async function addAgencyBroker({
   first_name,
   last_name,
   email,
   phone_number,
-}: AddAgencyRealtorProps): AddAgencyRealtorResult {
+  agency_id
+}: AddAgencyBrokerProps): AddAgencyBroker {
   const res = await axiosClient.post<AxiosRes<string>>(
-    `/agencies/realtors/${agency_id}`,
+    `/agencies/brokers/${agency_id}`,
     {
       first_name,
       last_name,
@@ -31,4 +31,4 @@ async function addAgencyRealtor({
   return res?.data;
 }
 
-export default addAgencyRealtor;
+export default addAgencyBroker;

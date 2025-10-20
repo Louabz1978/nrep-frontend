@@ -17,6 +17,17 @@ export const adminTabs: AdminTabsType = [
     permission: [],
   },
   {
+    label: "العقارات",
+    permission: [],
+    submenu: [
+      {
+        label: "كل العقارات",
+        permission: [],
+        to: "/admin/listing/all-listings",
+      },
+    ],
+  },
+  {
     label: "قائمة الاسماء",
     permission: [],
     submenu: [
@@ -33,30 +44,20 @@ export const adminTabs: AdminTabsType = [
     ],
   },
   {
-    label: "العقارات",
-    permission: [],
-    submenu: [
-      {
-        label: "كل العقارات",
-        permission: [],
-        to: "/admin/listing/all-listings",
-      },
-    ],
-  },
-  {
     label: "الأساسيات",
     permission: [],
     submenu: [
       {
-        label: "سماسرة",
-        permission: [],
-        to: "/admin/brokers",
-      },
-      {
-        label: "وكلاء العقارات",
+        label: "الوسيط العقاري",
         permission: [],
         to: "/admin/realtors",
       },
+      {
+        label: "صاحب الشركة العقارية",
+        permission: [],
+        to: "/admin/brokers",
+      },
+
       {
         label: "الشركات العقارية",
         permission: [],

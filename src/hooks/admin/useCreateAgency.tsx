@@ -1,3 +1,4 @@
+// src/hooks/admin/useCreateAgency.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import createAgency from "@/api/admin/agencies/createAgency";
 import QUERY_KEYS from "@/data/global/queryKeys";
@@ -14,7 +15,7 @@ function useCreateAgency() {
   const mutation = useMutation({
     mutationFn: createAgency,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.agencies.query] }).catch(console.error);
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.agencies.query] });
       navigate("/admin/agencies");
     },
   });
@@ -32,5 +33,3 @@ function useCreateAgency() {
 }
 
 export default useCreateAgency;
-
-
