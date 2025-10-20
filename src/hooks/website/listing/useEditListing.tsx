@@ -63,9 +63,9 @@ export const useEditListings = () => {
         ?.map((item) => item?.consumer_id as string)
         ?.join(","),
       country: undefined,
-      county: submitData?.country?.title,
-      city: submitData?.city?.title,
-      area: submitData?.area?.title,
+      county_id: submitData?.county_id?.county_id,
+      city_id: submitData?.city_id?.city_id,
+      area_id: submitData?.area_id?.area_id,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
       water: submitData?.water?.value || null,

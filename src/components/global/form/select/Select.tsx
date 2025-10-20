@@ -123,8 +123,8 @@ function Select<T extends FieldValues>({
       ? keyValue
         ? (watch(name) ?? [])?.filter(
             (ele: Record<string, ReactNode>) =>
-              ele?.[showValue as string] ==
-              (finalChoice as Record<string, ReactNode>)?.[showValue as string]
+              ele?.[keyValue as string] ==
+              (finalChoice as Record<string, ReactNode>)?.[keyValue as string]
           )?.length
         : (watch(name) as string)?.includes(finalChoice as string)
       : keyValue
@@ -488,9 +488,9 @@ function Select<T extends FieldValues>({
                       ? keyValue
                         ? (watch(name) as Record<string, ReactNode>[])?.filter(
                             (ele: Record<string, ReactNode>) =>
-                              ele[showValue as string] ==
+                              ele[keyValue as string] ==
                               (finalChoice as Record<string, ReactNode>)[
-                                showValue as string
+                                keyValue as string
                               ]
                           )?.length
                         : (watch(name) as string[])?.includes(

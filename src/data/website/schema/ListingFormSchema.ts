@@ -13,9 +13,9 @@ export type GeneralStepType = {
   street: TString;
   floor: TNumber;
   apt: TNumber;
-  country: TOption;
-  city: TOption;
-  area: TOption;
+  county_id: TOption;
+  city_id: TOption;
+  area_id: TOption;
   property_type: TOption;
   area_space: TNumber;
   bedrooms: TNumber;
@@ -44,12 +44,15 @@ export const generalStepSchema = Joi.object<GeneralStepType>({
     .label("اسم الشارع"),
   floor: Joi.number().required().messages(VALIDATION_MESSAGES).label("الطابق"),
   apt: Joi.number().required().messages(VALIDATION_MESSAGES).label("رقم الشقة"),
-  country: optionSchema
+  county_id: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
-  city: optionSchema.required().messages(VALIDATION_MESSAGES).label("المدينة"),
-  area: optionSchema
+  city_id: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المدينة"),
+  area_id: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الحي/المنطقة"),
@@ -116,9 +119,9 @@ export const generalStepInitialValues: GeneralStepType = {
   street: null,
   floor: null,
   apt: null,
-  country: null,
-  city: null,
-  area: null,
+  county_id: null,
+  city_id: null,
+  area_id: null,
   property_type: null,
   area_space: null,
   bedrooms: null,

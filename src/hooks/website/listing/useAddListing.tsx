@@ -45,11 +45,10 @@ export const useAddListings = () => {
       sellers: submitData?.sellers
         ?.map((item) => item?.consumer_id as string)
         ?.join(","),
-      country: submitData?.country?.value,
       livable: submitData?.livable,
-      county: submitData?.country?.title,
-      city: submitData?.city?.title,
-      area: submitData?.area?.title,
+      county_id: submitData?.county_id?.county_id,
+      city_id: submitData?.city_id?.city_id,
+      area_id: submitData?.area_id?.area_id,
       property_type: submitData?.property_type?.value,
       status: submitData?.status?.value,
       water: submitData?.water?.value,
@@ -63,9 +62,6 @@ export const useAddListings = () => {
         submitData?.photos?.find((item) => item?.isMain)?.path as File
       )?.name,
       owner_id: 1,
-      area_id: 1,
-      city_id: 1,
-      county_id: 1,
     };
 
     // toaster

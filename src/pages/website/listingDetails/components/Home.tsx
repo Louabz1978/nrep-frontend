@@ -3,7 +3,11 @@ import HomeImages from "./HomeImages";
 import HomeInfo from "./HomeInfo";
 import { PiCurrencyDollarFill } from "react-icons/pi";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
-import { PROPERTY_TYPE, STATUS_WITH_CLOSED, WATERLINE } from "@/data/global/select";
+import {
+  PROPERTY_TYPE,
+  STATUS_WITH_CLOSED,
+  WATERLINE,
+} from "@/data/global/select";
 
 interface RenderDetailsTabProps {
   propertyDetails: ListingDetailsType;
@@ -25,11 +29,6 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
     (item) => item?.value == propertyDetails?.additional?.water
   )?.label;
 
-
-  const firstName = propertyDetails?.owner?.first_name ?? "";
-  const lastName = propertyDetails?.owner?.last_name ?? "";
-  const fullName = `${firstName}${lastName ? ` ${lastName}` : ""}`.trim();
-
   const images = propertyDetails.images_urls?.map((item) => ({
     url: item?.url?.replace("//static", "/static"),
     is_main: item?.is_main,
@@ -41,10 +40,10 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
       <HomeImages images={images} />
 
       {/* info */}
-      <div className="grid grid-cols-6 gap-6xl">
-        <div className="col-span-full grid grid-cols-10 gap-3xl">
+      <div className="grid md:grid-cols-6 gap-6xl">
+        <div className="md:col-span-full grid md:grid-cols-10 md:gap-3xl gap-6xl">
           {/* general */}
-          <div className="col-span-4 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col justify-center gap-3xl">
+          <div className="md:col-span-4 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col justify-center gap-3xl">
             {/* header */}
             <div className="flex items-center justify-center gap-xl">
               <span className="text-size24 underline text-primary">
@@ -122,7 +121,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
           </div>
 
           {/* additional */}
-          <div className="col-span-6 rounded-[16px] bg-card-bg shadow-card grid grid-cols-7">
+          <div className="md:col-span-6 rounded-[16px] bg-card-bg shadow-card grid grid-cols-7">
             <div className="col-span-2 p-xl border-l border-tertiary-fg flex flex-col gap-9xl">
               <HomeInfo
                 icon={PiCurrencyDollarFill}
@@ -223,7 +222,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
         </div>
 
         {/* description */}
-        <div className="col-span-3 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
+        <div className="md:col-span-3 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
           {/* label */}
           <div className="font-black text-size32 text-primary-fg">
             وصف العقار :
@@ -233,7 +232,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             {propertyDetails?.description}
           </div>
         </div>
-        <div className="col-span-3 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
+        <div className="md:col-span-3 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
           {/* label */}
           <div className="font-black text-size32 text-primary-fg">
             تعليمات المعاينة :
@@ -245,7 +244,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
         </div>
 
         {/* agent info */}
-        <div className="col-span-2 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-6xl">
+        <div className="md:col-span-2 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-6xl">
           <HomeInfo
             label="الوسيط المسؤول:"
             labelClassName="!text-size16 !text-primary-fg"
@@ -271,7 +270,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             valueClassName="!text-size16 !text-primary-fg"
           />
         </div>
-        <div className="col-span-2 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-6xl">
+        <div className="md:col-span-2 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-6xl">
           <HomeInfo
             label="الشركة العقارية:"
             labelClassName="!text-size16 !text-primary-fg"
@@ -297,7 +296,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             valueClassName="!text-size16 !text-primary-fg"
           />
         </div>
-        <div className="col-span-2 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-6xl">
+        <div className="md:col-span-2 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-6xl">
           <HomeInfo
             label="عمولة البائع:"
             labelClassName="!text-size16 !text-primary-fg"
@@ -319,7 +318,9 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
           <HomeInfo
             label="اسم صاحب العقار:"
             labelClassName="!text-size16 !text-primary-fg"
-            value={fullName}
+            value={propertyDetails?.sellers
+              ?.map((ele) => `${ele?.name} ${ele?.surname}`?.trim())
+              ?.join(" - ")}
             valueClassName="!text-size16 !text-primary-fg"
           />
         </div>

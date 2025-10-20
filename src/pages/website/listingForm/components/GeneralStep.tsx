@@ -86,9 +86,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             label="المحافظة"
             placeholder="اختر المحافظة"
             choices={countries}
-            keyValue="title"
+            keyValue="county_id"
             showValue="title"
-            name="country"
+            name="county_id"
             info="يرجى اختيار المحافظة التي يقع فيها العقار"
             required
           />
@@ -97,9 +97,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             label="المدينة"
             placeholder="اختر المدينة"
             choices={cities}
-            keyValue="title"
+            keyValue="city_id"
             showValue="title"
-            name="city"
+            name="city_id"
             info="يرجى اختيار المدينة التي يقع فيها العقار"
             required
           />
@@ -108,9 +108,9 @@ function GeneralStep({ form, setCurrentStep }: GeneralStepProps) {
             label="الحي/المنطقة"
             placeholder="اختر الحي أو المنطقة"
             choices={Area}
-            keyValue="title"
+            keyValue="area_id"
             showValue="title"
-            name="area"
+            name="area_id"
             info="يرجى اختيار الحي أو المنطقة التي يقع فيها العقار"
             required
           />
