@@ -1,34 +1,52 @@
+// src/pages/admin/realtors/AddRealtor.tsx
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
+import Select from "@/components/global/form/select/Select";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
   addBrokerInitialValues,
   addBrokerSchema,
-  type AddBrokerForm,
 } from "@/data/admin/schema/AddBrokerSchema";
-import useAddAgencyRealtor from "@/hooks/admin/useAddAgencyRealtor";
 import type { AddRealtorForm } from "@/data/admin/schema/AddRealtorschema";
+import useAddAgencyRealtor from "@/hooks/admin/useAddAgencyRealtor";
+import useGetAgencies from "@/hooks/admin/useGetAgencies";
+import { useMemo } from "react";
 
-const AddBroker = () => {
+const AddRealtor = () => {
   const { handleAddAgencyRealtor, addAgencyRealtor } = useAddAgencyRealtor();
+  const { agencies, agenciesQuery } = useGetAgencies();
 
+  const agencyChoices = useMemo(() => {
+    return (
+      agencies?.map((agency) => ({
+        value: String(agency.agency_id),
+        label: agency.name,
+      })) ?? []
+    );
+  }, [agencies]);
 
   const form = useForm<AddRealtorForm>({
     resolver: joiResolver(addBrokerSchema),
     defaultValues: addBrokerInitialValues,
   });
 
-  async function onSubmit(data: AddBrokerForm) {
+  async function onSubmit() {
     const first_name = form.getValues("first_name") ?? "";
     const last_name = form.getValues("last_name") ?? "";
     const email = form.getValues("email") ?? "";
     const phone_number = form.getValues("phone_number") ?? "";
+    const agency_id = form.getValues("agency_id");
 
-    handleAddAgencyRealtor({
-      agency_id,
+    if (!agency_id) {
+      form.setError("agency_id", { message: "يجب اختيار شركة عقارية" });
+      return;
+    }
+
+    await handleAddAgencyRealtor({
+      agency_id: Number(agency_id),
       first_name,
       last_name,
       email,
@@ -86,6 +104,21 @@ const AddBroker = () => {
                 type="text"
                 required
               />
+
+              <Select
+                form={form}
+                name="agency_id"
+                label="الشركة العقارية"
+                placeholder={
+                  agenciesQuery.isLoading
+                    ? "جاري تحميل الشركات العقارية..."
+                    : "اختر الشركة العقارية"
+                }
+                choices={agencyChoices}
+                keyValue="value"
+                showValue="label"
+                required
+              />
             </div>
 
             <div className="flex pt-4">
@@ -96,7 +129,7 @@ const AddBroker = () => {
               >
                 {addAgencyRealtor.isPending
                   ? "جاري الحفظ..."
-                  : "حفظ صاحب الشركة العقارية +"}
+                  : "حفظ السمسار العقاري"}
               </Button>
             </div>
           </form>
@@ -106,4 +139,4 @@ const AddBroker = () => {
   );
 };
 
-export default AddBroker;
+export default AddRealtor;
