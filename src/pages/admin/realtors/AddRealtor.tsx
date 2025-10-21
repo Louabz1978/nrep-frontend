@@ -4,16 +4,17 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
-  addBrokerInitialValues,
-  addBrokerSchema,
-} from "@/data/admin/schema/AddBrokerSchema";
-import type { AddRealtorForm } from "@/data/admin/schema/AddRealtorschema";
+  addRealtorInitialValues,
+  addRealtorSchema,
+  type AddRealtorForm,
+} from "@/data/admin/schema/AddRealtorschema";
 import useAddAgencyRealtor from "@/hooks/admin/useAddAgencyRealtor";
 import useGetAgencies from "@/hooks/admin/useGetAgencies";
 import { useMemo } from "react";
+import type { AddAgencyRealtorProps } from "@/api/admin/agencies/addAgencyRealtor";
 
 const AddRealtor = () => {
   const { handleAddAgencyRealtor, addAgencyRealtor } = useAddAgencyRealtor();
@@ -22,37 +23,20 @@ const AddRealtor = () => {
   const agencyChoices = useMemo(() => {
     return (
       agencies?.map((agency) => ({
-        value: String(agency.agency_id),
+        value: agency.agency_id,
         label: agency.name,
       })) ?? []
     );
   }, [agencies]);
 
   const form = useForm<AddRealtorForm>({
-    resolver: joiResolver(addBrokerSchema),
-    defaultValues: addBrokerInitialValues,
+    resolver: joiResolver(addRealtorSchema),
+    defaultValues: addRealtorInitialValues,
   });
 
-  async function onSubmit() {
-    const first_name = form.getValues("first_name") ?? "";
-    const last_name = form.getValues("last_name") ?? "";
-    const email = form.getValues("email") ?? "";
-    const phone_number = form.getValues("phone_number") ?? "";
-    const agency_id = form.getValues("agency_id");
-
-    if (!agency_id) {
-      form.setError("agency_id", { message: "يجب اختيار شركة عقارية" });
-      return;
-    }
-
-    await handleAddAgencyRealtor({
-      agency_id: Number(agency_id),
-      first_name,
-      last_name,
-      email,
-      phone_number,
-    });
-  }
+  const onSubmit: SubmitHandler<AddRealtorForm> = async (data) => {
+    await handleAddAgencyRealtor({...(data  as AddAgencyRealtorProps)});
+  };
 
   return (
     <AnimateContainer>

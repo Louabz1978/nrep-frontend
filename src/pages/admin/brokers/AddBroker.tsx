@@ -4,7 +4,7 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
   addBrokerInitialValues,
@@ -14,6 +14,7 @@ import {
 import useAddAgencyBroker from "@/hooks/admin/useAddAgencyBroker";
 import useGetAgencies from "@/hooks/admin/useGetAgencies";
 import { useMemo } from "react";
+import type { AddAgencyBrokerProps } from "@/api/admin/agencies/addagencyBroker";
 
 const AddBroker = () => {
   const { addAgencyBroker, handleAddAgencyBroker } = useAddAgencyBroker();
@@ -22,7 +23,7 @@ const AddBroker = () => {
   const agencyChoices = useMemo(() => {
     return (
       agencies?.map((agency) => ({
-        value: String(agency.agency_id),
+        value: agency.agency_id,
         label: agency.name,
       })) ?? []
     );
@@ -33,26 +34,9 @@ const AddBroker = () => {
     defaultValues: addBrokerInitialValues,
   });
 
-  async function onSubmit(data: AddBrokerForm) {
-    const first_name = form.getValues("first_name") ?? "";
-    const last_name = form.getValues("last_name") ?? "";
-    const email = form.getValues("email") ?? "";
-    const phone_number = form.getValues("phone_number") ?? "";
-    const agency_id = form.getValues("agency_id");
-
-    if (!agency_id) {
-      form.setError("agency_id", { message: "يجب اختيار شركة عقارية" });
-      return;
-    }
-
-    await handleAddAgencyBroker({
-      agency_id: Number(agency_id),
-      first_name,
-      last_name,
-      email,
-      phone_number,
-    });
-  }
+  const onSubmit: SubmitHandler<AddBrokerForm> = async (data) => {
+    await handleAddAgencyBroker({...(data as AddAgencyBrokerProps)});
+  };
 
   return (
     <AnimateContainer>
@@ -63,7 +47,6 @@ const AddBroker = () => {
               إضافة صاحب شركة عقارية
             </h1>
           </div>
-
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full mx-auto"
@@ -77,7 +60,6 @@ const AddBroker = () => {
                 type="text"
                 required
               />
-
               <Input
                 form={form}
                 label="إسم العائلة"
@@ -86,7 +68,6 @@ const AddBroker = () => {
                 type="text"
                 required
               />
-
               <Input
                 form={form}
                 label="البريد الإلكتروني"
@@ -95,7 +76,6 @@ const AddBroker = () => {
                 type="email"
                 required
               />
-
               <Input
                 form={form}
                 label="رقم الهاتف"
@@ -104,7 +84,6 @@ const AddBroker = () => {
                 type="text"
                 required
               />
-
               <Select
                 form={form}
                 name="agency_id"
@@ -120,7 +99,6 @@ const AddBroker = () => {
                 required
               />
             </div>
-
             <div className="flex pt-4">
               <Button
                 type="submit"

@@ -6,6 +6,7 @@ import type { Agency } from "@/types/admin/agency";
 import useGetAgencies from "@/hooks/admin/useGetAgencies";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
+import { Checkbox } from "@/components/global/ui/checkbox";
 
 const AgencyTable = () => {
   const { agencies, agenciesQuery } = useGetAgencies();
@@ -14,12 +15,33 @@ const AgencyTable = () => {
   const columns: ColumnDef<Agency>[] = useMemo(
     () => [
       {
-        accessorKey: "index",
-        header: "#",
-        cell: ({ row }) => row.index + 1,
-        size: 5,
-        minSize: 5,
-      },
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+          className="ms-2 bg-white"
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value: boolean) =>
+            table.toggleAllPageRowsSelected(!!value)
+          }
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          className="ms-2 bg-white"
+          checked={row.getIsSelected()}
+          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+      size: 8,
+      }
+      ,
       { 
         accessorKey: "name", 
         header: "اسم الشركة",

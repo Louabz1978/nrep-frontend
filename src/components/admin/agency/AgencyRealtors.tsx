@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { DataTable, type Filters } from "@/components/global/table2/table";
+import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import type { ColumnDef } from "@tanstack/react-table";
 import useGetAgencyById from "@/hooks/admin/useGetAgencyById";

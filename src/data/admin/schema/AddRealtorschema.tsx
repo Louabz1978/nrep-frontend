@@ -1,15 +1,21 @@
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
+import { type TString, type TNumber } from "@/data/global/schema";
 
 export type AddRealtorForm = {
-  agency_id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
+    agency_id: TNumber;
+  first_name: TString;
+  last_name: TString;
+  email: TString;
+  phone_number: TString;
 };
 
-export const addBrokerSchema = Joi.object<AddRealtorForm>({
+export const addRealtorSchema = Joi.object<AddRealtorForm>({
+  agency_id: Joi.number()
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الشركة العقارية"),
+
   first_name: Joi.string()
     .min(2)
     .max(50)
@@ -36,8 +42,9 @@ export const addBrokerSchema = Joi.object<AddRealtorForm>({
 });
 
 export const addRealtorInitialValues: AddRealtorForm = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone_number: "",
+  agency_id: null,
+  first_name: null,
+  last_name: null,
+  email: null,
+  phone_number: null,
 };

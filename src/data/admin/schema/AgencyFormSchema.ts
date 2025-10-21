@@ -1,18 +1,24 @@
 import Joi from "joi";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
+import {
+  optionSchema,
+  type TNumber,
+  type TString,
+  type TOption,
+} from "@/data/global/schema";
 
 export type CreateAgencyForm = {
-  name: string | null;
-  email: string | null;
-  phone_number: string | null;
-  brokers_id: string | string[] | null;
-  floor?: number | null;
-  apt?: number | string | null;
-  area_id?: number | null;
-  city_id?: number | null;
-  county_id?: number | null;
-  building_num?: string | null;
-  street?: string | null;
+  name: TString;
+  email: TString;
+  phone_number: TString;
+  brokers_id: TOption[];
+  floor: TNumber;
+  apt: TNumber;
+  area_id: TOption;
+  city_id: TOption;
+  county_id: TOption;
+  building_num: TString;
+  street: TString;
 };
 
 export const createAgencySchema = Joi.object<CreateAgencyForm>({
@@ -24,7 +30,6 @@ export const createAgencySchema = Joi.object<CreateAgencyForm>({
     .label("اسم الشركة"),
 
   email: Joi.string()
-    .email({ tlds: false })
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("البريد الإلكتروني"),
@@ -34,38 +39,36 @@ export const createAgencySchema = Joi.object<CreateAgencyForm>({
     .messages(VALIDATION_MESSAGES)
     .label("رقم الهاتف"),
 
-  brokers_id: Joi.alternatives()
-    .try(Joi.string(), Joi.array().items(Joi.string()))
-    .allow(null)
-    .optional()
+  brokers_id: Joi.array()
+    .items(optionSchema)
+    .min(1)
+    .required()
     .messages(VALIDATION_MESSAGES)
-    .label("معرّفات السماسرة"),
+    .label("السماسرة"),
   floor: Joi.number()
     .allow(null)
     .optional()
     .messages(VALIDATION_MESSAGES)
     .label("الطابق"),
 
-  apt: Joi.alternatives()
-    .try(Joi.number(), Joi.string())
+  apt: Joi.number()
     .allow(null)
     .optional()
     .messages(VALIDATION_MESSAGES)
     .label("الشقة"),
-
-  area_id: Joi.number()
+  area_id: optionSchema
     .allow(null)
     .optional()
     .messages(VALIDATION_MESSAGES)
     .label("الحي"),
 
-  city_id: Joi.number()
+  city_id: optionSchema
     .allow(null)
     .optional()
     .messages(VALIDATION_MESSAGES)
     .label("المدينة"),
 
-  county_id: Joi.number()
+  county_id: optionSchema
     .allow(null)
     .optional()
     .messages(VALIDATION_MESSAGES)
