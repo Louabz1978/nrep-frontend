@@ -1,15 +1,21 @@
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
+import { optionSchema, type TString, type TOption } from "@/data/global/schema";
 
 export type AddBrokerForm = {
-  agency_id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone_number: string;
+  agency_id: TOption;
+  first_name: TString;
+  last_name: TString;
+  email: TString;
+  phone_number: TString;
 };
 
 export const addBrokerSchema = Joi.object<AddBrokerForm>({
+  agency_id: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("الشركة العقارية"),
+
   first_name: Joi.string()
     .min(2)
     .max(50)
@@ -22,7 +28,7 @@ export const addBrokerSchema = Joi.object<AddBrokerForm>({
     .max(50)
     .required()
     .messages(VALIDATION_MESSAGES)
-    .label("إسم العائلة"),
+    .label("اسم العائلة"),
 
   email: Joi.string()
     .required()
@@ -36,8 +42,9 @@ export const addBrokerSchema = Joi.object<AddBrokerForm>({
 });
 
 export const addBrokerInitialValues: AddBrokerForm = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone_number: "",
+  agency_id: null,
+  first_name: null,
+  last_name: null,
+  email: null,
+  phone_number: null,
 };

@@ -1,7 +1,9 @@
 import Joi from "joi";
 
 // option schema
-export const optionSchema = Joi.object({ value: Joi.string() }).unknown();
+export const optionSchema = Joi.object({
+  value: Joi.alternatives([Joi.string(), Joi.number()]),
+}).unknown();
 
 // url schema
 export const urlSchema = Joi.string().regex(

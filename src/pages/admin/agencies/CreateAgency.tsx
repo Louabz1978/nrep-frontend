@@ -6,96 +6,71 @@ import Input from "@/components/global/form/input/Input";
 import Select from "@/components/global/form/select/Select";
 import useCreateAgency from "@/hooks/admin/useCreateAgency";
 import useGetAllBrokers from "@/hooks/admin/useGetAllBrokers";
+import useGetCountries from "@/hooks/website/listing/useGetCountries";
+import useGetCities from "@/hooks/website/listing/useGetCities";
+import useGetArea from "@/hooks/website/listing/useGetArea";
 import { useForm } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
 import {
   createAgencyInitialValues,
   createAgencySchema,
   type CreateAgencyForm,
 } from "@/data/admin/schema/AgencyFormSchema";
-import { joiResolver } from "@hookform/resolvers/joi";
+import type { CreateAgencyTypes } from "@/types/admin/agency";
 import { useMemo } from "react";
 
-const CreateAgency = () => {
+function CreateAgency() {
+  //  Hooks
   const { handleCreateAgency, createAgency } = useCreateAgency();
   const { allBrokers, allBrokersQuery } = useGetAllBrokers();
+  const { countries, countriesQuery } = useGetCountries();
+  const { cities, citiesQuery } = useGetCities();
+  const { Area, AreaQuery } = useGetArea();
 
   const form = useForm<CreateAgencyForm>({
     resolver: joiResolver(createAgencySchema),
     defaultValues: createAgencyInitialValues,
   });
 
-  const brokerChoices = useMemo(() => {
-    return (
+  const brokerChoices = useMemo(
+    () =>
       allBrokers?.map((broker) => ({
         value: String(broker.user_id),
         label: `${broker.first_name} ${broker.last_name}`,
-      })) ?? []
-    );
-  }, [allBrokers]);
+      })) ?? [],
+    [allBrokers]
+  );
+  const onSubmit = async (data: CreateAgencyForm) => {
+    const brokers_id = Array.isArray(data.brokers_id)
+      ? data.brokers_id
+          .map((broker) => (typeof broker === "object" ? broker.value : broker))
+          .join(",")
+      : data.brokers_id || "";
 
-  async function onSubmit() {
-    console.log(" Form Submitted!");
+    const payload: CreateAgencyTypes = {
+      ...data,
+      brokers_id,
+      
+    };
 
-    const name = form.getValues("name") ?? "";
-    const email = form.getValues("email") ?? "";
-    const phone_number = form.getValues("phone_number") ?? "";
-
-    const brokers_id = form.getValues("brokers_id");
-    if (!brokers_id || brokers_id.length === 0) {
-      form.setError("brokers_id", {
-        message: "يجب اختيار سمسار واحد على الأقل",
-      });
-      return;
-    }
-
-    const floorValue = form.getValues("floor");
-    const floor = floorValue ? parseInt(floorValue.toString(), 10) : null;
-
-    const apt = form.getValues("apt") as number | string | null;
-
-    const areaIdValue = form.getValues("area_id");
-    const area_id = areaIdValue ? parseInt(areaIdValue.toString(), 10) : null;
-
-    const cityIdValue = form.getValues("city_id");
-    const city_id = cityIdValue ? parseInt(cityIdValue.toString(), 10) : null;
-
-    const countyIdValue = form.getValues("county_id");
-    const county_id = countyIdValue
-      ? parseInt(countyIdValue.toString(), 10)
-      : null;
-
-    const building_num = form.getValues("building_num") as string | null;
-    const street = form.getValues("street") as string | null;
-
-    await handleCreateAgency({
-      name,
-      email,
-      phone_number,
-      brokers_id: Array.isArray(brokers_id)
-        ? brokers_id.join(",")
-        : brokers_id.toString(),
-      floor,
-      apt,
-      area_id,
-      city_id,
-      county_id,
-      building_num,
-      street,
-    });
-  }
+    await handleCreateAgency(payload);
+    console.log("Payload :", payload);
+    
+  };
 
   return (
     <AnimateContainer>
       <PageContainer>
-        <h1 className="text-3xl font-bold text-center mb-6">
-          إنشاء شركة عقارية
-        </h1>
-
         <form
+          id="create_agency_form"
           onSubmit={form.handleSubmit(onSubmit)}
-          className="rounded-md p-4 space-y-4"
+          className="flex flex-col gap-6xl"
         >
-          <div className="grid md:grid-cols-3 sm:grid-cols-1  gap-8">
+          <h1 className="text-3xl font-bold text-center mb-6">
+            إنشاء شركة عقارية
+          </h1>
+
+          <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-x-5xl gap-y-3xl">
             <Input
               form={form}
               label="اسم الشركة"
@@ -143,7 +118,7 @@ const CreateAgency = () => {
               form={form}
               label="الطابق"
               name="floor"
-              placeholder="الاول"
+              placeholder="الأول"
               type="number"
             />
 
@@ -155,28 +130,42 @@ const CreateAgency = () => {
               type="text"
             />
 
-            <Input
+            <Select
               form={form}
-              label="الحي"
               name="area_id"
-              placeholder="الانشاءات"
-              type="number"
+              label="المنطقة"
+              placeholder={
+                AreaQuery.isLoading ? "جاري تحميل المناطق..." : "اختر المنطقة"
+              }
+              choices={Area}
+              keyValue="title"
+              showValue="title"
             />
 
-            <Input
+            <Select
               form={form}
-              label="المدينة"
               name="city_id"
-              placeholder="حمص"
-              type="number"
+              label="المدينة"
+              placeholder={
+                citiesQuery.isLoading ? "جاري تحميل المدن..." : "اختر المدينة"
+              }
+              choices={cities}
+              keyValue="title"
+              showValue="title"
             />
 
-            <Input
+            <Select
               form={form}
-              label="المحافظة"
               name="county_id"
-              placeholder="حمص"
-              type="number"
+              label="المحافظة"
+              placeholder={
+                countriesQuery.isLoading
+                  ? "جاري تحميل المحافظات..."
+                  : "اختر المحافظة"
+              }
+              choices={countries}
+              keyValue="title"
+              showValue="title"
             />
 
             <Input
@@ -196,13 +185,15 @@ const CreateAgency = () => {
             />
           </div>
 
-          <Button type="submit" disabled={createAgency.isPending}>
-            {createAgency.isPending ? "جاري الحفظ..." : "حفظ الشركة العقارية"}
-          </Button>
+          <div className="flex justify-end w-full gap-xl">
+            <Button type="submit" disabled={createAgency.isPending}>
+              {createAgency.isPending ? "جاري الحفظ..." : "حفظ الشركة العقارية"}
+            </Button>
+          </div>
         </form>
       </PageContainer>
     </AnimateContainer>
   );
-};
+}
 
 export default CreateAgency;
