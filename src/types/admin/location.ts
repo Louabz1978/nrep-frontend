@@ -25,7 +25,7 @@ export type CreateCityTypes = {
 };
 
 export type CreateCountyTypes = {
-  name: string;
+  title: string;
 };
 
 export type CreateAreaTypes = {
@@ -39,7 +39,7 @@ export type UpdateCity = {
 };
 
 export type UpdateCounty = {
-  name?: string;
+  title?: string;
 };
 
 export type UpdateArea = {

@@ -4,11 +4,11 @@ import Joi from "joi";
 
 // County Schema
 export type CountyForm = {
-  name: TString;
+  title: TString;
 };
 
 export const countySchema = Joi.object<CountyForm>({
-  name: Joi.string()
+  title: Joi.string()
     .min(2)
     .max(100)
     .required()
@@ -17,7 +17,7 @@ export const countySchema = Joi.object<CountyForm>({
 });
 
 export const countyInitialValues: CountyForm = {
-  name: "",
+  title: "",
 };
 
 // City Schema
@@ -34,14 +34,14 @@ export const citySchema = Joi.object<CityForm>({
     .messages(VALIDATION_MESSAGES)
     .label("اسم المدينة"),
 
-    county_id: optionSchema
+  county_id: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
 });
 
 export const cityInitialValues: CityForm = {
-  name: null ,
+  name: null,
   county_id: null,
 };
 
@@ -59,15 +59,65 @@ export const areaSchema = Joi.object<AreaForm>({
     .messages(VALIDATION_MESSAGES)
     .label("اسم المنطقة"),
 
-    city_id: optionSchema
+  city_id: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المدينة"),
 });
 
 export const areaInitialValues: AreaForm = {
-  name: null ,
+  name: null,
   city_id: null,
 };
 
+// Update Schemas
+export type UpdateCountyForm = {
+  title: TString;
+};
 
+export const updateCountySchema = Joi.object<UpdateCountyForm>({
+  title: Joi.string()
+    .min(2)
+    .max(100)
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المحافظة"),
+});
+
+export type UpdateCityForm = {
+  name: TString;
+  county_id: TOption;
+};
+
+export const updateCitySchema = Joi.object<UpdateCityForm>({
+  name: Joi.string()
+    .min(2)
+    .max(100)
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المدينة"),
+
+  county_id: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المحافظة"),
+});
+
+export type UpdateAreaForm = {
+  name: TString;
+  city_id: TOption;
+};
+
+export const updateAreaSchema = Joi.object<UpdateAreaForm>({
+  name: Joi.string()
+    .min(2)
+    .max(100)
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("اسم المنطقة"),
+
+  city_id: optionSchema
+    .required()
+    .messages(VALIDATION_MESSAGES)
+    .label("المدينة"),
+});

@@ -1,3 +1,4 @@
+
 import { useMemo } from "react";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
