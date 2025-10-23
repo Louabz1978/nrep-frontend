@@ -7,7 +7,6 @@ import FormSectionHeader from "@/components/global/typography/FormSectionHeader"
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
 import {
-  
   PROPERTY_TYPE,
   STATUS_WITH_CLOSED,
   TransType,
@@ -299,7 +298,7 @@ function ListingDetails({ data }: ListingDetailsProps) {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-tertiary-bg h-full">
+        <div className=" h-full">
           <div
             ref={pdfRef}
             data-tab-content="details"

@@ -34,7 +34,7 @@ export default function HomeImages({ images }: HomeImagesProps) {
   };
 
   return (
-    <div className="w-full flex justify-center items-center pt-6xl bg-card">
+    <div className="w-full flex justify-center items-center pt-6xl">
       <div className="w-[85%] h-[540px] relative">
         {/* Navigation Arrows */}
 

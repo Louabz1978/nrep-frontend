@@ -272,7 +272,6 @@ function ListingDetails2({ data }: ListingDetailsProps) {
     waterLine: waterLine || "لا يوجد",
   };
 
-
   return (
     <AnimateContainer>
       <PageContainer>
@@ -326,7 +325,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-tertiary-bg h-full">
+        <div className="h-full">
           <div
             ref={pdfRef}
             data-tab-content="details"
