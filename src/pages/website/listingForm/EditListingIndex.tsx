@@ -29,6 +29,7 @@ function EditListingIndex() {
   // get listing details
   const { listingDetails, listingDetailsQuery } = useListingDetails(listingId);
   const isClosed = listingDetails?.status == PropertyStatus.CLOSED;
+  console.log(listingDetails)
 
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingFormSkeleton}>

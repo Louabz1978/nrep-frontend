@@ -5,6 +5,8 @@ import { PiCurrencyDollarFill } from "react-icons/pi";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import {
   PROPERTY_TYPE,
+  STATUS_COLORS,
+  STATUS_TEXT,
   STATUS_WITH_CLOSED,
   WATERLINE,
 } from "@/data/global/select";
@@ -66,6 +68,9 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 icon={PiCurrencyDollarFill}
                 label="الحالة"
                 value={status?.label}
+                valueClassName={`${STATUS_TEXT?.[
+                  status?.value as keyof typeof STATUS_TEXT
+                ]} ${STATUS_COLORS?.[status?.value as keyof typeof STATUS_COLORS]} p-lg px-3xl rounded-full`}
               />
               <HomeInfo
                 icon={PiCurrencyDollarFill}

@@ -3,6 +3,9 @@ import createCounty from "@/api/admin/locations/createCounty";
 import type { CreateCountyTypes } from "@/types/admin/location";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { showApiErrors } from "@/utils/showApiErrors";
+import { toast } from "sonner";
+import MESSAGES from "@/data/global/messages";
+import type { CountyForm } from "@/data/admin/schema/LocationSchemas";
 
 function useCreateCounty() {
   const queryClient = useQueryClient();
@@ -18,8 +21,22 @@ function useCreateCounty() {
       showApiErrors(error);
     },
   });
+  // handle submit add contact form
+  async function handleAddCounty(submitData: CountyForm) {
+    const data = {
+      title: submitData?.title ?? "",
+    };
 
-  return { createCountyMutation };
+    // toaster
+    toast.promise(createCountyMutation.mutateAsync(data), {
+      loading: MESSAGES?.county?.add?.loading,
+      success: MESSAGES?.county?.add?.success,
+      error: (error) => {
+        return showApiErrors(error);
+      },
+    });
+  }
+  return { handleAddCounty, createCountyMutation };
 }
 
 export default useCreateCounty;

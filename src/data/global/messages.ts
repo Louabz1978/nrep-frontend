@@ -91,6 +91,20 @@ const MESSAGES = {
       success: "تمت إزالة الوسيط من الشركة بنجاح!",
     },
   },
+  county: {
+    add: {
+      loading: "جار إضافة المحافظة...",
+      success: "تمت إضافة المحافظة بنجاح!",
+    },
+    edit: {
+      loading: "جار تعديل المحافظة...",
+      success: "تمت تعديل المحافظة بنجاح!",
+    },
+    delete: {
+      loading: "جار حذف المحافظة...",
+      success: "تمت حذف المحافظة بنجاح!",
+    },
+  },
 };
 
 export default MESSAGES;
