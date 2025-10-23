@@ -1,6 +1,6 @@
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
-import { type TString, type TNumber } from "@/data/global/schema";
+import { type TString, type TNumber, optionSchema } from "@/data/global/schema";
 
 export type AddRealtorForm = {
     agency_id: TNumber;
@@ -11,7 +11,7 @@ export type AddRealtorForm = {
 };
 
 export const addRealtorSchema = Joi.object<AddRealtorForm>({
-  agency_id: Joi.number()
+  agency_id: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("الشركة العقارية"),
