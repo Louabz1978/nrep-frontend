@@ -7,25 +7,27 @@ import "swiper/css/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRef, useState } from "react";
 
-const images = [
-  "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-  "https://images.unsplash.com/photo-1570129477492-45c003edd2be",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  "https://images.unsplash.com/photo-1599423300746-b62533397364",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
-  "https://images.unsplash.com/photo-1570129477492-45c003edd2be",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  "https://images.unsplash.com/photo-1599423300746-b62533397364",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-];
-
 interface HomeImagesProps {
   images: { url: string; is_main?: boolean }[];
 }
 export default function HomeImages({ images }: HomeImagesProps) {
   const swiperRef = useRef<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Calculate initial slide based on image count
+  const getInitialSlide = () => {
+    const totalImages = images.length;
+
+    if (totalImages >= 5) {
+      return 2; // Start with third image (index 2)
+    } else if (totalImages === 4 || totalImages === 3) {
+      return 1; // Start with second image (index 1)
+    } else {
+      return 0; // Start with first image (index 0)
+    }
+  };
+
+  const initialSlide = getInitialSlide();
 
   const handleBulletClick = (index: number) => {
     if (swiperRef.current) {
@@ -34,10 +36,8 @@ export default function HomeImages({ images }: HomeImagesProps) {
   };
 
   return (
-    <div className="w-full flex justify-center items-center pt-6xl">
+    <div className="w-full md:col-span-6 flex justify-center items-center pt-6xl">
       <div className="w-[85%] h-[540px] relative">
-        {/* Navigation Arrows */}
-
         {/* Custom Pagination */}
         <div className="absolute bottom-7xl left-1/2 transform -translate-x-1/2 z-10 !flex justify-center items-center gap-lg">
           <button className=" !static translate-y-[10px] !self-center swiper-button-prev before:hidden after:hidden z-10 !size-5xl flex items-center justify-center transition">
@@ -69,13 +69,14 @@ export default function HomeImages({ images }: HomeImagesProps) {
           effect="coverflow"
           grabCursor={true}
           centeredSlides={true}
+          initialSlide={initialSlide ?? 0}
           slidesPerView={"auto"}
           loop={false}
           speed={600}
           coverflowEffect={{
             rotate: 0,
-            stretch: 160,
-            depth: 200,
+            stretch: 100,
+            depth: 150,
             modifier: 2.5,
             slideShadows: false,
           }}
@@ -93,7 +94,7 @@ export default function HomeImages({ images }: HomeImagesProps) {
           {images.map((item, index) => (
             <SwiperSlide
               key={index}
-              className="swiper-slide-custom rounded-[40px] overflow-hidden bg-tertiary-bg shadow-lg !w-[700px] !h-[400px]"
+              className="swiper-slide-custom rounded-[40px] overflow-hidden bg-tertiary-bg shadow-lg !w-[412px] !h-[412px]"
             >
               <img
                 src={item?.url}

@@ -38,14 +38,11 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
 
   return (
     <div className="w-full flex flex-col gap-6xl">
-      {/* images */}
-      <HomeImages images={images} />
-
       {/* info */}
-      <div className="grid md:grid-cols-6 gap-6xl">
-        <div className="md:col-span-full grid md:grid-cols-10 md:gap-3xl gap-6xl">
+      <div className="grid md:grid-cols-6 gap-3xl">
+        <div className="md:col-span-full grid md:grid-cols-10 gap-3xl">
           {/* general */}
-          <div className="md:col-span-4 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col justify-center gap-3xl">
+          <div className="md:col-span-4 md:row-span-2 rounded-[16px] p-xl bg-card-bg shadow-card justify-center flex flex-col gap-3xl">
             {/* header */}
             <div className="flex items-center justify-center gap-xl">
               <span className="text-size24 underline text-primary">
@@ -57,7 +54,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             </div>
 
             {/* render info */}
-            <div className="grid grid-cols-2 gap-5xl">
+            <div className="grid grid-cols-2 gap-5xl flex-1">
               <HomeInfo
                 icon={PiCurrencyDollarFill}
                 label="السعر"
@@ -70,7 +67,9 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 value={status?.label}
                 valueClassName={`${STATUS_TEXT?.[
                   status?.value as keyof typeof STATUS_TEXT
-                ]} ${STATUS_COLORS?.[status?.value as keyof typeof STATUS_COLORS]} p-lg px-3xl rounded-full`}
+                ]} ${STATUS_COLORS?.[
+                  status?.value as keyof typeof STATUS_COLORS
+                ]} py-xs px-2xl rounded-full`}
               />
               <HomeInfo
                 icon={PiCurrencyDollarFill}
@@ -125,9 +124,11 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             </div>
           </div>
 
+          {/* images */}
+          <HomeImages images={images} />
           {/* additional */}
           <div className="md:col-span-6 rounded-[16px] bg-card-bg shadow-card grid grid-cols-7">
-            <div className="col-span-2 p-xl border-l border-tertiary-fg flex flex-col gap-9xl">
+            <div className="col-span-2 p-xl border-l border-tertiary-fg/25 flex flex-col gap-9xl">
               <HomeInfo
                 icon={PiCurrencyDollarFill}
                 iconClassName="size-4xl min-w-4xl"
@@ -159,7 +160,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 }
               />
             </div>
-            <div className="col-span-2 p-xl border-l border-tertiary-fg flex flex-col gap-9xl">
+            <div className="col-span-2 p-xl border-l border-tertiary-fg/25 flex flex-col gap-9xl">
               <HomeInfo
                 icon={PiCurrencyDollarFill}
                 iconClassName="size-4xl min-w-4xl"
@@ -227,7 +228,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
         </div>
 
         {/* description */}
-        <div className="md:col-span-3 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
+        <div className="col-span-full rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
           {/* label */}
           <div className="font-black text-size32 text-primary-fg">
             وصف العقار :
@@ -237,7 +238,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             {propertyDetails?.description}
           </div>
         </div>
-        <div className="md:col-span-3 rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
+        <div className="col-span-full rounded-[16px] p-xl bg-card-bg shadow-card flex flex-col gap-3xl">
           {/* label */}
           <div className="font-black text-size32 text-primary-fg">
             تعليمات المعاينة :

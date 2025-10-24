@@ -1,10 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-// import { usePDF } from "react-to-pdf";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
-import PreviouseButton from "@/components/global/form/button/PreviouseButton";
-import { Button } from "@/components/global/form/button/Button";
 import {
   PROPERTY_TYPE,
   STATUS_WITH_CLOSED,
@@ -20,11 +16,9 @@ import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg"
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaHouse, FaImages } from "react-icons/fa6";
 import { FaChartLine } from "react-icons/fa";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas-pro";
-import { toast } from "sonner";
 import RenderImagesTab from "./components/Images";
 import CompatibleMarketReport from "./components/CompatibleMarketReport";
+import PrintButton from "./components/PrintButton";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -39,13 +33,8 @@ const TABS = [
 ];
 
 function ListingDetails2({ data }: ListingDetailsProps) {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
-  const pdfRef = useRef<HTMLDivElement>(null);
-  const taxesRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<null>(null);
   const mapRef2 = useRef<null>(null);
-  const imagesRef = useRef<null>(null);
   //resize the map when the tab is changed
   useEffect(() => {
     if (activeTab === "map" && mapRef2.current) {
@@ -54,153 +43,6 @@ function ListingDetails2({ data }: ListingDetailsProps) {
       }, 100);
     }
   }, [activeTab]);
-
-  // Helper function to apply print styles to the CLONED elements only
-  const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
-    // Hide elements with data-print-hidden=true - query from the CLONED element
-    const hiddenElements = clonedElement.querySelectorAll(
-      '[data-print-hidden="true"]'
-    );
-    hiddenElements.forEach((el) => {
-      (el as HTMLElement).style.display = "none";
-    });
-
-    // Show elements with data-print-visible=true - query from the CLONED element
-    const visibleElements = clonedElement.querySelectorAll(
-      '[data-print-visible="true"]'
-    );
-    visibleElements.forEach((el) => {
-      (el as HTMLElement).style.display = "block";
-      (el as HTMLElement).style.position = "static";
-      (el as HTMLElement).style.opacity = "1";
-      (el as HTMLElement).style.pointerEvents = "auto";
-      (el as HTMLElement).style.visibility = "visible";
-      (el as HTMLElement).style.gridColumn = "span 3";
-      (el as HTMLElement).style.textAlign = "center";
-      (el as HTMLElement).style.margin = "15px 0";
-    });
-  };
-
-  const handleDownloadPDF = async () => {
-    if (!pdfRef.current || !taxesRef.current) return;
-
-    const toastId = toast.loading("جار تجهيز ملف PDF...", {
-      duration: Infinity,
-    });
-
-    try {
-      document.body.classList.add("printing");
-
-      // 1. Create a container for combined content
-      const container = document.createElement("div");
-      container.style.width = "100%";
-      container.style.position = "absolute";
-      container.style.left = "-9999px";
-      container.id = "print-container";
-      document.body.appendChild(container);
-
-      // 2. Clone and modify both sections
-      const detailsClone = pdfRef.current.cloneNode(true) as HTMLElement;
-      const taxesClone = taxesRef.current.cloneNode(true) as HTMLElement;
-
-      // 3. Apply print styles to the CLONED elements, not the live DOM
-      applyPrintStylesToClone(detailsClone);
-
-      // Remove unnecessary margins/padding
-      detailsClone.style.display = "block";
-      detailsClone.style.pageBreakAfter = "always";
-      detailsClone.style.margin = "0";
-      detailsClone.style.padding = "0";
-      taxesClone.style.display = "block";
-      taxesClone.style.pageBreakAfter = "always";
-      taxesClone.style.margin = "0";
-      taxesClone.style.padding = "0";
-
-      // Add section headers
-      const detailsHeader = document.createElement("h2");
-      detailsHeader.textContent = "تفاصيل العقار";
-      detailsHeader.style.textAlign = "center";
-      detailsHeader.style.marginBottom = "20px";
-      detailsHeader.style.fontSize = "18px";
-      detailsHeader.style.fontWeight = "bold";
-
-      const taxesHeader = document.createElement("h2");
-      taxesHeader.textContent = "الضرائب";
-      taxesHeader.style.textAlign = "center";
-      taxesHeader.style.margin = "20px 0 15px 0";
-      taxesHeader.style.fontSize = "18px";
-      taxesHeader.style.fontWeight = "bold";
-
-      // Build the combined content
-      container.appendChild(detailsHeader);
-      container.appendChild(detailsClone);
-      container.appendChild(taxesHeader);
-      container.appendChild(taxesClone);
-
-      // 4. Capture as single image
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        windowWidth: 1200,
-        windowHeight: container.scrollHeight,
-        onclone: (clonedDoc, element) => {
-          element.style.display = "block";
-          clonedDoc.body.style.overflow = "visible";
-
-          // Apply styles to the cloned document as well
-          const clonedDetails = clonedDoc.querySelector(
-            '[data-tab-content="details"]'
-          );
-          if (clonedDetails) {
-            applyPrintStylesToClone(clonedDetails as HTMLElement);
-          }
-        },
-      });
-
-      // 5. Generate PDF
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      const maxHeight = 297;
-      const finalHeight = Math.min(imgHeight, maxHeight);
-
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        0,
-        imgWidth,
-        finalHeight,
-        undefined,
-        "FAST"
-      );
-
-      toast.success("جار تنزيل ملف PDF...", {
-        id: toastId,
-        duration: 2000,
-      });
-      pdf.save("property-report.pdf");
-    } catch (error) {
-      toast.error("فشل إنشاء ملف PDF", {
-        id: toastId,
-        description: "حدث خطأ أثناء محاولة إنشاء الملف",
-        duration: 3000,
-      });
-      console.error("Error generating PDF:", error);
-    } finally {
-      document.body.classList.remove("printing");
-      const containers = document.querySelectorAll("#print-container");
-      containers.forEach((container) => container.remove());
-    }
-  };
-
-  const handleNavigate = () => navigate(-1);
 
   const status = STATUS_WITH_CLOSED?.find(
     (item) => item?.value == data?.status
@@ -277,7 +119,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
       <PageContainer>
         <div>
           <h1 className="text-size29">تفاصيل العقار </h1>
-          <div className="flex justify-around items-center w-full text-primary font-bold text-size18 mb-2xl">
+          <div className="flex md:flex-row flex-col justify-around md:items-center w-full text-primary font-bold text-size18 mb-2xl">
             <span className=" w-full block gap-2xl">
               {`${dummyProperty.buildingNumber ?? "  "}${"     "}${
                 dummyProperty.streetName ?? "  "
@@ -304,12 +146,12 @@ function ListingDetails2({ data }: ListingDetailsProps) {
           className="flex gap-5xl items-center justify-center my-5xl"
           style={{ direction: "ltr" }}
         >
-          <div className="flex overflow-auto gap-5xl">
+          <div className="flex overflow-auto md:gap-5xl gap-xl">
             {TABS.map((tab) => (
               <div className="flex items-center justify-center">
                 <button
                   key={tab.key}
-                  className={`flex items-center justify-around gap-3 px-6 py-3 rounded-full font-medium cursor-pointer ${
+                  className={`flex items-center justify-around gap-3 px-6 py-3 w-max rounded-full font-medium cursor-pointer ${
                     activeTab === tab.key
                       ? "bg-golden-medium text-layout-bg"
                       : "bg-layout-bg text-tertiary-bg"
@@ -327,7 +169,6 @@ function ListingDetails2({ data }: ListingDetailsProps) {
         {/* Tab Content */}
         <div className="h-full">
           <div
-            ref={pdfRef}
             data-tab-content="details"
             style={{ display: activeTab === "details" ? "block" : "none" }}
           >
@@ -335,7 +176,6 @@ function ListingDetails2({ data }: ListingDetailsProps) {
           </div>
 
           <div
-            ref={taxesRef}
             data-tab-content="taxes"
             style={{ display: activeTab === "taxes" ? "block" : "none" }}
             className="h-full"
@@ -344,7 +184,6 @@ function ListingDetails2({ data }: ListingDetailsProps) {
           </div>
 
           <div
-            ref={mapRef}
             data-tab-content="map"
             style={{ display: activeTab === "map" ? "block" : "none" }}
           >
@@ -352,7 +191,6 @@ function ListingDetails2({ data }: ListingDetailsProps) {
           </div>
 
           <div
-            ref={imagesRef}
             data-tab-content="images"
             style={{ display: activeTab === "images" ? "block" : "none" }}
             className="h-full"
@@ -370,20 +208,8 @@ function ListingDetails2({ data }: ListingDetailsProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between w-full mt-10 gap-xl">
-          <div onClick={handleNavigate}>
-            <PreviouseButton />
-          </div>
-          <Button
-            className="bg-green border-none"
-            onClick={(e) => {
-              e.preventDefault();
-              handleDownloadPDF();
-              // toPDF();
-            }}
-          >
-            طباعة التفاصيل PDF
-          </Button>
+        <div className="flex justify-center w-full mt-10 gap-xl">
+          <PrintButton data={data} />
         </div>
       </PageContainer>
     </AnimateContainer>

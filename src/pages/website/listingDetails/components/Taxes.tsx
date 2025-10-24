@@ -1,5 +1,5 @@
 import { DataTable } from "@/components/global/table2/table";
-import type { ListingMovement, Taxes } from "@/types/website/reports";
+import type { Taxes } from "@/types/website/reports";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 

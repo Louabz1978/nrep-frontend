@@ -11,12 +11,10 @@ type RenderImagesTabProps = {
 
 const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const images = dummyProperty?.image ?? [];
-  const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalImageIndex, setModalImageIndex] = useState<number>(0);
 
   const handleImageClick = (index: number) => {
-    setActiveIndex(index);
     setModalImageIndex(index);
     setIsModalOpen(true);
   };
@@ -24,58 +22,28 @@ const RenderImagesTab = ({ dummyProperty }: RenderImagesTabProps) => {
   const handleCloseModal = () => setIsModalOpen(false);
   const handleCloseModalWrapper = () => setIsModalOpen(false);
 
-  const chunkPattern = [2, 3, 1];
-  const gridRows: Array<{ startIdx: number; count: number }> = [];
-  let idx = 0,
-    patternIdx = 0;
-  while (idx < images.length) {
-    const count = chunkPattern[patternIdx % chunkPattern.length];
-    gridRows.push({
-      startIdx: idx,
-      count: Math.min(count, images.length - idx),
-    });
-    idx += count;
-    patternIdx++;
-  }
-
   return (
     <div className="max-w-[1300px] mx-auto h-full flex flex-col items-center">
-      <div className="w-full p-3xl flex flex-col items-center space-y-6">
-        {gridRows.map(({ startIdx, count }, rowIdx) => {
-          const rowImages = images.slice(startIdx, startIdx + count);
-
-          let widthClass = "w-1/2";
-          if (count === 3) widthClass = "w-1/3";
-          if (count === 1) widthClass = "w-full";
+      <div className="w-full grid grid-cols-6 md:gap-6xl gap-md">
+        {images.map((image, index) => {
+          const row = index % 6 <= 1 ? 1 : index % 6 <= 4 ? 2 : 3;
+          const rowClassName =
+            row == 1
+              ? "col-span-3 md:h-[475px] h-[200px]"
+              : row == 2
+              ? "col-span-2 md:h-[294px] h-[130px]"
+              : "col-span-full md:h-[900px] h-[400px]";
           return (
             <div
-              key={`row-${rowIdx}`}
-              className={`w-full flex flex-1 h-[300px] gap-6 justify-${
-                count === 1 ? "center" : "between"
-              } items-center`}
+              key={index}
+              className={`w-full cursor-pointer ${rowClassName}`}
+              onClick={() => handleImageClick(index)}
             >
-              {rowImages.map((img, i) => {
-                const globalIdx = startIdx + i;
-                return (
-                  <div
-                    key={globalIdx}
-                    className={`${widthClass} h-[${
-                      count === 1 ? 450 : count === 2 ? 350 : 250
-                    }px] overflow-hidden  transition cursor-pointer ${
-                      activeIndex === globalIdx
-                        ? " opacity-100"
-                        : "opacity-80 hover:opacity-100"
-                    }`}
-                    onClick={() => handleImageClick(globalIdx)}
-                  >
-                    <img
-                      src={img.url}
-                      className="object-cover h-full w-full"
-                      loading="lazy"
-                    />
-                  </div>
-                );
-              })}
+              <img
+                src={image.url}
+                className="object-cover h-full w-full"
+                loading="lazy"
+              />
             </div>
           );
         })}

@@ -1,9 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { usePDF } from "react-to-pdf";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
-import FormSectionHeader from "@/components/global/typography/FormSectionHeader";
 import PreviouseButton from "@/components/global/form/button/PreviouseButton";
 import { Button } from "@/components/global/form/button/Button";
 import {
@@ -13,45 +11,34 @@ import {
   WATERLINE,
 } from "@/data/global/select";
 import { FaMap } from "react-icons/fa";
-import RenderDetailsTab from "./components/Home";
-import RenderTaxesTab from "./components/Taxes";
-import RenderMapTab from "./components/Map";
+import RenderDetailsTab from "../oldComponents/Home";
+import RenderTaxesTab from "../oldComponents/Taxes";
 import type { ListingDetailsType } from "@/types/website/listings";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaHouse, FaImages } from "react-icons/fa6";
+import { FaChartLine } from "react-icons/fa";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
-import RenderImagesTab from "./components/Images";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
 }
 
 const TABS = [
-  { key: "details", label: "التفاصيل", icon: <FaHouse /> },
-  { key: "images", label: "الصور", icon: <FaImages /> },
-  { key: "taxes", label: "الضرائب", icon: <FaMoneyBillAlt /> },
+  { key: "reports", label: "السوق المتوافق", icon: <FaChartLine /> },
   { key: "map", label: "الخريطة", icon: <FaMap /> },
+  { key: "taxes", label: "الضرائب", icon: <FaMoneyBillAlt /> },
+  { key: "images", label: "الصور", icon: <FaImages /> },
+  { key: "details", label: "التفاصيل", icon: <FaHouse /> },
 ];
 
-function ListingDetails({ data }: ListingDetailsProps) {
+function PrintButton({ data }: ListingDetailsProps) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("details");
   const pdfRef = useRef<HTMLDivElement>(null);
   const taxesRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<null>(null);
-  const mapRef2 = useRef<null>(null);
-  const imagesRef = useRef<null>(null);
-  //resize the map when the tab is changed
-  useEffect(() => {
-    if (activeTab === "map" && mapRef2.current) {
-      setTimeout(() => {
-        mapRef2.current?.invalidateSize();
-      }, 100);
-    }
-  }, [activeTab]);
 
   // Helper function to apply print styles to the CLONED elements only
   const applyPrintStylesToClone = (clonedElement: HTMLElement) => {
@@ -222,137 +209,159 @@ function ListingDetails({ data }: ListingDetailsProps) {
   }`.trim();
 
   const dummyProperty = {
-    livable: data?.livable,
-    sellers: data?.sellers ?? [],
     trans_type: transType?.label,
-    ac: data.additional?.ac ? "يوجد" : "لا يوجد",
-    apartmentNumber: data.address?.apt || "2",
-    area: data.address?.area || "النص هنا",
-    approximatePrice: ((data.price * 80) / 100).toFixed(2),
-    balcony: data.additional?.balcony || 0,
-    bathrooms: data.bathrooms || "النص هنا",
-    bedrooms: data.bedrooms || "3",
-    buildYear: data.year_built || "1999",
-    buildingNumber: data.address?.building_num || "452146",
-    buyerCommission: data.buyer_realtor_commission + "%" || "$",
+    ac: data?.additional?.ac ? "يوجد" : "لا يوجد",
+    apartmentNumber: data?.address?.apt || "2",
+    area: data?.address?.area || "النص هنا",
+    approximatePrice: ((data?.price * 80) / 100).toFixed(2),
+    balcony: data?.additional?.balcony || 0,
+    bathrooms: data?.bathrooms || "النص هنا",
+    bedrooms: data?.bedrooms || "3",
+    buildYear: data?.year_built || "1999",
+    buildingNumber: data?.address?.building_num || "452146",
+    buyerCommission: data?.buyer_realtor_commission + "%" || "$",
     city: data?.address?.city || "النص هنا",
     contractExpiration: data?.exp_date ?? "---",
-    description: data.description || "---",
-    elevator: data.additional?.elevator ? " يوجد" : "لا يوجد",
-    email: data.created_by_user?.email || "seller@gmail.com",
-    fans: data.additional?.fan_number || 0,
+    description: data?.description || "---",
+    elevator: data?.additional?.elevator ? " يوجد" : "لا يوجد",
+    email: data?.created_by_user?.email || "seller@gmail.com",
+    fans: data?.additional?.fan_number || 0,
     floor: data?.address?.floor || "2",
-    floorNumber: data.address?.floor || "3",
-    garden: data.additional?.garden ? "يوجد" : "لا يوجد",
+    floorNumber: data?.address?.floor || "3",
+    garden: data?.additional?.garden ? "يوجد" : "لا يوجد",
     governorate: data?.address?.county || "حمص",
-    image: data.images_urls?.map((item) => ({
+    image: data?.images_urls?.map((item) => ({
       url: item?.url?.replace("//static", "/static"),
       is_main: item?.is_main,
     })) || [{ url: image, is_main: true }],
-    jacuzzy: data.additional?.jacuzzi ? "يوجد" : "لا يوجد",
+    jacuzzy: data?.additional?.jacuzzi ? "يوجد" : "لا يوجد",
     licenseNumber: "2516584005",
-    mls: data.mls_num || "454942",
-    parking: data.additional?.garage ? "يوجد" : "لا يوجد",
-    phoneNumber: data.created_by_user?.phone_number || "0909091009",
-    pool: data.additional?.pool ? "يوجد" : "لا يوجد",
+    mls: data?.mls_num || "454942",
+    parking: data?.additional?.garage ? "يوجد" : "لا يوجد",
+    phoneNumber: data?.created_by_user?.phone_number || "0909091009",
+    pool: data?.additional?.pool ? "يوجد" : "لا يوجد",
     previewInstruction: data?.show_inst ?? "---",
-    price: data.price || 1000000,
-    propertyArea: data.area_space || "200",
+    price: data?.price || 1000000,
+    propertyArea: data?.area_space || "200",
     propertyOwner: fullName || "seller 11",
     propertyType: propertyType || "شقة",
     realEstateCompany: "NREP",
     responsibleMediator: createdByFullName || "---",
-    sellerCommission: data.property_realtor_commission + "%" || "$",
-    solarEnergy: data.additional?.solar_system ? "يوجد" : "لا يوجد",
-    latitude: data.latitude,
-    longitude: data.longitude,
+    sellerCommission: data?.property_realtor_commission + "%" || "$",
+    solarEnergy: data?.additional?.solar_system ? "يوجد" : "لا يوجد",
+    latitude: data?.latitude,
+    longitude: data?.longitude,
     DimensionsOfTheEarth: 170,
     status: status || "---",
-    streetName: data.address?.street || "النص هنا",
+    streetName: data?.address?.street || "النص هنا",
     waterLine: waterLine || "لا يوجد",
   };
 
   return (
-    <AnimateContainer>
-      <PageContainer>
-        <FormSectionHeader>تفاصيل العقار</FormSectionHeader>
+    <>
+      <div className="hidden">
+        <AnimateContainer>
+          <PageContainer>
+            <div>
+              <h1 className="text-size29">تفاصيل العقار </h1>
+              <div className="flex justify-around items-center w-full text-primary font-bold text-size18 mb-2xl">
+                <span className=" w-full block gap-2xl">
+                  {`${dummyProperty.buildingNumber ?? "  "}${"     "}${
+                    dummyProperty.streetName ?? "  "
+                  }${"     "}الطابق${"     "}${
+                    dummyProperty.floor ?? "  "
+                  }${"     "}الشقة${"     "}${
+                    dummyProperty.apartmentNumber ?? "  "
+                  }${"     "}${dummyProperty.area}${"     "},${"     "}${
+                    dummyProperty.city
+                  }${"     "},${"     "}${dummyProperty.governorate}`}
+                </span>
+                <div className="flex text-size15 text-success">
+                  <div className="flex items-center whitespace-nowrap">
+                    القيمة التقديرية للعقار :{" "}
+                  </div>
+                  <span>${((dummyProperty?.price * 80) / 100).toFixed(2)}</span>
+                </div>
+              </div>
+              <hr />
+            </div>
 
-        {/* Tabs */}
-        <div className="flex mt-6 gap-2 " style={{ direction: "ltr" }}>
-          <div className="flex overflow-auto gap-2">
-            {TABS.map((tab) => (
-              <button
-                key={tab.key}
-                className={`flex items-center justify-around gap-3 px-6 py-3 rounded-t-md font-medium cursor-pointer ${
-                  activeTab === tab.key
-                    ? "bg-tertiary-bg border-2 border-b-0 border-quaternary-border"
-                    : "bg-quaternary-border text-tertiary-bg"
-                }`}
-                onClick={() => setActiveTab(tab.key)}
+            {/* Tabs */}
+            <div
+              className="flex gap-5xl items-center justify-center my-5xl"
+              style={{ direction: "ltr" }}
+            >
+              <div className="flex overflow-auto gap-5xl">
+                {TABS.map((tab) => (
+                  <div className="flex items-center justify-center">
+                    <button
+                      key={tab.key}
+                      className={`flex items-center justify-around gap-3 px-6 py-3 rounded-full font-medium cursor-pointer ${
+                        activeTab === tab.key
+                          ? "bg-golden-medium text-layout-bg"
+                          : "bg-layout-bg text-tertiary-bg"
+                      }`}
+                      onClick={() => setActiveTab(tab.key)}
+                    >
+                      <div>{tab.label}</div>
+                      <div>{tab.icon}</div>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Tab Content */}
+            <div className="h-full">
+              <div
+                ref={pdfRef}
+                data-tab-content="details"
+                style={{ display: activeTab === "details" ? "block" : "none" }}
               >
-                <div>{tab.icon}</div>
-                <div>{tab.label}</div>
-              </button>
-            ))}
-          </div>
-        </div>
+                <RenderDetailsTab propertyDetails={data} />
+              </div>
 
-        {/* Tab Content */}
-        <div className=" h-full">
-          <div
-            ref={pdfRef}
-            data-tab-content="details"
-            style={{ display: activeTab === "details" ? "block" : "none" }}
-          >
-            <RenderDetailsTab propertyDetails={data} />
-          </div>
+              <div
+                ref={taxesRef}
+                data-tab-content="taxes"
+                style={{ display: activeTab === "taxes" ? "block" : "none" }}
+                className="h-full"
+              >
+                <RenderTaxesTab />
+              </div>
+            </div>
 
-          <div
-            ref={taxesRef}
-            data-tab-content="taxes"
-            style={{ display: activeTab === "taxes" ? "block" : "none" }}
-            className="h-full"
-          >
-            <RenderTaxesTab />
-          </div>
-
-          <div
-            ref={mapRef}
-            data-tab-content="map"
-            style={{ display: activeTab === "map" ? "block" : "none" }}
-          >
-            <RenderMapTab dummyProperty={dummyProperty} mapRef={mapRef2} />
-          </div>
-
-          <div
-            ref={imagesRef}
-            data-tab-content="images"
-            style={{ display: activeTab === "images" ? "block" : "none" }}
-            className="h-full"
-          >
-            <RenderImagesTab dummyProperty={dummyProperty} />
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex justify-between w-full mt-10 gap-xl">
-          <div onClick={handleNavigate}>
-            <PreviouseButton />
-          </div>
-          <Button
-            className="bg-green border-none"
-            onClick={(e) => {
-              e.preventDefault();
-              handleDownloadPDF();
-              // toPDF();
-            }}
-          >
-            طباعة التفاصيل PDF
-          </Button>
-        </div>
-      </PageContainer>
-    </AnimateContainer>
+            {/* Action Buttons */}
+            <div className="flex justify-between w-full mt-10 gap-xl">
+              <div onClick={handleNavigate}>
+                <PreviouseButton />
+              </div>
+              <Button
+                className="bg-green border-none"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDownloadPDF();
+                  // toPDF();
+                }}
+              >
+                طباعة التفاصيل PDF
+              </Button>
+            </div>
+          </PageContainer>
+        </AnimateContainer>
+      </div>
+      <Button
+        className="bg-umber-light border-none rounded-[32px] !px-xl !py-4xl"
+        onClick={(e) => {
+          e.preventDefault();
+          handleDownloadPDF();
+          // toPDF();
+        }}
+      >
+        طباعة التفاصيل PDF
+      </Button>
+    </>
   );
 }
 
-export default ListingDetails;
+export default PrintButton;
