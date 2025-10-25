@@ -22,6 +22,41 @@ export interface BrokerHistoryReport {
   notes?: string;
 }
 
+export interface RealtorHistoryReport {
+  realtor_id: number;
+  license_number: string;
+  realtor_name: string;
+  number_of_sales: number;
+  total_sales: number;
+}
+
+export interface AgenciesHistoryReport {
+  agency_id: number;
+  agency_name: string;
+  agency_email: string;
+  agency_phone: string;
+  agencies_names: string[];
+  realtors_names: string[];
+}
+
+export interface GetAgenciesHistoryResponse {
+  data: AgenciesHistoryReport[];
+  pagination: {
+    total_pages: number;
+    total_records: number;
+    current_page: number;
+    records_per_page: number;
+  };
+}
+export interface GetRealtorHistoryResponse {
+  data: RealtorHistoryReport[];
+  pagination: {
+    total_pages: number;
+    total_records: number;
+    current_page: number;
+    records_per_page: number;
+  };
+}
 export interface GetTopAgenciesResponse {
   data: TopAgencyReport[];
   pagination: {
