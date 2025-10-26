@@ -94,6 +94,16 @@ export const adminTabs: AdminTabsType = [
         permission: [],
         to: "/admin/reports/broker-history",
       },
+      {
+        label: "تقرير الوكالات",
+        permission: [],
+        to: "/admin/reports/agencies-history",
+      },
+      {
+        label: "تقرير الوسطاء",
+        permission: [],
+        to: "/admin/reports/realtor-history",
+      },
     ],
   },
 ];

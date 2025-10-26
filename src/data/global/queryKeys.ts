@@ -43,6 +43,10 @@ const QUERY_KEYS = {
     query: "agencies-query",
     details: "agencies-details",
   },
+  counties: {
+    query: "counties",
+    details: "county-details",
+  },
 };
 
 export default QUERY_KEYS;

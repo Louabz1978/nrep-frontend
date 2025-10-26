@@ -41,6 +41,9 @@ import BrokerHistory from "./pages/admin/reports/BrokerHistory";
 import CitiesList from "./pages/admin/cities/CitiesList";
 import CountiesList from "./pages/admin/counties/CountiesList";
 import AreasList from "./pages/admin/areas/AreasList";
+import AgenciesHistory from "./pages/admin/reports/AgenciesHistory";
+import RealtorHistory from "./pages/admin/reports/RealtorHistory";
+import CountyDetails from "./components/admin/basics/CountyDetails";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -214,8 +217,20 @@ const router = createBrowserRouter([
         element: <BrokerHistory />,
       },
       {
+        path: "reports/agencies-history",
+        element: <AgenciesHistory />,
+      },
+      {
+        path: "reports/realtor-history",
+        element: <RealtorHistory />,
+      },
+      {
         path: "counties",
         element: <CountiesList />,
+      },
+      {
+        path: "county/:id",
+        element: <CountyDetails />,
       },
       {
         path: "cities",
