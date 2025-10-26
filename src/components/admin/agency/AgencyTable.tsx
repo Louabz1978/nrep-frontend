@@ -18,56 +18,55 @@ const AgencyTable = () => {
         id: "select",
         header: ({ table }) => (
           <Checkbox
-          className="ms-2 bg-white"
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value: boolean) =>
-            table.toggleAllPageRowsSelected(!!value)
-          }
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          className="ms-2 bg-white"
-          checked={row.getIsSelected()}
-          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-      size: 8,
-      }
-      ,
-      { 
-        accessorKey: "name", 
+            className="ms-2 bg-white"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value: boolean) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            className="ms-2 bg-white"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+        maxSize: 5,
+      },
+      {
+        accessorKey: "name",
         header: "اسم الشركة",
         size: 20,
         minSize: 20,
       },
-      { 
-        accessorKey: "email", 
+      {
+        accessorKey: "email",
         header: "البريد الإلكتروني",
         size: 25,
         minSize: 25,
       },
-      { 
-        accessorKey: "phone_number", 
+      {
+        accessorKey: "phone_number",
         header: "رقم الهاتف",
         size: 20,
         minSize: 20,
       },
-      { 
-        accessorKey: "created_by", 
+      {
+        accessorKey: "created_by",
         header: "أنشئت بواسطة",
         size: 15,
         minSize: 15,
       },
-      { 
-        accessorKey: "address.city", 
+      {
+        accessorKey: "address.city",
         header: "المدينة",
         size: 15,
         minSize: 15,
@@ -76,12 +75,10 @@ const AgencyTable = () => {
     []
   );
 
-
   return (
     <AnimateContainer>
-      <PageContainer> 
+      <PageContainer>
         <div className="space-y-6">
-          {/* Data Table */}
           <DataTable
             prefix={TABLE_PREFIXES.agencies}
             columns={columns}
@@ -102,5 +99,3 @@ const AgencyTable = () => {
 };
 
 export default AgencyTable;
-
-

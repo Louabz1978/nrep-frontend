@@ -20,6 +20,8 @@ export interface BrokerHistoryReport {
   transaction_amount?: number;
   commission_earned?: number;
   notes?: string;
+  total_sales?: number;
+  total_revenue?: number;
 }
 
 export interface RealtorHistoryReport {

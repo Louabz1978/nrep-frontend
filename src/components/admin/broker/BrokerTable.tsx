@@ -8,41 +8,44 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Checkbox } from "@/components/global/ui/checkbox";
 
 const BrokerTable = () => {
-  const { allBrokers, allBrokersQuery } = useGetAllBrokers({ queryParams: { role: "broker" } });
+  const { allBrokers, allBrokersQuery } = useGetAllBrokers({
+    queryParams: { role: "broker" },
+  });
+
   const totalPages = allBrokersQuery?.data?.pagination?.total_pages || 1;
 
   const columns: ColumnDef<any>[] = useMemo(
     () => [
       {
         id: "select",
-        header: ({ table }) => (    
+        header: ({ table }) => (
           <Checkbox
-          className="ms-2 bg-white"
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value: boolean) =>
-            table.toggleAllPageRowsSelected(!!value)
-          }
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          className="ms-2 bg-white"
-          checked={row.getIsSelected()}
-          onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-      size: 8,
-      } ,
+            className="ms-2 bg-white"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value: boolean) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            className="ms-2 bg-white"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+        maxSize: 5,
+      },
       {
         accessorKey: "first_name",
-        header: "اسم الأول",
+        header: "الاسم الأول",
         size: 20,
         minSize: 20,
       },
@@ -68,16 +71,15 @@ const BrokerTable = () => {
     []
   );
 
-
   return (
     <AnimateContainer>
       <PageContainer>
         <div className="space-y-6">
           {/* Page Header */}
           <div className="mb-5xl">
-          <h1 className="text-size30 font-medium">أصحاب الشركات العقارية</h1>
-          <hr />
-        </div>
+            <h1 className="text-size30 font-medium">أصحاب الشركات العقارية</h1>
+            <hr />
+          </div>
 
           {/* Data Table */}
           <DataTable
@@ -87,7 +89,7 @@ const BrokerTable = () => {
             query={allBrokersQuery}
             totalPageCount={totalPages}
             searchKey="first_name"
-            searchPlaceholder="البحث عن طريق اسم"
+            searchPlaceholder="البحث عن طريق الاسم"
             searchType="text"
             show={true}
             to="/admin/brokers/add"

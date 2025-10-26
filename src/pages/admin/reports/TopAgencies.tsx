@@ -2,73 +2,39 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgencyReport } from "@/types/admin/reports";
 import useGetTopAgencies from "@/hooks/admin/reports/useGetTopAgencies";
-import { Radio } from "@/components/global/ui/radio";
 
 const TopAgencies = () => {
   const month = "9";
   const year = "2025";
-  const { topAgencies, topAgenciesQuery } = useGetTopAgencies({
-    month,
-    year,
-  });
-
-  const [period, setPeriod] = useState<"current" | "previous">("current");
+  const { topAgencies } = useGetTopAgencies({ month, year });
 
   const columns: ColumnDef<TopAgencyReport>[] = useMemo(
     () => [
       {
-        id: "rank",
-        header: "#",
-        cell: ({ row }) => {
-          return row?.index + 1;
-        },
-        size: 10,
+        accessorKey: "agency_id",
+        header: "معرف الشركة العقارية",
+        size: 20,
       },
       {
         accessorKey: "agency_name",
-        header: "اسم الوكالة",
-        size: 25,
+        header: "اسم الشركة العقارية",
+        size: 35,
       },
       {
         accessorKey: "total_sales",
-        header: "عدد المبيعات",
-        size: 15,
-        cell: ({ getValue }) => {
-          const value = getValue() as number;
-          return value.toLocaleString();
-        },
+        header: "مجموع عدد العقارات المباعة",
+        size: 20,
+        cell: ({ getValue }) => (getValue() as number).toLocaleString(),
       },
       {
         accessorKey: "total_revenue",
-        header: "إجمالي الإيرادات",
-        size: 20,
-        cell: ({ getValue }) => {
-          const value = getValue() as number;
-          return `$${value.toLocaleString()}`;
-        },
-      },
-      {
-        accessorKey: "active_brokers",
-        header: "الوسطاء النشطين",
-        size: 15,
-      },
-      {
-        accessorKey: "active_realtors",
-        header: "الوسطاء العقاريين",
-        size: 15,
-      },
-      {
-        accessorKey: "success_rate",
-        header: "معدل النجاح %",
-        size: 15,
-        cell: ({ getValue }) => {
-          const value = getValue() as number;
-          return `${value}%`;
-        },
+        header: "مجموع أسعار المبيعات",
+        size: 25,
+        cell: ({ getValue }) => (getValue() as number).toLocaleString(),
       },
     ],
     []
@@ -77,41 +43,29 @@ const TopAgencies = () => {
   return (
     <AnimateContainer>
       <PageContainer>
-        <div className="mb-2xl">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-size24 sm:text-size30 font-medium mb-md sm:mb-xl text-center sm:text-right">
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row items-end sm:justify-between gap-4 border-b-1 pb-2">
+            <h1 className="text-size24 sm:text-size30 font-medium text-center sm:text-right">
               تقرير أفضل عشر وكالات عقارية
             </h1>
-            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-12 mb-2 sm:mb-4">
-              <div className="flex flex-row items-center gap-4 sm:gap-10 w-full sm:w-auto justify-center">
-                <Radio
-                  name="period"
-                  value="current"
-                  label="الشهر الحالي"
-                  checked={period === "current"}
-                  onChange={() => setPeriod("current")}
-                  ariaLabel="الشهر الحالي"
-                />
-                <Radio
-                  name="period"
-                  value="previous"
-                  label="الشهر السابق"
-                  checked={period === "previous"}
-                  onChange={() => setPeriod("previous")}
-                  ariaLabel="الشهر السابق"
-                />
-              </div>
-            </div>
+
+            <input
+              name="agency_id"
+              placeholder="البحث عن طريق معرف الشركة العقارية"
+              type="search"
+              className="bg-white w-[400px] h-8 p-2 rounded-xl border-none outline-none focus:outline-none focus:border-none focus:ring-0 placeholder:text-size14"
+              />
           </div>
-          <hr className="mt-2" />
         </div>
+
+        {/* Data Table */}
         <div className="w-full overflow-x-auto">
           <DataTable
             report={true}
             prefix={TABLE_PREFIXES.top_agencies}
             columns={columns}
             data={topAgencies}
-            // query={topAgenciesQuery}
           />
         </div>
       </PageContainer>

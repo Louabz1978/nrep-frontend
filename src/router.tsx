@@ -189,7 +189,7 @@ const router = createBrowserRouter([
         element: <CreateAgency />,
       },
       {
-        path: "agencies/:id",
+        path: "agencies/details/:id",
         element: <AgencyDetails />,
       },
       {
