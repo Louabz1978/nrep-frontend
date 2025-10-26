@@ -38,7 +38,7 @@ const RealtorTable = () => {
       ),
       enableSorting: false,
       enableHiding: false,
-      size: 8,
+      maxSize: 5,
       },{
         accessorKey: "first_name",
         header: "الأسم الأول",
