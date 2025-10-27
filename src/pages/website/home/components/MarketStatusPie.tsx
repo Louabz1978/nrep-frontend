@@ -30,9 +30,9 @@ const MarketStatusPie = () => {
   const { date, area } = form.watch();
 
   const apiParams = useMemo<GetMarketWatcherProps | null>(() => {
-    if (!date?.value || !area?.title) return null;
+    if (!date?.value) return null;
     return {
-      queryParams: { period: String(date.value), area: String(area.title) },
+      queryParams: { period: String(date.value), area_id: area?.area_id },
     };
   }, [date, area]);
 
@@ -147,6 +147,7 @@ const MarketStatusPie = () => {
             ]}
             showValue="label"
             keyValue="value"
+            preventRemove
           />
         </div>
         <div className="w-48">
@@ -157,7 +158,7 @@ const MarketStatusPie = () => {
             placeholder="المنطقة"
             choices={Area}
             showValue="title"
-            keyValue="title"
+            keyValue="area_id"
           />
         </div>
       </form>

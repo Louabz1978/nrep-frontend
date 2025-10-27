@@ -3,8 +3,8 @@ import type { PropertyStatsResponse } from "@/types/website/reports";
 
 interface GetMarketMovementProps {
   queryParams: {
-    city: string;
-    area: string;
+    city_id: string;
+    area_id: string;
     year: number;
     month: number;
   };
@@ -13,12 +13,12 @@ interface GetMarketMovementProps {
 export default async function getMarketMovement({
   queryParams,
 }: GetMarketMovementProps): Promise<PropertyStatsResponse> {
-  const { city, area, year, month } = queryParams ?? {};
+  const { city_id, area_id, year, month } = queryParams ?? {};
 
   const res = await axiosClient.get<PropertyStatsResponse>(
-    "/get_property_stats/",
+    "/report/get_property_stats/",
     {
-      params: { city, area, year, month, t: Date.now() }, // ✅ add timestamp to bypass browser caching
+      params: { city_id, area_id, year, month, t: Date.now() }, // ✅ add timestamp to bypass browser caching
     }
   );
 

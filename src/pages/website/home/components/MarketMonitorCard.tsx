@@ -98,7 +98,10 @@ const getApexOptionsAndSeries = (
 
 const getChartOptions = (hasData: boolean): ApexOptions => ({
   ...getApexOptionsAndSeries([]).options,
-  dataLabels: { ...(getApexOptionsAndSeries([]).options.dataLabels as any), enabled: hasData },
+  dataLabels: {
+    ...(getApexOptionsAndSeries([]).options.dataLabels as any),
+    enabled: hasData,
+  },
 });
 
 // --- Component Parts ---
@@ -164,7 +167,7 @@ const FilterForm = ({ form }: { form: UseFormReturn<FilterChartsType> }) => {
           choices={Area}
           showValue="title"
           preventRemove
-          keyValue="title"
+          keyValue="area_id"
         />
       </div>
     </form>
@@ -182,10 +185,11 @@ const MarketMonitorCard = () => {
   const { date, area } = form.watch();
 
   const apiParams = useMemo(() => {
-    if (!date?.value || !area?.title) return null;
-    return { queryParams: { period: date.value, area: area.title } };
+    if (!date?.value) return null;
+    return { queryParams: { period: date.value, area: area?.area_id } };
   }, [date, area]);
 
+  console.log({ apiParams });
   const { marketWatcher, isLoading, isError, isFetched } =
     useMarketWatcher(apiParams);
 

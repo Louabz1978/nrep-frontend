@@ -11,8 +11,8 @@ import type { TopAgentReport } from "@/types/website/reports";
 const TopAgentsColumn = () => {
   const [period, setPeriod] = useState<"current" | "previous">("current");
 
-  const month = "9";
-  const year = "2025";
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
   const { topAgent, getTopAgentQuery } = useGetTopAgent({
     month,
     year,
@@ -20,24 +20,26 @@ const TopAgentsColumn = () => {
 
   type TopAgentResponse = {
     results?: TopAgentReport[];
-    previous_results?: TopAgentReport[];
+    previous_month?: TopAgentReport[];
   };
 
   const response = topAgent as Partial<TopAgentResponse> | undefined;
-
+  console.log({ response });
   const dataset = useMemo(() => {
-    const currentResults: TopAgentReport[] = Array.isArray(response?.results)
-      ? response.results.slice(0, 10)
+    const currentResults: TopAgentReport[] = Array.isArray(
+      response?.current_month
+    )
+      ? response.current_month.slice(0, 10)
       : [];
 
     const previousResults: TopAgentReport[] = Array.isArray(
-      response?.previous_results
+      response?.previous_month
     )
-      ? response.previous_results.slice(0, 10)
+      ? response.previous_month.slice(0, 10)
       : [];
 
     return period === "current" ? currentResults : previousResults;
-  }, [period, response?.results, response?.previous_results]);
+  }, [period, response?.current_month, response?.previous_month]);
 
   const categories = useMemo(() => {
     const actualCategories = dataset.map((item) => item.full_name ?? "-");

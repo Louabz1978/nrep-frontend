@@ -11,8 +11,8 @@ import { Radio } from "@/components/global/ui/radio";
 
 const TopAgent = () => {
   // Default values for month and year as 9 and 2025
-  const month = "9";
-  const year = "2025";
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
   const { topAgent, getTopAgentQuery } = useGetTopAgent({
     month,
     year,
@@ -55,20 +55,22 @@ const TopAgent = () => {
   );
 
   type TopAgentResponse = {
-    results?: TopAgentReport[];
-    previous_results?: TopAgentReport[];
+    current_month?: TopAgentReport[];
+    previous_month?: TopAgentReport[];
   };
 
   const response = topAgent as Partial<TopAgentResponse> | undefined;
 
-  const currentResults: TopAgentReport[] = Array.isArray(response?.results)
-    ? (response!.results as TopAgentReport[])
+  const currentResults: TopAgentReport[] = Array.isArray(
+    response?.current_month
+  )
+    ? (response!.current_month as TopAgentReport[])
     : [];
 
   const previousResults: TopAgentReport[] = Array.isArray(
-    response?.previous_results
+    response?.previous_month
   )
-    ? (response!.previous_results as TopAgentReport[])
+    ? (response!.previous_month as TopAgentReport[])
     : [];
 
   return (

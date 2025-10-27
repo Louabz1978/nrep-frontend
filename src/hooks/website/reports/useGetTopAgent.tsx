@@ -32,9 +32,7 @@ function useGetTopAgent({ month, year }: IUseGetTopAgent) {
   });
 
   // final data
-  const topAgent = getTopAgentQuery.data?.data;
-
-
+  const topAgent = getTopAgentQuery.data?.data?.data;
 
   return {
     getTopAgentQuery,

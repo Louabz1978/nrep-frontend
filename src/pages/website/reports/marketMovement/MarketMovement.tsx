@@ -109,8 +109,8 @@ const MarketMovement = () => {
   const { Area } = useGetArea();
 
   const { marketMovement, getMarketMovementQuery } = useGetMarketMovement({
-    city: "حمص",
-    area: area?.title,
+    city_id: 1,
+    area_id: area?.area_id,
     year: year?.value,
     month: month?.value,
   });
@@ -126,7 +126,6 @@ const MarketMovement = () => {
     ],
     []
   );
-
 
   return (
     <AnimateContainer>
@@ -163,7 +162,7 @@ const MarketMovement = () => {
                 placeholder="اختر المنطقة"
                 choices={Area}
                 showValue="title"
-                keyValue="title"
+                keyValue="area_id"
                 labelStyle="w-[120px]"
               />
             </div>
