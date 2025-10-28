@@ -71,6 +71,7 @@ interface DataTableProps<TData, TValue, TRow> {
   addLabel?: string;
   showActionButtons?: boolean;
   report?: boolean;
+  location?: boolean
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -94,6 +95,7 @@ export function DataTable<TData, TValue, TRow>({
   addLabel,
   showActionButtons = false,
   report = false,
+  location=false,
 }: DataTableProps<TData, TValue, TRow>) {
   const id = useId();
 
@@ -401,7 +403,7 @@ export function DataTable<TData, TValue, TRow>({
           </Table>
         </ScrollArea>
 
-        {!report && (
+        {(!report || location) && (
           <div className="flex items-center justify-between space-x-md py-lg px-lg">
             <div className="flex-1 text-sm text-secondary-fg">
               <span className="hidden sm:inline">

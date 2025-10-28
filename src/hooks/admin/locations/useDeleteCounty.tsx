@@ -24,7 +24,6 @@ function useDeleteCounty() {
     },
   });
 
-  // --- New handle function ---
   async function handleDeleteCounty({ id }: DeleteCountyProps) {
     // toaster
     toast.promise(deleteCountyMutation.mutateAsync({ id }), {
@@ -36,7 +35,7 @@ function useDeleteCounty() {
     });
   }
 
-  return { deleteCountyMutation, handleDeleteCounty }; // Expose the new function
+  return { deleteCountyMutation, handleDeleteCounty };
 }
 
 export default useDeleteCounty;

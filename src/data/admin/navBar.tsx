@@ -68,16 +68,6 @@ export const adminTabs: AdminTabsType = [
         permission: [],
         to: "/admin/counties",
       },
-      {
-        label: "المدن",
-        permission: [],
-        to: "/admin/cities",
-      },
-      {
-        label: "المناطق",
-        permission: [],
-        to: "/admin/areas",
-      },
     ],
   },
   {

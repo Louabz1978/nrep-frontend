@@ -3,6 +3,8 @@ import deleteArea from "@/api/admin/locations/deleteArea";
 import type { DeleteAreaProps } from "@/api/admin/locations/deleteArea";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { showApiErrors } from "@/utils/showApiErrors";
+import { toast } from "sonner";
+import MESSAGES from "@/data/global/messages";
 
 function useDeleteArea() {
   const queryClient = useQueryClient();
@@ -18,8 +20,18 @@ function useDeleteArea() {
       showApiErrors(error);
     },
   });
+  async function handleDeleteArea({ id }: DeleteAreaProps) {
+    // toaster
+    toast.promise(deleteAreaMutation.mutateAsync({ id }), {
+      loading: MESSAGES?.county?.delete?.loading,
+      success: MESSAGES?.county?.delete?.success,
+      error: (error) => {
+        return showApiErrors(error);
+      },
+    });
+  }
 
-  return { deleteAreaMutation };
+  return { deleteAreaMutation, handleDeleteArea };
 }
 
 export default useDeleteArea;
