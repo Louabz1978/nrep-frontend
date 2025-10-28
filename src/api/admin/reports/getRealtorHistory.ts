@@ -10,7 +10,7 @@ export default async function getRealtorHistory({
   queryParams,
 }: GetRealtorHistoryProps): GetRealtorHistoryResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
-    `/realtor-history`,
+    `report/agents/detailed`,
     {
       params: {
         ...queryParams,

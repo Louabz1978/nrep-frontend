@@ -3,7 +3,7 @@ import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Area } from "@/types/admin/location";
+import type { Area, City } from "@/types/admin/location"; // Import City
 import useGetAreas from "@/hooks/admin/locations/useGetAreas";
 import { Button } from "@/components/global/form/button/Button";
 import { FaCheck, FaFolderPlus, FaPlus } from "react-icons/fa6";
@@ -15,6 +15,8 @@ import useDeleteArea from "@/hooks/admin/locations/useDeleteArea";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import Input from "@/components/global/form/input/Input";
+// --- MODIFIED: Import Select component (assumed path) ---
+import Select from "@/components/global/form/select/Select";
 import {
   areaInitialValues,
   areaSchema,
@@ -25,12 +27,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/global/tooltip/Tooltiop";
+import useGetCities from "@/hooks/admin/locations/useGetCities";
 
 type AreaOrFormRow = Area | { area_id: number; isForm: true; title: string };
 
-// --- MODIFIED: Removed AreaTableProps and city_id prop ---
 const AreaTable = () => {
-  const { areas, areasQuery , totalPages} = useGetAreas();
+  const { areas, areasQuery, totalPages } = useGetAreas();
+  // --- MODIFIED: Get cities for the select dropdown ---
+  const { cities } = useGetCities();
+console.log(cities)
 
   // --- Mutations ---
   const { handleAddArea, createAreaMutation } = useCreateArea();
@@ -41,7 +46,10 @@ const AreaTable = () => {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [editingRowId, setEditingRowId] = useState<number | null>(null);
 
+
   // --- Form ---
+  // --- MODIFIED: Updated useForm to use new defaults ---
+  // ASSUMPTION: You updated AreaForm and areaSchema to include 'city_id'
   const form = useForm<AreaForm>({
     resolver: joiResolver(areaSchema),
     defaultValues: areaInitialValues,
@@ -53,70 +61,69 @@ const AreaTable = () => {
     if (isAddingNew && !form.getValues().title) {
       form.reset(areaInitialValues);
     }
-  }, [isAddingNew, form]);
+  }, [isAddingNew, form, areaInitialValues]);
+
+  // --- MODIFIED: Prepare city options for Select component ---
+  const citiesOptions = useMemo(() => {
+    return (cities ?? []).map((city: City) => ({
+      value: city.city_id,
+      label: city.title,
+    }));
+  }, [cities]);
 
   // --- Handlers ---
 
+  // --- MODIFIED: handleSaveArea now uses city_id from form ---
   const handleSaveArea = useCallback(async () => {
     const values = form.getValues();
-    // --- MODIFIED: Get city_id from existing area data ---
-    const cityId = areas?.[0]?.city_id;
-
-    if (values.title?.trim() && cityId) {
+    if (values.title?.trim() && values.city_id) {
       await handleAddArea({
         title: values.title.trim(),
-        city_id: cityId, // --- MODIFIED: Use inferred cityId
+        city_id: Number(values.city_id), // Use city_id from form
       });
       setIsAddingNew(false);
       form.reset(areaInitialValues);
-    } else if (!cityId) {
-      // This will happen if the 'areas' array is empty
-      console.warn(
-        "Cannot add area: No existing city_id found to reference."
-      );
     }
-  }, [form, handleAddArea, areas]); // --- MODIFIED: Add 'areas' to dependency array
+  }, [form, handleAddArea, areaInitialValues]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingNew(false);
     form.reset(areaInitialValues);
-  }, [form]);
+  }, [form, areaInitialValues]);
 
+  // --- MODIFIED: handleStartEdit now resets city_id in form ---
   const handleStartEdit = useCallback(
     (row: Area) => {
       setEditingRowId(row.area_id);
-      form.reset({ title: row.title });
-      setIsAddingNew(false); // Ensure add mode is off
+      form.reset({ title: row.title, city_id: row.city_id });
+      setIsAddingNew(false);
     },
     [form]
   );
 
-  // --- THIS FUNCTION IS ALREADY CORRECT and does what you asked ---
+  // --- MODIFIED: handleSaveUpdate now uses city_id from form ---
   const handleSaveUpdate = useCallback(
     async (area_id: number) => {
       const values = form.getValues();
-      // Finds the original area to get its city_id
-      const areaToUpdate = areas?.find((a) => a.area_id === area_id);
-
-      if (values.title?.trim() && areaToUpdate) {
+      if (values.title?.trim() && values.city_id) {
         await handleEditArea({
-          area_id: areaToUpdate.area_id,
+          area_id: area_id,
           payload: {
             title: values.title.trim(),
-            city_id: areaToUpdate.city_id, // Uses the city_id from the existing area
+            city_id: Number(values.city_id), // Use city_id from form
           },
         });
         setEditingRowId(null);
         form.reset(areaInitialValues);
       }
     },
-    [form, handleEditArea, areas] // 'areas' is already in dependency array
+    [form, handleEditArea, areaInitialValues]
   );
 
   const handleCancelEdit = useCallback(() => {
     setEditingRowId(null);
     form.reset(areaInitialValues);
-  }, [form]);
+  }, [form, areaInitialValues]);
 
   // --- Columns ---
   const columns: ColumnDef<AreaOrFormRow>[] = useMemo(
@@ -189,21 +196,7 @@ const AreaTable = () => {
             (row.original as Area)?.area_id === editingRowId;
           const isForm = "isForm" in row.original && row.original.isForm;
 
-          if (isForm) {
-            return (
-              <div className="w-full">
-                <Input
-                  form={form}
-                  name="title"
-                  placeholder="أدخل اسم المنطقة"
-                  addingStyle="w-full"
-                  addingInputStyle="w-full"
-                />
-              </div>
-            );
-          }
-
-          if (isEditing) {
+          if (isForm || isEditing) {
             return (
               <div className="w-full">
                 <Input
@@ -219,6 +212,43 @@ const AreaTable = () => {
 
           if ("area_id" in row.original && !isForm) {
             return row.original.title;
+          }
+
+          return "";
+        },
+      },
+      // --- MODIFIED: Added City Name column ---
+      {
+        id: "city_name",
+        header: "اسم المدينة",
+        cell: ({ row }) => {
+          const isEditing =
+            (row.original as Area)?.area_id === editingRowId;
+          const isForm = "isForm" in row.original && row.original.isForm;
+
+          // Show Select for new row or editing row
+          if (isForm || isEditing) {
+            return (
+              <div className="w-full">
+                <Select
+                  form={form}
+                  name="city_id"
+                  placeholder="اختر مدينة"
+                  choices={cities}
+                  showValue="title"
+                  keyValue="city_id"
+                  addingStyle="w-full"
+                />
+              </div>
+            );
+          }
+
+          // Show text for existing row
+          if ("area_id" in row.original && !isForm) {
+            const city = cities?.find(
+              (c: City) => c.city_id === row.original.city_id
+            );
+            return city?.title ?? "---";
           }
 
           return "";
@@ -247,10 +277,11 @@ const AreaTable = () => {
                       type="button"
                       size={"icon"}
                       className="bg-transparent !text-primary"
+                      // --- MODIFIED: Disable logic
                       disabled={
                         !form.watch("title")?.trim() ||
-                        isProcessing ||
-                        !areas?.[0]?.city_id // --- MODIFIED: Disable if no city_id is available
+                        !form.watch("city_id") ||
+                        isProcessing
                       }
                       onClick={handleSaveArea}
                     >
@@ -288,7 +319,12 @@ const AreaTable = () => {
                       type="button"
                       size={"icon"}
                       className="bg-transparent !text-primary"
-                      disabled={!form.watch("title")?.trim() || isProcessing}
+                      // --- MODIFIED: Disable logic
+                      disabled={
+                        !form.watch("title")?.trim() ||
+                        !form.watch("city_id") ||
+                        isProcessing
+                      }
                       onClick={() => handleSaveUpdate(original.area_id)}
                     >
                       <FaCheck className="text-size25" />
@@ -413,7 +449,7 @@ const AreaTable = () => {
         onClick={() => {
           setIsAddingNew(true);
           setEditingRowId(null);
-          form.reset(areaInitialValues);
+          form.reset(newAreaInitialValues); // --- MODIFIED: Use new initial values
         }}
         disabled={
           isAddingNew ||

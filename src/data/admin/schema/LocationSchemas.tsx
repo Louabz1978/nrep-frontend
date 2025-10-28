@@ -48,7 +48,7 @@ export const cityInitialValues: CityForm = {
 // Area Schema
 export type AreaForm = {
   title: TString;
-  city_id: TNumber;
+  city_id: TOption;
 };
 
 export const areaSchema = Joi.object<AreaForm>({
@@ -59,7 +59,7 @@ export const areaSchema = Joi.object<AreaForm>({
     .messages(VALIDATION_MESSAGES)
     .label("اسم المنطقة"),
 
-  city_id: Joi.number()
+  city_id: optionSchema
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المدينة"),

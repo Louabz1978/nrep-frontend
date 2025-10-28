@@ -1,4 +1,4 @@
-import type { TNumber, TString } from "@/data/global/schema";
+import type { TNumber, TOption, TString } from "@/data/global/schema";
 
 export type City = {
   city_id: number;
@@ -33,7 +33,7 @@ export type CreateCountyTypes = {
 
 export type CreateAreaTypes = {
   title: TString;
-  city_id: TNumber;
+  city_id: TOption;
 };
 
 export type UpdateCity = {
