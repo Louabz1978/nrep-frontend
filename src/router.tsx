@@ -155,6 +155,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AdminHome />,
+        handle: {
+          noPadding: true,
+          whitebg: true,
+        },
       },
       {
         path: "listing/all-listings",
