@@ -21,7 +21,7 @@ function useCreateCounty() {
       showApiErrors(error);
     },
   });
-  // handle submit add contact form
+
   async function handleAddCounty(submitData: CountyForm) {
     const data = {
       title: submitData?.title ?? "",

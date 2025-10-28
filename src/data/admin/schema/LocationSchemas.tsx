@@ -1,4 +1,4 @@
-import { optionSchema, type TOption, type TString } from "@/data/global/schema";
+import { optionSchema, type TNumber, type TOption, type TString } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
@@ -22,51 +22,51 @@ export const countyInitialValues: CountyForm = {
 
 // City Schema
 export type CityForm = {
-  name: TString;
-  county_id: TOption;
+  title: TString;
+  county_id: TNumber;
 };
 
 export const citySchema = Joi.object<CityForm>({
-  name: Joi.string()
+  title: Joi.string()
     .min(2)
     .max(100)
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم المدينة"),
 
-  county_id: optionSchema
+  county_id: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المحافظة"),
 });
 
 export const cityInitialValues: CityForm = {
-  name: null,
+  title: null,
   county_id: null,
 };
 
 // Area Schema
 export type AreaForm = {
-  name: TString;
-  city_id: TOption;
+  title: TString;
+  city_id: TNumber;
 };
 
 export const areaSchema = Joi.object<AreaForm>({
-  name: Joi.string()
+  title: Joi.string()
     .min(2)
     .max(100)
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("اسم المنطقة"),
 
-  city_id: optionSchema
+  city_id: Joi.number()
     .required()
     .messages(VALIDATION_MESSAGES)
     .label("المدينة"),
 });
 
 export const areaInitialValues: AreaForm = {
-  name: null,
+  title: null,
   city_id: null,
 };
 

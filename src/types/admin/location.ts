@@ -1,3 +1,5 @@
+import type { TNumber, TString } from "@/data/global/schema";
+
 export type City = {
   city_id: number;
   title: string;
@@ -14,14 +16,15 @@ export type County = {
 
 export type Area = {
   area_id: number;
+  city_id:number;
   title: string;
   created_at: string;
   created_by: string;
 };
 
 export type CreateCityTypes = {
-  name: string;
-  county_id: number;
+  title: string;
+  county_id:  TNumber;
 };
 
 export type CreateCountyTypes = {
@@ -29,13 +32,13 @@ export type CreateCountyTypes = {
 };
 
 export type CreateAreaTypes = {
-  name: string;
-  city_id: number;
+  title: TString;
+  city_id: TNumber;
 };
 
 export type UpdateCity = {
-  name?: string;
-  county_id?: number;
+  title?: string;
+  county_id?: TNumber
 };
 
 export type UpdateCounty = {
@@ -43,6 +46,6 @@ export type UpdateCounty = {
 };
 
 export type UpdateArea = {
-  name?: string;
+  title?: string;
   city_id?: number;
 };

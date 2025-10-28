@@ -1,24 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import getCounties from "@/api/admin/locations/getCounties";
-import type { GetCountiesProps } from "@/api/admin/locations/getCounties";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import type { County } from "@/types/admin/location";
+import getSearchParams from "@/utils/getSearchParams";
+import { useOptimisticSearchParams } from "nuqs/adapters/react-router/v6";
 
+function useGetCounties() {
+  const searchParams = useOptimisticSearchParams();
+  const queryParams = getSearchParams(searchParams, `${TABLE_PREFIXES.counties}_`);
 
-function useGetCounties(params?: GetCountiesProps) {
   const countiesQuery = useQuery({
-    queryKey: [TABLE_PREFIXES.counties, JSON.stringify(params?.queryParams)],
-    queryFn: () => getCounties({ ...(params || {}) }),
+    queryKey: [TABLE_PREFIXES.counties, JSON.stringify(queryParams)],
+    queryFn: () => getCounties({queryParams}),
     retry: false,
     refetchOnWindowFocus: false,
   });
 
-
-
   const counties = countiesQuery?.data?.data as County[] | undefined;
-
-
-
 
   return { countiesQuery, counties };
 }

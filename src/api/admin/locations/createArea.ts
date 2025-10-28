@@ -5,7 +5,7 @@ import type { Area, CreateAreaTypes } from "@/types/admin/location";
 export type CreateAreaResult = Promise<AxiosRes<Area>>;
 
 async function createArea(data: CreateAreaTypes): CreateAreaResult {
-  const res = await axiosClient.post<AxiosRes<Area>>(`/areas/`, data);
+  const res = await axiosClient.post<AxiosRes<Area>>(`/areas`, data);
   return res?.data;
 }
 
