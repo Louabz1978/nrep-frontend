@@ -33,6 +33,10 @@ type CityOrFormRow = City | { city_id: number; isForm: true; title: string };
 const CityTable = () => {
   const { id } = useParams();
 
+  // --- MODIFIED: Make sure your useGetCities hook passes the 'id'
+  // I'm assuming your useGetCities hook needs the county id.
+  // If it's already filtered by the route, this is fine.
+  // If not, you might need: useGetCities({ queryParams: { county_id: id } })
   const { cities, citiesQuery } = useGetCities();
   const totalPages = citiesQuery?.data?.pagination?.total_pages || 1;
 
@@ -63,7 +67,7 @@ const CityTable = () => {
 
   const handleSaveCity = useCallback(async () => {
     const values = form.getValues();
-    if (values.title?.trim()) {
+    if (values.title?.trim() && id) { // Added check for 'id'
       await handleAddCity({
         title: values.title.trim(),
         county_id: Number(id),
@@ -71,7 +75,7 @@ const CityTable = () => {
       setIsAddingNew(false);
       form.reset(cityInitialValues);
     }
-  }, [form, handleAddCity, id]); // <-- FIX: Added 'id' to dependency array
+  }, [form, handleAddCity, id]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingNew(false);
@@ -90,7 +94,7 @@ const CityTable = () => {
   const handleSaveUpdate = useCallback(
     async (city_id: number) => {
       const values = form.getValues();
-      if (values.title?.trim()) {
+      if (values.title?.trim() && id) { // Added check for 'id'
         await handleEditCity({
           city_id,
           payload: {
@@ -102,7 +106,7 @@ const CityTable = () => {
         form.reset(cityInitialValues);
       }
     },
-    [form, handleEditCity, id] // <-- FIX: Added 'id' to dependency array
+    [form, handleEditCity, id]
   );
 
   const handleCancelEdit = useCallback(() => {
@@ -125,7 +129,6 @@ const CityTable = () => {
               table.toggleAllPageRowsSelected(!!value)
             }
             aria-label="Select all"
-            // Disable header checkbox during add/edit/processing
             disabled={
               isAddingNew ||
               editingRowId !== null ||
@@ -155,7 +158,6 @@ const CityTable = () => {
               checked={row.getIsSelected()}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
               aria-label="Select row"
-              // Disable row checkbox during add/edit/processing
               disabled={
                 isAddingNew ||
                 editingRowId !== null ||
@@ -175,13 +177,16 @@ const CityTable = () => {
       },
       {
         id: "title",
-        accessorKey: "title",
+        // --- FIX: Removed accessorKey: "title" ---
         header: "اسم المدينة",
         cell: ({ row }) => {
           const isEditing = (row.original as City)?.city_id === editingRowId;
           const isForm = "isForm" in row.original && row.original.isForm;
 
-          if (isForm || isEditing) {
+          // --- FIX: Split logic to handle isForm explicitly first ---
+
+          // Show Input for new row form
+          if (isForm) {
             return (
               <div className="w-full">
                 <Input
@@ -195,6 +200,22 @@ const CityTable = () => {
             );
           }
 
+          // Show Input for editing row
+          if (isEditing) {
+            return (
+              <div className="w-full">
+                <Input
+                  form={form}
+                  name="title"
+                  placeholder="أدخل اسم المدينة"
+                  addingStyle="w-full"
+                  addingInputStyle="w-full"
+                />
+              </div>
+            );
+          }
+
+          // Show text for existing row
           if ("city_id" in row.original && !isForm) {
             return row.original.title;
           }
@@ -219,7 +240,6 @@ const CityTable = () => {
           if (isForm) {
             return (
               <div className="flex items-center gap-md">
-                {/* Save button (Create) */}
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
@@ -235,7 +255,6 @@ const CityTable = () => {
                   <TooltipContent>حفظ</TooltipContent>
                 </Tooltip>
 
-                {/* Cancel button (Create) */}
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
@@ -258,7 +277,6 @@ const CityTable = () => {
           if (isEditing) {
             return (
               <div className="flex items-center gap-md">
-                {/* Save button (Update) */}
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
@@ -274,7 +292,6 @@ const CityTable = () => {
                   <TooltipContent>حفظ التعديل</TooltipContent>
                 </Tooltip>
 
-                {/* Cancel button (Update) */}
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
@@ -296,7 +313,6 @@ const CityTable = () => {
           // Existing city row (DISPLAY mode)
           return (
             <div className="flex items-center gap-md">
-              {/* Edit button */}
               <Tooltip>
                 <TooltipTrigger>
                   <Button
@@ -314,7 +330,6 @@ const CityTable = () => {
                 <TooltipContent>تعديل</TooltipContent>
               </Tooltip>
 
-              {/* Delete button */}
               <Tooltip>
                 <TooltipTrigger>
                   <div>
