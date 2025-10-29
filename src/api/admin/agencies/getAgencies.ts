@@ -16,7 +16,9 @@ export type GetAgenciesProps = {
 
 export type GetAgenciesResult = Promise<AxiosRes<PaginationData<Agency[]>>>;
 
-async function getAgencies({ queryParams }: GetAgenciesProps = {}): GetAgenciesResult {
+async function getAgencies({
+  queryParams,
+}: GetAgenciesProps = {}): GetAgenciesResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<Agency[]>>>(
     `/agencies/`,
     {
@@ -30,5 +32,3 @@ async function getAgencies({ queryParams }: GetAgenciesProps = {}): GetAgenciesR
 }
 
 export default getAgencies;
-
-

@@ -80,7 +80,7 @@ export const adminTabs: AdminTabsType = [
         to: "/admin/reports/top-agencies",
       },
       {
-        label: "سجل حركة الوسطاء",
+        label: "تقرير أصحاب الوكالات",
         permission: [],
         to: "/admin/reports/broker-history",
       },

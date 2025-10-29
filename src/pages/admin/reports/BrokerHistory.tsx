@@ -115,7 +115,7 @@ const BrokerHistory = () => {
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row items-end sm:justify-between border-b-1 pb-2 gap-4">
             <h1 className="text-size24 sm:text-size30 font-medium text-center sm:text-right">
-              تقرير تاريخ الوسطاء العقاريين
+              تقرير تاريخ أصحاب الوكالات
             </h1>
 
             <div className="flex items-end gap-4 relative" ref={filterRef}>
