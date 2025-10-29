@@ -25,7 +25,7 @@ export default async function getAgenciesHistory({
 }: GetAgenciesHistoryProps): GetAgenciesHistoryResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
     // --- MODIFIED: Corrected endpoint and used agency_id variable ---
-    `/report/agency_history/${1}`,
+    `/report/agency_history`,
     {
       // --- MODIFIED: Passed all params to the request ---
       params: {

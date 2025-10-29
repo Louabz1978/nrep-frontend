@@ -2,16 +2,20 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useMemo } from "react";
+// --- Added useState and useCallback ---
+import { useMemo, useState, useCallback } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 // --- 1. This is the *only* type you should use ---
 import type { AgenciesHistoryReport } from "@/types/admin/reports";
 import { Input } from "@/components/global/ui/input";
 import useGetagenciesHistory from "@/hooks/admin/reports/useGetAgenciesHistory";
 import { useQueryState, parseAsInteger, parseAsString } from "nuqs";
+// --- Imports required for popups ---
+import { Button } from "@/components/global/form/button/Button";
+import Popup from "@/components/global/popup/Popup";
 
-// --- 2. Delete the local 'YourNewReportType' ---
-// type YourNewReportType = { ... }; // <-- DELETE THIS
+// Define the type for a single property item from the response
+type PropertyItem = AgenciesHistoryReport["realtors"][0]["properties"][0];
 
 const AgenciesHistory = () => {
   const [start_month] = useQueryState(
@@ -36,6 +40,21 @@ const AgenciesHistory = () => {
     parseAsString.withDefault("")
   );
 
+  // --- State for Popups ---
+  const [isBrokersPopupOpen, setIsBrokersPopupOpen] = useState(false);
+  const [selectedBrokers, setSelectedBrokers] = useState<string[]>([]);
+
+  const [isRealtorsPopupOpen, setIsRealtorsPopupOpen] = useState(false);
+  const [selectedRealtors, setSelectedRealtors] = useState<
+    AgenciesHistoryReport["realtors"]
+  >([]);
+
+  const [isPropertiesPopupOpen, setIsPropertiesPopupOpen] = useState(false);
+  const [selectedRealtorName, setSelectedRealtorName] = useState("");
+  const [selectedProperties, setSelectedProperties] = useState<PropertyItem[]>(
+    []
+  );
+
   const { agenciesHistory, getAgenciesHistoryQuery } = useGetagenciesHistory({
     start_month,
     start_year,
@@ -43,9 +62,70 @@ const AgenciesHistory = () => {
     end_year,
   });
 
-  console.log(agenciesHistory); // This is correct (AgenciesHistoryReport[])
+  // --- Popup Handlers ---
+  const handleBrokersClick = useCallback((brokers: string[]) => {
+    if (brokers && brokers.length > 0) {
+      setSelectedBrokers(brokers);
+      setIsBrokersPopupOpen(true);
+    }
+  }, []);
 
-  // --- 3. Change columns to use the imported type ---
+  const handleRealtorsClick = useCallback(
+    (realtors: AgenciesHistoryReport["realtors"]) => {
+      if (realtors && realtors.length > 0) {
+        setSelectedRealtors(realtors);
+        setIsRealtorsPopupOpen(true);
+      }
+    },
+    []
+  );
+
+  const handleRealtorNameClick = useCallback(
+    (realtor: AgenciesHistoryReport["realtors"][0]) => {
+      setSelectedRealtorName(realtor.realtor_name);
+      setSelectedProperties(realtor.properties);
+      setIsPropertiesPopupOpen(true);
+      setIsRealtorsPopupOpen(false); // Close the realtors list popup
+    },
+    []
+  );
+
+  // --- Columns for the Properties Popup Table ---
+  const propertiesColumns: ColumnDef<PropertyItem>[] = useMemo(
+    () => [
+      {
+        accessorKey: "property_type",
+        header: "نوع العقار",
+      },
+      {
+        accessorKey: "price",
+        header: "السعر",
+        cell: ({ row }) =>
+          // Format price as currency
+          new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD", // Or your desired currency
+          }).format(row.original.price),
+      },
+      {
+        accessorKey: "status",
+        header: "الحالة",
+      },
+      {
+        accessorKey: "trans_type",
+        header: "نوع المعاملة",
+      },
+      {
+        accessorKey: "date",
+        header: "التاريخ",
+        // Format date to be more readable
+        cell: ({ row }) => new Date(row.original.date).toLocaleDateString(),
+      },
+    ],
+    []
+  );
+
+  // --- Main Table Columns ---
   const columns: ColumnDef<AgenciesHistoryReport>[] = useMemo(
     () => [
       {
@@ -68,8 +148,20 @@ const AgenciesHistory = () => {
         header: "اسماء الوسطاء",
         size: 20,
         cell: ({ row }) => {
-          const brokers = row.original.agencies_names as string[] | undefined;
-          return brokers?.join(", ") || "لا يوجد";
+          const brokers = row.original.brokers as string[] | undefined;
+          if (!brokers || brokers.length === 0) {
+            return "لا يوجد";
+          }
+          return (
+            <Button
+              onClick={() => handleBrokersClick(brokers)}
+              className=" underline !bg-transparent !text-golden-bold"
+            >
+              {brokers.length > 1
+                ? `${brokers[0]} +${brokers.slice(1).length}` // "Broker Name +2"
+                : brokers[0]}
+            </Button>
+          );
         },
       },
       {
@@ -77,17 +169,31 @@ const AgenciesHistory = () => {
         header: "اسماء الوكلاء العقاريين",
         size: 20,
         cell: ({ row }) => {
-          const realtors = row.original.realtors_names as string[] | undefined;
-          return realtors?.join(", ") || "لا يوجد";
+          const realtors = row.original.realtors;
+          if (!realtors || realtors.length === 0) {
+            return "لا يوجد";
+          }
+          const realtorNames = realtors.map((realtor) => realtor.realtor_name);
+          return (
+            <Button
+              onClick={() => handleRealtorsClick(realtors)}
+              className=" underline !bg-transparent !text-golden-bold"
+            >
+              {realtorNames.length > 1
+                ? `${realtorNames[0]} +${realtorNames.slice(1).length}` // "Realtor Name +2"
+                : realtorNames[0]}
+            </Button>
+          );
         },
       },
       {
-        accessorKey: "total_properties_count",
+        accessorKey: "total_closed_count",
         header: "عدد العقارات",
         size: 15,
       },
     ],
-    []
+    // Add handlers to dependency array
+    [handleBrokersClick, handleRealtorsClick]
   );
 
   return (
@@ -117,14 +223,55 @@ const AgenciesHistory = () => {
             report={true}
             prefix={TABLE_PREFIXES.agencies_history}
             columns={columns}
-            // --- 4. This is now correct: data is AgenciesHistoryReport[] ---
-            data={(agenciesHistory ) ?? []}
+            data={agenciesHistory ?? []}
             query={getAgenciesHistoryQuery}
             totalPageCount={
               getAgenciesHistoryQuery.data?.pagination?.total_pages || 1
             }
           />
         </div>
+
+        {/* --- Realtor List Popup --- */}
+<Popup
+  open={isRealtorsPopupOpen}
+  onClose={() => setIsRealtorsPopupOpen(false)}
+>
+  <h1 className="text-center border-b-2 mb-3 p-1 !text-primary">string</h1>
+  {/* This div just contains the list of realtor names */}
+  <div className="flex flex-col">
+    {selectedRealtors.map((realtor, index) => (
+      <Button
+        key={index}
+        onClick={() => handleRealtorNameClick(realtor)}
+        className="
+          !bg-transparent          {/* Transparent background */}
+          w-full justify-center   {/* Center the text */}
+          !text-black         {/* Text color from image */}
+          font-medium             {/* Medium font weight */}
+          py-3                    {/* Vertical padding */}
+          hover:!bg-gray-100      {/* Light gray hover effect */}
+          !rounded-none           {/* Remove button rounding */}
+        "
+      >
+        {realtor.realtor_name}
+      </Button>
+    ))}
+  </div>
+</Popup>
+
+        {/* --- Realtor Properties Popup --- */}
+        <Popup
+          open={isPropertiesPopupOpen}
+          onClose={() => setIsPropertiesPopupOpen(false)}
+        >
+          <div className="w-full overflow-x-auto">
+            <DataTable
+              columns={propertiesColumns}
+              data={selectedProperties}
+              // We pass minimal props as this is a simple client-side table
+            />
+          </div>
+        </Popup>
       </PageContainer>
     </AnimateContainer>
   );

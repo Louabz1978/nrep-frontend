@@ -23,7 +23,7 @@ function useGetRealtorHistory() {
   });
 
   // final data
-  const realtorHistory = getRealtorHistoryQuery.data?.data;
+  const realtorHistory = getRealtorHistoryQuery.data
 
   return {
     getRealtorHistoryQuery,
