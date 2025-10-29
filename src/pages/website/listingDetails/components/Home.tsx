@@ -1,7 +1,28 @@
 import type { ListingDetailsType } from "@/types/website/listings";
 import HomeImages from "./HomeImages";
 import HomeInfo from "./HomeInfo";
-import { PiCurrencyDollarFill } from "react-icons/pi";
+import { 
+  PiCurrencyDollarFill,
+  PiBuildings,
+  PiRuler,
+  PiRoadHorizon,
+  PiCalendar,
+  PiStairs,
+  PiMapPin,
+  PiHouse,
+  PiBed,
+  PiBathtub,
+  PiWind,
+  PiElevator,
+  PiTree,
+  PiSnowflake,
+  PiCar,
+  PiSun,
+  PiSwimmingPool,
+  PiDrop,
+  PiWarningCircle,
+
+} from "react-icons/pi";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import {
   PROPERTY_TYPE,
@@ -62,7 +83,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 valueClassName="!text-size24 font-bold"
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiWarningCircle}
                 label="الحالة"
                 value={status?.label}
                 valueClassName={`${STATUS_TEXT?.[
@@ -72,52 +93,52 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 ]} py-xs px-2xl rounded-full`}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiBuildings}
                 label="رقم البناء"
                 value={propertyDetails?.address?.building_num}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiRuler}
                 label="مساحة العقار"
                 value={`${propertyDetails?.area_space} م2`}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiRoadHorizon}
                 label="اسم الشارع"
                 value={propertyDetails?.address?.street}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiCalendar}
                 label="سنة البناء"
                 value={propertyDetails?.year_built}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiStairs}
                 label="رقم الطابق"
                 value={propertyDetails?.address?.floor}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiMapPin}
                 label="الحي"
                 value={propertyDetails?.address?.area}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiHouse}
                 label="رقم الشقة"
                 value={propertyDetails?.address?.apt}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiMapPin}
                 label="المدينة"
                 value={propertyDetails?.address?.city}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiHouse}
                 label="نوع العقار"
                 value={propertyType}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiMapPin}
                 label="المحافظة"
                 value={propertyDetails?.address?.county}
               />
@@ -130,28 +151,28 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
           <div className="md:col-span-6 rounded-[16px] bg-card-bg shadow-card grid grid-cols-7">
             <div className="col-span-2 p-xl border-l border-tertiary-fg/25 flex flex-col gap-9xl">
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiBed}
                 iconClassName="size-4xl min-w-4xl"
                 label="عدد غرف النوم"
                 labelClassName="!font-bold"
                 value={propertyDetails?.bedrooms}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiHouse}
                 iconClassName="size-4xl min-w-4xl"
                 label="عدد الشرف"
                 labelClassName="!font-bold"
                 value={propertyDetails?.additional?.balcony}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiWind}
                 iconClassName="size-4xl min-w-4xl"
                 label="مراوح"
                 labelClassName="!font-bold"
                 value={propertyDetails?.additional?.fan_number}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiElevator}
                 iconClassName="size-4xl min-w-4xl"
                 label="مصعد"
                 labelClassName="!font-bold"
@@ -162,28 +183,28 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             </div>
             <div className="col-span-2 p-xl border-l border-tertiary-fg/25 flex flex-col gap-9xl">
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiBathtub}
                 iconClassName="size-4xl min-w-4xl"
                 label="عدد الحمامات"
                 labelClassName="!font-bold"
                 value={propertyDetails?.bathrooms}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiTree}
                 iconClassName="size-4xl min-w-4xl"
                 label="حديقة"
                 labelClassName="!font-bold"
                 value={propertyDetails?.additional?.garden ? "يوجد" : "لا يوجد"}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiSnowflake}
                 iconClassName="size-4xl min-w-4xl"
                 label="مكيف"
                 labelClassName="!font-bold"
                 value={propertyDetails?.additional?.ac ? "يوجد" : "لا يوجد"}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiDrop}
                 iconClassName="size-4xl min-w-4xl"
                 label="جاكوزي"
                 labelClassName="!font-bold"
@@ -194,21 +215,21 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
             </div>
             <div className="col-span-3 p-xl flex flex-col gap-9xl">
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiDrop}
                 iconClassName="size-4xl min-w-4xl"
                 label="خط المياه الواصل للعقار"
                 labelClassName="!font-bold"
                 value={waterLine}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiCar}
                 iconClassName="size-4xl min-w-4xl"
                 label="مكان مخصص لركن الآلية"
                 labelClassName="!font-bold"
                 value={propertyDetails?.additional?.garage ? "يوجد" : "لا يوجد"}
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiSun}
                 iconClassName="size-4xl min-w-4xl"
                 label="طاقة شمسية"
                 labelClassName="!font-bold"
@@ -217,7 +238,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 }
               />
               <HomeInfo
-                icon={PiCurrencyDollarFill}
+                icon={PiSwimmingPool}
                 iconClassName="size-4xl min-w-4xl"
                 label="مسبح"
                 labelClassName="!font-bold"
