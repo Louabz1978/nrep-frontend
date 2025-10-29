@@ -30,7 +30,8 @@ function StatusForm({ row }: { row: Row<Listing> }) {
 
   console.log(user);
 
-  const isSameUser = row?.original?.created_by_user?.user_id == user?.user_id;
+  const isSameUser =
+    row?.original?.created_by_user?.user_id == (user?.data ?? user)?.user_id;
   const isClosed = row?.original?.status == PropertyStatus.CLOSED;
 
   const { handleEditListingPartial } = useEditListingsPartial();

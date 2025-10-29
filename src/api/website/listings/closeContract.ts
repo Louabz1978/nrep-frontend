@@ -14,7 +14,7 @@ async function closeContract({
   closing_price,
   seller_agent_commission,
 }: closeContractProps): updateListingResult {
-  const res = await axiosClient.put(`/contracts/contract/close/${mls}`, {
+  const res = await axiosClient.put(`/property/close/${mls}`, {
     buyer_agent,
     buyer_agent_commission,
     closing_date,
