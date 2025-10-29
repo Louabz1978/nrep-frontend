@@ -35,7 +35,7 @@ const AreaTable = () => {
   const { areas, areasQuery, totalPages } = useGetAreas();
   // --- MODIFIED: Get cities for the select dropdown ---
   const { cities } = useGetCities();
-console.log(cities)
+  console.log(cities);
 
   // --- Mutations ---
   const { handleAddArea, createAreaMutation } = useCreateArea();
@@ -45,7 +45,6 @@ console.log(cities)
   // --- State ---
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [editingRowId, setEditingRowId] = useState<number | null>(null);
-
 
   // --- Form ---
   // --- MODIFIED: Updated useForm to use new defaults ---
@@ -76,10 +75,11 @@ console.log(cities)
   // --- MODIFIED: handleSaveArea now uses city_id from form ---
   const handleSaveArea = useCallback(async () => {
     const values = form.getValues();
+
     if (values.title?.trim() && values.city_id) {
       await handleAddArea({
         title: values.title.trim(),
-        city_id: Number(values.city_id), // Use city_id from form
+        city_id: Number(values?.city_id?.city_id), // Use city_id from form
       });
       setIsAddingNew(false);
       form.reset(areaInitialValues);
@@ -95,7 +95,10 @@ console.log(cities)
   const handleStartEdit = useCallback(
     (row: Area) => {
       setEditingRowId(row.area_id);
-      form.reset({ title: row.title, city_id: row.city_id });
+      form.reset({
+        title: row.title,
+        city_id: { city_id: row.city_id, title: "حمص" },
+      });
       setIsAddingNew(false);
     },
     [form]
@@ -105,12 +108,14 @@ console.log(cities)
   const handleSaveUpdate = useCallback(
     async (area_id: number) => {
       const values = form.getValues();
+
       if (values.title?.trim() && values.city_id) {
+        console.log({ values });
         await handleEditArea({
           area_id: area_id,
           payload: {
             title: values.title.trim(),
-            city_id: Number(values.city_id), // Use city_id from form
+            city_id: Number(values.city_id.city_id), // Use city_id from form
           },
         });
         setEditingRowId(null);
@@ -151,8 +156,7 @@ console.log(cities)
           />
         ),
         cell: ({ row }) => {
-          const isEditing =
-            (row.original as Area)?.area_id === editingRowId;
+          const isEditing = (row.original as Area)?.area_id === editingRowId;
           const isForm = "isForm" in row.original && row.original.isForm;
 
           if (isEditing || isForm) {
@@ -192,8 +196,7 @@ console.log(cities)
         id: "title",
         header: "اسم المنطقة",
         cell: ({ row }) => {
-          const isEditing =
-            (row.original as Area)?.area_id === editingRowId;
+          const isEditing = (row.original as Area)?.area_id === editingRowId;
           const isForm = "isForm" in row.original && row.original.isForm;
 
           if (isForm || isEditing) {
@@ -222,8 +225,7 @@ console.log(cities)
         id: "city_name",
         header: "اسم المدينة",
         cell: ({ row }) => {
-          const isEditing =
-            (row.original as Area)?.area_id === editingRowId;
+          const isEditing = (row.original as Area)?.area_id === editingRowId;
           const isForm = "isForm" in row.original && row.original.isForm;
 
           // Show Select for new row or editing row

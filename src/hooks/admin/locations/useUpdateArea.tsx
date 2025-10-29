@@ -29,9 +29,12 @@ function useUpdateArea() {
 
   async function handleEditArea(submitData: HandleEditAreaProps) {
     const id = submitData.area_id;
+    console.log({ submitData });
     const data = {
       title: submitData.payload.title ?? "",
+      city_id: submitData.payload.city_id,
     };
+    console.log({ data });
 
     toast.promise(updateAreaMutation.mutateAsync({ id, data }), {
       loading: MESSAGES?.area?.edit?.loading,

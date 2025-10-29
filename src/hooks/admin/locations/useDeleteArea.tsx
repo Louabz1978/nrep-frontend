@@ -23,8 +23,8 @@ function useDeleteArea() {
   async function handleDeleteArea({ id }: DeleteAreaProps) {
     // toaster
     toast.promise(deleteAreaMutation.mutateAsync({ id }), {
-      loading: MESSAGES?.county?.delete?.loading,
-      success: MESSAGES?.county?.delete?.success,
+      loading: MESSAGES?.area?.delete?.loading,
+      success: MESSAGES?.area?.delete?.success,
       error: (error) => {
         return showApiErrors(error);
       },
