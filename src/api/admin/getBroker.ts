@@ -8,20 +8,22 @@ export type GetAllBrokersProps = {
 };
 export type GetAllBrokersResult = Promise<AxiosRes<PaginationData<User[]>>>;
 
-async function getAllBrokers({ queryParams }: GetAllBrokersProps = {}): GetAllBrokersResult {
+async function getAllBrokers({
+  queryParams,
+}: GetAllBrokersProps = {}): GetAllBrokersResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
     `/users/`,
     {
       params: {
         ...queryParams,
-        roles: "broker", 
+        roles: "broker",
         page: queryParams?.page ?? 1,
       },
     }
   );
 
-  const filtered = res.data.data.filter((user) =>
-    user.roles?.includes("broker")
+  const filtered = res.data.data.filter(
+    (user) => user.roles?.includes("broker") || true
   );
 
   return {

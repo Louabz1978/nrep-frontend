@@ -76,7 +76,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             >
               <PopoverTrigger asChild>
                 <button
-                  className={`flex items-center justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
+                  className={`flex items-center justify-between text-nowrap w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
                     isCurrentPath || hasCurrentChild
                       ? "text-primary font-medium"
                       : isOpen
@@ -111,7 +111,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
             key={index}
             to={item.to}
             onClick={() => setOpenPopovers([])}
-            className={`flex items-center justify-between w-full px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
+            className={`flex items-center justify-between w-full text-nowrap px-4 py-2 text-right transition-colors cursor-pointer duration-200 ${
               isCurrentPath
                 ? "text-tertiary-bg bg-golden-medium"
                 : "text-tertiary-bg hover:bg-golden-medium/50"
@@ -194,7 +194,7 @@ function Navbar({ variant = "bar", className = "" }: NavbarProps) {
                 </PopoverTrigger>
                 <PopoverContent
                   align="start"
-                  className="w-35 mt-0 border-none bg-golden-medium-75 !p-0 rounded-[12px] overflow-hidden"
+                  className="min-w-35 max-w-max mt-0 border-none bg-golden-medium-75 w-max !p-0 rounded-[12px] overflow-hidden"
                   sideOffset={8}
                 >
                   <div className="space-y-0">{renderSubMenu(tab.submenu)}</div>

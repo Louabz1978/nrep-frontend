@@ -3,7 +3,6 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Button } from "@/components/global/form/button/Button";
 import Input from "@/components/global/form/input/Input";
-import Select from "@/components/global/form/select/Select";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
@@ -12,30 +11,38 @@ import {
   type AddRealtorForm,
 } from "@/data/admin/schema/AddRealtorschema";
 import useAddAgencyRealtor from "@/hooks/admin/useAddAgencyRealtor";
-import useGetAgencies from "@/hooks/admin/useGetAgencies";
-import { useMemo } from "react";
-import type { AddAgencyRealtorProps } from "@/api/admin/agencies/addAgencyRealtor";
+import cleanValues from "@/utils/cleanValues";
+import useEditAgencyRealtor from "@/hooks/admin/useEditAgencyRealtor";
 
-const AddRealtor = () => {
+const AddRealtor = ({
+  defaultValues = addRealtorInitialValues,
+  id,
+}: {
+  defaultValues?: AddRealtorForm;
+  id?: string;
+}) => {
   const { handleAddAgencyRealtor, addAgencyRealtor } = useAddAgencyRealtor();
-  const { agencies, agenciesQuery } = useGetAgencies();
+  const { editAgencyRealtor, handlEditAgencyRealtor } = useEditAgencyRealtor();
 
-  const agencyChoices = useMemo(() => {
-    return (
-      agencies?.map((agency) => ({
-        value: agency.agency_id,
-        label: agency.name,
-      })) ?? []
-    );
-  }, [agencies]);
+  // initial values
+  const initialValues = cleanValues(addRealtorInitialValues, defaultValues);
 
   const form = useForm<AddRealtorForm>({
     resolver: joiResolver(addRealtorSchema),
-    defaultValues: addRealtorInitialValues,
+    defaultValues: initialValues,
   });
 
   const onSubmit: SubmitHandler<AddRealtorForm> = async (data) => {
-    await handleAddAgencyRealtor({...(data  as AddAgencyRealtorProps)});
+    if (id)
+      await handlEditAgencyRealtor({
+        ...data,
+        password: undefined,
+        id,
+      });
+    else
+      await handleAddAgencyRealtor({
+        ...data,
+      });
   };
 
   return (
@@ -44,7 +51,7 @@ const AddRealtor = () => {
         <div className="space-y-6">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-20">
-              إضافة صاحب شركة عقارية
+              إضافة وكيل عقاري
             </h1>
           </div>
 
@@ -52,21 +59,75 @@ const AddRealtor = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full mx-auto"
           >
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <Input
                 form={form}
-                label="الإسم"
+                label="الاسم"
                 name="first_name"
-                placeholder="الإسم"
+                placeholder="الاسم"
                 type="text"
                 required
               />
 
               <Input
                 form={form}
-                label="إسم العائلة"
+                label="اسم العائلة"
                 name="last_name"
-                placeholder="إسم العائلة"
+                placeholder="اسم العائلة"
+                type="text"
+                required
+              />
+
+              <Input
+                form={form}
+                label="اسم الأب"
+                name="father_name"
+                placeholder="اسم الأب"
+                type="text"
+                required
+              />
+
+              <Input
+                form={form}
+                label="اسم الأم"
+                name="mother_name_surname"
+                placeholder="اسم الأم"
+                type="text"
+                required
+              />
+
+              <Input
+                form={form}
+                label="مكان الولادة"
+                name="place_birth"
+                placeholder="مكان الولادة"
+                type="text"
+                required
+              />
+
+              <Input
+                form={form}
+                label="تاريخ الولادة"
+                name="date_birth"
+                placeholder="تاريخ الولادة"
+                type="date"
+                required
+              />
+
+              <Input
+                form={form}
+                label="السجل"
+                name="registry"
+                placeholder="السجل"
+                type="text"
+                required
+              />
+
+              <Input
+                form={form}
+                label="الرقم الوطني"
+                name="national_number"
+                placeholder="الرقم الوطني"
                 type="text"
                 required
               />
@@ -82,25 +143,19 @@ const AddRealtor = () => {
 
               <Input
                 form={form}
+                label="كلمة المرور"
+                name="password"
+                placeholder="كلمة المرور"
+                type="password"
+                required
+              />
+
+              <Input
+                form={form}
                 label="رقم الهاتف"
                 name="phone_number"
                 placeholder="رقم الهاتف"
                 type="text"
-                required
-              />
-
-              <Select
-                form={form}
-                name="agency_id"
-                label="الشركة العقارية"
-                placeholder={
-                  agenciesQuery.isLoading
-                    ? "جاري تحميل الشركات العقارية..."
-                    : "اختر الشركة العقارية"
-                }
-                choices={agencyChoices}
-                keyValue="value"
-                showValue="label"
                 required
               />
             </div>
@@ -108,10 +163,10 @@ const AddRealtor = () => {
             <div className="flex pt-4">
               <Button
                 type="submit"
-                disabled={addAgencyRealtor.isPending}
+                disabled={(id ? editAgencyRealtor : addAgencyRealtor).isPending}
                 className="text-white px-6 py-2 rounded-md font-medium text-right block"
               >
-                {addAgencyRealtor.isPending
+                {(id ? editAgencyRealtor : addAgencyRealtor).isPending
                   ? "جاري الحفظ..."
                   : "حفظ السمسار العقاري"}
               </Button>

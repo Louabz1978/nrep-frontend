@@ -6,6 +6,16 @@ import type { ColumnDef } from "@tanstack/react-table";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { Checkbox } from "@/components/global/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/global/tooltip/Tooltiop";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/global/form/button/Button";
+import { FiEdit } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
+import useDeleteBroker from "@/hooks/admin/useDeleteBroker";
 
 const BrokerTable = () => {
   const { allBrokers, allBrokersQuery } = useGetAllBrokers({
@@ -13,6 +23,8 @@ const BrokerTable = () => {
   });
 
   const totalPages = allBrokersQuery?.data?.pagination?.total_pages || 1;
+
+  const { deleteBroker, handleDeleteBroker } = useDeleteBroker();
 
   const columns: ColumnDef<any>[] = useMemo(
     () => [
@@ -66,6 +78,58 @@ const BrokerTable = () => {
         header: "رقم الهاتف",
         size: 20,
         minSize: 20,
+      },
+      {
+        id: "action",
+        header: "الإجراء",
+        cell: ({ row }) => {
+          return (
+            <div className="flex items-center gap-md">
+              {/* edit */}
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link to={`/admin/brokers/edit/${row?.original?.user_id}`}>
+                    <Button
+                      size={"icon"}
+                      className="bg-transparent !text-primary"
+                    >
+                      <FiEdit className="text-size25" />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>تعديل</TooltipContent>
+              </Tooltip>
+
+              {/* delete */}
+              <Tooltip>
+                <TooltipTrigger>
+                  <div>
+                    <Button
+                      size={"icon"}
+                      className={`bg-transparent`}
+                      disabled={
+                        deleteBroker?.isPending &&
+                        deleteBroker?.variables?.user_id ==
+                          row?.original?.user_id
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDeleteBroker({
+                          user_id: row?.original?.user_id,
+                        });
+                      }}
+                    >
+                      <FaRegTrashAlt className="text-size25 text-[#6B1F2A]" />
+                    </Button>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>حذف</TooltipContent>
+              </Tooltip>
+            </div>
+          );
+        },
+        size: 10,
+        minSize: 10,
       },
     ],
     []

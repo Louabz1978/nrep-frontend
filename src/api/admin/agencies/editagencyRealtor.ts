@@ -11,15 +11,14 @@ export type AddAgencyRealtorProps = {
 
 export type AddAgencyRealtorResult = Promise<AxiosRes<string>>;
 
-async function addAgencyRealtor(
+async function editAgencyRealtor(
   data: AddAgencyRealtorProps
 ): AddAgencyRealtorResult {
-  const res = await axiosClient.post<AxiosRes<string>>(`/users`, {
+  const res = await axiosClient.put<AxiosRes<string>>(`/users/${data?.id}`, {
     ...data,
     role: ["realtor"],
   });
-
   return res?.data;
 }
 
-export default addAgencyRealtor;
+export default editAgencyRealtor;

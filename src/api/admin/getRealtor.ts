@@ -8,7 +8,9 @@ export type GetAllRealtorsProps = {
 };
 
 export type GetAllRealtorsResult = Promise<AxiosRes<PaginationData<User[]>>>;
-async function getAllRealtors({ queryParams }: GetAllRealtorsProps = {}): GetAllRealtorsResult {
+async function getAllRealtors({
+  queryParams,
+}: GetAllRealtorsProps = {}): GetAllRealtorsResult {
   const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
     `/users/`,
     {
@@ -19,8 +21,8 @@ async function getAllRealtors({ queryParams }: GetAllRealtorsProps = {}): GetAll
       },
     }
   );
-  const filtered = res.data.data.filter((user) =>
-    user.roles?.includes("realtor")
+  const filtered = res.data.data.filter(
+    (user) => user.roles?.includes("realtor") || true
   );
 
   return {

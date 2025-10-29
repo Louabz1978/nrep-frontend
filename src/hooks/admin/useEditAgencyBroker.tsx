@@ -1,22 +1,27 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import addAgencyBroker from "@/api/admin/agencies/addagencyBroker";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import MESSAGES from "@/data/global/messages";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { showApiErrors } from "@/utils/showApiErrors";
+import editAgencyBroker from "@/api/admin/agencies/editagencyBroker";
 
-function useAddAgencyBroker() {
+function useEditAgencyBroker() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: addAgencyBroker,
+    mutationFn: editAgencyBroker,
     onSuccess: (_data, variables) => {
       navigate("/admin/brokers");
       queryClient
         .invalidateQueries({
           queryKey: [QUERY_KEYS.brokers.query],
+        })
+        .catch(console.error);
+      queryClient
+        .invalidateQueries({
+          queryKey: [QUERY_KEYS.brokers.details],
         })
         .catch(console.error);
       queryClient
@@ -27,19 +32,19 @@ function useAddAgencyBroker() {
     },
   });
 
-  async function handleAddAgencyBroker(
-    data: Parameters<typeof addAgencyBroker>[0]
+  async function handlEditAgencyBroker(
+    data: Parameters<typeof editAgencyBroker>[0]
   ) {
     await toast.promise(mutation.mutateAsync(data), {
-      loading: MESSAGES.agency.addBroker.loading,
-      success: MESSAGES.agency.addBroker.success,
+      loading: MESSAGES.agency.editBroker.loading,
+      success: MESSAGES.agency.editBroker.success,
       error: (error) => {
         return showApiErrors(error);
       },
     });
   }
 
-  return { addAgencyBroker: mutation, handleAddAgencyBroker };
+  return { editAgencyBroker: mutation, handlEditAgencyBroker };
 }
 
-export default useAddAgencyBroker;
+export default useEditAgencyBroker;

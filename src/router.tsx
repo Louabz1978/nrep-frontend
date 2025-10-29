@@ -44,6 +44,9 @@ import AreasList from "./pages/admin/areas/AreasList";
 import AgenciesHistory from "./pages/admin/reports/AgenciesHistory";
 import RealtorHistory from "./pages/admin/reports/RealtorHistory";
 import CountyDetails from "./components/admin/basics/CountyDetails";
+import EditAgencyFormIndex from "./pages/admin/agencies/EditAgencyFormIndex";
+import EditBrokerFormIndex from "./pages/admin/brokers/EditBrokerFormIndex";
+import EditRealtorFormIndex from "./pages/admin/realtors/EditRealtorFormIndex";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -193,6 +196,10 @@ const router = createBrowserRouter([
         element: <CreateAgency />,
       },
       {
+        path: "agencies/edit/:id",
+        element: <EditAgencyFormIndex />,
+      },
+      {
         path: "agencies/details/:id",
         element: <AgencyDetails />,
       },
@@ -205,12 +212,20 @@ const router = createBrowserRouter([
         element: <AddBroker />,
       },
       {
+        path: "brokers/edit/:id",
+        element: <EditBrokerFormIndex />,
+      },
+      {
         path: "realtors",
         element: <RealtorTable />,
       },
       {
         path: "realtors/add",
         element: <AddRealtor />,
+      },
+      {
+        path: "realtors/edit/:id",
+        element: <EditRealtorFormIndex />,
       },
       {
         path: "reports/top-agencies",

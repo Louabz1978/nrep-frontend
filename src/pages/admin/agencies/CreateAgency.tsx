@@ -18,18 +18,30 @@ import {
 } from "@/data/admin/schema/AgencyFormSchema";
 import type { CreateAgencyTypes } from "@/types/admin/agency";
 import { useMemo } from "react";
+import cleanValues from "@/utils/cleanValues";
+import useEditAgency from "@/hooks/admin/useEditAgency";
 
-function CreateAgency() {
+function CreateAgency({
+  defaultValues = createAgencyInitialValues,
+  id,
+}: {
+  defaultValues?: CreateAgencyForm;
+  id?: string;
+}) {
   //  Hooks
   const { handleCreateAgency, createAgency } = useCreateAgency();
+  const { handleEditAgency, editAgency } = useEditAgency();
   const { allBrokers, allBrokersQuery } = useGetAllBrokers();
   const { countries, countriesQuery } = useGetCountries();
   const { cities, citiesQuery } = useGetCities();
   const { Area, AreaQuery } = useGetArea();
 
+  // initial values
+  const initialValues = cleanValues(createAgencyInitialValues, defaultValues);
+
   const form = useForm<CreateAgencyForm>({
     resolver: joiResolver(createAgencySchema),
-    defaultValues: createAgencyInitialValues,
+    defaultValues: initialValues,
   });
 
   const brokerChoices = useMemo(
@@ -50,12 +62,28 @@ function CreateAgency() {
     const payload: CreateAgencyTypes = {
       ...data,
       brokers_id,
-      
     };
-
-    await handleCreateAgency(payload);
+    if (id)
+      await handleEditAgency(
+        {
+          ...data,
+          brokers_id: data.brokers_id?.map((broker) => broker?.value),
+          address: {
+            floor: data.floor,
+            apt: data.apt,
+            area_id: data.area_id.area_id,
+            city_id: data.city_id.city_id,
+            county_id: data.county_id.county_id,
+            building_num: data.building_num,
+            street: data.street,
+          },
+        },
+        id
+      );
+    else {
+      await handleCreateAgency(payload);
+    }
     console.log("Payload :", payload);
-    
   };
 
   return (
@@ -67,7 +95,7 @@ function CreateAgency() {
           className="flex flex-col gap-6xl"
         >
           <h1 className="text-3xl font-bold text-center mb-6">
-            إنشاء شركة عقارية
+            {id ? "تعديل شركة عقارية" : "إنشاء شركة عقارية"}
           </h1>
 
           <div className="grid xl:grid-cols-3 md:grid-cols-2 gap-x-5xl gap-y-3xl">
@@ -132,13 +160,15 @@ function CreateAgency() {
 
             <Select
               form={form}
-              name="area_id"
-              label="المنطقة"
+              name="county_id"
+              label="المحافظة"
               placeholder={
-                AreaQuery.isLoading ? "جاري تحميل المناطق..." : "اختر المنطقة"
+                countriesQuery.isLoading
+                  ? "جاري تحميل المحافظات..."
+                  : "اختر المحافظة"
               }
-              choices={Area}
-              keyValue="title"
+              choices={countries}
+              keyValue="county_id"
               showValue="title"
             />
 
@@ -150,21 +180,19 @@ function CreateAgency() {
                 citiesQuery.isLoading ? "جاري تحميل المدن..." : "اختر المدينة"
               }
               choices={cities}
-              keyValue="title"
+              keyValue="city_id"
               showValue="title"
             />
 
             <Select
               form={form}
-              name="county_id"
-              label="المحافظة"
+              name="area_id"
+              label="المنطقة"
               placeholder={
-                countriesQuery.isLoading
-                  ? "جاري تحميل المحافظات..."
-                  : "اختر المحافظة"
+                AreaQuery.isLoading ? "جاري تحميل المناطق..." : "اختر المنطقة"
               }
-              choices={countries}
-              keyValue="title"
+              choices={Area}
+              keyValue="area_id"
               showValue="title"
             />
 
@@ -186,8 +214,13 @@ function CreateAgency() {
           </div>
 
           <div className="flex justify-end w-full gap-xl">
-            <Button type="submit" disabled={createAgency.isPending}>
-              {createAgency.isPending ? "جاري الحفظ..." : "حفظ الشركة العقارية"}
+            <Button
+              type="submit"
+              disabled={(id ? editAgency : createAgency).isPending}
+            >
+              {(id ? editAgency : createAgency).isPending
+                ? "جاري الحفظ..."
+                : "حفظ الشركة العقارية"}
             </Button>
           </div>
         </form>

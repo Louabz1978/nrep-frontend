@@ -43,6 +43,14 @@ const QUERY_KEYS = {
     query: "agencies-query",
     details: "agencies-details",
   },
+  realtors: {
+    query: "realtors-query",
+    details: "realtors-details",
+  },
+  brokers: {
+    query: "brokers-query",
+    details: "brokers-details",
+  },
   counties: {
     query: "counties",
     details: "county-details",

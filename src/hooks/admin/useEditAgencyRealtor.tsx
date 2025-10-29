@@ -1,45 +1,45 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import addAgencyBroker from "@/api/admin/agencies/addagencyBroker";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import MESSAGES from "@/data/global/messages";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { showApiErrors } from "@/utils/showApiErrors";
+import editAgencyRealtor from "@/api/admin/agencies/editagencyRealtor";
 
-function useAddAgencyBroker() {
+function useEditAgencyRealtor() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: addAgencyBroker,
-    onSuccess: (_data, variables) => {
-      navigate("/admin/brokers");
+    mutationFn: editAgencyRealtor,
+    onSuccess: (_data) => {
+      navigate("/admin/realtors");
       queryClient
         .invalidateQueries({
-          queryKey: [QUERY_KEYS.brokers.query],
+          queryKey: [QUERY_KEYS.realtors.query],
         })
         .catch(console.error);
       queryClient
         .invalidateQueries({
-          queryKey: [QUERY_KEYS.agencies.details, variables.agency_id],
+          queryKey: [QUERY_KEYS.realtors.details],
         })
         .catch(console.error);
     },
   });
 
-  async function handleAddAgencyBroker(
-    data: Parameters<typeof addAgencyBroker>[0]
+  async function handlEditAgencyRealtor(
+    data: Parameters<typeof editAgencyRealtor>[0]
   ) {
     await toast.promise(mutation.mutateAsync(data), {
-      loading: MESSAGES.agency.addBroker.loading,
-      success: MESSAGES.agency.addBroker.success,
+      loading: MESSAGES.agency.editRealtor.loading,
+      success: MESSAGES.agency.editRealtor.success,
       error: (error) => {
         return showApiErrors(error);
       },
     });
   }
 
-  return { addAgencyBroker: mutation, handleAddAgencyBroker };
+  return { editAgencyRealtor: mutation, handlEditAgencyRealtor };
 }
 
-export default useAddAgencyBroker;
+export default useEditAgencyRealtor;
