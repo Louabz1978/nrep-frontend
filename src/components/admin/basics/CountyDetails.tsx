@@ -31,7 +31,7 @@ const CountyDetails = () => {
               <h1 className="text-size24 sm:text-size30 font-medius  text-center sm:text-right">
                 {countyDetails?.county?.title}
               </h1>
-              <p> هنا تعرض كل تفاصيل محافظة حمص </p>
+              <p> هنا تعرض كل تفاصيل محافظة {countyDetails?.county?.title} </p>
             </div>
             <div className="mb-0">
               <Input

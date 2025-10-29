@@ -24,7 +24,7 @@ function useCreateArea() {
   async function handleAddArea(submitData: AreaForm) {
     const data = {
       title: submitData?.title ?? "",
-      city_id : submitData?.city_id 
+      city_id : submitData?.city_id
     };
 
     // toaster
