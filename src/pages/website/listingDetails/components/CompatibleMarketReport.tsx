@@ -1,6 +1,4 @@
 import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/global/table2/table";
 import { Input } from "@/components/global/ui/input";
@@ -17,7 +15,6 @@ interface CompatibleMarketReportProps {
 const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
   const [searchMls, setSearchMls] = useState("");
 
- 
   const { compatibleProperties, compatiblePropertiesQuery } =
     useGetCompatibleProperties({
       mls: searchMls || mls,
@@ -26,14 +23,18 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
   const columns: ColumnDef<Listing>[] = useMemo(
     () => [
       {
-        accessorKey: "mls",
+        accessorKey: "address",
         header: "MLS",
         size: 20,
         cell: ({ row }) => {
-          const mlsValue = row.getValue("mls") as string;
-          return mlsValue ? mlsValue.replace(/-/g, " - ") : "---";
+          const mlsValue = row.getValue("address") as string;
+      
+          const match = mlsValue.match(/A\d+|\d+/);
+          
+          return match ? match[0] : mlsValue;
         },
-      },
+      }
+      ,
       {
         accessorKey: "address",
         header: "العنوان",
