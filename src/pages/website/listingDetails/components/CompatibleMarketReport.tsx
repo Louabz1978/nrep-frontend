@@ -7,28 +7,17 @@ import { Input } from "@/components/global/ui/input";
 import useGetCompatibleProperties from "@/hooks/website/reports/useGetCompatibleProperties";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import type { Listing } from "@/types/website/listings";
-import Joi from "joi";
+
 import { FaSearch } from "react-icons/fa";
 
 interface CompatibleMarketReportProps {
   mls: string;
 }
-interface SearchFormType {
-  mls: string;
-}
-
-const searchSchema = Joi.object({
-  mls: Joi.string().allow("").optional(),
-});
 
 const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
   const [searchMls, setSearchMls] = useState("");
 
-  const form = useForm<SearchFormType>({
-    resolver: joiResolver(searchSchema),
-    defaultValues: { mls: "" },
-  });
-
+ 
   const { compatibleProperties, compatiblePropertiesQuery } =
     useGetCompatibleProperties({
       mls: searchMls || mls,
