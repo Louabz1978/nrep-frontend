@@ -107,49 +107,13 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
     []
   );
 
-  const dummyRows: Listing[] = [
-    {
-      mls: "21000005",
-      address: { street: "المحطة" },
-      bedrooms: 4,
-      bathrooms: 3,
-      status: "closed",
-      sale_date: "2/10/2025",
-      sale_price: 1000000,
-    } as any,
-    {
-      mls: "21000006",
-      address: { street: "المحطة" },
-      bedrooms: 3,
-      bathrooms: 4,
-      status: "active",
-      sale_date: "-----",
-      sale_price: undefined,
-    } as any,
-    {
-      mls: "21000007",
-      address: { street: "المحطة" },
-      bedrooms: 1,
-      bathrooms: 2,
-      status: "closed",
-      sale_date: "2/10/2025",
-      sale_price: 1000000,
-    } as any,
-    {
-      mls: "21000008",
-      address: { street: "المحطة" },
-      bedrooms: 2,
-      bathrooms: 1,
-      status: "active",
-      sale_date: "-----",
-      sale_price: undefined,
-    } as any,
-  ];
-  const baseRows = dummyRows;
+  const tableData = compatibleProperties?.data?.data?.Other ?? [];
+
+  console.log("✅ Compatible Properties:", tableData);
 
   return (
     <div className="p-6">
-      <div className="mb-6 flex justify-between items-end ">
+      <div className="mb-6 flex justify-between items-end">
         <div>
           <h2 className="text-2xl font-semibold text-right mb-4">
             تقرير السوق المتوافق للعقار
@@ -159,19 +123,19 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
           </p>
         </div>
 
-          <div className="flex gap-4 w-[300px] items-center justify-end">
-            <Input
-              value={searchMls}
-              onChange={(e) => setSearchMls(e.target.value)}
-              type="text"
-              variant="white"
-              icon={FaSearch}
-              iconClassName="text-gray-400/50 h-[18px] w-[18px] "
-              iconInline
-              placeholder="البحث عن طريق رقم MLS"
-              className="w-80 text-right"
-            />
-          </div>
+        <div className="flex gap-4 w-[300px] items-center justify-end">
+          <Input
+            value={searchMls}
+            onChange={(e) => setSearchMls(e.target.value)}
+            type="text"
+            variant="white"
+            icon={FaSearch}
+            iconClassName="text-gray-400/50 h-[18px] w-[18px]"
+            iconInline
+            placeholder="البحث عن طريق رقم MLS"
+            className="w-80 text-right"
+          />
+        </div>
       </div>
 
       <div className="w-full overflow-x-auto bg-[#E5E5E5] rounded-xl p-2">
@@ -179,8 +143,8 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
           report={true}
           prefix={TABLE_PREFIXES.compatible_properties}
           columns={columns}
-          data={baseRows}
-          // query={compatiblePropertiesQuery}
+          data={tableData}
+          query={compatiblePropertiesQuery}
         />
       </div>
     </div>

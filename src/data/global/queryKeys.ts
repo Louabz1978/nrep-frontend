@@ -36,6 +36,7 @@ const QUERY_KEYS = {
   },
   admin_reports: {
     realtor_history: "realtor-history",
+    broker_history:"broker-history",
     agencies_history: "agencies-history",
     expected_price: "expected-price",
   },

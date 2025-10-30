@@ -2,14 +2,18 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgencyReport } from "@/types/admin/reports";
 import useGetTopAgencies from "@/hooks/admin/reports/useGetTopAgencies";
 
+const months = Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }));
+const currentYear = new Date().getFullYear();
+const years = [currentYear - 1, currentYear, currentYear + 1].map((y) => ({ value: String(y), label: String(y) }));
+
 const TopAgencies = () => {
-  const month = "9";
-  const year = "2025";
+  const [month, setMonth] = useState("9");
+  const [year, setYear] = useState("2025");
   const { topAgencies } = useGetTopAgencies({ month, year });
 
   const columns: ColumnDef<TopAgencyReport>[] = useMemo(
@@ -25,13 +29,13 @@ const TopAgencies = () => {
         size: 35,
       },
       {
-        accessorKey: "total_sales",
+        accessorKey: "total_properties_sold",
         header: "مجموع عدد العقارات المباعة",
         size: 20,
         cell: ({ getValue }) => (getValue() as number).toLocaleString(),
       },
       {
-        accessorKey: "total_revenue",
+        accessorKey: "total_sales_amount",
         header: "مجموع أسعار المبيعات",
         size: 25,
         cell: ({ getValue }) => (getValue() as number).toLocaleString(),
@@ -50,12 +54,28 @@ const TopAgencies = () => {
               تقرير أفضل عشر وكالات عقارية
             </h1>
 
-            <input
-              name="agency_id"
-              placeholder="البحث عن طريق معرف الشركة العقارية"
-              type="search"
-              className="bg-white w-[400px] h-8 p-2 rounded-xl border-none outline-none focus:outline-none focus:border-none focus:ring-0 placeholder:text-size14"
-              />
+            <div className="flex gap-2 items-center">
+              <select
+                className="bg-white h-8 p-1 rounded-xl border border-gray-300"
+                value={month}
+                onChange={e => setMonth(e.target.value)}
+                title="اختر الشهر"
+              >
+                {months.map((m) => (
+                  <option key={m.value} value={m.value}>{`الشهر: ${m.label}`}</option>
+                ))}
+              </select>
+              <select
+                className="bg-white h-8 p-1 rounded-xl border border-gray-300"
+                value={year}
+                onChange={e => setYear(e.target.value)}
+                title="اختر السنة"
+              >
+                {years.map((y) => (
+                  <option key={y.value} value={y.value}>{`السنة: ${y.label}`}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 

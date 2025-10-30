@@ -1,31 +1,22 @@
 import axiosClient from "@/libs/axios/axios-client";
 import type { AxiosRes } from "@/types/global/axios";
-import type { BrokerHistoryReport } from "@/types/admin/reports";
-
+import type { PaginationData, SearchParams } from "@/types/global/pagination";
+import type { User } from "@/types/global/user";
 export type GetBrokerHistoryProps = {
-  month?: string;
-  year?: string;
-  broker_id?: number;
+  queryParams?: SearchParams;
 };
-
-export type GetBrokerHistoryResult = Promise<AxiosRes<BrokerHistoryReport[]>>;
-
-async function getBrokerHistory({ 
-  month = "9", 
-  year = "2025",
-  broker_id
-}: GetBrokerHistoryProps = {}): GetBrokerHistoryResult {
-  const res = await axiosClient.get<AxiosRes<BrokerHistoryReport[]>>(
-    `/admin/reports/broker-history`,
+export type GetBrokerHistoryResult = Promise<AxiosRes<PaginationData<User[]>>>;
+export default async function getBrokerHistory({
+  queryParams,
+}: GetBrokerHistoryProps): GetBrokerHistoryResult {
+  const res = await axiosClient.get<AxiosRes<PaginationData<User[]>>>(
+    `report/agents/detailed`,
     {
       params: {
-        month,
-        year,
-        broker_id,
+        ...queryParams,
+        page: queryParams?.page ?? 1,
       },
     }
   );
   return res?.data;
 }
-
-export default getBrokerHistory;

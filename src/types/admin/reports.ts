@@ -1,12 +1,8 @@
 export interface TopAgencyReport {
-  rank: number;
   agency_id: number;
   agency_name: string;
-  total_sales: number;
-  total_revenue: number;
-  active_brokers: number;
-  active_realtors: number;
-  success_rate: number;
+  total_properties_sold:number;
+  total_sales_amount:number;
 }
 
 export interface BrokerHistoryReport {

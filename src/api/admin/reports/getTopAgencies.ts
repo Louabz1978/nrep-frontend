@@ -14,14 +14,15 @@ export type GetTopAgenciesResult = Promise<AxiosRes<TopAgencyReport[]>>;
 
 async function getTopAgencies({ searchParams }: GetTopAgenciesProps): GetTopAgenciesResult {
   const res = await axiosClient.get<AxiosRes<TopAgencyReport[]>>(
-    `/top-agencies`,
+    `/report/top_10_agencies_sales`,
     {
       params: {
         ...searchParams
       },
     }
   );
-  return res?.data;
+  console.log(res)
+  // return res?.data;
 }
 
 export default getTopAgencies;

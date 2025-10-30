@@ -17,26 +17,19 @@ async function getCompatibleProperties({
   queryParams,
 }: GetCompatiblePropertiesProps): Promise<GetCompatiblePropertiesResult> {
   const res = await axiosClient.get<AxiosRes<PaginationData<Listing[]>>>(
-    `/property/compatible/${mls}`,
+    `/report/cmr`,
     {
       params: {
+        mls,
         ...queryParams,
-        page: queryParams?.page ?? 1,
       },
     }
   );
 
+  console.log("✅ Response:", res.data);
+
   return {
-    data: res?.data?.data || { 
-      data: [], 
-      pagination: {
-        current_page: 1,
-        per_page: 10,
-        total: 0,
-        page: 1,
-        total_pages: 0,
-      }
-    },
+    data: res?.data,
   };
 }
 

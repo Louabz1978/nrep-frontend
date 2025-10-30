@@ -15,7 +15,7 @@ export default function useGetCompatibleProperties({
   });
 
   return {
-    compatibleProperties: compatiblePropertiesQuery.data?.data?.data,
+    compatibleProperties: compatiblePropertiesQuery,
     compatiblePropertiesQuery,
   };
 }
