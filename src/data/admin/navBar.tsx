@@ -44,7 +44,7 @@ export const adminTabs: AdminTabsType = [
     ],
   },
   {
-    label: "الأساسيات",
+    label: "البيانات",
     permission: [],
     submenu: [
       {
