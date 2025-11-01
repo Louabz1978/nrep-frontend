@@ -29,7 +29,7 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
         cell: ({ row }) => {
           const mlsValue = row.getValue("address") as string;
       
-          const match = mlsValue.match(/A\d+|\d+/);
+          const match = mlsValue.match(/\d+|\d+/);
           
           return match ? match[0] : mlsValue;
         },
@@ -96,10 +96,10 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
     ],
     []
   );
-
+  
   const tableData = compatibleProperties?.data?.data?.Other ?? [];
+  console.log(tableData)
 
-  console.log("✅ Compatible Properties:", tableData);
 
   return (
     <div className="p-6">

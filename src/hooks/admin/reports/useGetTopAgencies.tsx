@@ -7,12 +7,12 @@ function useGetTopAgencies(searchParams?: { month?: string; year?: string }) {
     queryKey: [TABLE_PREFIXES.top_agencies, JSON.stringify(searchParams)],
     queryFn: () =>
       getTopAgencies({ searchParams: { ...(searchParams || {}) } }),
-    retry: false,
+    retry: true,
     refetchOnWindowFocus: false,
-    enabled: false, 
+    enabled: true, 
   });
 
-  const topAgencies = topAgenciesQuery.data || [];
+  const topAgencies = topAgenciesQuery.data?.data || [];
 
   return { topAgenciesQuery, topAgencies };
 }

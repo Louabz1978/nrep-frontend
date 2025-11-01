@@ -46,7 +46,6 @@ const BrokerHistory = () => {
     { key: "apartments", label: "شقق" },
   ];
 
-  // 2. Map tab keys to the corresponding keys in your API response
   const keyMap: {
     [tabKey: string]: { sales: keyof RawBrokerHistory; total: keyof RawBrokerHistory };
   } = useMemo(
@@ -71,7 +70,6 @@ const BrokerHistory = () => {
     []
   );
 
-  // 3. Create the dynamically filtered and mapped data
   const filteredData: BrokerHistoryReport[] = useMemo(() => {
     if (!brokerHistory) return [];
 
@@ -84,24 +82,18 @@ const BrokerHistory = () => {
         broker_id: broker.agent_id,
         broker_name: broker.agent_name,
         license_number: broker.license_number,
-        // Assign sales/total based on the active tab
         number_of_sales: broker[currentKeys.sales] ?? 0,
         total_sales: broker[currentKeys.total] ?? 0,
       }));
-  }, [brokerHistory, activeTab, keyMap]); // Re-run when data or tab changes
+  }, [brokerHistory, activeTab, keyMap]); 
 
-  // --- NEW (THE CRITICAL FIX) ---
-  // 4. Create a new "query" object that injects our filtered data
-  // This ensures the DataTable uses our transformed data, not the raw data
   const modifiedQuery = useMemo(() => {
     return {
-      ...brokerHistoryQuery, // Spread all original query properties (isLoading, etc.)
-      data: filteredData, // OVERWRITE the 'data' property with our filtered data
+      ...brokerHistoryQuery, 
+      data: filteredData, 
     };
   }, [brokerHistoryQuery, filteredData]);
-  // --- END OF FIX ---
 
-  // Columns definition (no change needed)
   const columns: ColumnDef<BrokerHistoryReport>[] = useMemo(
     () => [
       {
