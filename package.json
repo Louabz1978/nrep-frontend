@@ -43,6 +43,7 @@
     "framer-motion": "^12.18.1",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.5.11",
+    "html2pdf.js": "^0.12.1",
     "joi": "^17.13.3",
     "jotai": "^2.12.5",
     "jspdf": "^3.0.1",

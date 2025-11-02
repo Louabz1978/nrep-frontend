@@ -21,6 +21,7 @@ const TABLE_PREFIXES = {
   agencies: "agencies",
   top_agencies: "topAgencies",
   broker_history: "brokerHistory",
+  agencies_history_properties: "agenciesHistoryProperties",
 };
 
 export default TABLE_PREFIXES;

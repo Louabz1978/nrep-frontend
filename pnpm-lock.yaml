@@ -101,6 +101,9 @@ importers:
       html2canvas-pro:
         specifier: ^1.5.11
         version: 1.5.11
+      html2pdf.js:
+        specifier: ^0.12.1
+        version: 0.12.1
       joi:
         specifier: ^17.13.3
         version: 17.13.3
@@ -2286,6 +2289,9 @@ packages:
   html2canvas@1.4.1:
     resolution: {integrity: sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==}
     engines: {node: '>=8.0.0'}
+
+  html2pdf.js@0.12.1:
+    resolution: {integrity: sha512-3rBWQ96H5oOU9jtoz3MnE/epGi27ig9h8aonBk4JTpvUERM3lMRxhIRckhJZEi4wE0YfRINoYOIDY0hLY0CHgQ==}
 
   human-signals@4.3.1:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}
@@ -5576,6 +5582,11 @@ snapshots:
     dependencies:
       css-line-break: 2.1.0
       text-segmentation: 1.0.3
+
+  html2pdf.js@0.12.1:
+    dependencies:
+      html2canvas: 1.4.1
+      jspdf: 3.0.1
 
   human-signals@4.3.1: {}
 

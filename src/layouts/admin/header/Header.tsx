@@ -3,7 +3,7 @@ import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose } from "react-icons/ai";
 import logo from "@/assets/images/new_logo.png";
 import { useUser } from "@/stores/useUser";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { LuLogIn } from "react-icons/lu";
 import { Popover, PopoverContent } from "@/components/global/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
@@ -15,6 +15,9 @@ import Settings from "@/components/global/settings/Settings";
 import Navbar from "../navbar/Navbar";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { HiOutlineMenu, HiOutlineChevronDown } from "react-icons/hi";
+import { Button } from "@/components/global/form/button/Button";
+import { generateReadablePDF } from "@/utils/generatePDF";
+import { MdOutlineRealEstateAgent } from "react-icons/md";
 
 type UserProps = {
   user: ReturnType<typeof useUser>["user"];
@@ -22,36 +25,38 @@ type UserProps = {
   onLoginClick: () => void;
 };
 
-const UserActions: React.FC<UserProps> = ({ user, onLogout, onLoginClick }) => (
-  <div className="px-4 pt-4 pb-4 border-b border-white flex items-center justify-between">
-    <div className="flex items-center gap-3">
-      <CgProfile className="size-[26px]" />
-      <span className="text-size18 font-semibold truncate max-w-[180px]">
-        {user
-          ? `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() ||
-            user.email
-          : "الضيف"}
-      </span>
+const UserActions: React.FC<UserProps> = ({ user, onLogout, onLoginClick }) => {
+  return (
+    <div className="px-4 pt-4 pb-4 border-b border-white flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <CgProfile className="size-[26px]" />
+        <span className="text-size18 font-semibold truncate max-w-[180px]">
+          {user
+            ? `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() ||
+              user.email
+            : "الضيف"}
+        </span>
+      </div>
+      {user ? (
+        <button
+          className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full"
+          onClick={onLogout}
+        >
+          <PiSignOut className="size-[16px]" />
+          خروج
+        </button>
+      ) : (
+        <button
+          className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full"
+          onClick={onLoginClick}
+        >
+          <LuLogIn className="size-[16px]" />
+          دخول
+        </button>
+      )}
     </div>
-    {user ? (
-      <button
-        className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full"
-        onClick={onLogout}
-      >
-        <PiSignOut className="size-[16px]" />
-        خروج
-      </button>
-    ) : (
-      <button
-        className="flex items-center gap-2 text-size14 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full"
-        onClick={onLoginClick}
-      >
-        <LuLogIn className="size-[16px]" />
-        دخول
-      </button>
-    )}
-  </div>
-);
+  );
+};
 
 type NavProps = {
   navItems: TabType[];
@@ -152,7 +157,7 @@ const Nav: React.FC<NavProps> = ({
 
 function Header() {
   // user info
-  const { user } = useUser();
+  const { user, hasPermissions } = useUser();
   // search value
   const [search, setSearch] = useState("");
   //navigate
@@ -163,16 +168,31 @@ function Header() {
 
   // logout mutations
   const { handleLogout, logout } = useLogoutMutation();
-
+  const [isPrinting, setIsPrinting] = useState(false);
   const [isMobileMounted, setIsMobileMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState<string[]>([]);
   const location = useLocation();
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const toggleGroup = (label: string) => {
     setOpenGroups((prev) =>
       prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
     );
+  };
+
+  // 4. Create the handler function
+  const handlePrintClick = async () => {
+    setIsPrinting(true);
+    try {
+      // We pass the ID of the *content area*
+      await generateReadablePDF("document.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsPrinting(false);
+    }
   };
 
   const navItems = useMemo(() => tabs, []);
@@ -187,9 +207,14 @@ function Header() {
     setTimeout(() => setIsMobileMounted(false), 300);
   };
 
+  const isRealtor = hasPermissions(["realtor"]);
+
   return (
     // header container
-    <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm ">
+    <header
+      ref={contentRef}
+      className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm "
+    >
       {/* brand + inline nav */}
       <div className="flex items-center ">
         <div className="max-md:hidden">
@@ -199,12 +224,25 @@ function Header() {
           to="/admin"
           className="2xl:absolute xl:left-[50%] xl:-translate-x-[50%]  w-7xl h-7xl"
         >
-          <img src={logo} alt="NREP" className="size-full object-contain relative right-8" />
+          <img
+            src={logo}
+            alt="NREP"
+            className="size-full object-contain relative right-8"
+          />
         </Link>
       </div>
 
       {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
+        <div>
+          <Button
+            disabled={isPrinting}
+            onClick={handlePrintClick}
+            className="!bg-golden-medium"
+          >
+            طباعة PDF
+          </Button>
+        </div>
         <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
             type="number"
@@ -250,6 +288,15 @@ function Header() {
                   <span>الملف الشخصي</span>
                   <PiUser />
                 </div>
+                {isRealtor ? (
+                  <Link
+                    to={"/"}
+                    className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary"
+                  >
+                    <span>انتقال إلى واجهة الوسيط</span>
+                    <MdOutlineRealEstateAgent />
+                  </Link>
+                ) : null}
                 <div
                   onClick={() => {
                     if (!logout?.isPending) handleLogout();

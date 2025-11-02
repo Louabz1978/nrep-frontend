@@ -15,6 +15,7 @@ import Settings from "@/components/global/settings/Settings";
 import Navbar from "../navbar/Navbar";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { HiOutlineMenu, HiOutlineChevronDown } from "react-icons/hi";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 type UserProps = {
   user: ReturnType<typeof useUser>["user"];
@@ -152,7 +153,7 @@ const Nav: React.FC<NavProps> = ({
 
 function Header() {
   // user info
-  const { user } = useUser();
+  const { user, hasPermissions } = useUser();
   // search value
   const [search, setSearch] = useState("");
   //navigate
@@ -187,6 +188,8 @@ function Header() {
     setTimeout(() => setIsMobileMounted(false), 300);
   };
 
+  const isAdmin = hasPermissions(["admin"]);
+
   return (
     // header container
     <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm ">
@@ -199,7 +202,11 @@ function Header() {
           to="/"
           className="2xl:absolute xl:left-[50%] xl:-translate-x-[50%]  w-7xl h-7xl"
         >
-          <img src={logo} alt="NREP" className="size-full object-contain relative right-8" />
+          <img
+            src={logo}
+            alt="NREP"
+            className="size-full object-contain relative right-8"
+          />
         </Link>
       </div>
 
@@ -250,6 +257,15 @@ function Header() {
                   <span>الملف الشخصي</span>
                   <PiUser />
                 </div>
+                {isAdmin ? (
+                  <Link
+                    to={"/admin"}
+                    className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary"
+                  >
+                    <span>انتقال إلى واجهة المسؤول</span>
+                    <MdOutlineAdminPanelSettings />
+                  </Link>
+                ) : null}
                 <div
                   onClick={() => {
                     if (!logout?.isPending) handleLogout();
