@@ -3,7 +3,7 @@ import { CgProfile } from "react-icons/cg";
 import { AiOutlineClose } from "react-icons/ai";
 import logo from "@/assets/images/new_logo.png";
 import { useUser } from "@/stores/useUser";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { LuLogIn } from "react-icons/lu";
 import { Popover, PopoverContent } from "@/components/global/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
@@ -15,6 +15,8 @@ import Settings from "@/components/global/settings/Settings";
 import Navbar from "../navbar/Navbar";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { HiOutlineMenu, HiOutlineChevronDown } from "react-icons/hi";
+import { Button } from "@/components/global/form/button/Button";
+import { generateReadablePDF } from "@/utils/generatePDF";
 
 type UserProps = {
   user: ReturnType<typeof useUser>["user"];
@@ -163,16 +165,32 @@ function Header() {
 
   // logout mutations
   const { handleLogout, logout } = useLogoutMutation();
-
+  const [isPrinting, setIsPrinting] = useState(false);
   const [isMobileMounted, setIsMobileMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState<string[]>([]);
   const location = useLocation();
 
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const toggleGroup = (label: string) => {
     setOpenGroups((prev) =>
       prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
     );
+  };
+
+  // 4. Create the handler function
+  const handlePrintClick = async () => {
+    setIsPrinting(true);
+    try {
+      // We pass the ID of the *content area*
+      await generateReadablePDF("document.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsPrinting(false);
+
+    }
   };
 
   const navItems = useMemo(() => tabs, []);
@@ -189,7 +207,7 @@ function Header() {
 
   return (
     // header container
-    <header className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm ">
+    <header ref={contentRef}  className="w-full bg-layout-bg max-md:overflow-hidden h-7xl flex  items-center justify-between md:px-container-padding-desktop px-container-padding-mobile py-sm ">
       {/* brand + inline nav */}
       <div className="flex items-center ">
         <div className="max-md:hidden">
@@ -199,12 +217,25 @@ function Header() {
           to="/admin"
           className="2xl:absolute xl:left-[50%] xl:-translate-x-[50%]  w-7xl h-7xl"
         >
-          <img src={logo} alt="NREP" className="size-full object-contain relative right-8" />
+          <img
+            src={logo}
+            alt="NREP"
+            className="size-full object-contain relative right-8"
+          />
         </Link>
       </div>
 
       {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
+        <div>
+          <Button
+            disabled={isPrinting}
+            onClick={handlePrintClick}
+            className="!bg-golden-medium"
+          >
+            طباعة PDF
+          </Button>
+        </div>
         <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
             type="number"

@@ -22,6 +22,7 @@ function AdminLayout() {
       className={`relative flex flex-col scroll-bar transition-colors duration-[0.3s] ${
         useWhiteBackground ? "bg-white" : "bg-primary-bg"
       }`}
+      id="page-content"
     >
       <AnimateContainer>
         <Header />

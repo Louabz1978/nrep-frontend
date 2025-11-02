@@ -447,9 +447,9 @@
   --spacing-10xl: calc(112px * var(--space-factor));
   --spacing-11xl: calc(160px * var(--space-factor));
 
-  --spacing-container-max-width-desktop: 1280px;
+  --spacing-container-max-width-desktop: 1380px;
   --spacing-container-padding-mobile: 16px;
-  --spacing-container-padding-desktop: 32px;
+  --spacing-container-padding-desktop: 20px;
 }
 
 @layer components {
