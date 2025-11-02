@@ -2,13 +2,24 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { RealtorHistoryReport } from "@/types/admin/reports";
 import { Input } from "@/components/global/ui/input";
 import useGetRealtorHistory from "@/hooks/admin/reports/useGetRealtorHistory";
+import { useQueryState, parseAsString } from "nuqs";
+import { Button } from "@/components/global/form/button/Button";
+import { ListFilterPlus } from "lucide-react";
+import { MONTHS } from "@/data/global/months";
+import Select from "@/components/global/form/select/Select";
+import { useForm } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
+import {
+  realtorFilterFormInitialValues,
+  realtorFilterFormSchema,
+  type RealtorFilterForm,
+} from "@/data/admin/schema/RealtorsFilterForm";
 
-// Define a type for the raw API response based on your example
 type RawRealtorHistory = {
   agent_id: number;
   agent_name: string;
@@ -32,9 +43,39 @@ type RawRealtorHistory = {
 };
 
 const RealtorHistory = () => {
-  // 1. Get the original data and query object from the hook
-  const { realtorHistory, getRealtorHistoryQuery } =
-    useGetRealtorHistory<RawRealtorHistory[]>();
+  const [search, setSearch] = useQueryState(
+    `${TABLE_PREFIXES.realtor_history}_search`,
+    parseAsString.withDefault("")
+  );
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
+  const form = useForm<RealtorFilterForm>({
+    resolver: joiResolver(realtorFilterFormSchema),
+    defaultValues: realtorFilterFormInitialValues,
+    mode: "onChange",
+  });
+
+  const currentYear = new Date().getFullYear();
+  const years = [
+    { value: currentYear.toString(), label: currentYear.toString() },
+    {
+      value: (currentYear - 1).toString(),
+      label: (currentYear - 1).toString(),
+    },
+    {
+      value: (currentYear - 2).toString(),
+      label: (currentYear - 2).toString(),
+    },
+  ];
+
+  const { realtorHistory, getRealtorHistoryQuery } = useGetRealtorHistory({
+    start_month: form.watch("start_month")?.value,
+    start_year: form.watch("start_year")?.value,
+    end_month: form.watch("end_month")?.value,
+    end_year: form.watch("end_year")?.value,
+    search: search,
+  });
 
   const [activeTab, setActiveTab] = useState("apartments");
 
@@ -48,9 +89,11 @@ const RealtorHistory = () => {
     { key: "apartments", label: "شقق" },
   ];
 
-  // 2. Map tab keys to the corresponding keys in your API response
   const keyMap: {
-    [tabKey: string]: { sales: keyof RawRealtorHistory; total: keyof RawRealtorHistory };
+    [tabKey: string]: {
+      sales: keyof RawRealtorHistory;
+      total: keyof RawRealtorHistory;
+    };
   } = useMemo(
     () => ({
       properties: {
@@ -73,7 +116,6 @@ const RealtorHistory = () => {
     []
   );
 
-  // 3. Create the dynamically filtered and mapped data
   const filteredData: RealtorHistoryReport[] = useMemo(() => {
     if (!realtorHistory) return [];
 
@@ -86,24 +128,38 @@ const RealtorHistory = () => {
         realtor_id: realtor.agent_id,
         realtor_name: realtor.agent_name,
         license_number: realtor.license_number,
-        // Assign sales/total based on the active tab
         number_of_sales: realtor[currentKeys.sales] ?? 0,
         total_sales: realtor[currentKeys.total] ?? 0,
       }));
-  }, [realtorHistory, activeTab, keyMap]); // Re-run when data or tab changes
+  }, [realtorHistory, activeTab, keyMap]);
 
-  // --- NEW (THE CRITICAL FIX) ---
-  // 4. Create a new "query" object that injects our filtered data
-  // This ensures the DataTable uses our transformed data, not the raw data
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
+        setIsFilterOpen(false);
+      }
+    };
+    if (isFilterOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isFilterOpen]);
+
   const modifiedQuery = useMemo(() => {
+    const pagination = getRealtorHistoryQuery.data?.pagination;
+
     return {
-      ...getRealtorHistoryQuery, // Spread all original query properties (isLoading, etc.)
-      data: filteredData, // OVERWRITE the 'data' property with our filtered data
+      ...getRealtorHistoryQuery,
+      data: filteredData,
+      pagination: pagination,
     };
   }, [getRealtorHistoryQuery, filteredData]);
-  // --- END OF FIX ---
 
-  // Columns definition (no change needed)
   const columns: ColumnDef<RealtorHistoryReport>[] = useMemo(
     () => [
       {
@@ -143,19 +199,83 @@ const RealtorHistory = () => {
             <h1 className="text-size24 sm:text-size30 font-medium mb-md sm:mb-xl text-center sm:text-right">
               تقرير تاريخ الوسطاء العقاريين
             </h1>
-            <div>
+            <div className="flex items-end gap-4 relative" ref={filterRef}>
+              <Button
+                onClick={() => setIsFilterOpen((prev) => !prev)}
+                className="!rounded-md !text-primary-fg bg-white !h-9 !text-[14px] flex items-center gap-y-xs px-4 py-2 border border-transparent "
+              >
+                <p className="font-medium text-[14px]">الفلتر</p>
+                <ListFilterPlus className="size-4 ml-1" />
+              </Button>
+              {isFilterOpen && (
+                <div className="absolute top-full right-0 mt-2 w-52 h-auto px-6 py-2 bg-white border border-gray-300 rounded shadow-md z-50 text-[14px] space-y-2">
+                  <div>
+                    <span className="font-medium text-gray-700 text-right block ">
+                      البحث من :
+                    </span>
+                    <Select
+                      form={form}
+                      name="start_month"
+                      label="الشهر"
+                      placeholder="اختر الشهر"
+                      choices={MONTHS}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px]"
+                    />
+                    <Select
+                      form={form}
+                      name="start_year"
+                      label="السنة"
+                      placeholder="اختر السنة"
+                      choices={years}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px] mt-1"
+                    />
+                  </div>
+                  <div className="font-medium text-gray-500">إلى :</div>
+                  <div>
+                    <Select
+                      form={form}
+                      name="end_month"
+                      label="الشهر"
+                      placeholder="اختر الشهر"
+                      choices={MONTHS}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px] "
+                      labelStyle="!text-[12px]"
+                    />
+                    <Select
+                      form={form}
+                      name="end_year"
+                      label="السنة"
+                      placeholder="اختر السنة"
+                      choices={years}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px] mt-1"
+                    />
+                  </div>
+                </div>
+              )}
               <Input
-                placeholder="ابحث عن اسم الوسيط أو رقم الرخصة أو نوع العملية"
+                placeholder="ابحث عن اسم الوسيط أو رقم الرخصة"
                 type="search"
                 variant="white"
                 iconClassName="text-gray-400/50 h-[18px] w-[18px] "
-                className="w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm "
+                className="w-90 bg-white !h-9 !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm "
+                value={search}
+                onChange={(e) => setSearch(e.target.value || null)}
               />
             </div>
           </div>
           <hr className="mt-2" />
         </div>
-        {/* Tabs */}
         <div
           className="flex gap-5xl items-center justify-center my-5xl"
           style={{ direction: "ltr" }}
@@ -180,12 +300,10 @@ const RealtorHistory = () => {
         <div className="w-full overflow-x-auto">
           <DataTable
             report={true}
+            data={filteredData ?? []}
             prefix={TABLE_PREFIXES.realtor_history}
             columns={columns}
-            // 5. Pass the MODIFIED query object
             query={modifiedQuery}
-            // The 'data' prop is no longer needed, as 'query.data' is used
-            data={filteredData} // <-- This can be removed
           />
         </div>
       </PageContainer>

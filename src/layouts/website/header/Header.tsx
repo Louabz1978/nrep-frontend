@@ -16,6 +16,9 @@ import Navbar from "../navbar/Navbar";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { HiOutlineMenu, HiOutlineChevronDown } from "react-icons/hi";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/global/tooltip/Tooltiop";
+import { FaPrint } from "react-icons/fa6";
+import { generateReadablePDF } from "@/utils/generatePDF";
 
 type UserProps = {
   user: ReturnType<typeof useUser>["user"];
@@ -243,6 +246,14 @@ function Header() {
 
         {/* icons */}
         <div className="flex items-center gap-lg">
+        <div className="cursor-pointer" onClick={() => generateReadablePDF("document.pdf")}>
+            <Tooltip>
+              <TooltipTrigger>
+                <FaPrint className="size-[21px] cursor-pointer mt-2 ml-2" />
+              </TooltipTrigger>
+              <TooltipContent> PDF طباعة </TooltipContent>
+            </Tooltip>
+          </div>
           {/* login / user info */}
           {user ? (
             <Popover>

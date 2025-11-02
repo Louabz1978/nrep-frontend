@@ -2,7 +2,8 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useMemo, useState, useCallback } from "react";
+// --- Added useRef and useEffect ---
+import { useMemo, useState, useCallback, useRef, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AgenciesHistoryReport } from "@/types/admin/reports";
 import { Input } from "@/components/global/ui/input";
@@ -13,26 +14,18 @@ import Popup from "@/components/global/popup/Popup";
 import StatusForm from "@/pages/website/allListings.tsx/StatusForm";
 import { PROPERTY_TYPE, TransType } from "@/data/global/select";
 
+// --- Imports for Filter ---
+import { ListFilterPlus } from "lucide-react";
+import { MONTHS } from "@/data/global/months";
+import Select from "@/components/global/form/select/Select";
+import { useForm } from "react-hook-form";
+import { filterFormInitialValues, filterFormSchema, type FilterForm } from "@/data/admin/schema/AgenciesFilterForm";
+import { joiResolver } from "@hookform/resolvers/joi";
+
 // Define the type for a single property item from the response
 type PropertyItem = AgenciesHistoryReport["realtors"][0]["properties"][0];
 
 const AgenciesHistory = () => {
-  const [start_month] = useQueryState(
-    "start_month",
-    parseAsInteger.withDefault(1)
-  );
-  const [start_year] = useQueryState(
-    "start_year",
-    parseAsInteger.withDefault(2025)
-  );
-  const [end_month] = useQueryState(
-    "end_month",
-    parseAsInteger.withDefault(12)
-  );
-  const [end_year] = useQueryState(
-    "end_year",
-    parseAsInteger.withDefault(2025)
-  );
 
   const [search, setSearch] = useQueryState(
     `${TABLE_PREFIXES.agencies_history}_search`,
@@ -52,17 +45,60 @@ const AgenciesHistory = () => {
 
   const [isPropertiesPopupOpen, setIsPropertiesPopupOpen] = useState(false);
   const [selectedIndividualName, setSelectedIndividualName] = useState("");
-  const [selectedProperties, setSelectedProperties] = useState<PropertyItem[] | null>(
-    null
-  );
+  const [selectedProperties, setSelectedProperties] = useState<
+    PropertyItem[] | null
+  >(null);
   const [selectedAgencyName, setSelectedAgencyName] = useState("");
 
+  // --- State for Filter (from BrokerHistory) ---
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
+  const form = useForm<FilterForm>(
+    {
+      resolver: joiResolver(filterFormSchema),
+      defaultValues: filterFormInitialValues,
+      mode: "onChange",
+    }
+  );
+
+  // --- Data for Filter (from BrokerHistory) ---
+  const currentYear = new Date().getFullYear();
+  const years = [
+    { value: currentYear.toString(), label: currentYear.toString() },
+    {
+      value: (currentYear - 1).toString(),
+      label: (currentYear - 1).toString(),
+    },
+    {
+      value: (currentYear - 2).toString(),
+      label: (currentYear - 2).toString(),
+    },
+  ];
+
   const { agenciesHistory, getAgenciesHistoryQuery } = useGetagenciesHistory({
-    start_month,
-    start_year,
-    end_month,
-    end_year,
+    start_month: form.watch("start_month")?.value,
+    start_year: form.watch("start_year")?.value,
+    end_month: form.watch("end_month")?.value,
+    end_year: form.watch("end_year")?.value,
   });
+
+  // --- Click Outside Logic for Filter (from BrokerHistory) ---
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
+        setIsFilterOpen(false);
+      }
+    };
+    if (isFilterOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isFilterOpen]);
 
   // --- Popup Handlers with robust nullish checks ---
   const handleBrokersClick = useCallback(
@@ -90,7 +126,9 @@ const AgenciesHistory = () => {
   const handleRealtorNameClick = useCallback(
     (realtor: AgenciesHistoryReport["realtors"][0]) => {
       setSelectedIndividualName(realtor?.realtor_name ?? "");
-      setSelectedProperties(Array.isArray(realtor?.properties) ? realtor.properties : []);
+      setSelectedProperties(
+        Array.isArray(realtor?.properties) ? realtor.properties : []
+      );
       setIsPropertiesPopupOpen(true);
       setIsRealtorsPopupOpen(false); // Close the realtors list popup
     },
@@ -100,7 +138,9 @@ const AgenciesHistory = () => {
   const handleBrokerNameClick = useCallback(
     (broker: AgenciesHistoryReport["brokers"][0]) => {
       setSelectedIndividualName(broker?.broker_name ?? "");
-      setSelectedProperties(Array.isArray(broker?.properties) ? broker.properties : []);
+      setSelectedProperties(
+        Array.isArray(broker?.properties) ? broker.properties : []
+      );
       setIsPropertiesPopupOpen(true);
       setIsBrokersPopupOpen(false); // Close the brokers list popup
     },
@@ -200,21 +240,22 @@ const AgenciesHistory = () => {
           if (!Array.isArray(brokers) || brokers.length === 0) {
             return "لا يوجد";
           }
-          // Defensive: expect broker object has 'broker_name'
-          const brokerNames = brokers
-          .map((broker) =>
-              broker
-            )
-            console.log(brokerNames);
+          // --- FIX: Map to broker_name, not the object ---
+          const brokerNames = brokers.map((broker) => broker).filter(Boolean); // Remove any empty strings
 
+          if (brokerNames.length === 0) {
+            return "لا يوجد";
+          }
 
           return (
             <Button
-              onClick={() => handleBrokersClick(brokers, row.original?.name ?? "")}
+              onClick={() =>
+                handleBrokersClick(brokers, row.original?.name ?? "")
+              }
               className=" underline !bg-transparent !text-golden-bold"
             >
               {brokerNames.length > 1
-                ? `${brokerNames[0]} +${brokerNames.slice(1).length }`
+                ? `${brokerNames[0]} +${brokerNames.slice(1).length}`
                 : brokerNames[0]}
             </Button>
           );
@@ -236,13 +277,20 @@ const AgenciesHistory = () => {
                 : ""
             )
             .filter(Boolean);
+
+          if (realtorNames.length === 0) {
+            return "لا يوجد";
+          }
+
           return (
             <Button
-              onClick={() => handleRealtorsClick(realtors, row.original?.name ?? "")}
+              onClick={() =>
+                handleRealtorsClick(realtors, row.original?.name ?? "")
+              }
               className=" underline !bg-transparent !text-golden-bold"
             >
               {realtorNames.length > 1
-                ? `${realtorNames[0]} +${realtorNames.slice(1).length }`
+                ? `${realtorNames[0]} +${realtorNames.slice(1).length}`
                 : realtorNames[0]}
             </Button>
           );
@@ -254,6 +302,7 @@ const AgenciesHistory = () => {
         size: 15,
       },
     ],
+    // --- Added handleBrokerNameClick to dependency array ---
     [handleBrokersClick, handleRealtorsClick, handleBrokerNameClick]
   );
 
@@ -265,13 +314,97 @@ const AgenciesHistory = () => {
             <h1 className="text-size24 sm:text-size30 font-medium mb-md sm:mb-xl text-center sm:text-right">
               تقرير الوكالات
             </h1>
-            <div>
+
+            {/* --- Filter and Search Container --- */}
+            <div className="flex items-end gap-4 relative" ref={filterRef}>
+              {/* Filter Button */}
+              <Button
+                onClick={() => setIsFilterOpen((prev) => !prev)}
+                className="!rounded-md !text-primary-fg bg-white !h-9 !text-[14px] flex items-center gap-y-xs px-4 py-2 border border-transparent "
+              >
+                <p className="font-medium text-[14px]">الفلتر</p>
+                <ListFilterPlus className="size-4 ml-1" />
+              </Button>
+
+              {/* Filter Dropdown */}
+              {isFilterOpen && (
+                <div className="absolute top-full right-0 mt-2 w-52 h-auto px-6 py-2 bg-white border border-gray-300 rounded shadow-md z-50 text-[14px] space-y-2">
+                  <div>
+                    <span className="font-medium text-gray-700 text-right block ">
+                      البحث من :
+                    </span>
+                    <Select
+                      form={form}
+                      name="start_month"
+                      label="الشهر"
+                      placeholder="اختر الشهر"
+                      choices={MONTHS}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px]"
+                      onChange={(value: string) =>
+                        setStartMonth(parseInt(value) || null)
+                      }
+                    />
+                    <Select
+                      form={form}
+                      name="start_year"
+                      label="السنة"
+                      placeholder="اختر السنة"
+                      choices={years}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px] mt-1"
+                      onChange={(value: string) =>
+                        setStartYear(parseInt(value) || null)
+                      }
+                    />
+                  </div>
+
+                  <div className="font-medium text-gray-500">إلى :</div>
+
+                  <div>
+                    <Select
+                      form={form}
+                      name="end_month"
+                      label="الشهر"
+                      placeholder="اختر الشهر"
+                      choices={MONTHS}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px] "
+                      labelStyle="!text-[12px]"
+                      onChange={(value: string) =>
+                        setEndMonth(parseInt(value) || null)
+                      }
+                    />
+                    <Select
+                      form={form}
+                      name="end_year"
+                      label="السنة"
+                      placeholder="اختر السنة"
+                      choices={years}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px] mt-1"
+                      onChange={(value: string) =>
+                        setEndYear(parseInt(value) || null)
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Existing Search Input */}
               <Input
                 placeholder="ابحث عن اسم الوكالة أو ايميل الوكالة أو رقم الهاتف الوكالة"
                 type="search"
                 variant="white"
                 iconClassName="text-gray-400/50 h-[18px] w-[18px] "
-                className="w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm "
+                className="w-90 bg-white !h-9 !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm "
                 value={search}
                 onChange={(e) => setSearch(e.target.value || null)}
               />
@@ -301,28 +434,29 @@ const AgenciesHistory = () => {
             {selectedAgencyName}
           </h1>
           <div className="flex flex-col">
-            {(Array.isArray(selectedBrokers) ? selectedBrokers : []).map((broker, index) => (
-              <Button
-                key={index}
-                onClick={() => handleBrokerNameClick(broker)}
-                className="
-                  !bg-transparent
-                  w-full justify-center
-                  !text-black
-                  font-medium
-                  py-3
-                  hover:!bg-gray-100
-                  !rounded-none
-                "
-              >
-                {/* Defensive: Show broker_name, fallback empty string */}
-                {broker}
-              </Button>
-            ))}
+            {(Array.isArray(selectedBrokers) ? selectedBrokers : []).map(
+              (broker, index) => (
+                <Button
+                  key={index}
+                  onClick={() => handleBrokerNameClick(broker)}
+                  className="
+                    !bg-transparent
+                    w-full justify-center
+                    !text-black
+                    font-medium
+                    py-3
+                    hover:!bg-gray-100
+                    !rounded-none
+                  "
+                >
+                  {broker}
+                </Button>
+              )
+            )}
           </div>
         </Popup>
 
-        {/* Realtor Properties Popup */}
+        {/* Properties Popup (for both Brokers and Realtors) */}
         <Popup
           open={isPropertiesPopupOpen}
           onClose={() => setIsPropertiesPopupOpen(false)}
@@ -332,9 +466,10 @@ const AgenciesHistory = () => {
           </h1>
           <div className="w-full overflow-x-auto">
             <DataTable
+              report={true}
               columns={propertiesColumns}
               data={Array.isArray(selectedProperties) ? selectedProperties : []}
-              prefix={TABLE_PREFIXES.agencies_history}
+              prefix={TABLE_PREFIXES.agencies_history_properties}
             />
           </div>
         </Popup>
@@ -348,42 +483,31 @@ const AgenciesHistory = () => {
             {selectedAgencyName}
           </h1>
           <div className="flex flex-col">
-            {(Array.isArray(selectedRealtors) ? selectedRealtors : []).map((realtor, index) => (
-              <Button
-                key={index}
-                onClick={() => handleRealtorNameClick(realtor)}
-                className="
-                  !bg-transparent
-                  w-full justify-center
-                  !text-black
-                  font-medium
-                  py-3
-                  hover:!bg-gray-100
-                  !rounded-none
-                "
-              >
-                {typeof realtor === "object" && realtor !== null ? realtor.realtor_name : ""}
-              </Button>
-            ))}
+            {(Array.isArray(selectedRealtors) ? selectedRealtors : []).map(
+              (realtor, index) => (
+                <Button
+                  key={index}
+                  onClick={() => handleRealtorNameClick(realtor)}
+                  className="
+                    !bg-transparent
+                    w-full justify-center
+                    !text-black
+                    font-medium
+                    py-3
+                    hover:!bg-gray-100
+                    !rounded-none
+                  "
+                >
+                  {typeof realtor === "object" && realtor !== null
+                    ? realtor.realtor_name
+                    : ""}
+                </Button>
+              )
+            )}
           </div>
         </Popup>
 
-        {/* Realtor Properties Popup (duplicate, but with correct properties key) */}
-        <Popup
-          open={isPropertiesPopupOpen}
-          onClose={() => setIsPropertiesPopupOpen(false)}
-        >
-          <h1 className="text-center border-b-2 mb-3 p-1 !text-primary">
-            {selectedAgencyName} - {selectedIndividualName}
-          </h1>
-          <div className="w-full overflow-x-auto">
-            <DataTable
-              columns={propertiesColumns}
-              data={Array.isArray(selectedProperties) ? selectedProperties : []}
-              prefix={TABLE_PREFIXES.agencies_history_properties}
-            />
-          </div>
-        </Popup>
+        {/* --- Removed the duplicated popup that was here --- */}
       </PageContainer>
     </AnimateContainer>
   );

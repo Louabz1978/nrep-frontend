@@ -15,4 +15,4 @@ export const urlSchema = Joi.string().regex(
 export type TEmpty = null | undefined;
 export type TString = string | null | undefined;
 export type TNumber = number | null | undefined;
-export type TOption = { value: string; [key: string]: unknown } | TEmpty;
+export type TOption = { value: string | number; [key: string]: unknown } | TEmpty;
