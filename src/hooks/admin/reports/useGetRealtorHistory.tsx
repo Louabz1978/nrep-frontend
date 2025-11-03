@@ -5,33 +5,58 @@ import getSearchParams from "@/utils/getSearchParams";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import getRealtorHistory from "@/api/admin/reports/getRealtorHistory";
 
-type Filters = Record<string, string | number | undefined | null> | undefined;
+// --- NEW: Define props type to match Agencies hook ---
+// This will accept the filter values passed from the component
+type UseGetRealtorHistoryProps = {
+  start_month: number;
+  start_year: number;
+  end_month: number;
+  end_year: number;
+  search: string;
+};
 
-function useGetRealtorHistory(Params?: Filters) {
+// --- MODIFIED: Accept props ---
+function useGetRealtorHistory({
+  start_month,
+  start_year,
+  end_month,
+  end_year,
+  search,
+}: UseGetRealtorHistoryProps) {
   const searchParams = useOptimisticSearchParams();
+  // This will get pagination params like page, limit
   const queryParams = getSearchParams(
     searchParams,
     `${TABLE_PREFIXES.realtor_history}_`
   );
-  const finalParamsRaw = { ...queryParams, ...(Params || {}) } as Record<string, unknown>;
-  const finalParams: Record<string, string> = {};
-  Object.entries(finalParamsRaw).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      finalParams[key] = String(value);
-    }
-  });
 
   const getRealtorHistoryQuery = useQuery({
+    // --- MODIFIED: Add all filter params to queryKey ---
     queryKey: [
-      QUERY_KEYS?.admin_reports.realtor_history,JSON.stringify(finalParams),
+      QUERY_KEYS?.admin_reports.realtor_history,
+      start_month,
+      start_year,
+      end_month,
+      end_year,
+      search,
+      JSON.stringify(queryParams),
     ],
-    queryFn: () => getRealtorHistory({ queryParams: { ...finalParams } }),
+    // --- MODIFIED: Pass all params to the API function ---
+    queryFn: () =>
+      getRealtorHistory({
+        start_month,
+        start_year,
+        end_month,
+        end_year,
+        search,
+        queryParams: { ...queryParams }, // This passes page, limit, etc.
+      }),
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   // final data
-  const realtorHistory = getRealtorHistoryQuery.data
+  const realtorHistory = getRealtorHistoryQuery.data;
 
   return {
     getRealtorHistoryQuery,

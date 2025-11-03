@@ -2,7 +2,7 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgencyReport } from "@/types/admin/reports";
 import useGetTopAgencies from "@/hooks/admin/reports/useGetTopAgencies";
@@ -51,8 +51,10 @@ const TopAgencies = () => {
     );
   }, [isCurrentYear, currentMonth]);
 
-  
-  const { topAgenciesQuery, topAgencies } = useGetTopAgencies({ month, year });
+  const { topAgenciesQuery, topAgencies } = useGetTopAgencies({
+    month: String(month),
+    year: String(year),
+  });
 
   const columns: ColumnDef<TopAgencyReport>[] = useMemo(
     () => [

@@ -15,9 +15,14 @@ import Settings from "@/components/global/settings/Settings";
 import Navbar from "../navbar/Navbar";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { HiOutlineMenu, HiOutlineChevronDown } from "react-icons/hi";
-import { Button } from "@/components/global/form/button/Button";
 import { generateReadablePDF } from "@/utils/generatePDF";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
+import { FaPrint } from "react-icons/fa6";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/global/tooltip/Tooltiop";
 
 type UserProps = {
   user: ReturnType<typeof useUser>["user"];
@@ -234,15 +239,6 @@ function Header() {
 
       {/* left area */}
       <div className="flex items-center gap-xl text-quaternary-fg">
-        <div>
-          <Button
-            disabled={isPrinting}
-            onClick={handlePrintClick}
-            className="!bg-golden-medium"
-          >
-            طباعة PDF
-          </Button>
-        </div>
         <div className="relative lg:w-[352px] md:w-[250px] w-[200px]">
           <input
             type="number"
@@ -274,6 +270,14 @@ function Header() {
 
         {/* icons */}
         <div className="flex items-center gap-lg">
+          <div className="cursor-pointer" onClick={handlePrintClick}>
+            <Tooltip>
+              <TooltipTrigger>
+                <FaPrint className="size-[21px] cursor-pointer mt-2 ml-2" />
+              </TooltipTrigger>
+              <TooltipContent> PDF طباعة </TooltipContent>
+            </Tooltip>
+          </div>
           {/* login / user info */}
           {user ? (
             <Popover>
@@ -284,10 +288,12 @@ function Header() {
                 align="start"
                 className="bg-tertiary-bg mt-md p-0 border-none shadow-2xl flex flex-col"
               >
-                <div className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary">
-                  <span>الملف الشخصي</span>
-                  <PiUser />
-                </div>
+                <Link to="/admin/profile">
+                  <div className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary">
+                    <span>الملف الشخصي</span>
+                    <PiUser />
+                  </div>
+                </Link>
                 {isRealtor ? (
                   <Link
                     to={"/"}

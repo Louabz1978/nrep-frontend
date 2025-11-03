@@ -47,13 +47,6 @@ function useGetagenciesHistory({
       }),
     retry: false,
     refetchOnWindowFocus: false,
-    // --- MODIFIED: Prevent query unless all required params are present ---
-    enabled: !!(
-      start_month &&
-      start_year &&
-      end_month &&
-      end_year
-    ),
   });
 
   // final data
