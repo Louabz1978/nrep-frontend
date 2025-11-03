@@ -261,7 +261,7 @@ const router = createBrowserRouter([
         element: <AreasList />,
       },
       {
-        path: "profile/:id",
+        path: "profile",
         element: <ProfilePage />,
       },
       {

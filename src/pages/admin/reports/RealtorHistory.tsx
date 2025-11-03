@@ -14,11 +14,7 @@ import { MONTHS } from "@/data/global/months";
 import Select from "@/components/global/form/select/Select";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import {
-  realtorFilterFormInitialValues,
-  realtorFilterFormSchema,
-  type RealtorFilterForm,
-} from "@/data/admin/schema/RealtorsFilterForm";
+import { filterFormInitialValues, filterFormSchema, type FilterForm } from "@/data/admin/schema/FilterForm";
 
 type RawRealtorHistory = {
   agent_id: number;
@@ -50,9 +46,9 @@ const RealtorHistory = () => {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
-  const form = useForm<RealtorFilterForm>({
-    resolver: joiResolver(realtorFilterFormSchema),
-    defaultValues: realtorFilterFormInitialValues,
+  const form = useForm<FilterForm>({
+    resolver: joiResolver(filterFormSchema),
+    defaultValues: filterFormInitialValues,
     mode: "onChange",
   });
 

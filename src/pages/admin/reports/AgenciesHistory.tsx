@@ -19,14 +19,17 @@ import { ListFilterPlus } from "lucide-react";
 import { MONTHS } from "@/data/global/months";
 import Select from "@/components/global/form/select/Select";
 import { useForm } from "react-hook-form";
-import { filterFormInitialValues, filterFormSchema, type FilterForm } from "@/data/admin/schema/AgenciesFilterForm";
+import {
+  filterFormInitialValues,
+  filterFormSchema,
+  type FilterForm,
+} from "@/data/admin/schema/FilterForm";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 // Define the type for a single property item from the response
 type PropertyItem = AgenciesHistoryReport["realtors"][0]["properties"][0];
 
 const AgenciesHistory = () => {
-
   const [search, setSearch] = useQueryState(
     `${TABLE_PREFIXES.agencies_history}_search`,
     parseAsString.withDefault("")
@@ -53,13 +56,11 @@ const AgenciesHistory = () => {
   // --- State for Filter (from BrokerHistory) ---
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
-  const form = useForm<FilterForm>(
-    {
-      resolver: joiResolver(filterFormSchema),
-      defaultValues: filterFormInitialValues,
-      mode: "onChange",
-    }
-  );
+  const form = useForm<FilterForm>({
+    resolver: joiResolver(filterFormSchema),
+    defaultValues: filterFormInitialValues,
+    mode: "onChange",
+  });
 
   // --- Data for Filter (from BrokerHistory) ---
   const currentYear = new Date().getFullYear();

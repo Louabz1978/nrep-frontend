@@ -3,12 +3,16 @@ import ImagesInput from "@/components/global/form/imagesInput/ImagesInput";
 import Input from "@/components/global/form/input/Input";
 import AnimateContainer from "@/components/global/pageContainer/AnimateContainer";
 import PageContainer from "@/components/global/pageContainer/PageContainer";
-import { profileInitialValues, profileSchema, type Profile } from "@/data/admin/schema/profileSchema";
+import {
+  profileInitialValues,
+  profileSchema,
+  type Profile,
+} from "@/data/admin/schema/profileSchema";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { LogOut } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { BiCamera, BiUser } from "react-icons/bi";
-
+import { FiExternalLink } from "react-icons/fi";
 
 // Mock data for the contacts list on the left, as seen in the design
 const mockContacts = [
@@ -39,74 +43,27 @@ const ProfilePage = () => {
       <PageContainer>
         {/* Page Header */}
         <div className="mb-6 text-right">
-          <h1 className="text-3xl font-bold text-gray-800">ملفي الشخصي</h1>
-          <p className="mt-2 text-gray-500">
+          <h1 className="text-3xl font-bold">ملفي الشخصي</h1>
+          <p className="mt-2">
             يتم عرض جميع المعلومات الشخصية المضافة مع إمكانية التعديل مباشرة
           </p>
         </div>
-        <hr className="mb-8 border-gray-200" />
+        <hr className="mb-8" />
 
         {/* Main Content Grid (Left Sidebar + Right Form) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8" dir="rtl">
-          {/* Left Sidebar */}
-          <aside className="lg:col-span-1 bg-gray-50 p-6 rounded-xl shadow-sm h-fit">
-            <div className="flex flex-col items-center">
-              {/* Avatar/Image Input */}
-              <div className="relative mb-4">
-                <ImagesInput
-                  form={form}
-                  name="image_url"
-                  className="!w-32 !h-32 !rounded-full !border-4 !border-white !shadow-lg"
-                />
-                <label
-                  htmlFor="image_url"
-                  className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow cursor-pointer"
-                >
-                  <BiCamera className="w-4 h-4 text-gray-600" />
-                </label>
-              </div>
-
-              {/* User Info */}
-              <h2 className="text-xl font-semibold text-gray-800">
-                {fullName || "اسم المستخدم"}
-              </h2>
-              <p className="text-gray-500">وسيط عقاري</p>
-            </div>
-
-            <hr className="my-6 border-gray-200" />
-
-            {/* Contacts List (Mocked from design) */}
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-gray-700">جهات الاتصال</h3>
-                <a href="#" className="text-sm text-teal-600 font-medium">
-                  عرض الكل
-                </a>
-              </div>
-              <div className="space-y-4">
-                {mockContacts.map((contact) => (
-                  <div key={contact.id} className="flex items-center gap-3">
-                    <span className="bg-gray-200 p-2 rounded-full">
-                      <BiUser className="w-5 h-5 text-gray-500" />
-                    </span>
-                    <span className="text-gray-700">{contact.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </aside>
-
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 " dir="rtl">
           {/* Right Content (The Form) */}
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="lg:col-span-2"
+            className="lg:col-span-3 bg-[var(--card-bg)] p-6xl rounded-2xl"
           >
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-right">
               معلوماتي الشخصية
             </h2>
+            <hr />
 
             {/* Form Fields Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mt-3xl">
               <Input
                 form={form}
                 name="full_name"
@@ -161,32 +118,71 @@ const ProfilePage = () => {
 
             {/* Form Actions */}
             <div className="flex flex-col md:flex-row justify-between items-center mt-10 gap-4">
-              <a
-                href="#"
-                className="flex items-center gap-2 text-gray-600 hover:text-teal-600 font-medium"
-              >
-                <LogOut className="w-4 h-4" />
-                تغيير كلمة المرور
-              </a>
-
               <div className="flex items-center gap-4">
+                <Button
+                  type="submit"
+                  className="!bg-primary !text-white hover:!bg-primary"
+                >
+                  حفظ التعديل
+                </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => form.reset(profileInitialValues)}
-                  className="!bg-white !text-red-600 !border !border-red-600 hover:!bg-red-50"
+                  className="!bg-white !text-umber-light !border !border-umber-light hover:!text-umber-light hover:!bg-white"
                 >
                   إعادة تعيين
                 </Button>
-                <Button
-                  type="submit"
-                  className="!bg-teal-600 !text-white hover:!bg-teal-700"
-                >
-                  حفظ التعديل
-                </Button>
               </div>
+              <a
+                href="#"
+                className="flex items-center gap-2 text-primary border-b-2  font-medium"
+              >
+                تغيير كلمة المرور
+                <LogOut className="w-4 h-4" />
+              </a>
             </div>
           </form>
+          {/* Left Sidebar */}
+          <div className="lg:col-span-1 w-[320px]">
+            <div className="flex flex-col items-center bg-[var(--card-bg)] rounded-2xl p-xl">
+              <ImagesInput
+                form={form}
+                name="image_url"
+                className="relative mb-4 !w-32 !h-32 !rounded-full !border-4 !border-white !shadow-lg !flex"
+              />
+
+              {/* User Info */}
+              <h2 className="text-xl font-semibold">
+                {fullName || "اسم المستخدم"}
+              </h2>
+              <p className="text-golden-medium font-semibold">وسيط عقاري</p>
+            </div>
+
+            {/* Contacts List (Mocked from design) */}
+            <div className="bg-[var(--card-bg)] mt-3xl p-5xl rounded-2xl">
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold">جهات الاتصال</h3>
+                  <Button >
+                    عرض الكل
+                    <FiExternalLink />
+                  </Button>
+                </div>
+                <hr className="mb-4xl" />
+                <div className="space-y-4">
+                  {mockContacts.map((contact) => (
+                    <div key={contact.id} className="flex items-center gap-3">
+                      <span className=" p-2 rounded-full">
+                        <BiUser className="w-5 h-5" />
+                      </span>
+                      <span className="">{contact.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </PageContainer>
     </AnimateContainer>
