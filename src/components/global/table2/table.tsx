@@ -226,7 +226,7 @@ export function DataTable<TData, TValue, TRow>({
                                     <ListFilterPlus className="size-xl ml-xs" />
                                   </Button>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-[180px] p-md rounded-sm bg-tertiary-bg border-0 shadow-[#00000040] shadow-2xl">
+                                <PopoverContent side="bottom" align="center" sideOffset={6} className="w-[300px] h-[400px] p-md rounded-sm bg-tertiary-bg border-0 shadow-[#00000040] shadow-2xl overflow-auto">
                                   <p className="mb-lg">{"الفلتر"}</p>
 
                                   {filters.map((f) => {

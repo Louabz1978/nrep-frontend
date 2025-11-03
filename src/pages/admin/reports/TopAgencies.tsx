@@ -2,35 +2,56 @@ import AnimateContainer from "@/components/global/pageContainer/AnimateContainer
 import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable } from "@/components/global/table2/table";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgencyReport } from "@/types/admin/reports";
 import useGetTopAgencies from "@/hooks/admin/reports/useGetTopAgencies";
 import { Input } from "@/components/global/ui/input";
+import { useForm, useWatch } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
 import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/global/ui/select";
+  topAgenciesReportFormSchema,
+  topAgenciesReportInitialValues,
+  type TopAgenciesReportFormType,
+} from "@/data/admin/schema/TopAgenciesReportSchema";
+import Select from "@/components/global/form/select/Select";
 
-const months = Array.from({ length: 12 }, (_, i) => ({
+const monthsChoices = Array.from({ length: 12 }, (_, i) => ({
   value: String(i + 1),
   label: `الشهر: ${i + 1}`,
 }));
 
-const currentYear = new Date().getFullYear();
-const years = [currentYear - 1, currentYear, currentYear + 1].map((y) => ({
+const now = new Date();
+const baseYear = now.getFullYear();
+const yearsChoices = [baseYear - 1, baseYear].map((y) => ({
   value: String(y),
   label: `السنة: ${y}`,
 }));
 
 const TopAgencies = () => {
-  const now = new Date();
-  const [month, setMonth] = useState(String(now.getMonth() + 1));
-  const [year, setYear] = useState(String(now.getFullYear()));
+  const form = useForm<TopAgenciesReportFormType>({
+    resolver: joiResolver(topAgenciesReportFormSchema),
+    defaultValues: topAgenciesReportInitialValues,
+    mode: "onChange",
+  });
 
+  const Month = useWatch({ control: form.control, name: "month" });
+  const Year = useWatch({ control: form.control, name: "year" });
+
+  console.log(Month)
+  const month = Month?.value ?? String(now.getMonth() + 1);
+  const year = Year?.value ?? String(now.getFullYear());
+
+  const currentMonth = now.getMonth() + 1;
+  const isCurrentYear = year === String(baseYear);
+
+  const filteredMonthsChoices = useMemo(() => {
+    return monthsChoices.filter((m) =>
+      isCurrentYear ? Number(m.value) <= currentMonth : true
+    );
+  }, [isCurrentYear, currentMonth]);
+
+  
   const { topAgenciesQuery, topAgencies } = useGetTopAgencies({ month, year });
 
   const columns: ColumnDef<TopAgencyReport>[] = useMemo(
@@ -74,31 +95,27 @@ const TopAgencies = () => {
             </div>
 
             <div className="flex gap-2 items-center">
-              <Select value={month} onValueChange={(val) => setMonth(val)}>
-                <SelectTrigger className="bg-white h-9 p-1 rounded-xl border border-gray-300 w-[110px]">
-                  <SelectValue placeholder="اختر الشهر" />
-                </SelectTrigger>
-                <SelectContent>
-                  {months.map((m) => (
-                    <SelectItem key={m.value} value={m.value}>
-                      {m.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Select
+                form={form}
+                name="month"
+                placeholder="اختر الشهر"
+                choices={filteredMonthsChoices}
+                showValue="label"
+                keyValue="value"
+                addingSelectStyle="min-w-[140px]"
+                addingInputStyle="!h-9 !py-0 !px-2 bg-white border border-gray-300 rounded-xl"
+              />
 
-              <Select value={year} onValueChange={(val) => setYear(val)}>
-                <SelectTrigger className="bg-white h-9 p-1 rounded-xl border border-gray-300 w-[110px]">
-                  <SelectValue placeholder="اختر السنة" />
-                </SelectTrigger>
-                <SelectContent>
-                  {years.map((y) => (
-                    <SelectItem key={y.value} value={y.value}>
-                      {y.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Select
+                form={form}
+                name="year"
+                placeholder="اختر السنة"
+                choices={yearsChoices}
+                showValue="label"
+                keyValue="value"
+                addingSelectStyle="min-w-[140px]"
+                addingInputStyle="!h-9 !py-0 !px-2 bg-white border border-gray-300 rounded-xl"
+              />
             </div>
           </div>
         </div>

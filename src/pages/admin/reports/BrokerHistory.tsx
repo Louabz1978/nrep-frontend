@@ -7,6 +7,15 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { BrokerHistoryReport } from "@/types/admin/reports";
 import { Input } from "@/components/global/ui/input";
 import useGetBrokerHistory from "@/hooks/admin/reports/useGetBrokerHistory";
+import { useForm, useWatch } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
+import Select from "@/components/global/form/select/Select";
+import {
+  brokerHistoryReportFormSchema,
+  brokerHistoryReportInitialValues,
+  type BrokerHistoryReportFormType,
+} from "@/data/admin/schema/BrokerHistoryReportSchema";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type RawBrokerHistory = {
   agent_id: number;
@@ -31,8 +40,7 @@ type RawBrokerHistory = {
 };
 
 const BrokerHistory = () => {
-  const { brokerHistory, brokerHistoryQuery } =
-    useGetBrokerHistory<RawBrokerHistory[]>();
+  const { brokerHistory, brokerHistoryQuery } = useGetBrokerHistory();
 
   const [activeTab, setActiveTab] = useState("apartments");
 
@@ -71,28 +79,24 @@ const BrokerHistory = () => {
   );
 
   const filteredData: BrokerHistoryReport[] = useMemo(() => {
-    if (!brokerHistory) return [];
+    if (!Array.isArray(brokerHistory)) return [];
 
     const currentKeys = keyMap[activeTab];
     if (!currentKeys) return [];
-    console.log(brokerHistory)
-    return brokerHistory
+    return (brokerHistory as RawBrokerHistory[])
       .filter((user) => user.role === "broker")
       .map((broker) => ({
         broker_id: broker.agent_id,
         broker_name: broker.agent_name,
-        license_number: broker.license_number,
-        number_of_sales: broker[currentKeys.sales] ?? 0,
-        total_sales: broker[currentKeys.total] ?? 0,
+        license_number: broker.license_number ?? "",
+        action_type: "",
+        action_date: "",
+        number_of_sales: Number(broker[currentKeys.sales] ?? 0),
+        total_sales: Number(broker[currentKeys.total] ?? 0),
       }));
   }, [brokerHistory, activeTab, keyMap]); 
 
-  const modifiedQuery = useMemo(() => {
-    return {
-      ...brokerHistoryQuery, 
-      data: filteredData, 
-    };
-  }, [brokerHistoryQuery, filteredData]);
+  // keep original query for loading/error, pass transformed data separately
 
   const columns: ColumnDef<BrokerHistoryReport>[] = useMemo(
     () => [
@@ -144,6 +148,8 @@ const BrokerHistory = () => {
             </div>
           </div>
           <hr className="mt-2" />
+          {/* Filters: From/To month & year */}
+          <BrokerHistoryFilters />
         </div>
         {/* Tabs */}
         <div
@@ -172,8 +178,7 @@ const BrokerHistory = () => {
             report={true}
             prefix={TABLE_PREFIXES.broker_history}
             columns={columns}
-            // 5. Pass the MODIFIED query object
-            query={modifiedQuery}
+            query={brokerHistoryQuery}
             data={filteredData}
           />
         </div>
@@ -183,3 +188,115 @@ const BrokerHistory = () => {
 };
 
 export default BrokerHistory;
+
+// --- Filters subcomponent ---
+function BrokerHistoryFilters() {
+  const monthsChoices = Array.from({ length: 12 }, (_, i) => ({
+    value: String(i + 1),
+    label: `الشهر: ${i + 1}`,
+  }));
+  const now = new Date();
+  const baseYear = now.getFullYear();
+  const yearsChoices = [baseYear - 1, baseYear].map((y) => ({
+    value: String(y),
+    label: `السنة: ${y}`,
+  }));
+
+  const form = useForm<BrokerHistoryReportFormType>({
+    resolver: joiResolver(brokerHistoryReportFormSchema),
+    defaultValues: brokerHistoryReportInitialValues,
+    mode: "onChange",
+  });
+
+  const fromYear = useWatch({ control: form.control, name: "from_year" });
+  const toYear = useWatch({ control: form.control, name: "to_year" });
+  const currentMonth = now.getMonth() + 1;
+  const isCurrent = (y?: string) => y === String(baseYear);
+  const filterMonths = (y?: string) =>
+    isCurrent(y)
+      ? monthsChoices.filter((m) => Number(m.value) <= currentMonth)
+      : monthsChoices;
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const onSubmit = (values: BrokerHistoryReportFormType) => {
+    const params = new URLSearchParams();
+    const prefix = `${TABLE_PREFIXES.broker_history}_`;
+    if (values.from_month?.value)
+      params.set(`${prefix}from_month`, String(values.from_month.value));
+    if (values.from_year?.value)
+      params.set(`${prefix}from_year`, String(values.from_year.value));
+    if (values.to_month?.value)
+      params.set(`${prefix}to_month`, String(values.to_month.value));
+    if (values.to_year?.value)
+      params.set(`${prefix}to_year`, String(values.to_year.value));
+
+    navigate(`${location.pathname}?${params.toString()}`);
+  };
+
+  return (
+    <form
+      className="mt-lg bg-white p-md rounded-md flex flex-col gap-md"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-md">
+        <div className="flex flex-col gap-sm">
+          <p className="font-medium">البحث من :</p>
+          <div className="flex gap-sm">
+            <Select
+              form={form}
+              name="from_month"
+              placeholder="الشهر"
+              choices={filterMonths(fromYear?.value)}
+              showValue="label"
+              keyValue="value"
+              addingSelectStyle="min-w-[140px]"
+              addingInputStyle="!h-9 !py-0 !px-2 bg-white border border-gray-300 rounded-xl"
+            />
+            <Select
+              form={form}
+              name="from_year"
+              placeholder="السنة"
+              choices={yearsChoices}
+              showValue="label"
+              keyValue="value"
+              addingSelectStyle="min-w-[140px]"
+              addingInputStyle="!h-9 !py-0 !px-2 bg-white border border-gray-300 rounded-xl"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-sm">
+          <p className="font-medium">إلى :</p>
+          <div className="flex gap-sm">
+            <Select
+              form={form}
+              name="to_month"
+              placeholder="الشهر"
+              choices={filterMonths(toYear?.value)}
+              showValue="label"
+              keyValue="value"
+              addingSelectStyle="min-w-[140px]"
+              addingInputStyle="!h-9 !py-0 !px-2 bg-white border border-gray-300 rounded-xl"
+            />
+            <Select
+              form={form}
+              name="to_year"
+              placeholder="السنة"
+              choices={yearsChoices}
+              showValue="label"
+              keyValue="value"
+              addingSelectStyle="min-w-[140px]"
+              addingInputStyle="!h-9 !py-0 !px-2 bg-white border border-gray-300 rounded-xl"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-end">
+        <button type="submit" className="px-lg py-sm rounded-md bg-primary text-white">
+          تطبيق
+        </button>
+      </div>
+    </form>
+  );
+}

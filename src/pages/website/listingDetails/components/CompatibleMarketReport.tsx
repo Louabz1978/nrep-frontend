@@ -28,13 +28,12 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
         size: 20,
         cell: ({ row }) => {
           const mlsValue = row.getValue("address") as string;
-      
+
           const match = mlsValue.match(/\d+|\d+/);
-          
+
           return match ? match[0] : mlsValue;
         },
-      }
-      ,
+      },
       {
         accessorKey: "address",
         header: "العنوان",
@@ -96,10 +95,10 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
     ],
     []
   );
-  
-  const tableData = compatibleProperties?.data?.data?.Other ?? [];
-  console.log(tableData)
 
+  const tableData = compatibleProperties?.data?.data?.Other ?? [];
+  const ClosedData = compatibleProperties?.data?.data?.Closed ?? [];
+  console.log(tableData);
 
   return (
     <div className="p-6">
@@ -134,6 +133,16 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
           prefix={TABLE_PREFIXES.compatible_properties}
           columns={columns}
           data={tableData}
+          query={compatiblePropertiesQuery}
+        />
+        <h1 className="text-2xl font-semibold text-right my-5">
+          العقارات المغلقة
+        </h1>{" "}
+        <DataTable
+          report={true}
+          prefix={TABLE_PREFIXES.compatible_properties}
+          columns={columns}
+          data={ClosedData}
           query={compatiblePropertiesQuery}
         />
       </div>
