@@ -20,6 +20,7 @@ import { BiUser } from "react-icons/bi";
 import { FiExternalLink } from "react-icons/fi";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import OTPInput from "react-otp-input";
+import { Link } from "react-router-dom";
 
 // Mock data for the contacts list on the left, as seen in the design
 const mockContacts = [
@@ -40,6 +41,7 @@ const ProfilePage = () => {
   const [canResend, setCanResend] = useState(false);
 
   const { profileDetails } = useGetProfile();
+  // console.log(profileDetails);
 
   const form = useForm<Profile>({
     resolver: joiResolver(profileSchema),
@@ -47,17 +49,15 @@ const ProfilePage = () => {
     mode: "onChange",
   });
 
-  // --- ADDED USEEFFECT ---
-  // This effect will run when profileDetails is fetched.
-  // It uses form.reset() to populate all form fields with the data.
+  // Populate form when profileDetails fetched
   useEffect(() => {
     if (profileDetails) {
-      // Assuming the structure of profileDetails matches the 'Profile' type
       form.reset(profileDetails);
     }
-  }, [profileDetails, form.reset]);
-  // --- END OF ADDED USEEFFECT ---
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileDetails]);
 
+  // Timer effect for OTP resend
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -69,6 +69,11 @@ const ProfilePage = () => {
     }
   }, [timer]);
 
+  const email = form.watch("email");
+  const fullName =
+    (form.watch("first_name") ? form.watch("first_name") + " " : "") +
+    (form.watch("last_name") ?? "");
+
   const handleResend = async () => {
     setTimer(20);
     setCanResend(false);
@@ -79,17 +84,12 @@ const ProfilePage = () => {
     }
   };
 
-  const email = form.watch("email");
-
-  // Watch the full_name to display it live in the sidebar
-  const fullName = form.watch("full_name");
-
   const onSubmit: SubmitHandler<Profile> = (data) => {
     console.log("Profile Data:", data);
     // Handle profile update logic here
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePopupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (otp.length !== 4) {
       return;
@@ -136,9 +136,15 @@ const ProfilePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mt-3xl">
               <Input
                 form={form}
-                name="full_name"
-                label="الإسم الكامل"
-                placeholder="ادخل الإسم الكامل"
+                name="first_name"
+                label="الاسم الأول"
+                placeholder="ادخل الاسم الأول"
+              />
+              <Input
+                form={form}
+                name="last_name"
+                label="الاسم الأخير"
+                placeholder="ادخل الاسم الأخير"
               />
               <Input
                 form={form}
@@ -162,7 +168,7 @@ const ProfilePage = () => {
               <Input
                 form={form}
                 name="agency_email"
-                label="البريد الإلكتر الإلكتروني للشركة"
+                label="البريد الإلكتروني للشركة"
                 placeholder="ادخل البريد الإلكتروني للشركة"
               />
               <Input
@@ -178,12 +184,21 @@ const ProfilePage = () => {
                 label="عنوان الشركة"
                 placeholder="ادخل عنوان الشركة"
               />
-              <Input
-                form={form}
-                name="my_active_listings"
-                label="my activ listing" // Matching label from design
-                placeholder="ادخل..."
-              />
+
+              {/* 'my activ listing' field - Replaced with non-input div as requested */}
+              <div className="flex flex-col gap-y-2">
+                {/* Label */}
+                <label className="text-right text-sm font-medium text-gray-700">
+                  my activ listing
+                </label>
+                {/* Fake Input Box (matching image) */}
+                <div className="flex items-center mt-1 w-full h-10 px-4 py-2 bg-white rounded-lg border border-quaternary-border/50">
+                  {/* Placeholder Text */}
+                  <span className="w-full text-right text-gray-400">
+                    <Link to={"/listing/my-listings"}>4</Link>
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Form Actions */}
@@ -198,110 +213,26 @@ const ProfilePage = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => form.reset(profileDetails || profileInitialValues)}
+                  onClick={() =>
+                    form.reset(profileDetails || profileInitialValues)
+                  }
                   className="!bg-umber-light !text-white !border !border-umber-light hover:!text-white hover:!bg-umber-light"
                 >
                   إعادة تعيين
                 </Button>
               </div>
-              <a
-                href="#"
-                className="flex items-center gap-2 text-primary border-b-2  font-medium"
+              <button
+                type="button"
+                className="flex items-center gap-2 text-primary border-b-2 font-medium bg-transparent"
                 onClick={() => setOpen(true)}
               >
                 تغيير كلمة المرور
                 <LogOut className="w-4 h-4" />
-              </a>
+              </button>
             </div>
-            <Popup open={open} onClose={() => setOpen(false)}>
-              <div className="w-[410px] max-w-full gap-[16px] pb-2xl   rounded-[28px] flex flex-col items-center relative">
-                {/* Back Button */}
-                <button
-                  className="absolute top-4 left-4 w-8 h-8 rounded-lg border border-gray-300 flex items-center justify-center transition-colors"
-                  onClick={() => window.history.back()}
-                >
-                  <MdKeyboardArrowLeft />
-                </button>
-
-                <form
-                  id="login_form"
-                  className="w-full flex flex-col items-center"
-                  onSubmit={handleSubmit}
-                >
-                  <div className="w-[250px] flex flex-col gap-[24px]">
-                    <div className="w-full flex justify-start">
-                      <span className="text-size18 font-bold mt-2 text-center">
-                        الرجاء مراجعة البريد الالكتروني
-                      </span>
-                    </div>
-                    <OTPInput
-                      value={otp}
-                      onChange={setOtp}
-                      numInputs={4}
-                      renderInput={(props, index) => (
-                        <input
-                          {...props}
-                          onFocus={() => setActiveInput(index)}
-                          className={`w-12 h-12 rounded-lg border-2 text-center text-lg font-semibold focus:outline-none transition-colors ${
-                            index === activeInput
-                              ? "border-golden-medium bg-tertiary-bg"
-                              : "border-gray-300 bg-tertiary-bg"
-                          } ${props.value ? "border-golden-medium" : ""}`}
-                          style={{
-                            width: "48px",
-                            height: "48px",
-                          }}
-                        />
-                      )}
-                      containerStyle={{
-                        display: "flex",
-                        gap: "16px",
-                        justifyContent: "center",
-                      }}
-                    />
-
-                    {/* Email Display */}
-                    <div className="w-full text-center flex">
-                      <p className="text-sm text-gray-500">
-                        لقد أرسلنا كود على الايميل{" "}
-                        <span className="font-medium text-gray-700">
-                          {email}
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Resend Timer */}
-                    <div className="w-full text-center">
-                      {canResend ? (
-                        <button
-                          onClick={handleResend}
-                          className="text-sm font-semibold cursor-pointer"
-                        >
-                          أرسل الكود مرة أخرى
-                        </button>
-                      ) : (
-                        <p className="text-sm font-semibold">
-                          أرسل الكود مرة أخرى{" "}
-                          {String(Math.floor(timer / 60)).padStart(2, "0")}:
-                          {String(timer % 60).padStart(2, "0")}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="w-full flex flex-col">
-                      <Button
-                        type="submit"
-                        disabled={otp.length !== 4 || sendOpt.isPending}
-                        className="w-full py-4 d-block text-white shadow-md login-button bg-golden-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {sendOpt.isPending ? "جار التحقق..." : "تأكيد"}
-                      </Button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </Popup>
+            {/* POPUP REMOVED FROM HERE */}
           </form>
+
           {/* Left Sidebar */}
           <div className="lg:col-span-1">
             <div className="flex flex-col justify-center items-center bg-[var(--card-bg)] rounded-2xl p-xl">
@@ -309,12 +240,12 @@ const ProfilePage = () => {
                 form={form}
                 name="image_url"
                 profile={true}
-                className="relative mb-4 !w-32 !h-32 !rounded-full   !border-4 !border-white !shadow-lg !flex"
+                className="relative mb-4 !w-32 !h-32 !rounded-full !border-4 !border-white !shadow-lg !flex"
               />
 
               {/* User Info */}
               <h2 className="text-xl font-semibold">
-                {fullName || "اسم المستخدم"}
+                {fullName.trim() || "اسم المستخدم"}
               </h2>
               <p className="text-golden-medium font-semibold">وسيط عقاري</p>
             </div>
@@ -324,19 +255,21 @@ const ProfilePage = () => {
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-semibold">جهات الاتصال</h3>
-                  <Button>
-                    عرض الكل
-                    <FiExternalLink />
-                  </Button>
+                  <Link to={"/contact"}>
+                    <Button>
+                      عرض الكل
+                      <FiExternalLink />
+                    </Button>
+                  </Link>
                 </div>
                 <hr className="mb-4xl" />
                 <div className="space-y-4">
                   {mockContacts.map((contact) => (
                     <div key={contact.id} className="flex items-center gap-3">
-                      <span className=" p-2 rounded-full">
+                      <span className="p-2 rounded-full">
                         <BiUser className="w-5 h-5" />
                       </span>
-                      <span className="">{contact.name}</span>
+                      <span>{contact.name}</span>
                     </div>
                   ))}
                 </div>
@@ -344,6 +277,99 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+
+        {/* POPUP MOVED HERE - Outside the main form */}
+        <Popup open={open} onClose={() => setOpen(false)}>
+          <div className="w-[410px] max-w-full gap-[16px] pb-2xl rounded-[28px] flex flex-col items-center relative">
+            {/* Back Button */}
+            <button
+              className="absolute top-4 left-4 w-8 h-8 rounded-lg border border-gray-300 flex items-center justify-center transition-colors"
+              type="button"
+              onClick={() => setOpen(false)}
+            >
+              <MdKeyboardArrowLeft />
+            </button>
+
+            <form
+              id="login_form"
+              className="w-full flex flex-col items-center"
+              onSubmit={handlePopupSubmit}
+            >
+              <div className="w-[250px] flex flex-col gap-[24px]">
+                <div className="w-full flex justify-start">
+                  <span className="text-size18 font-bold mt-2 text-center">
+                    الرجاء مراجعة البريد الالكتروني
+                  </span>
+                </div>
+                <OTPInput
+                  value={otp}
+                  onChange={setOtp}
+                  numInputs={4}
+                  renderInput={(props, index) => (
+                    <input
+                      {...props}
+                      onFocus={() => setActiveInput(index)}
+                      className={`w-12 h-12 rounded-lg border-2 text-center text-lg font-semibold focus:outline-none transition-colors ${
+                        index === activeInput
+                          ? "border-golden-medium bg-tertiary-bg"
+                          : "border-gray-300 bg-tertiary-bg"
+                      } ${props.value ? "border-golden-medium" : ""}`}
+                      style={{
+                        width: "48px",
+                        height: "48px",
+                      }}
+                    />
+                  )}
+                  containerStyle={{
+                    display: "flex",
+                    gap: "16px",
+                    justifyContent: "center",
+                  }}
+                />
+
+                {/* Email Display */}
+                <div className="w-full text-center flex justify-center">
+                  <p className="text-sm text-gray-500">
+                    لقد أرسلنا كود على الايميل{" "}
+                    <span className="font-medium text-gray-700">
+                      {email}
+                    </span>
+                  </p>
+                </div>
+
+                {/* Resend Timer */}
+                <div className="w-full text-center">
+                  {canResend ? (
+                    <button
+                      type="button"
+                      onClick={handleResend}
+                      className="text-sm font-semibold cursor-pointer bg-transparent"
+                    >
+                      أرسل الكود مرة أخرى
+                    </button>
+                  ) : (
+                    <p className="text-sm font-semibold">
+                      أرسل الكود مرة أخرى{" "}
+                      {String(Math.floor(timer / 60)).padStart(2, "0")}
+                      :
+                      {String(timer % 60).padStart(2, "0")}
+                    </p>
+                  )}
+                </div>
+
+                <div className="w-full flex flex-col">
+                  <Button
+                    type="submit"
+                    disabled={otp.length !== 4 || sendOpt.isPending}
+                    className="w-full py-4 d-block text-white shadow-md login-button bg-golden-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {sendOpt.isPending ? "جار التحقق..." : "تأكيد"}
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </Popup>
       </PageContainer>
     </AnimateContainer>
   );

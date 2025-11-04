@@ -16,7 +16,11 @@ import Navbar from "../navbar/Navbar";
 import { tabs, type TabType } from "@/data/website/navbar";
 import { HiOutlineMenu, HiOutlineChevronDown } from "react-icons/hi";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/global/tooltip/Tooltiop";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/global/tooltip/Tooltiop";
 import { FaPrint } from "react-icons/fa6";
 import { generateReadablePDF } from "@/utils/generatePDF";
 
@@ -246,7 +250,10 @@ function Header() {
 
         {/* icons */}
         <div className="flex items-center gap-lg">
-        <div className="cursor-pointer" onClick={() => generateReadablePDF("document.pdf")}>
+          <div
+            className="cursor-pointer"
+            onClick={() => generateReadablePDF("document.pdf")}
+          >
             <Tooltip>
               <TooltipTrigger>
                 <FaPrint className="size-[21px] cursor-pointer mt-2 ml-2" />
@@ -264,10 +271,12 @@ function Header() {
                 align="start"
                 className="bg-tertiary-bg mt-md p-0 border-none shadow-2xl flex flex-col"
               >
-                <div className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary">
-                  <span>الملف الشخصي</span>
-                  <PiUser />
-                </div>
+                <Link to={"/profile"}>
+                  <div className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary">
+                    <span>الملف الشخصي</span>
+                    <PiUser />
+                  </div>
+                </Link>
                 {isAdmin ? (
                   <Link
                     to={"/admin"}
