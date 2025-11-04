@@ -56,6 +56,10 @@ const QUERY_KEYS = {
     query: "counties",
     details: "county-details",
   },
+  profile:{
+    query:"profile",
+    details:"profile-details"
+  }
 };
 
 export default QUERY_KEYS;

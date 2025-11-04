@@ -82,7 +82,7 @@ export const profileSchema = Joi.object<Profile>({
 
 export const profileInitialValues: Profile = {
   full_name: null,
-  email: null,
+  email: "humamsafi20@gmail.com",
   license: null,
   agency_name: null,
   agency_email: null,
