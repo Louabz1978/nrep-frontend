@@ -3,7 +3,8 @@ import type { TNumber, TString } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 
 export type Profile = {
-  full_name: TString;
+  first_name: TString;
+  last_name: TString;
   email: TString;
   license: TNumber;
   agency_name: TString;
@@ -15,8 +16,14 @@ export type Profile = {
 };
 
 export const profileSchema = Joi.object<Profile>({
-  full_name: Joi.string()
-    .label("الاسم الكامل")
+  first_name: Joi.string()
+    .label("الاسم الأول")
+    .min(3)
+    .max(100)
+    .required()
+    .messages(VALIDATION_MESSAGES),
+  last_name: Joi.string()
+    .label("الاسم الأخير")
     .min(3)
     .max(100)
     .required()
@@ -81,8 +88,9 @@ export const profileSchema = Joi.object<Profile>({
 });
 
 export const profileInitialValues: Profile = {
-  full_name: null,
-  email: "humamsafi20@gmail.com",
+  first_name: null,
+  last_name: null,
+  email:null,
   license: null,
   agency_name: null,
   agency_email: null,

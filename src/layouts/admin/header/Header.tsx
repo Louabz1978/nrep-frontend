@@ -288,12 +288,6 @@ function Header() {
                 align="start"
                 className="bg-tertiary-bg mt-md p-0 border-none shadow-2xl flex flex-col"
               >
-                <Link to="/admin/profile">
-                  <div className="border-b border-secondary-border py-md px-xl text-size16 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition-all duration-[0.3s] text-primary-fg hover:text-primary">
-                    <span>الملف الشخصي</span>
-                    <PiUser />
-                  </div>
-                </Link>
                 {isRealtor ? (
                   <Link
                     to={"/"}

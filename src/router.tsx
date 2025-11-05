@@ -47,7 +47,7 @@ import CountyDetails from "./components/admin/basics/CountyDetails";
 import EditAgencyFormIndex from "./pages/admin/agencies/EditAgencyFormIndex";
 import EditBrokerFormIndex from "./pages/admin/brokers/EditBrokerFormIndex";
 import EditRealtorFormIndex from "./pages/admin/realtors/EditRealtorFormIndex";
-import ProfilePage from "./pages/admin/profile/Profile";
+import ProfilePage from "./pages/website/profile/Profile";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -148,6 +148,14 @@ const router = createBrowserRouter([
       {
         path: "transfers/sale",
         element: <SaleTransfer />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
       },
     ],
   },
@@ -259,10 +267,6 @@ const router = createBrowserRouter([
       {
         path: "areas",
         element: <AreasList />,
-      },
-      {
-        path: "profile",
-        element: <ProfilePage />,
       },
       {
         path: "*",

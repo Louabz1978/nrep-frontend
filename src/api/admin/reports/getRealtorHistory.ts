@@ -5,6 +5,7 @@ import type { User } from "@/types/global/user";
 
 // --- MODIFIED: Added props to match the hook ---
 export type GetRealtorHistoryProps = {
+  user_id : number;
   start_month: number;
   start_year: number;
   end_month: number;
@@ -17,6 +18,7 @@ export type GetRealtorHistoryResult = Promise<AxiosRes<PaginationData<User[]>>>;
 
 // --- MODIFIED: Destructure all new props ---
 export default async function getRealtorHistory({
+  user_id,
   start_month,
   start_year,
   end_month,
@@ -29,6 +31,7 @@ export default async function getRealtorHistory({
     {
       // --- MODIFIED: Pass all params to the request ---
       params: {
+        user_id,
         start_month,
         start_year,
         end_month,

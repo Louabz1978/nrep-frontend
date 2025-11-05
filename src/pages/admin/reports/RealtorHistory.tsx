@@ -5,7 +5,6 @@ import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { useMemo, useState, useRef, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { RealtorHistoryReport } from "@/types/admin/reports";
-import { Input } from "@/components/global/ui/input";
 import useGetRealtorHistory from "@/hooks/admin/reports/useGetRealtorHistory";
 import { useQueryState, parseAsString } from "nuqs";
 import { Button } from "@/components/global/form/button/Button";
@@ -14,7 +13,11 @@ import { MONTHS } from "@/data/global/months";
 import Select from "@/components/global/form/select/Select";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { filterFormInitialValues, filterFormSchema, type FilterForm } from "@/data/admin/schema/FilterForm";
+import {
+  filterFormInitialValues,
+  filterFormSchema,
+  type FilterForm,
+} from "@/data/admin/schema/FilterForm";
 
 type RawRealtorHistory = {
   agent_id: number;
@@ -51,6 +54,7 @@ const RealtorHistory = () => {
     defaultValues: filterFormInitialValues,
     mode: "onChange",
   });
+  console.log(form.watch())
 
   const currentYear = new Date().getFullYear();
   const years = [
@@ -66,6 +70,7 @@ const RealtorHistory = () => {
   ];
 
   const { realtorHistory, getRealtorHistoryQuery } = useGetRealtorHistory({
+    user_id: form.watch("user_id")?.realtor_id,
     start_month: form.watch("start_month")?.value,
     start_year: form.watch("start_year")?.value,
     end_month: form.watch("end_month")?.value,
@@ -128,6 +133,8 @@ const RealtorHistory = () => {
         total_sales: realtor[currentKeys.total] ?? 0,
       }));
   }, [realtorHistory, activeTab, keyMap]);
+
+  console.log(filteredData);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -259,14 +266,13 @@ const RealtorHistory = () => {
                   </div>
                 </div>
               )}
-              <Input
-                placeholder="ابحث عن اسم الوسيط أو رقم الرخصة"
-                type="search"
-                variant="white"
-                iconClassName="text-gray-400/50 h-[18px] w-[18px] "
-                className="w-90 bg-white !h-9 !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm "
-                value={search}
-                onChange={(e) => setSearch(e.target.value || null)}
+              <Select
+                form={form}
+                name="user_id"
+                placeholder="اختر الوسيط"
+                choices={filteredData}
+                showValue="realtor_name"
+                keyValue="realtor_id"
               />
             </div>
           </div>

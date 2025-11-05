@@ -8,6 +8,7 @@ import getRealtorHistory from "@/api/admin/reports/getRealtorHistory";
 // --- NEW: Define props type to match Agencies hook ---
 // This will accept the filter values passed from the component
 type UseGetRealtorHistoryProps = {
+  user_id : number,
   start_month: number;
   start_year: number;
   end_month: number;
@@ -17,6 +18,7 @@ type UseGetRealtorHistoryProps = {
 
 // --- MODIFIED: Accept props ---
 function useGetRealtorHistory({
+  user_id,
   start_month,
   start_year,
   end_month,
@@ -34,6 +36,7 @@ function useGetRealtorHistory({
     // --- MODIFIED: Add all filter params to queryKey ---
     queryKey: [
       QUERY_KEYS?.admin_reports.realtor_history,
+      user_id,
       start_month,
       start_year,
       end_month,
@@ -44,6 +47,7 @@ function useGetRealtorHistory({
     // --- MODIFIED: Pass all params to the API function ---
     queryFn: () =>
       getRealtorHistory({
+        user_id,
         start_month,
         start_year,
         end_month,
