@@ -1,7 +1,7 @@
 import type { ListingDetailsType } from "@/types/website/listings";
 import HomeImages from "./HomeImages";
 import HomeInfo from "./HomeInfo";
-import { 
+import {
   PiCurrencyDollarFill,
   PiBuildings,
   PiRuler,
@@ -21,7 +21,6 @@ import {
   PiSwimmingPool,
   PiDrop,
   PiWarningCircle,
-
 } from "react-icons/pi";
 import image from "@/assets/images/21fab550203e56bedfeac5e3ca82ed71c8ae6376.jpg";
 import {
@@ -41,6 +40,8 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
   const createdByFullName = `${createdByFirstName}${
     createdByLastName ? ` ${createdByLastName}` : ""
   }`.trim();
+  const predicted_price = ((propertyDetails?.price * 80) / 100).toFixed(2);
+   
 
   const status = STATUS_WITH_CLOSED?.find(
     (item) => item?.value == propertyDetails?.status
@@ -146,7 +147,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
           </div>
 
           {/* images */}
-          <HomeImages images={images} />
+          <HomeImages images={images} predicted_price={predicted_price} />
           {/* additional */}
           <div className="md:col-span-6 rounded-[16px] bg-card-bg shadow-card grid grid-cols-7">
             <div className="col-span-2 p-xl border-l border-tertiary-fg/25 flex flex-col gap-9xl">

@@ -1,4 +1,4 @@
-import { optionSchema, type TOption, type TString } from "@/data/global/schema";
+import { optionSchema, type TOption } from "@/data/global/schema";
 import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
@@ -8,6 +8,7 @@ export type FilterForm = {
   start_year: TOption;
   end_month: TOption;
   end_year: TOption;
+  broker: TOption;
 };
 
 export const filterFormSchema = Joi.object<FilterForm>({
@@ -36,4 +37,5 @@ export const filterFormInitialValues: FilterForm = {
   start_year: null,
   end_month: null,
   end_year: null,
+  broker: null,
 };

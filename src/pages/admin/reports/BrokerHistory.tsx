@@ -5,9 +5,7 @@ import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import { useMemo, useState, useRef, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { BrokerHistoryReport } from "@/types/admin/reports";
-import { Input } from "@/components/global/ui/input";
 import useGetBrokerHistory from "@/hooks/admin/reports/useGetBrokerHistory";
-import { useQueryState, parseAsString } from "nuqs";
 import { Button } from "@/components/global/form/button/Button";
 import { ListFilterPlus } from "lucide-react";
 import { MONTHS } from "@/data/global/months";
@@ -43,11 +41,6 @@ type RawBrokerHistory = {
 };
 
 const BrokerHistory = () => {
-  const [search, setSearch] = useQueryState(
-    `${TABLE_PREFIXES.broker_history}_search`,
-    parseAsString.withDefault("")
-  );
-
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +62,6 @@ const BrokerHistory = () => {
     start_year: form.watch("start_year")?.value,
     end_month: form.watch("end_month")?.value,
     end_year: form.watch("end_year")?.value,
-    search,
   });
 
   const [activeTab, setActiveTab] = useState("apartments");
@@ -84,41 +76,34 @@ const BrokerHistory = () => {
     { key: "apartments", label: "شقق" },
   ];
 
-  const keyMap: {
-    [tabKey: string]: {
-      sales: keyof RawBrokerHistory;
-      total: keyof RawBrokerHistory;
-    };
-  } = useMemo(
+  const keyMap = useMemo(
     () => ({
-      properties: {
-        sales: "total_properties_sold",
-        total: "total_sales_amount",
-      },
-      buildings: {
-        sales: "buildings_sold",
-        total: "buildings_total_price",
-      },
+      properties: { sales: "total_properties_sold", total: "total_sales_amount" },
+      buildings: { sales: "buildings_sold", total: "buildings_total_price" },
       lands: { sales: "lands_sold", total: "lands_total_price" },
       farms: { sales: "farms_sold", total: "farms_total_price" },
       shops: { sales: "stores_sold", total: "stores_total_price" },
       villas: { sales: "villas_sold", total: "villas_total_price" },
-      apartments: {
-        sales: "apartments_sold",
-        total: "apartments_total_price",
-      },
+      apartments: { sales: "apartments_sold", total: "apartments_total_price" },
     }),
     []
   );
-
   const filteredData: BrokerHistoryReport[] = useMemo(() => {
     if (!brokerHistory) return [];
-
     const currentKeys = keyMap[activeTab];
     if (!currentKeys) return [];
 
+    const selectedBroker = form.watch("broker");
+    const selectedBrokerId = selectedBroker ? String(selectedBroker.value) : null;
+
     return brokerHistory
-      .filter((user) => user.role === "broker")
+      .filter((user) => {
+        const isBroker = user.role === "broker";
+        if (selectedBrokerId) {
+          return isBroker && String(user.agent_id) === selectedBrokerId;
+        }
+        return isBroker;
+      })
       .map((broker) => ({
         broker_id: broker.agent_id,
         broker_name: broker.agent_name,
@@ -126,7 +111,7 @@ const BrokerHistory = () => {
         number_of_sales: broker[currentKeys.sales] ?? 0,
         total_sales: broker[currentKeys.total] ?? 0,
       }));
-  }, [brokerHistory, activeTab, keyMap]);
+  }, [brokerHistory, activeTab, keyMap, form.watch("broker")]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -137,19 +122,12 @@ const BrokerHistory = () => {
     if (isFilterOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFilterOpen]);
 
   const modifiedQuery = useMemo(() => {
     const pagination = brokerHistoryQuery.data?.pagination;
-
-    return {
-      ...brokerHistoryQuery,
-      data: filteredData,
-      pagination: pagination,
-    };
+    return { ...brokerHistoryQuery, data: filteredData, pagination };
   }, [brokerHistoryQuery, filteredData]);
 
   const columns: ColumnDef<BrokerHistoryReport>[] = useMemo(
@@ -171,6 +149,7 @@ const BrokerHistory = () => {
             <h1 className="text-size24 sm:text-size30 font-medium mb-md sm:mb-xl text-center sm:text-right">
               تقرير تاريخ الوسطاء العقاريين
             </h1>
+
             <div className="flex items-end gap-4 relative" ref={filterRef}>
               <Button
                 onClick={() => setIsFilterOpen((prev) => !prev)}
@@ -179,82 +158,50 @@ const BrokerHistory = () => {
                 <p className="font-medium text-[14px]">الفلتر</p>
                 <ListFilterPlus className="size-4 ml-1" />
               </Button>
+
               {isFilterOpen && (
                 <div className="absolute top-full right-0 mt-2 w-52 h-auto px-6 py-2 bg-white border border-gray-300 rounded shadow-md z-50 text-[14px] space-y-2">
                   <div>
-                    <span className="font-medium text-gray-700 text-right block">
-                      البحث من :
-                    </span>
-                    <Select
-                      form={form}
-                      name="start_month"
-                      label="الشهر"
-                      placeholder="اختر الشهر"
-                      choices={MONTHS}
-                      keyValue="value"
-                      showValue="label"
-                      addingInputStyle="!h-8 !text-[12px]"
-                      labelStyle="!text-[12px]"
-                    />
-                    <Select
-                      form={form}
-                      name="start_year"
-                      label="السنة"
-                      placeholder="اختر السنة"
-                      choices={years}
-                      keyValue="value"
-                      showValue="label"
-                      addingInputStyle="!h-8 !text-[12px]"
-                      labelStyle="!text-[12px] mt-1"
-                    />
+                    <span className="font-medium text-gray-700 text-right block">البحث من :</span>
+                    <Select form={form} name="start_month" label="الشهر" placeholder="اختر الشهر" choices={MONTHS} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px]" />
+                    <Select form={form} name="start_year" label="السنة" placeholder="اختر السنة" choices={years} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px] mt-1" />
                   </div>
+
                   <div className="font-medium text-gray-500">إلى :</div>
                   <div>
-                    <Select
-                      form={form}
-                      name="end_month"
-                      label="الشهر"
-                      placeholder="اختر الشهر"
-                      choices={MONTHS}
-                      keyValue="value"
-                      showValue="label"
-                      addingInputStyle="!h-8 !text-[12px]"
-                      labelStyle="!text-[12px]"
-                    />
-                    <Select
-                      form={form}
-                      name="end_year"
-                      label="السنة"
-                      placeholder="اختر السنة"
-                      choices={years}
-                      keyValue="value"
-                      showValue="label"
-                      addingInputStyle="!h-8 !text-[12px]"
-                      labelStyle="!text-[12px] mt-1"
-                    />
+                    <Select form={form} name="end_month" label="الشهر" placeholder="اختر الشهر" choices={MONTHS} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px]" />
+                    <Select form={form} name="end_year" label="السنة" placeholder="اختر السنة" choices={years} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px] mt-1" />
                   </div>
                 </div>
               )}
-              <Input
-                placeholder="ابحث عن اسم الوسيط أو رقم الرخصة"
-                type="search"
-                variant="white"
-                iconClassName="text-gray-400/50 h-[18px] w-[18px]"
-                className="w-90 bg-white !h-9 !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm"
-                value={search}
-                onChange={(e) => setSearch(e.target.value || null)}
+
+              <Select
+                form={form}
+                name="broker"
+                placeholder="ابحث عن طريق الوسيط"
+                keyValue="value"
+                showValue="label"
+                choices={
+                  brokerHistory
+                    ? brokerHistory
+                        .filter((broker) => broker.role === "broker")
+                        .map((broker) => ({
+                          value: String(broker.agent_id),
+                          label: broker.agent_name,
+                        }))
+                    : []
+                }
               />
             </div>
           </div>
+
           <hr className="mt-2" />
         </div>
-        <div
-          className="flex gap-5xl items-center justify-center my-5xl"
-          style={{ direction: "ltr" }}
-        >
+
+        <div className="flex gap-5xl items-center justify-center my-5xl" style={{ direction: "ltr" }}>
           <div className="flex overflow-auto gap-5xl">
             {TABS.map((tab) => (
-              <div className="flex items-center justify-center" key={tab.key}>
+              <div key={tab.key}>
                 <button
                   className={`flex items-center justify-around gap-3 px-6xl py-3 rounded-full font-medium cursor-pointer ${
                     activeTab === tab.key
@@ -263,7 +210,7 @@ const BrokerHistory = () => {
                   }`}
                   onClick={() => setActiveTab(tab.key)}
                 >
-                  <div>{tab.label}</div>
+                  {tab.label}
                 </button>
               </div>
             ))}

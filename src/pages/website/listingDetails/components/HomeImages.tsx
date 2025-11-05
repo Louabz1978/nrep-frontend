@@ -8,9 +8,12 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRef, useState } from "react";
 
 interface HomeImagesProps {
-  images: { url: string; is_main?: boolean }[];
+  images: { url: string; is_main?: boolean; predicted_price: number }[];
 }
-export default function HomeImages({ images }: HomeImagesProps) {
+export default function HomeImages({
+  images,
+  predicted_price,
+}: HomeImagesProps) {
   const swiperRef = useRef<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -36,8 +39,8 @@ export default function HomeImages({ images }: HomeImagesProps) {
   };
 
   return (
-    <div className="w-full md:col-span-6 flex justify-center items-center pt-6xl">
-      <div className="w-[85%] h-[540px] relative">
+    <div className="w-full md:col-span-6 bg-card-bg rounded-2xl flex flex-col justify-center items-center pt-6xl">
+      <div className="w-[85%] h-[520px] relative">
         {/* Custom Pagination */}
         <div className="absolute bottom-7xl left-1/2 transform -translate-x-1/2 z-10 !flex justify-center items-center gap-lg">
           <button className=" !static translate-y-[10px] !self-center swiper-button-prev before:hidden after:hidden z-10 !size-5xl flex items-center justify-center transition">
@@ -104,6 +107,12 @@ export default function HomeImages({ images }: HomeImagesProps) {
             </SwiperSlide>
           ))}
         </Swiper>
+      </div>
+      <div className="flex items-center gap-md text-success text-size20 font-black mb-10 -mt-5 ">
+        <span className="whitespace-nowrap">القيمة التقديرية للعقار  :</span>
+        <span className="font-black whitespace-nowrap">
+          {predicted_price != null ? `$ ${predicted_price}` : "$ ---"}
+        </span>
       </div>
     </div>
   );

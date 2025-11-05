@@ -6,7 +6,6 @@ import { useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { TopAgencyReport } from "@/types/admin/reports";
 import useGetTopAgencies from "@/hooks/admin/reports/useGetTopAgencies";
-import { Input } from "@/components/global/ui/input";
 import { useForm, useWatch } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import {
@@ -56,6 +55,14 @@ const TopAgencies = () => {
     year: String(year),
   });
 
+  const selectedAgency = form.watch("agency");
+  const filteredAgencies = useMemo((): TopAgencyReport[] => {
+    if (!topAgencies) return [] ;
+    const selectedId = selectedAgency?.value ? String(selectedAgency.value) : null;
+    if (!selectedId) return topAgencies;
+    return topAgencies.filter((agnecy) => String(agnecy.agency_id) === selectedId);
+  }, [topAgencies, selectedAgency]);
+
   const columns: ColumnDef<TopAgencyReport>[] = useMemo(
     () => [
       { accessorKey: "agency_id", header: "معرف الشركة العقارية", size: 20 },
@@ -86,12 +93,18 @@ const TopAgencies = () => {
                 تقرير أفضل عشر شركات عقارية
               </h1>
               <div>
-                <Input
-                  placeholder="البحث عن طريق معرف الشركة"
-                  type="search"
-                  variant="white"
-                  iconClassName="text-gray-400/50 h-[18px] w-[18px]"
-                  className="w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm"
+                <Select
+                  form={form}
+                  name="agency"
+                  placeholder="اختر الشركة العقارية"
+                  choices={topAgencies.map((agency: TopAgencyReport) => ({
+                    value: String(agency.agency_id),
+                    label: agency.agency_name,
+                  }))}
+                  showValue="label"
+                  keyValue="value"
+                  addingSelectStyle="min-w-[220px]"
+                  addingInputStyle="!h-2lg !py-0 !px-2 bg-white border border-gray-300 rounded-xl !text-size16"
                 />
               </div>
             </div>
@@ -128,7 +141,7 @@ const TopAgencies = () => {
             report={true}
             prefix={TABLE_PREFIXES.top_agencies}
             columns={columns}
-            data={topAgencies}
+            data={filteredAgencies}
             query={topAgenciesQuery}
           />
         </div>
