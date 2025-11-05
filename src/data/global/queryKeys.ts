@@ -28,6 +28,7 @@ const QUERY_KEYS = {
     getListingMovement: "report-get-listing-movement",
     getAgentMovement: "report-get-agent-movement",
     compatibleProperties: "reports-compatible-properties",
+    expected_price:"reports-expected-price",
   },
   transfers: {
     query: "transfers-query",

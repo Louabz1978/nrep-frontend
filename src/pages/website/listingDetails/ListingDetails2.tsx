@@ -19,6 +19,16 @@ import { FaChartLine } from "react-icons/fa";
 import RenderImagesTab from "./components/Images";
 import CompatibleMarketReport from "./components/CompatibleMarketReport";
 import PrintButton from "./components/PrintButton";
+import { joiResolver } from "@hookform/resolvers/joi";
+import {
+  TARGET_YEAR_FORM_SCHEMA,
+  TARGET_YEAR_FORM_SCHEMA_INITIAL_VALUES,
+  type TargetYearFormType,
+} from "@/data/global/targetYearFormSchema";
+import { useForm } from "react-hook-form";
+import Select from "@/components/global/form/select/Select";
+import { YEARS } from "@/data/global/years";
+import useStandardPrice from "@/hooks/website/listing/useStandardPrice";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
@@ -47,6 +57,17 @@ function ListingDetails2({ data }: ListingDetailsProps) {
   const status = STATUS_WITH_CLOSED?.find(
     (item) => item?.value == data?.status
   );
+  const form = useForm<TargetYearFormType>({
+    resolver: joiResolver(TARGET_YEAR_FORM_SCHEMA),
+    defaultValues: TARGET_YEAR_FORM_SCHEMA_INITIAL_VALUES,
+  });
+
+  const selectedYear = form.watch("target_year");
+  const target_year = selectedYear?.value ?? null;
+  const property_id = data.property_id;
+  console.log({ property_id, target_year });
+  const { standardPrice } = useStandardPrice({ property_id, target_year } );
+  console.log({ standardPrice });
   const transType = TransType?.find((item) => item?.value == data?.trans_type);
   const propertyType = PROPERTY_TYPE?.find(
     (item) => item?.value == data?.property_type
@@ -119,7 +140,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
       <PageContainer>
         <div>
           <h1 className="text-size29">تفاصيل العقار </h1>
-          <div className="flex md:flex-row flex-col justify-around md:items-center w-full text-primary font-bold text-size18 mb-2xl">
+          <div className="flex md:flex-row flex-col justify-around md:items-center w-full text-primary  font-bold text-size18 mb-2xl">
             <span className=" w-full block gap-2xl">
               {`${dummyProperty.buildingNumber ?? "  "}${"     "}${
                 dummyProperty.streetName ?? "  "
@@ -131,11 +152,26 @@ function ListingDetails2({ data }: ListingDetailsProps) {
                 dummyProperty.city
               }${"     "},${"     "}${dummyProperty.governorate}`}
             </span>
-            <div className="flex text-size15 text-success">
-              <div className="flex items-center whitespace-nowrap">
-                القيمة التقديرية للعقار :{" "}
+            <div className="flex items-center gap-lg justify-end mb-2xl">
+              <Select
+                form={form}
+                name="target_year"
+                placeholder="اختر عام"
+                choices={YEARS}
+                showValue="label"
+                keyValue="value"
+                addingSelectStyle="!w-[120px]"
+              />
+              <div className="flex items-center gap-md text-success text-size20 font-black ">
+                <span className="whitespace-nowrap">
+                  السعر الإفتراضي المتوقع :
+                </span>
+                <span className="font-bold whitespace-nowrap">
+                  {standardPrice?.predicted_price != null
+                    ? `$ ${standardPrice.predicted_price}`
+                    : "$ ---"}
+                </span>
               </div>
-              <span>${((dummyProperty?.price * 80) / 100).toFixed(2)}</span>
             </div>
           </div>
           <hr />
