@@ -42,6 +42,7 @@ export const useAddContact = () => {
       national_number: submitData?.national_number ?? null,
       email: submitData?.email ?? null,
       phone_number: submitData?.phone_number ?? null,
+      password: submitData?.password ?? null,
     };
 
     // toaster

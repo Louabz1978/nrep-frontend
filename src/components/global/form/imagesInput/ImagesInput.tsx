@@ -45,7 +45,7 @@ interface ImagesInputProps<T extends FieldValues> {
   toggle?: Path<T>;
   required?: boolean;
   labelStyle?: string;
-  profile?:boolean
+  profile?: boolean;
 }
 
 function ImagesInput<T extends FieldValues>({
@@ -256,7 +256,7 @@ function ImagesInput<T extends FieldValues>({
       ) : null}
 
       <div
-        className={` ${profile} ? col-span-1 :grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4xl ${imagesContainerClassName}`}
+        className={` ${profile} grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4xl ${imagesContainerClassName}`}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}

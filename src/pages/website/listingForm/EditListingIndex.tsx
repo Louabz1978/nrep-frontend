@@ -29,7 +29,7 @@ function EditListingIndex() {
   // get listing details
   const { listingDetails, listingDetailsQuery } = useListingDetails(listingId);
   const isClosed = listingDetails?.status == PropertyStatus.CLOSED;
-  console.log(listingDetails)
+  console.log(listingDetails);
 
   return (
     <StatusManager query={listingDetailsQuery} Loader={ListingFormSkeleton}>
@@ -61,10 +61,18 @@ function EditListingIndex() {
               apt: listingDetails?.address.apt
                 ? Number(listingDetails?.address.apt)
                 : undefined,
-              area: {
+              area_id: {
                 title: listingDetails?.address.area,
-                value: listingDetails?.address.area,
-              }, // Assuming 'area' maps to 'district'
+                area_id: 1,
+              },
+              county_id: {
+                title: listingDetails?.address.county,
+                county_id: 1,
+              },
+              city_id: {
+                title: listingDetails?.address.city,
+                city_id: 1,
+              },
               area_space: listingDetails?.area_space,
               bedrooms: listingDetails?.bedrooms,
               bathrooms: listingDetails?.bathrooms,
@@ -75,14 +83,6 @@ function EditListingIndex() {
                 listingDetails?.buyer_realtor_commission,
               year_built: listingDetails?.year_built,
               description: listingDetails?.description,
-              country: {
-                value: listingDetails?.address.county,
-                title: listingDetails?.address.county,
-              },
-              city: {
-                value: listingDetails.address.city,
-                title: listingDetails.address.city,
-              },
               property_type: {
                 value: listingDetails.property_type,
                 label:

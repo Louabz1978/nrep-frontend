@@ -159,15 +159,17 @@ const ContactForm = ({ defaultValues, id }: ContactFormProps) => {
               info="يرجى إدخال رقم الهاتف"
               required
             />
-            <Input
-              form={form}
-              type="string"
-              label="كلمة المرور"
-              placeholder="أدخل كلمة االمرور"
-              name="password"
-              info="يرجى إدخال كلمة المرور"
-              required
-            />
+            {id ? null : (
+              <Input
+                form={form}
+                type="string"
+                label="كلمة المرور"
+                placeholder="أدخل كلمة االمرور"
+                name="password"
+                info="يرجى إدخال كلمة المرور"
+                required
+              />
+            )}
           </div>
           <div className="flex justify-end w-full gap-xl mt-auto">
             <Button

@@ -41,6 +41,7 @@ const EditContactFormIndex = () => {
               contactDetails.phone_number ||
               contactFormInitialValues.phone_number,
             email: contactDetails.email || contactFormInitialValues.email,
+            password: "Aa!11111",
           }}
           id={contactId}
         />
