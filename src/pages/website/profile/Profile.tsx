@@ -198,18 +198,21 @@ const ProfilePage = () => {
                 name="first_name"
                 label="الاسم الأول"
                 placeholder="ادخل الاسم الأول"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
                 name="last_name"
                 label="الاسم الأخير"
                 placeholder="ادخل الاسم الأخير"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
                 name="email"
                 label="البريد الإلكتروني"
                 placeholder="ادخل البريد الإلكتروني"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
@@ -217,18 +220,21 @@ const ProfilePage = () => {
                 label="رقم الرخصة"
                 placeholder="ادخل رقم الرخصة"
                 type="number"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
                 name="agency_name"
                 label="اسم الشركة"
                 placeholder="ادخل اسم الشركة"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
                 name="agency_email"
                 label="البريد الإلكتروني للشركة"
                 placeholder="ادخل البريد الإلكتروني للشركة"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
@@ -236,18 +242,20 @@ const ProfilePage = () => {
                 label="رقم رخصة الشركة"
                 placeholder="ادخل رقم رخصة الشركة"
                 type="number"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <Input
                 form={form}
                 name="agency_address"
                 label="عنوان الشركة"
                 placeholder="ادخل عنوان الشركة"
+                addingInputStyle="!border-3 !border-golden-medium"
               />
               <div className="flex flex-col gap-y-2">
-                <label className="text-right text-sm font-medium text-gray-700">
+                <label className="text-right text-size20 font-medium text-gray-700">
                   عقاراتي النشطة
                 </label>
-                <div className="flex items-center mt-1 w-full h-10 px-4 py-2 bg-tertiary-bg rounded-lg border border-quaternary-border/50">
+                <div className="flex items-center mt-1 w-full h-10 px-4 py-2 bg-tertiary-bg rounded-lg border-3 border-golden-medium">
                   <span className="w-full text-right text-gray-400">
                     <Link to={"/listing/my-listings"}>4</Link>
                   </span>

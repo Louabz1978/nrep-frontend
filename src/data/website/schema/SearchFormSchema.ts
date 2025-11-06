@@ -8,7 +8,7 @@ import VALIDATION_MESSAGES from "@/data/global/validationMessages";
 import Joi from "joi";
 
 export type SearchFormType = {
-  area: TString;
+  area: TOption;
   city: TOption;
   min_price: TNumber;
   max_price: TNumber;
@@ -16,7 +16,7 @@ export type SearchFormType = {
 };
 
 export const searchFormSchema = Joi.object<SearchFormType>({
-  area: Joi.string()
+  area: optionSchema
     .allow(null, "")
     .messages(VALIDATION_MESSAGES)
     .label("الحي"),

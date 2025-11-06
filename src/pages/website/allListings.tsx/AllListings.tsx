@@ -9,8 +9,6 @@ import {
 } from "@/components/global/tooltip/Tooltiop";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import {
-  cityChoices,
-  STATUS,
   STATUS_WITH_CLOSED,
   TransType,
 } from "@/data/global/select";
@@ -27,6 +25,8 @@ import { PropertyStatus } from "@/data/global/enums";
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { TfiInfoAlt } from "react-icons/tfi";
+import useGetArea from "@/hooks/website/listing/useGetArea";
+import useGetCities from "@/hooks/website/listing/useGetCities";
 
 function AllListings() {
 
@@ -41,6 +41,9 @@ function AllListings() {
 
   // handle delete listing methods
   const { deleteListing, handleDeleteListing } = useDeleteListings();
+
+  const { Area} = useGetArea();
+  const { cities } = useGetCities();
 
   // listing item columns
   const listingColumns: ColumnDef<Listing>[] = useMemo(
@@ -199,7 +202,7 @@ function AllListings() {
                           handleDeleteListing(row?.original?.property_id);
                         }}
                       >
-                        <FaRegTrashAlt className="text-size25 text-[#6B1F2A]" />
+                        <FaRegTrashAlt className="text-size25 text-umber-light" />
                       </Button>
                     </div>
                   </TooltipTrigger>
@@ -212,7 +215,7 @@ function AllListings() {
                 <TooltipTrigger>
                   <Link to={`${isAdminRoute ? "/admin" : ""}/listing/details/${row?.original?.property_id}`}>
                     <Button
-                      className="bg-transparent !text-[#988561]"
+                      className="bg-transparent !text-golden-medium"
                       size={"icon"}
                     >
                       <TfiInfoAlt className="text-size28" />
@@ -231,7 +234,6 @@ function AllListings() {
     [handleDeleteListing, deleteListing]
   );
 
-  // filter config
   const filter: Filters = useMemo(
     () => [
       {
@@ -240,14 +242,23 @@ function AllListings() {
         label: "المدينة",
         title: "المدينة",
         searchKey: "city",
-        options: cityChoices,
+        options:
+        cities?.map((city: any) => ({
+          label: city.title,
+          value: city.city_id,
+        })) ?? [],
       },
       {
         id: "area",
-        type: "text",
+        type: "select",
         label: "الحي",
         title: "الحي",
         searchKey: "area",
+        options:
+          Area?.map((country: any) => ({
+            label: country.title,
+            value: country.area_id,
+          })) ?? [],
       },
       {
         id: "min_price",
@@ -272,7 +283,7 @@ function AllListings() {
         options: STATUS_WITH_CLOSED,
       },
     ],
-    []
+    [cities , Area]
   );
 
   return (
