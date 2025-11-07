@@ -28,7 +28,7 @@ const QUERY_KEYS = {
     getListingMovement: "report-get-listing-movement",
     getAgentMovement: "report-get-agent-movement",
     compatibleProperties: "reports-compatible-properties",
-    expected_price:"reports-expected-price",
+    expected_price: "reports-expected-price",
   },
   transfers: {
     query: "transfers-query",
@@ -37,7 +37,7 @@ const QUERY_KEYS = {
   },
   admin_reports: {
     realtor_history: "realtor-history",
-    broker_history:"broker-history",
+    broker_history: "broker-history",
     agencies_history: "agencies-history",
     expected_price: "expected-price",
   },
@@ -57,10 +57,14 @@ const QUERY_KEYS = {
     query: "counties",
     details: "county-details",
   },
-  profile:{
-    query:"profile",
-    details:"profile-details"
-  }
+  profile: {
+    query: "profile",
+    details: "profile-details",
+  },
+  endUser: {
+    sharedProperties: "end-user-shared-properties",
+    favoriteProperties: "end-user-favorite-properties",
+  },
 };
 
 export default QUERY_KEYS;

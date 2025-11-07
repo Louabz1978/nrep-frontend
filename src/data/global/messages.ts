@@ -153,6 +153,18 @@ const MESSAGES = {
       success: "تم حذف المنطقة بنجاح!",
     },
   },
+  endUser: {
+    favorites: {
+      add: {
+        loading: "جار إضافة العقار إلى المفضلة...",
+        success: "تمت إضافة العقار إلى المفضلة بنجاح!",
+      },
+      remove: {
+        loading: "جار إزالة العقار من المفضلة...",
+        success: "تمت إزالة العقار من المفضلة بنجاح!",
+      },
+    },
+  },
 };
 
 export default MESSAGES;
