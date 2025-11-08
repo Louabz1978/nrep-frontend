@@ -5,21 +5,21 @@ import getSearchParams from "@/utils/getSearchParams";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import getBrokerHistory from "@/api/admin/reports/getBrokerHistory";
 
-export type UseGetBrokerHistoryProps = {
-  start_month: number;
-  start_year: number;
-  end_month: number;
-  end_year: number;
-  search: string;
+type UseGetBrokerHistoryProps = {
+  user_id?: number;
+  start_month?: number;
+  start_year?: number;
+  end_month?: number;
+  end_year?: number;
 };
 
 function useGetBrokerHistory({
+  user_id,
   start_month,
   start_year,
   end_month,
   end_year,
-  search,
-}: UseGetBrokerHistoryProps) {
+}: UseGetBrokerHistoryProps = {}) {
   const searchParams = useOptimisticSearchParams();
   const queryParams = getSearchParams(
     searchParams,
@@ -29,29 +29,31 @@ function useGetBrokerHistory({
   const getBrokerHistoryQuery = useQuery({
     queryKey: [
       QUERY_KEYS?.admin_reports.broker_history,
+      user_id,
       start_month,
       start_year,
       end_month,
       end_year,
-      search,
+      
       JSON.stringify(queryParams),
     ],
     queryFn: () =>
       getBrokerHistory({
+        user_id,
         start_month,
         start_year,
         end_month,
         end_year,
-        search,
         queryParams: { ...queryParams },
       }),
     retry: false,
     refetchOnWindowFocus: false,
   });
+
   const brokerHistory = getBrokerHistoryQuery.data;
 
   return {
-    brokerHistoryQuery: getBrokerHistoryQuery,
+    getBrokerHistoryQuery,
     brokerHistory,
   };
 }

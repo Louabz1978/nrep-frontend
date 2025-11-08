@@ -152,7 +152,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
                 dummyProperty.city
               }${"     "},${"     "}${dummyProperty.governorate}`}
             </span>
-            <div className="flex items-center gap-lg justify-end mb-2xl">
+            <div className="flex flex-col items-center gap-lg justify-end mb-2xl">
               <Select
                 form={form}
                 name="target_year"
@@ -169,7 +169,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
                 <span className="font-bold whitespace-nowrap">
                   {standardPrice?.predicted_price != null
                     ? `$ ${standardPrice.predicted_price}`
-                    : "$ ---"}
+                    : " غير متوفر"}
                 </span>
               </div>
             </div>

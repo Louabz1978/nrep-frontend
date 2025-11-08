@@ -14,17 +14,36 @@ const ListingMovementHistory = () => {
   // Search state for filtering listing movements
   const [search, setSearch] = useState("");
 
-  const columns: ColumnDef<ListingMovement>[] = useMemo(
+  const columns: ColumnDef<{
+    property_id: number;
+    property_type: string;
+    price: number;
+    trans_type: string;
+    status: string;
+    floor: number;
+    apt: number;
+    area: string;
+    city: string;
+    building_num: number;
+    street: string;
+    sales_count: number;
+    rents_count: number;
+  }>[] = useMemo(
     () => [
       {
-        accessorKey: "mls",
-        header: "MLS",
+        accessorKey: "property_id",
+        header: "رقم العقار",
         size: 20,
       },
       {
-        accessorKey: "listing_type",
+        accessorKey: "property_type",
         header: "نوع العقار",
         size: 20,
+      },
+      {
+        accessorKey: "price",
+        header: "السعر",
+        size: 15,
       },
       {
         accessorKey: "trans_type",
@@ -33,7 +52,7 @@ const ListingMovementHistory = () => {
       },
       {
         accessorKey: "status",
-        header: " حالة العقار",
+        header: "حالة العقار",
         size: 15,
       },
       {
@@ -62,19 +81,19 @@ const ListingMovementHistory = () => {
         size: 10,
       },
       {
-        accessorKey: "street_name",
+        accessorKey: "street",
         header: "اسم الشارع",
         size: 15,
       },
       {
-        accessorKey: "sell_date",
-        header: "تاريخ البيع",
-        size: 15,
+        accessorKey: "sales_count",
+        header: "عدد عمليات البيع",
+        size: 10,
       },
       {
-        accessorKey: "sell_price",
-        header: "سعر البيع",
-        size: 15,
+        accessorKey: "rents_count",
+        header: "عدد عمليات الإيجار",
+        size: 10,
       },
     ],
     []
@@ -88,10 +107,10 @@ const ListingMovementHistory = () => {
       : [];
     if (!search) return data;
     return data.filter(
-      (item) =>
-        item.mls?.includes(search) || Number(item.mls ?? "").includes(search)
+      (item) => item.mls && item.mls.toString().includes(search)
     );
   }, [listingMovement, search]);
+  console.log(filteredData)
 
   return (
     <AnimateContainer>
@@ -124,7 +143,7 @@ const ListingMovementHistory = () => {
             report={true}
             prefix={TABLE_PREFIXES.top_agent}
             columns={columns}
-            data={filteredData}
+            data={filteredData as any}
             query={getListingMovementQuery}
           />
         </div>

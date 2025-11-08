@@ -6,8 +6,9 @@ interface IGetListingMovement {
 }
 
 export default async function getListingMovement({ queryParams }: IGetListingMovement) {
-  const res = await axiosClient.get<GetListingMovementResponse>(`/listing-movement`, {
+  const res = await axiosClient.get<GetListingMovementResponse>(`/report-property`, {
     params: { ...queryParams },
   });
+  console.log("res"+res.data)
   return res;
 }

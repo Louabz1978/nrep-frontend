@@ -6,6 +6,7 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { BrokerHistoryReport } from "@/types/admin/reports";
 import useGetBrokerHistory from "@/hooks/admin/reports/useGetBrokerHistory";
+import { useQueryState, parseAsString } from "nuqs";
 import { Button } from "@/components/global/form/button/Button";
 import { ListFilterPlus } from "lucide-react";
 import { MONTHS } from "@/data/global/months";
@@ -19,8 +20,8 @@ import {
 } from "@/data/admin/schema/FilterForm";
 
 type RawBrokerHistory = {
-  agent_id: number;
-  agent_name: string;
+  broker_id: number;
+  broker_name: string;
   license_number: string | null;
   role: string;
   apartments_sold: number;
@@ -41,9 +42,9 @@ type RawBrokerHistory = {
 };
 
 const BrokerHistory = () => {
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
-
   const form = useForm<FilterForm>({
     resolver: joiResolver(filterFormSchema),
     defaultValues: filterFormInitialValues,
@@ -53,11 +54,18 @@ const BrokerHistory = () => {
   const currentYear = new Date().getFullYear();
   const years = [
     { value: currentYear.toString(), label: currentYear.toString() },
-    { value: (currentYear - 1).toString(), label: (currentYear - 1).toString() },
-    { value: (currentYear - 2).toString(), label: (currentYear - 2).toString() },
+    {
+      value: (currentYear - 1).toString(),
+      label: (currentYear - 1).toString(),
+    },
+    {
+      value: (currentYear - 2).toString(),
+      label: (currentYear - 2).toString(),
+    },
   ];
 
-  const { brokerHistory, brokerHistoryQuery } = useGetBrokerHistory({
+  const { brokerHistory, getBrokerHistoryQuery } = useGetBrokerHistory({
+    user_id: form.watch("user_id")?.broker_id,
     start_month: form.watch("start_month")?.value,
     start_year: form.watch("start_year")?.value,
     end_month: form.watch("end_month")?.value,
@@ -76,34 +84,41 @@ const BrokerHistory = () => {
     { key: "apartments", label: "شقق" },
   ];
 
-  const keyMap = useMemo(
+  const keyMap: {
+    [tabKey: string]: {
+      sales: keyof RawBrokerHistory;
+      total: keyof RawBrokerHistory;
+    };
+  } = useMemo(
     () => ({
-      properties: { sales: "total_properties_sold", total: "total_sales_amount" },
-      buildings: { sales: "buildings_sold", total: "buildings_total_price" },
+      properties: {
+        sales: "total_properties_sold",
+        total: "total_sales_amount",
+      },
+      buildings: {
+        sales: "buildings_sold",
+        total: "buildings_total_price",
+      },
       lands: { sales: "lands_sold", total: "lands_total_price" },
       farms: { sales: "farms_sold", total: "farms_total_price" },
       shops: { sales: "stores_sold", total: "stores_total_price" },
       villas: { sales: "villas_sold", total: "villas_total_price" },
-      apartments: { sales: "apartments_sold", total: "apartments_total_price" },
+      apartments: {
+        sales: "apartments_sold",
+        total: "apartments_total_price",
+      },
     }),
     []
   );
+
   const filteredData: BrokerHistoryReport[] = useMemo(() => {
     if (!brokerHistory) return [];
+    
     const currentKeys = keyMap[activeTab];
     if (!currentKeys) return [];
 
-    const selectedBroker = form.watch("broker");
-    const selectedBrokerId = selectedBroker ? String(selectedBroker.value) : null;
-
     return brokerHistory
-      .filter((user) => {
-        const isBroker = user.role === "broker";
-        if (selectedBrokerId) {
-          return isBroker && String(user.agent_id) === selectedBrokerId;
-        }
-        return isBroker;
-      })
+      .filter((user) => user.role === "broker")
       .map((broker) => ({
         broker_id: broker.agent_id,
         broker_name: broker.agent_name,
@@ -111,32 +126,62 @@ const BrokerHistory = () => {
         number_of_sales: broker[currentKeys.sales] ?? 0,
         total_sales: broker[currentKeys.total] ?? 0,
       }));
-  }, [brokerHistory, activeTab, keyMap, form.watch("broker")]);
+  }, [brokerHistory, activeTab, keyMap]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
         setIsFilterOpen(false);
       }
     };
     if (isFilterOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [isFilterOpen]);
 
   const modifiedQuery = useMemo(() => {
-    const pagination = brokerHistoryQuery.data?.pagination;
-    return { ...brokerHistoryQuery, data: filteredData, pagination };
-  }, [brokerHistoryQuery, filteredData]);
+    const pagination = getBrokerHistoryQuery.data?.pagination;
+
+    return {
+      ...getBrokerHistoryQuery,
+      data: filteredData,
+      pagination: pagination,
+    };
+  }, [getBrokerHistoryQuery, filteredData]);
 
   const columns: ColumnDef<BrokerHistoryReport>[] = useMemo(
     () => [
-      { accessorKey: "broker_id", header: "معرف الوسيط", size: 20 },
-      { accessorKey: "broker_name", header: "اسم الوسيط", size: 20 },
-      { accessorKey: "license_number", header: "رقم الرخصة", size: 15 },
-      { accessorKey: "number_of_sales", header: "عدد المبيعات", size: 15 },
-      { accessorKey: "total_sales", header: "إجمالي المبيعات", size: 15 },
+      {
+        accessorKey: "broker_id",
+        header: "معرف الوسيط",
+        size: 20,
+      },
+      {
+        accessorKey: "broker_name",
+        header: "اسم الوسيط",
+        size: 20,
+      },
+      {
+        accessorKey: "license_number",
+        header: "رقم الرخصة",
+        size: 15,
+      },
+      {
+        accessorKey: "number_of_sales",
+        header: "عدد المبيعات",
+        size: 15,
+      },
+      {
+        accessorKey: "total_sales",
+        header: "إجمالي المبيعات",
+        size: 15,
+      },
     ],
     []
   );
@@ -147,61 +192,91 @@ const BrokerHistory = () => {
         <div className="mb-2xl">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h1 className="text-size24 sm:text-size30 font-medium mb-md sm:mb-xl text-center sm:text-right">
-              تقرير تاريخ الوسطاء العقاريين
+              تقرير اصحاب الوكالات
             </h1>
-
             <div className="flex items-end gap-4 relative" ref={filterRef}>
               <Button
                 onClick={() => setIsFilterOpen((prev) => !prev)}
-                className="!rounded-md !text-primary-fg bg-white !h-9 !text-[14px] flex items-center gap-y-xs px-4 py-2 border border-transparent"
+                className="!rounded-md !text-primary-fg bg-white !h-9 !text-[14px] flex items-center gap-y-xs px-4 py-2 border border-transparent "
               >
                 <p className="font-medium text-[14px]">الفلتر</p>
                 <ListFilterPlus className="size-4 ml-1" />
               </Button>
-
               {isFilterOpen && (
                 <div className="absolute top-full right-0 mt-2 w-52 h-auto px-6 py-2 bg-white border border-gray-300 rounded shadow-md z-50 text-[14px] space-y-2">
                   <div>
-                    <span className="font-medium text-gray-700 text-right block">البحث من :</span>
-                    <Select form={form} name="start_month" label="الشهر" placeholder="اختر الشهر" choices={MONTHS} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px]" />
-                    <Select form={form} name="start_year" label="السنة" placeholder="اختر السنة" choices={years} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px] mt-1" />
+                    <span className="font-medium text-gray-700 text-right block ">
+                      البحث من :
+                    </span>
+                    <Select
+                      form={form}
+                      name="start_month"
+                      label="الشهر"
+                      placeholder="اختر الشهر"
+                      choices={MONTHS}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px]"
+                    />
+                    <Select
+                      form={form}
+                      name="start_year"
+                      label="السنة"
+                      placeholder="اختر السنة"
+                      choices={years}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px] mt-1"
+                    />
                   </div>
-
                   <div className="font-medium text-gray-500">إلى :</div>
                   <div>
-                    <Select form={form} name="end_month" label="الشهر" placeholder="اختر الشهر" choices={MONTHS} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px]" />
-                    <Select form={form} name="end_year" label="السنة" placeholder="اختر السنة" choices={years} keyValue="value" showValue="label" addingInputStyle="!h-8 !text-[12px]" labelStyle="!text-[12px] mt-1" />
+                    <Select
+                      form={form}
+                      name="end_month"
+                      label="الشهر"
+                      placeholder="اختر الشهر"
+                      choices={MONTHS}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px] "
+                      labelStyle="!text-[12px]"
+                    />
+                    <Select
+                      form={form}
+                      name="end_year"
+                      label="السنة"
+                      placeholder="اختر السنة"
+                      choices={years}
+                      keyValue="value"
+                      showValue="label"
+                      addingInputStyle="!h-8 !text-[12px]"
+                      labelStyle="!text-[12px] mt-1"
+                    />
                   </div>
                 </div>
               )}
-
               <Select
                 form={form}
-                name="broker"
-                placeholder="ابحث عن طريق الوسيط"
-                keyValue="value"
-                showValue="label"
-                choices={
-                  brokerHistory
-                    ? brokerHistory
-                        .filter((broker) => broker.role === "broker")
-                        .map((broker) => ({
-                          value: String(broker.agent_id),
-                          label: broker.agent_name,
-                        }))
-                    : []
-                }
+                name="user_id"
+                placeholder="اختر الوسيط"
+                choices={filteredData}
+                showValue="broker_name"
+                keyValue="broker_id"
               />
             </div>
           </div>
-
           <hr className="mt-2" />
         </div>
-
-        <div className="flex gap-5xl items-center justify-center my-5xl" style={{ direction: "ltr" }}>
+        <div
+          className="flex gap-5xl items-center justify-center my-5xl"
+          style={{ direction: "ltr" }}
+        >
           <div className="flex overflow-auto gap-5xl">
             {TABS.map((tab) => (
-              <div key={tab.key}>
+              <div className="flex items-center justify-center" key={tab.key}>
                 <button
                   className={`flex items-center justify-around gap-3 px-6xl py-3 rounded-full font-medium cursor-pointer ${
                     activeTab === tab.key
@@ -210,13 +285,12 @@ const BrokerHistory = () => {
                   }`}
                   onClick={() => setActiveTab(tab.key)}
                 >
-                  {tab.label}
+                  <div>{tab.label}</div>
                 </button>
               </div>
             ))}
           </div>
         </div>
-
         <div className="w-full overflow-x-auto">
           <DataTable
             report={true}
