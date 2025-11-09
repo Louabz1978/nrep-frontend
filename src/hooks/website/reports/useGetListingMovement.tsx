@@ -29,6 +29,7 @@ function useGetListingMovement({ property_id }: UseGetListingMovementProps) {
       }),
     retry: false,
     refetchOnWindowFocus: false,
+    
   });
 
   // final data
