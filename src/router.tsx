@@ -48,6 +48,9 @@ import EditAgencyFormIndex from "./pages/admin/agencies/EditAgencyFormIndex";
 import EditBrokerFormIndex from "./pages/admin/brokers/EditBrokerFormIndex";
 import EditRealtorFormIndex from "./pages/admin/realtors/EditRealtorFormIndex";
 import ProfilePage from "./pages/website/profile/Profile";
+import SharedProperties from "./pages/endUser/sharedProperties/SharedProperties";
+import UserLayout from "./layouts/endUser/UserLayout";
+import FavoriteProperties from "./pages/endUser/favoratesProperties/FavoratesProperties";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -327,6 +330,33 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <OtherUserHome type="tenant" />,
+      },
+      {
+        path: "*",
+        element: <>404</>,
+      },
+    ],
+  },
+  // end user pages
+  {
+    path: "/end-user",
+    element: <PrivateRoute element={<UserLayout />} role={"free"} />,
+    children: [
+      {
+        index: true,
+        element: <SharedProperties />,
+      },
+      {
+        path: "shared-properties",
+        element: <SharedProperties />,
+      },
+      {
+        path: "favorite-properties",
+        element: <FavoriteProperties />,
+      },
+      {
+        path: "listing-details/:id",
+        element: <ListingDetailsIndex />,
       },
       {
         path: "*",

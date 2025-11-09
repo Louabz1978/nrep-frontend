@@ -26,6 +26,8 @@ import StatusForm from "../allListings.tsx/StatusForm";
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { TfiInfoAlt } from "react-icons/tfi";
+import useGetArea from "@/hooks/website/listing/useGetArea";
+import useGetCities from "@/hooks/website/listing/useGetCities";
 
 function MyListings() {
   // user information
@@ -36,6 +38,9 @@ function MyListings() {
 
   // handle delete listing methods
   const { deleteListing, handleDeleteListing } = useDeleteListings();
+
+  const { Area} = useGetArea();
+  const {cities} = useGetCities()
 
   // listing item columns
   const listingColumns: ColumnDef<Listing>[] = useMemo(
@@ -230,14 +235,23 @@ function MyListings() {
         label: "المدينة",
         title: "المدينة",
         searchKey: "city",
-        options: cityChoices,
+        options:
+          cities?.map((city: any) => ({
+            label: city.title,
+            value: city.city_id,
+          })) ?? [],
       },
       {
         id: "area",
-        type: "text",
+        type: "select",
         label: "الحي",
         title: "الحي",
         searchKey: "area",
+        options:
+          Area?.map((country: any) => ({
+            label: country.title,
+            value: country.area_id,
+          })) ?? [],
       },
       {
         id: "min_price",
@@ -262,7 +276,7 @@ function MyListings() {
         options: STATUS_WITH_CLOSED,
       },
     ],
-    []
+    [cities , Area]
   );
 
   return (

@@ -30,7 +30,6 @@ function useLogoutMutation() {
   const logout = useMutation({
     mutationFn: logoutFunction,
     onSuccess: () => {
-      toast.success(MESSAGES?.logout?.success);
       clearLocalSession();
     },
     onError: (error) => {
@@ -55,10 +54,16 @@ function useLogoutMutation() {
     }
 
     // Call the mutation with the required variables.
-    await logout.mutateAsync({
-      token: String(token),
-      type: "normal",
-    });
+    toast.promise(
+      logout.mutateAsync({
+        token: String(token),
+        type: "normal",
+      }),
+      {
+        loading: MESSAGES?.logout?.loading,
+        success: MESSAGES?.logout?.success,
+      }
+    );
   }
 
   return {

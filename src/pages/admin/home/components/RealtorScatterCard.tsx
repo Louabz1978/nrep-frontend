@@ -43,13 +43,13 @@ function RealtorScatterCard() {
     },
     xaxis: {
       type: "category",
-      min:0,
+      min: 0,
       labels: {
         rotate: -25,
         style: { fontSize: "12px", colors: "#374151" },
         offsetY: 4,
-        offsetX:-10,
-        maxHeight:64
+        offsetX: -10,
+        maxHeight: 64,
       },
       axisBorder: { show: true, color: "#00000078", height: 1, offsetY: 1 },
       axisTicks: { show: false },
@@ -59,7 +59,7 @@ function RealtorScatterCard() {
       tickAmount: 6,
       labels: {
         offsetX: -10,
-      }, 
+      },
       axisBorder: { show: true, color: "#00000078", width: 1, offsetX: -3 },
       axisTicks: { show: false },
     },
@@ -67,7 +67,7 @@ function RealtorScatterCard() {
       size: 8,
       colors: ["#c5b48a"],
       strokeColors: "#c5b48a",
-      offsetX:-30
+      offsetX: -30,
     },
     grid: {
       borderColor: "#00000078",
@@ -78,12 +78,12 @@ function RealtorScatterCard() {
         bottom: 0,
         left: 0,
       },
-      show: true,    
+      show: true,
       xaxis: {
-        lines: { show: true }, 
+        lines: { show: true },
       },
       yaxis: {
-        lines: { show: true }, 
+        lines: { show: true },
       },
     },
     tooltip: {
@@ -93,7 +93,7 @@ function RealtorScatterCard() {
     title: {
       text: "تقرير الوسطاء العقاريين",
       align: "center",
-      style: { fontWeight: "700", fontSize: "20px",color:"#000" },
+      style: { fontWeight: "700", fontSize: "20px", color: "#000" },
     },
   };
 

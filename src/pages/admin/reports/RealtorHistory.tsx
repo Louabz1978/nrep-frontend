@@ -273,6 +273,7 @@ const RealtorHistory = () => {
                 choices={filteredData}
                 showValue="realtor_name"
                 keyValue="realtor_id"
+                addingInputStyle="!w-60"
               />
             </div>
           </div>

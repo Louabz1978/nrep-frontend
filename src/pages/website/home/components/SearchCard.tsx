@@ -10,13 +10,18 @@ import {
 import cleanValues from "@/utils/cleanValues";
 import { FaSearch } from "react-icons/fa";
 import { Button } from "@/components/global/form/button/Button";
-import { cityChoices } from "@/data/global/select";
 import { hasValue } from "@/utils/filter";
 import { useNavigate } from "react-router-dom";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import SectionTitle from "./SectionTitle";
+import useGetCities from "@/hooks/website/listing/useGetCities";
+import useGetArea from "@/hooks/website/listing/useGetArea";
 
 const SearchCard = () => {
+
+  const {cities} = useGetCities()
+  const {Area} = useGetArea()
+
   const navigate = useNavigate();
   const form = useForm({
     resolver: joiResolver(searchFormSchema),
@@ -28,7 +33,8 @@ const SearchCard = () => {
   });
 
   const onSubmit = (data: SearchFormType) => {
-    const finalData = { ...data, city: data?.city?.value };
+    const finalData = { ...data, city: data?.city?.city_id , area : data?.area?.area_id};
+    console.log(finalData)
 
     let params = "";
     Object.keys(finalData)?.map((key) => {
@@ -52,6 +58,8 @@ const SearchCard = () => {
     hasValue(min_price) ||
     hasValue(max_price);
 
+    console.log(area)
+
   return (
     <div>
       <SectionTitle>البحث عن عقار</SectionTitle>
@@ -66,12 +74,14 @@ const SearchCard = () => {
           <div className="flex flex-col gap-y-[30px]">
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[var(--spacing-xl)] gap-y-[30px]">
-              <Input
+              <Select
                 form={form}
                 label="الحي"
                 name="area"
+                choices={Area}
+                showValue="title"
+                keyValue="area_id"
                 placeholder="ادخل الحي"
-                type="text"
                 disabled={!!mls}
               />
               <Select
@@ -79,9 +89,9 @@ const SearchCard = () => {
                 label="المدينة"
                 name="city"
                 placeholder="اختر المدينة"
-                choices={cityChoices}
-                showValue="label"
-                keyValue="value"
+                choices={cities}
+                showValue="title"
+                keyValue="city_id"
                 disabled={!!mls}
               />
 
