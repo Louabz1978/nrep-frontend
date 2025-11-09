@@ -7,7 +7,7 @@ import {
   TransType,
   WATERLINE,
 } from "@/data/global/select";
-import { FaMap } from "react-icons/fa";
+import { FaHistory, FaMap } from "react-icons/fa";
 import RenderDetailsTab from "./components/Home";
 import RenderTaxesTab from "./components/Taxes";
 import RenderMapTab from "./components/Map";
@@ -29,12 +29,14 @@ import { useForm } from "react-hook-form";
 import Select from "@/components/global/form/select/Select";
 import { YEARS } from "@/data/global/years";
 import useStandardPrice from "@/hooks/website/listing/useStandardPrice";
+import RenderListingMovementTab from "./components/ListingMovementHistory";
 
 interface ListingDetailsProps {
   data: ListingDetailsType;
 }
 
 const TABS = [
+  { key: "history", label: " تاريخ حركة العقار", icon: <FaHistory /> },
   { key: "reports", label: "السوق المتوافق", icon: <FaChartLine /> },
   { key: "map", label: "الخريطة", icon: <FaMap /> },
   { key: "taxes", label: "الضرائب", icon: <FaMoneyBillAlt /> },
@@ -66,7 +68,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
   const target_year = selectedYear?.value ?? null;
   const property_id = data.property_id;
   console.log({ property_id, target_year });
-  const { standardPrice } = useStandardPrice({ property_id, target_year } );
+  const { standardPrice } = useStandardPrice({ property_id, target_year });
   console.log({ standardPrice });
   const transType = TransType?.find((item) => item?.value == data?.trans_type);
   const propertyType = PROPERTY_TYPE?.find(
@@ -139,20 +141,9 @@ function ListingDetails2({ data }: ListingDetailsProps) {
     <AnimateContainer>
       <PageContainer>
         <div>
-          <h1 className="text-size29">تفاصيل العقار </h1>
-          <div className="flex md:flex-row flex-col justify-around md:items-center w-full text-primary  font-bold text-size18 mb-2xl">
-            <span className=" w-full block gap-2xl">
-              {`${dummyProperty.buildingNumber ?? "  "}${"     "}${
-                dummyProperty.streetName ?? "  "
-              }${"     "}الطابق${"     "}${
-                dummyProperty.floor ?? "  "
-              }${"     "}الشقة${"     "}${
-                dummyProperty.apartmentNumber ?? "  "
-              }${"     "}${dummyProperty.area}${"     "},${"     "}${
-                dummyProperty.city
-              }${"     "},${"     "}${dummyProperty.governorate}`}
-            </span>
-            <div className="flex flex-col items-center gap-lg justify-end mb-2xl">
+          <div className="flex justify-between items-start">
+            <h1 className="text-size29">تفاصيل العقار </h1>
+            <div className="flex flex-col items-center gap-lg justify-end ">
               <Select
                 form={form}
                 name="target_year"
@@ -160,7 +151,7 @@ function ListingDetails2({ data }: ListingDetailsProps) {
                 choices={YEARS}
                 showValue="label"
                 keyValue="value"
-                addingSelectStyle="!w-[120px]"
+                addingSelectStyle="!max-w-[350px]"
               />
               <div className="flex items-center gap-md text-success text-size20 font-black ">
                 <span className="whitespace-nowrap">
@@ -173,6 +164,19 @@ function ListingDetails2({ data }: ListingDetailsProps) {
                 </span>
               </div>
             </div>
+          </div>
+          <div className="flex md:flex-row flex-col justify-around md:items-center w-full text-primary  font-bold text-size18 mb-2xl">
+            <span className=" w-full block gap-2xl">
+              {`${dummyProperty.buildingNumber ?? "  "}${"     "}${
+                dummyProperty.streetName ?? "  "
+              }${"     "}الطابق${"     "}${
+                dummyProperty.floor ?? "  "
+              }${"     "}الشقة${"     "}${
+                dummyProperty.apartmentNumber ?? "  "
+              }${"     "}${dummyProperty.area}${"     "},${"     "}${
+                dummyProperty.city
+              }${"     "},${"     "}${dummyProperty.governorate}`}
+            </span>
           </div>
           <hr />
         </div>
@@ -210,7 +214,12 @@ function ListingDetails2({ data }: ListingDetailsProps) {
           >
             <RenderDetailsTab propertyDetails={data} />
           </div>
-
+          <div
+            data-tab-content="history"
+            style={{ display: activeTab === "history" ? "block" : "none" }}
+          >
+            <RenderListingMovementTab listing={data} />
+          </div>
           <div
             data-tab-content="taxes"
             style={{ display: activeTab === "taxes" ? "block" : "none" }}

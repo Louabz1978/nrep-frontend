@@ -159,12 +159,12 @@ const BrokerHistory = () => {
     () => [
       {
         accessorKey: "broker_id",
-        header: "معرف الوسيط",
+        header: "معرف صاحب الوكالة",
         size: 20,
       },
       {
         accessorKey: "broker_name",
-        header: "اسم الوسيط",
+        header: "اسم صاحب الوكالة",
         size: 20,
       },
       {
@@ -261,7 +261,7 @@ const BrokerHistory = () => {
               <Select
                 form={form}
                 name="user_id"
-                placeholder="اختر الوسيط"
+                placeholder="اختر صاحب الوكالة"
                 choices={filteredData}
                 showValue="broker_name"
                 keyValue="broker_id"

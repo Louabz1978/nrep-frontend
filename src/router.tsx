@@ -24,7 +24,7 @@ import MarketMovement from "./pages/website/reports/marketMovement/MarketMovemen
 import RentalTransfer from "@/pages/website/RentalTransfer";
 import SaleTransfer from "@/pages/website/SaleTransfer";
 import EditContractSign from "./pages/website/contracts/EditContractSign";
-import ListingMovementHistory from "./pages/website/reports/listingMovementHistory/ListingMovementHistory";
+import ListingMovementHistory from "./pages/website/listingDetails/components/ListingMovementHistory";
 import AgentMovement from "./pages/website/reports/agentMovement/AgentMovements";
 import ResetOtp from "./pages/global/resetOtp/ResetOtp";
 import VerifyPassword from "./pages/global/resetOtp/VerifyPassword";
