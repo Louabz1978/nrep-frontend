@@ -23,13 +23,13 @@ function useGetListingMovement({ property_id }: UseGetListingMovementProps) {
       JSON.stringify(queryParams),
     ],
     queryFn: () =>
-      getListingMovement({ 
-        property_id, 
-        queryParams: { ...queryParams } 
+      getListingMovement({
+        property_id,
+        queryParams: { ...queryParams },
       }),
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!property_id, // Only run query when property_id is provided
+    enabled: !!property_id,
   });
 
   // final data
