@@ -28,8 +28,6 @@ import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 function StatusForm({ row }: { row: Row<Listing> }) {
   const { user } = useUser();
 
-  console.log(user);
-
   const isSameUser =
     row?.original?.created_by_user?.user_id == (user?.data ?? user)?.user_id;
   const isClosed = row?.original?.status == PropertyStatus.CLOSED;

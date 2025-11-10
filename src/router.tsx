@@ -51,6 +51,7 @@ import ProfilePage from "./pages/website/profile/Profile";
 import SharedProperties from "./pages/endUser/sharedProperties/SharedProperties";
 import UserLayout from "./layouts/endUser/UserLayout";
 import FavoriteProperties from "./pages/endUser/favoratesProperties/FavoratesProperties";
+import MyActiveListings from "./pages/website/myActiveListings/MyActiveListings";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: "listing/my-listings",
         element: <MyListings />,
+      },
+      {
+        path: "listing/my-active-listings",
+        element: <MyActiveListings />,
       },
       {
         path: "listing/listing-movement",

@@ -4,7 +4,6 @@ import PageContainer from "@/components/global/pageContainer/PageContainer";
 import { DataTable, type Filters } from "@/components/global/table2/table";
 import { Checkbox } from "@/components/global/ui/checkbox";
 import {
-  cityChoices,
   PropertyStatus,
   STATUS_WITH_CLOSED,
   TransType,
