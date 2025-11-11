@@ -32,15 +32,16 @@ export const tabs: TabsType = [
       },
     ],
   },
-  {
-    label: "إدخال",
-    to: "/input",
-    permission: [],
-  },
+
   {
     label: "العقارات",
     permission: [],
     submenu: [
+      {
+        label: "إدخال عقار",
+        to: "/input",
+        permission: [],
+      },
       {
         label: "كل العقارات",
         permission: [],
@@ -56,11 +57,11 @@ export const tabs: TabsType = [
         permission: [],
         to: "/listing/my-active-listings",
       },
-      {
-        label: "تاريخ حركة العقار",
-        permission: [],
-        to: "/listing/listing-movement",
-      },
+      // {
+      //   label: "تاريخ حركة العقار",
+      //   permission: [],
+      //   to: "/listing/listing-movement",
+      // },
     ],
   },
   {

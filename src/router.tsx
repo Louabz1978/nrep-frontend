@@ -88,10 +88,10 @@ const router = createBrowserRouter([
         path: "listing/my-active-listings",
         element: <MyActiveListings />,
       },
-      {
-        path: "listing/listing-movement",
-        element: <ListingMovementHistory />,
-      },
+      // {
+      //   path: "listing/listing-movement",
+      //   element: <ListingMovementHistory />,
+      // },
       {
         path: "listing/details/:id",
         element: <ListingDetailsIndex />,

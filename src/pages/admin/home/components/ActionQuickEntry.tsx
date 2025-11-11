@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SectionTitle from "./SectionTitle";
 
 const searches = [
-  { name: "تاريخ حركة العقار", link: "/listing/listing-movement" },
+  // { name: "تاريخ حركة العقار", link: "/listing/listing-movement" },
   { name: "كل العقارات", link: "listing/all-listings" },
 ];
 const RelatedLinks = () => {
