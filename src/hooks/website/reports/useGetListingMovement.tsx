@@ -5,31 +5,35 @@ import getSearchParams from "@/utils/getSearchParams";
 import TABLE_PREFIXES from "@/data/global/tablePrefixes";
 import getListingMovement from "@/api/website/reports/getListingMovement";
 
+interface UseGetListingMovementProps {
+  property_id: number;
+}
 
-
-function useGetListingMovement() {
+function useGetListingMovement({ property_id }: UseGetListingMovementProps) {
   const searchParams = useOptimisticSearchParams();
   const queryParams = getSearchParams(
     searchParams,
     `${TABLE_PREFIXES.listing_movement}_`
   );
 
-
   const getListingMovementQuery = useQuery({
     queryKey: [
       QUERY_KEYS?.reports?.getListingMovement,
+      property_id,
       JSON.stringify(queryParams),
     ],
     queryFn: () =>
-      getListingMovement({ queryParams: { ...queryParams} }),
+      getListingMovement({ 
+        property_id, 
+        queryParams: { ...queryParams } 
+      }),
     retry: false,
     refetchOnWindowFocus: false,
+    
   });
 
   // final data
   const listingMovement = getListingMovementQuery.data?.data;
-
-
 
   return {
     getListingMovementQuery,
