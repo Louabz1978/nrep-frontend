@@ -41,7 +41,6 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
     createdByLastName ? ` ${createdByLastName}` : ""
   }`.trim();
   const predicted_price = ((propertyDetails?.price * 80) / 100).toFixed(2);
-   
 
   const status = STATUS_WITH_CLOSED?.find(
     (item) => item?.value == propertyDetails?.status
@@ -121,7 +120,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
               <HomeInfo
                 icon={PiMapPin}
                 label="الحي"
-                value={propertyDetails?.address?.area}
+                value={propertyDetails?.address?.area?.title}
               />
               <HomeInfo
                 icon={PiHouse}
@@ -131,7 +130,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
               <HomeInfo
                 icon={PiMapPin}
                 label="المدينة"
-                value={propertyDetails?.address?.city}
+                value={propertyDetails?.address?.city?.title}
               />
               <HomeInfo
                 icon={PiHouse}
@@ -141,7 +140,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
               <HomeInfo
                 icon={PiMapPin}
                 label="المحافظة"
-                value={propertyDetails?.address?.county}
+                value={propertyDetails?.address?.county?.title}
               />
             </div>
           </div>

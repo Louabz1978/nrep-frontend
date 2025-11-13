@@ -55,7 +55,7 @@ export const useEditListings = () => {
             (item as { path: string })?.path?.split("/")?.length - 1
           ]
       );
-
+    console.log(submitData);
     const data = {
       ...(submitData ?? {}),
       trans_type: submitData?.trans_type?.value,

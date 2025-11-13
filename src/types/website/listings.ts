@@ -31,9 +31,9 @@ interface Address {
   address_id: number;
   floor: number;
   apt: string;
-  area: string;
-  city: CityValue;
-  county: CityValue;
+  area: { area_id: number; title: string };
+  city: { city_id: number; title: string };
+  county: { county_id: number; title: string };
   created_at: string;
   created_by: number;
   building_num: number;

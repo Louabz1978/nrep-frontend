@@ -62,16 +62,16 @@ function EditListingIndex() {
                 ? Number(listingDetails?.address.apt)
                 : undefined,
               area_id: {
-                title: listingDetails?.address.area,
-                area_id: 1,
+                title: listingDetails?.address.area?.title,
+                area_id: listingDetails?.address.area?.area_id,
               },
               county_id: {
-                title: listingDetails?.address.county,
-                county_id: 1,
+                title: listingDetails?.address.county?.title,
+                county_id: listingDetails?.address.county?.county_id,
               },
               city_id: {
-                title: listingDetails?.address.city,
-                city_id: 1,
+                title: listingDetails?.address.city?.title,
+                city_id: listingDetails?.address.city?.city_id,
               },
               area_space: listingDetails?.area_space,
               bedrooms: listingDetails?.bedrooms,

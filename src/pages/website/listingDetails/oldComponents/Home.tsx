@@ -63,7 +63,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
       },
       {
         label: "الحي / المنطقة :",
-        value: propertyDetails?.address?.area,
+        value: propertyDetails?.address?.area?.title,
       },
       {
         label: "رقم الشقة :",
@@ -71,7 +71,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
       },
       {
         label: "المدينة / القرية :",
-        value: propertyDetails?.address?.city,
+        value: propertyDetails?.address?.city?.title,
       },
       {
         label: "نوع العقار : ",
@@ -79,7 +79,7 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
       },
       {
         label: "المحافظة :",
-        value: propertyDetails?.address?.county,
+        value: propertyDetails?.address?.county?.title,
       },
       {
         label: "نوع العقد :",
@@ -220,8 +220,9 @@ const RenderDetailsTab = ({ propertyDetails }: RenderDetailsTabProps) => {
                 propertyDetails?.address?.street ?? ""
               } الطابق ${propertyDetails?.address?.floor ?? ""} الشقة ${
                 propertyDetails?.address?.apt ?? ""
-              } ${propertyDetails?.address?.area}, ${propertyDetails?.address
-                ?.city}, ${propertyDetails?.address?.county}`}
+              } ${propertyDetails?.address?.area?.title}, ${propertyDetails
+                ?.address?.city?.title}, ${propertyDetails?.address?.county
+                ?.title}`}
             </span>
           </div>
         </div>
