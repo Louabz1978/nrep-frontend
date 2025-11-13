@@ -2,7 +2,7 @@ import { useDebouncedCallback } from "@/hooks/global/use-debounced-callback";
 import { cn } from "@/utils/cn";
 import type { LucideIcon } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
-import React, { useState } from "react";
+import React, { useState, type ReactNode } from "react"; // Import ReactNode
 import type { IconType } from "react-icons/lib";
 import { Input } from "../ui/input";
 import { FaSearch } from "react-icons/fa";
@@ -17,6 +17,8 @@ export interface InputProps
   searchKey: string;
   searchPlaceholder: string;
   searchType: "text" | "number";
+  hasSelect?: boolean;
+  select?: ReactNode; // <-- CHANGED
 }
 
 const TableSearch = ({
@@ -25,6 +27,8 @@ const TableSearch = ({
   searchKey,
   searchPlaceholder,
   searchType,
+  hasSelect,
+  select,
   ...props
 }: InputProps) => {
   const [q, setQ] = useQueryState(
@@ -41,21 +45,27 @@ const TableSearch = ({
   };
 
   return (
-    <Input
-      placeholder={searchPlaceholder}
-      type={searchType}
-      variant="white"
-      icon={FaSearch}
-      iconClassName="text-gray-400/50 h-[18px] w-[18px] "
-      iconInline
-      {...props}
-      value={value}
-      onChange={handleChange}
-      className={cn(
-        "w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
-        className
+    <>
+      {hasSelect ? (
+        select
+      ) : (
+        <Input
+          placeholder={searchPlaceholder}
+          type={searchType}
+          variant="white"
+          icon={FaSearch}
+          iconClassName="text-gray-400/50 h-[18px] w-[18px] "
+          iconInline
+          {...props}
+          value={value}
+          onChange={handleChange}
+          className={cn(
+            "w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] placeholder:text-xs leading-tight py-sm px-md !text-sm ",
+            className
+          )}
+        />
       )}
-    />
+    </>
   );
 };
 

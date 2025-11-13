@@ -25,6 +25,7 @@ import {
   useEffect,
   useId,
   useState,
+  type ReactNode, // Import ReactNode
 } from "react";
 import { SideModal } from "../ui/side-modal";
 import { Button } from "../form/button/Button";
@@ -42,7 +43,6 @@ import { type UseQueryResult } from "@tanstack/react-query";
 import RowSkeletonLoader from "./row-skeleton-loader";
 import EmptyCell from "./empty-cell";
 import AddButton from "./AddButton";
-import { FaPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
 
@@ -71,7 +71,11 @@ interface DataTableProps<TData, TValue, TRow> {
   addLabel?: string;
   showActionButtons?: boolean;
   report?: boolean;
-  location?: boolean
+  location?: boolean;
+  filter?: boolean;
+  onClickFilter?: () => void;
+  hasSelect?: boolean;
+  select?: ReactNode;
 }
 
 export function DataTable<TData, TValue, TRow>({
@@ -95,7 +99,11 @@ export function DataTable<TData, TValue, TRow>({
   addLabel,
   showActionButtons = false,
   report = false,
-  location=false,
+  location = false,
+  filter,
+  onClickFilter,
+  hasSelect,
+  select,
 }: DataTableProps<TData, TValue, TRow>) {
   const id = useId();
 
@@ -198,13 +206,15 @@ export function DataTable<TData, TValue, TRow>({
                             </>
                           )}
                         </div>
-                        <div className="flex gap-lg flex-wrap items-center flex-row-reverse">
+                        <div className="flex gap-lg  items-center flex-row-reverse">
                           <TableSearch
                             prefix={prefix}
                             wrapperClassName="w-fit min-w-[150px]"
                             searchKey={searchKey}
                             searchPlaceholder={searchPlaceholder}
                             searchType={searchType}
+                            hasSelect={hasSelect}
+                            select={select}
                           />
                           {filters && filters.length > 0 ? (
                             <Fragment>
@@ -226,7 +236,12 @@ export function DataTable<TData, TValue, TRow>({
                                     <ListFilterPlus className="size-xl ml-xs" />
                                   </Button>
                                 </PopoverTrigger>
-                                <PopoverContent side="bottom" align="center" sideOffset={6} className="w-[300px] h-[400px] p-md rounded-sm bg-tertiary-bg border-0 shadow-[#00000040] shadow-2xl overflow-auto">
+                                <PopoverContent
+                                  side="bottom"
+                                  align="center"
+                                  sideOffset={6}
+                                  className="w-[300px] h-[400px] p-md rounded-sm bg-tertiary-bg border-0 shadow-[#00000040] shadow-2xl overflow-auto"
+                                >
                                   <p className="mb-lg">{"الفلتر"}</p>
 
                                   {filters.map((f) => {
@@ -267,6 +282,14 @@ export function DataTable<TData, TValue, TRow>({
                                 );
                               })}
                             </Fragment>
+                          ) : filter ? (
+                            <Button
+                              onClick={onClickFilter}
+                              className={`!rounded-md bg-transparent !h-9 !text-primary-fg flex items-center gap-y-xs px-lg py-sm  border border-black`}
+                            >
+                              <p className="font-medium text-size16">الفلتر</p>
+                              <ListFilterPlus className="size-xl ml-xs" />
+                            </Button>
                           ) : null}
                         </div>
                       </div>
