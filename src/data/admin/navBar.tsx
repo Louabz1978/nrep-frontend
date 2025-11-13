@@ -96,4 +96,9 @@ export const adminTabs: AdminTabsType = [
       },
     ],
   },
+  {
+    label: "الإشعارات",
+    to: "/admin/notifications",
+    permission: [],
+  },
 ];

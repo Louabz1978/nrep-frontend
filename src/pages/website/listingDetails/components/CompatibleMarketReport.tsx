@@ -39,8 +39,13 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
         header: "العنوان",
         size: 30,
         cell: ({ row }) => {
-          const address = row.getValue("address") as any;
-          return address?.street || "المحطة";
+          const address = row.getValue("address") as string;
+          const street =
+            address.match(/[\u0600-\u06FF]+/) ||
+            address.match(/[A-Za-z]+/) ||
+            "";
+
+          return street || "المحطة";
         },
       },
       {
@@ -98,6 +103,7 @@ const CompatibleMarketReport = ({ mls }: CompatibleMarketReportProps) => {
 
   const tableData = compatibleProperties?.data?.data?.Other ?? [];
   const ClosedData = compatibleProperties?.data?.data?.Closed ?? [];
+  console.log(ClosedData);
   console.log(tableData);
 
   return (

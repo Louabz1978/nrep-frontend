@@ -5,7 +5,7 @@ function ScatterChartSkeleton() {
 
   return (
     <div className="rounded-2xl shadow-md bg-white p-6">
-      <div className="flex justify-center mb-10">
+      <div className="flex justify-right mb-10">
         <Skeleton className="h-6 w-48" />
       </div>
       <div className="relative w-full">

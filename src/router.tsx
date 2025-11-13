@@ -52,6 +52,7 @@ import SharedProperties from "./pages/endUser/sharedProperties/SharedProperties"
 import UserLayout from "./layouts/endUser/UserLayout";
 import FavoriteProperties from "./pages/endUser/favoratesProperties/FavoratesProperties";
 import MyActiveListings from "./pages/website/myActiveListings/MyActiveListings";
+import AdminNotifications from "./pages/admin/notifications/AdminNotifications";
 
 // Browser URL router container
 const router = createBrowserRouter([
@@ -259,6 +260,10 @@ const router = createBrowserRouter([
       {
         path: "reports/realtor-history",
         element: <RealtorHistory />,
+      },
+      {
+        path: "notifications",
+        element: <AdminNotifications />,
       },
       {
         path: "counties",
