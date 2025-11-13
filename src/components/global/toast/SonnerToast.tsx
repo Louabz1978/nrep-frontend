@@ -1,5 +1,5 @@
 import { Toaster } from "sonner";
-import { FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
+import { FaBell, FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
 import { PiInfo, PiSpinner } from "react-icons/pi";
 import { LuX } from "react-icons/lu";
 
@@ -19,6 +19,7 @@ function SonnerToast() {
         close: (
           <LuX className="!size-[16px] !text-primary-icon hover:!text-primary-fg transition-all duration-[0.2s]" />
         ),
+        notification:<FaBell />
       }}
       toastOptions={{
         closeButton: true,

@@ -1,8 +1,6 @@
 import axiosClient from "@/libs/axios/axios-client";
 import type { Notification } from "@/hooks/website/notificaions/useGetLiveNotifications";
 
-
-
 export interface GetNotificationsApiResponse {
   data: Notification[];
   pagination?: {
@@ -13,7 +11,21 @@ export interface GetNotificationsApiResponse {
   };
 }
 
-export default async function getNotifications(): Promise<GetNotificationsApiResponse> {
-  const res = await axiosClient.get<GetNotificationsApiResponse>("/notifications");
+interface GetNotificationsParams {
+  page: number;
+}
+
+export default async function getNotifications({
+  page = 1,
+}: GetNotificationsParams): Promise<GetNotificationsApiResponse> {
+
+  const res = await axiosClient.get<GetNotificationsApiResponse>(
+    "/notifications",
+    {
+      params: {
+        page: page,
+      },
+    }
+  );
   return res.data;
 }

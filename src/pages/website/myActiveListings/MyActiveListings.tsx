@@ -34,9 +34,13 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import Popup from "@/components/global/popup/Popup";
 import Select from "@/components/global/form/select/Select";
 import Range from "@/components/global/form/range/Range";
-import { SlidersHorizontal } from "lucide-react";
-import { FaXmark } from "react-icons/fa6";
 import ValueCard from "@/components/global/valueCard/ValueCard";
+import {
+  consumerInitialValues,
+  consumerSchema,
+  type ConsumerType,
+} from "@/data/website/schema/choiseContactSchema";
+import useGetAllContacts from "@/hooks/website/Contact/useGetAllContacts";
 
 function MyActiveListings() {
   // user information
@@ -48,6 +52,12 @@ function MyActiveListings() {
   const form = useForm<SharingListingsFilterType>({
     resolver: joiResolver(sharingListingsFilterSchema),
     defaultValues: sharingListingsFilterInitialValues,
+    mode: "onChange",
+  });
+
+  const contactForm = useForm<ConsumerType>({
+    resolver: joiResolver(consumerSchema),
+    defaultValues: consumerInitialValues,
     mode: "onChange",
   });
 
@@ -69,6 +79,8 @@ function MyActiveListings() {
 
   // get my listings
   const { myListings, myListingsQuery, totalPages } = useMyListings();
+
+  const { allContacts } = useGetAllContacts();
 
   // handle delete listing methods
   const { deleteListing, handleDeleteListing } = useDeleteListings();
@@ -279,23 +291,31 @@ function MyActiveListings() {
     [Area]
   );
 
+  const SelectComp = () => {
+    return (
+      <Select
+        form={contactForm}
+        name="consumer_id"
+        choices={allContacts}
+        keyValue="consumer_id"
+        showValue="name"
+        placeholder="اختر جهة اتصال"
+        addingSelectStyle="!w-90 bg-white !h-2lg !text-size16 !border-gray-400 !rounded-[10px] !flex leading-tight py-sm px-md !text-sm "
+      />
+    );
+  };
+
   return (
     <AnimateContainer>
       <PageContainer>
         <div className="mb-5xl">
           <div className="flex items-center justify-between mb-2xl">
             <div>
-              <h1 className="text-size30 font-medium">عقاراتي</h1>
-              <h3 className="text-size24">يتم عرض جميع عقاراتي المضافة</h3>
+              <h1 className="text-size30 font-medium">عقاراتي النشطة</h1>
+              <h3 className="text-size24">
+                يتم عرض جميع العقارات النشطة المضافة من قبلك
+              </h3>
             </div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setIsFilterOpen(true)}
-              className="bg-transparent border-secondary-border hover:bg-secondary-bg"
-            >
-              <SlidersHorizontal className="h-5 w-5" />
-            </Button>
           </div>
           <hr />
         </div>
@@ -305,13 +325,14 @@ function MyActiveListings() {
           data={(myListings ?? []) as Listing[]}
           query={myListingsQuery}
           totalPageCount={totalPages}
-          searchKey="mls_num"
-          searchPlaceholder="بحث عن MLS ..."
-          searchType="number"
           showActionButtons={true}
           show
           to="/listing/add"
           addLabel="إضافة عقار"
+          filter={true}
+          onClickFilter={() => setIsFilterOpen(true)}
+          hasSelect={true}
+          select={<SelectComp />}
         />
       </PageContainer>
 
@@ -327,12 +348,6 @@ function MyActiveListings() {
             <h2 className="text-size24 font-semibold">
               البحث عن مواصفات خاصة :
             </h2>
-            <button
-              onClick={() => setIsFilterOpen(false)}
-              className="p-2 hover:bg-secondary-bg rounded-lg transition-colors"
-            >
-              <FaXmark className="text-size20" />
-            </button>
           </div>
 
           {/* Filter Form */}

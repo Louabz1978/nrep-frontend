@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { io } from "socket.io-client";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import QUERY_KEYS from "@/data/global/queryKeys";
 import getNotifications from "@/api/website/getNotifications";
+import { toast } from "sonner"; //
+import { FaBell } from "react-icons/fa6";
 
 export interface Notification {
   id: string;
-  message: string;
+  message: string; //
   sender: string;
   timestamp: string;
 }
@@ -14,38 +16,59 @@ export interface Notification {
 const SOCKET_SERVER_URL = "http://3.21.189.218:8000/";
 
 function useGetLiveNotifications() {
-
-  const { data, ...query } = useQuery({
+  const queryClient = useQueryClient();
+  const { data, ...query } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.notifications.query],
-    queryFn: () => getNotifications(),
+    queryFn: ({ pageParam = 1 }) => getNotifications({ page: pageParam }),
+    getNextPageParam: (lastPage) => {
+      const { current_page, total_pages } = lastPage?.pagination ?? {};
+      if (typeof current_page === "number" && typeof total_pages === "number") {
+        return current_page < total_pages ? current_page + 1 : undefined;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
     refetchOnWindowFocus: false,
     retry: false,
   });
-
-  const [liveNotifications, setLiveNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
     const socket = io(SOCKET_SERVER_URL, { withCredentials: true });
 
     socket.on("notification", (notification: Notification) => {
-      setLiveNotifications((prev) => [...prev, notification]);
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.notifications.query],
+      });
+      toast.info("إشعار جديد", {
+        description: notification.message,
+        icon: <FaBell className="text-size18 text-umber-light" />,
+        position: "top-center",
+        duration: 3000,
+        closeButton: true,
+
+        action: {
+          label: "قراءة",
+          onClick: () => {
+            window.location.href = "/notifications";
+          },
+        },
+        actionButtonStyle: {
+          backgroundColor: "var(--primary)",
+          color: "white",
+        },
+      });
     });
 
     return () => {
       socket.disconnect();
     };
-},[]);
+  }, [queryClient]);
 
-  const notifications = [
-    ...(data?.data ?? []),
-    ...liveNotifications,
-  ];
+  const notifications = data?.pages.flatMap((page) => page.data) ?? [];
 
   return {
     notifications,
     ...query,
-    liveNotifications,
-    history: data?.data ?? [],
   };
 }
 

@@ -25,7 +25,8 @@ import { BiUser } from "react-icons/bi";
 import { FiExternalLink } from "react-icons/fi";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import OTPInput from "react-otp-input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaHouse } from "react-icons/fa6";
 
 const mockContacts = [
   { id: 1, name: "أحمد قيسون" },
@@ -48,6 +49,8 @@ const ProfilePage = () => {
 
   const [popupView, setPopupView] = useState<"otp" | "reset">("otp");
   const [resetToken, setResetToken] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const { profileDetails } = useGetProfile();
 
@@ -252,13 +255,19 @@ const ProfilePage = () => {
                 addingInputStyle="!border-3 !border-golden-medium"
               />
               <div className="flex flex-col gap-y-2">
-                <label className="text-right text-size20 font-medium text-gray-700">
+                <label className="text-right text-size18 font-medium">
                   عقاراتي النشطة
                 </label>
-                <div className="flex items-center mt-1 w-full h-10 px-4 py-2 bg-tertiary-bg rounded-lg border-3 border-golden-medium">
-                  <span className="w-full text-right text-gray-400">
-                    <Link to={"/listing/my-listings"}>4</Link>
-                  </span>
+                <div className="flex">
+                  <span className="w-full text-right text-size26">4</span>
+                  <Button
+                    type="button"
+                    className="flex items-center gap-2 !text-primary border-b-2 font-medium bg-transparent !rounded-none"
+                    onClick={() => navigate("/listing/my-active-listings")}
+                  >
+                    عرض العقارات النشطة
+                    <FaHouse className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -281,14 +290,14 @@ const ProfilePage = () => {
                   إعادة تعيين
                 </Button>
               </div>
-              <button
+              <Button
                 type="button"
-                className="flex items-center gap-2 text-primary border-b-2 font-medium bg-transparent"
+                className="flex items-center gap-2 !text-primary border-b-2 font-medium bg-transparent !rounded-none"
                 onClick={handleChangePasswordClick}
               >
                 تغيير كلمة المرور
                 <LogOut className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </form>
           <div className="lg:col-span-1">
