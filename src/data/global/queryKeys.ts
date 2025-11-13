@@ -65,6 +65,9 @@ const QUERY_KEYS = {
     sharedProperties: "end-user-shared-properties",
     favoriteProperties: "end-user-favorite-properties",
   },
+  notifications: {
+    query: "notifications-query",
+  },
 };
 
 export default QUERY_KEYS;
