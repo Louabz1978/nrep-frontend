@@ -69,6 +69,7 @@
     "sonner": "^2.0.5",
     "sweetalert2": "^11.22.0",
     "swiper": "^11.2.10",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.10",
     "vaul": "^1.1.2",
     "yup": "^1.6.1"

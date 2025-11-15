@@ -117,4 +117,9 @@ export const tabs: TabsType = [
       },
     ],
   },
+  {
+    label:"الاشعارات",
+    permission:[],
+    to:"/notifications"
+  }
 ];

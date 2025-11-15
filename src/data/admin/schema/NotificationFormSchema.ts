@@ -24,7 +24,7 @@ export const NotificationFormSchema = Joi.object<NotificationFormType>({
 });
 
 export const notificationFormInitialValues: NotificationFormType = {
-  recipient_id: 0,
+  recipient_id: null,
   title: null,
   body: null,
 };

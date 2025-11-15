@@ -53,7 +53,7 @@ import UserLayout from "./layouts/endUser/UserLayout";
 import FavoriteProperties from "./pages/endUser/favoratesProperties/FavoratesProperties";
 import MyActiveListings from "./pages/website/myActiveListings/MyActiveListings";
 import AdminNotifications from "./pages/admin/notifications/AdminNotifications";
-
+import RealtorNotifications from "./pages/website/realtor/Notifications";
 // Browser URL router container
 const router = createBrowserRouter([
   // realtor pages
@@ -161,6 +161,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "notifications",
+        element: <RealtorNotifications />,
       },
       {
         path: "*",

@@ -57,7 +57,6 @@ function RealtorScatterCard() {
   const filteredRealtors = useMemo(() => {
     if (!Array.isArray(realtorsOnly)) return [];
     const { totalPrice } = getPropertyFields(selectedPropertyType);
-
     return realtorsOnly
       .filter((realtor) => Number(realtor[totalPrice] || 0) > 0)
       .sort((a, b) => Number(b[totalPrice] || 0) - Number(a[totalPrice] || 0))
@@ -115,16 +114,17 @@ function RealtorScatterCard() {
       },
     },
     title: {
-      text: title,
+      text: "",
       align: "right",
       style: { fontWeight: "700", fontSize: "20px", color: "#000" },
     },
   };
 
   return (
-    <div className="">
-      <div className="mb-4 flex justify-end relative top-[70px] z-10 left-[80px]">
-        <div className="w-[120px]">
+    <div className="rounded-2xl shadow-md bg-white p-4">
+      <div className="flex justify-between items-center w-[80%]">
+        <h2 className="text-size22 font-bold">{title}</h2>
+        <div className="w-[150px]">
           <Select
             form={filterForm}
             name="property_type"
@@ -132,23 +132,22 @@ function RealtorScatterCard() {
             choices={PROPERTY_TYPE}
             keyValue="value"
             showValue="label"
-            addingInputStyle="!h-[40px] !text-[14px]"
+            addingInputStyle="!h-[36px] !text-[14px]"
             addingSelectStyle="!gap-0"
           />
         </div>
       </div>
 
+      {/* chart */}
       {getRealtorHistoryQuery.isLoading ? (
         <ScatterChartSkeleton />
       ) : (
-        <div className="rounded-2xl shadow-md bg-white p-6">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="scatter"
-            height={350}
-          />
-        </div>
+        <ReactApexChart
+          options={options}
+          series={series}
+          type="scatter"
+          height={350}
+        />
       )}
     </div>
   );

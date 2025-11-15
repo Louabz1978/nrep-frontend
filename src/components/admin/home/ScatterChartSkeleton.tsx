@@ -4,12 +4,12 @@ function ScatterChartSkeleton() {
   const pointHeights = [250, 320, 315, 38, 401, 142, 315, 350, 555, 60]
 
   return (
-    <div className="rounded-2xl shadow-md bg-white p-6">
+    <div className="rounded-2xl bg-white p-6">
       <div className="flex justify-right mb-10">
-        <Skeleton className="h-6 w-48" />
+        {/* <Skeleton className="h-6 w-48" /> */}
       </div>
       <div className="relative w-full">
-        <div className="relative h-[300px] w-full">
+        <div className="relative h-[253px] w-full">
           <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between pr-2">
             {Array.from({ length: 6 }).map((_, i) => (
               <Skeleton key={`y-${i}`} className="h-4 w-12" />
